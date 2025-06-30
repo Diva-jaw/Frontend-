@@ -12,6 +12,8 @@ import EmployersDashboard from './pages/EmployersDashboard';
 import ForgotPassword from './components/auth/ForgotPassword';
 import EmployerForgotPassword from './components/auth/EmployerForgotPassword';
 import JobBoard from './pages/JobBoard';
+import EmployeeTestimonials from './pages/EmployeeTestimonials';
+import LifeAtRFTSection from './components/sections/LifeAtRFTSection';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import type {} from 'react-router-dom';
 import { MessageSquareDot, Send, CheckCircle2 } from 'lucide-react';
@@ -61,6 +63,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/insights" element={<Insights />} />
                   <Route path="/careers" element={<Careers />} />
+                  <Route path="/life-at-rft" element={<LifeAtRFTSection />} />
                   <Route path="/signin" element={<SignIn />} /> {/* Update SignIn to use useToast if needed */}
                   <Route path="/signup" element={<NewUser />} />
                   <Route path="/profile" element={<Profile />} />
@@ -70,6 +73,7 @@ function App() {
                   <Route path="/employer-forgot-password" element={<EmployerForgotPassword />} />
                   <Route path="/apply" element={<JobBoard />} />
                   <Route path="/job-board" element={<JobBoard />} />
+                  <Route path="/employee-says" element={<EmployeeTestimonials />} />
                 </Routes>
               </main>
               <Footer />

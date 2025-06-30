@@ -127,15 +127,15 @@ const Navbar = () => {
                       <div className="w-2/3 py-4 px-6">
                         {subDropdown === 'careers' && (
                           <ul className="grid grid-cols-1 gap-2">
-                            <li><Link to="/life-at-rft" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">Life at RFT</Link></li>
-                            <li><Link to="/employee-says" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">What Our Employees Say</Link></li>
-                            <li><Link to="/apply" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">Apply</Link></li>
+                            <li><Link to="/life-at-rft" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => { setMainDropdownOpen(false); setSubDropdown(null); }}>Life at RFT</Link></li>
+                            <li><Link to="/employee-says" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => { setMainDropdownOpen(false); setSubDropdown(null); }}>What Our Employees Say</Link></li>
+                            <li><Link to="/apply" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => { setMainDropdownOpen(false); setSubDropdown(null); }}>Apply</Link></li>
                           </ul>
                         )}
                         {subDropdown === 'learn' && (
                           <ul className="grid grid-cols-1 gap-2">
-                            <li><Link to="/mdu" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">MDU</Link></li>
-                            <li><Link to="/crd" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">CRD</Link></li>
+                            <li><Link to="/mdu" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => { setMainDropdownOpen(false); setSubDropdown(null); }}>MDU</Link></li>
+                            <li><Link to="/crd" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => { setMainDropdownOpen(false); setSubDropdown(null); }}>CRD</Link></li>
                           </ul>
                         )}
                         {subDropdown === null && (
@@ -179,10 +179,10 @@ const Navbar = () => {
             ) : (
               // Not logged in state - show login/register buttons
               <>
-                <button onClick={handleSignInClick} className="px-4 py-2 border border-blue-200 dark:border-blue-600 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200">Login</button>
-                <button onClick={handleNewUserClick} className="px-4 py-2 bg-gradient-to-b from-red-500 to-red-700 text-white rounded-full hover:from-red-600 hover:to-red-800 font-semibold text-sm shadow-md transition-colors duration-200">Register</button>
+                <button onClick={handleSignInClick} className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200">Login</button>
+                <button onClick={handleNewUserClick} className="px-4 py-2 bg-gradient-to-b from-red-500 to-red-700 dark:from-red-700 dark:to-red-900 text-white rounded-full hover:from-red-600 hover:to-red-800 dark:hover:from-red-800 dark:hover:to-red-950 font-semibold text-sm shadow-lg transition-colors duration-200">Register</button>
                 <span className="h-6 w-px bg-gray-400 dark:bg-gray-600 mx-2 rounded-full" />
-                <Link to="/employers-login" className="px-4 py-2 border border-blue-200 dark:border-blue-600 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 flex items-center gap-2">For Employer's</Link>
+                <Link to="/employers-login" className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 flex items-center gap-2">For Employer's</Link>
               </>
             )}
             <button
