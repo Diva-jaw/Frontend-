@@ -22,6 +22,7 @@ interface Job {
 }
 
 const JobView = () => {
+  console.log('JobView component mounted');
   const { id } = useParams<{ id: string }>();
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
@@ -29,6 +30,7 @@ const JobView = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('JobView useEffect running, id:', id);
     if (!id) {
       setError('Invalid job ID');
       setLoading(false);
@@ -38,6 +40,7 @@ const JobView = () => {
       try {
         const response = await axios.get<Job>(`http://localhost:5000/api/jobs/${id}`);
         setJob(response.data);
+        console.log('Fetched job:', response.data);
       } catch (err: any) {
         console.error('Error fetching job:', err);
         setError('Failed to load job details. Please try again.');
@@ -76,6 +79,11 @@ const JobView = () => {
   }
 
   const isExpired = new Date(job.application_deadline) < new Date();
+
+  // Defensive: always use arrays for these fields
+  const responsibilities = Array.isArray(job?.responsibilities) ? job.responsibilities : [];
+  const requiredQualifications = Array.isArray(job?.required_qualifications) ? job.required_qualifications : [];
+  const preferredSkills = Array.isArray(job?.preferred_skills) ? job.preferred_skills : [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -143,44 +151,44 @@ const JobView = () => {
               <p className="text-gray-700 leading-relaxed">{job.job_summary}</p>
             </div>
 
-            {job.responsibilities && job.responsibilities.length > 0 && (
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">Responsibilities</h2>
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">Key Responsibilities</h2>
+              {responsibilities.length > 0 ? (
                 <ul className="list-disc ml-6 text-gray-700 space-y-2">
-                  {job.responsibilities.map((item, idx) => (
-                    <li key={idx} className="leading-relaxed">
-                      {item}
-                    </li>
+                  {responsibilities.map((item, idx) => (
+                    <li key={idx} className="leading-relaxed">{item}</li>
                   ))}
                 </ul>
-              </div>
-            )}
+              ) : (
+                <p className="text-gray-500 italic">Not specified</p>
+              )}
+            </div>
 
-            {job.required_qualifications && job.required_qualifications.length > 0 && (
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">Required Qualifications</h2>
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">Required Qualifications</h2>
+              {requiredQualifications.length > 0 ? (
                 <ul className="list-disc ml-6 text-gray-700 space-y-2">
-                  {job.required_qualifications.map((item, idx) => (
-                    <li key={idx} className="leading-relaxed">
-                      {item}
-                    </li>
+                  {requiredQualifications.map((item, idx) => (
+                    <li key={idx} className="leading-relaxed">{item}</li>
                   ))}
                 </ul>
-              </div>
-            )}
+              ) : (
+                <p className="text-gray-500 italic">Not specified</p>
+              )}
+            </div>
 
-            {job.preferred_skills && job.preferred_skills.length > 0 && (
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">Preferred Skills</h2>
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">Preferred Skills</h2>
+              {preferredSkills.length > 0 ? (
                 <ul className="list-disc ml-6 text-gray-700 space-y-2">
-                  {job.preferred_skills.map((item, idx) => (
-                    <li key={idx} className="leading-relaxed">
-                      {item}
-                    </li>
+                  {preferredSkills.map((item, idx) => (
+                    <li key={idx} className="leading-relaxed">{item}</li>
                   ))}
                 </ul>
-              </div>
-            )}
+              ) : (
+                <p className="text-gray-500 italic">Not specified</p>
+              )}
+            </div>
 
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">Equal Opportunity Statement</h2>
@@ -189,6 +197,9 @@ const JobView = () => {
 
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">How to Apply</h2>
+              {job.how_to_apply && job.how_to_apply.startsWith('http') && (
+                <a href={job.how_to_apply} target="_blank" rel="noopener noreferrer" className="inline-block mt-2 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-semibold">Apply Online</a>
+              )}
               <p className="text-gray-700 leading-relaxed">{job.how_to_apply}</p>
             </div>
 

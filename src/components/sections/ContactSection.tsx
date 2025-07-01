@@ -26,6 +26,11 @@ const ContactSection = () => {
     setLoading(true);
     setSuccess('');
     setError('');
+    if (!user || !user.id) {
+      setError('You must be logged in to send a message. Please sign in or sign up.');
+      setLoading(false);
+      return;
+    }
     try {
       const payload = {
         name: formData.name,

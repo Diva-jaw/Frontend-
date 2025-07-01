@@ -31,6 +31,7 @@ import JobDashboard from './pages/hrDashboard/jobPost/JobDashboard';
 import SignIn from './pages/hrDashboard/SignIn';
 import HRLayout from './pages/hrDashboard/HRLayout';
 import JobView from './pages/hrDashboard/jobPost/JobView';
+import ApplyJobPage from './pages/ApplyJobPage';
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -96,6 +97,7 @@ function App() {
                     <Route path="posted-job" element={<JobDashboard />} />
                     <Route path="posted-job/:id" element={<JobView />} />
                   </Route>
+                  <Route path="/apply-job" element={<ApplyJobPage />} />
                 </Routes>
               </main>
               <Footer />
