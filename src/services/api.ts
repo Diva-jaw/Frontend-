@@ -7,6 +7,7 @@ export interface AuthResponse {
     id: number;
     name: string;
     email: string;
+    role: 'user' | 'hr';
   };
 }
 
@@ -71,10 +72,10 @@ class ApiService {
   }
 
   // Login user
-  async login(email: string, password: string): Promise<AuthResponse> {
+  async login(email: string, password: string, role: 'user' | 'hr'): Promise<AuthResponse> {
     return this.makeRequest<AuthResponse>('/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, role }),
     });
   }
 

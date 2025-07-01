@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 
 const EmployersDashboard: React.FC = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || user.role !== 'hr') {
+      // Optionally show a message or toast here
+      navigate('/'); // Redirect to home or another page
+    }
+  }, [user, navigate]);
+
+  if (!user || user.role !== 'hr') {
+    return null; // Or a spinner/unauthorized message
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-blue-100 py-8 px-4">
       <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-2xl">

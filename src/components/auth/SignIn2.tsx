@@ -27,24 +27,26 @@ const SignIn: React.FC = () => {
     }
 
     try {
-      const response = await apiService.login(formData.email, formData.password);
+      const response = await apiService.login(formData.email, formData.password, 'user');
       
       // Use AuthContext login function to update global state
       if (response.token && response.user) {
         login(response.token, response.user);
+        if (response.user.role === 'hr') {
+          navigate('/hr');
+        } else {
+          navigate('/');
+        }
       }
       
       setIsLoading(false);
       
-      // Redirect to dashboard or home page
-      navigate('/');
-      
     } catch (err) {
       setIsLoading(false);
       const errorMessage = err instanceof Error ? err.message : 'Login failed';
-      
-      // Provide user-friendly error messages
-      if (errorMessage.includes('Invalid credentials')) {
+      if (errorMessage.includes('not authorized')) {
+        setError('❌ You are not authorized to log in as a User with this account.');
+      } else if (errorMessage.includes('Invalid credentials')) {
         setError('❌ Invalid email or password. Please check your credentials and try again.');
       } else if (errorMessage.includes('Login failed')) {
         setError('❌ Login failed. Please try again or contact support if the problem persists.');

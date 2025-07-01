@@ -1,32 +1,55 @@
 import { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import axios from 'axios';
+import { useAuth } from '../AuthContext';
 
 const ContactSection = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    name: user?.name || '',
+    email: user?.email || '',
     phone: '',
     subject: '',
     message: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would normally handle the form submission
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! We will get back to you shortly.');
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: '',
-    });
+    setLoading(true);
+    setSuccess('');
+    setError('');
+    try {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        phone_number: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        user_id: user && user.id ? user.id : undefined,
+      };
+      await axios.post('http://localhost:5000/api/messages', payload);
+      setSuccess('Thank you for your message! We will get back to you shortly.');
+      setFormData({
+        name: user?.name || '',
+        email: user?.email || '',
+        phone: '',
+        subject: '',
+        message: '',
+      });
+    } catch (err: any) {
+      const backendError = err?.response?.data?.error;
+      setError(backendError ? `Failed to send message: ${backendError}` : 'Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,7 +62,6 @@ const ContactSection = () => {
             Have questions or ready to start your next project? Contact us today for a free consultation.
           </p>
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="animate-slideUp" style={{animationDelay: '0.1s', animationFillMode: 'both'}}>
             <div className="bg-blue-50 dark:bg-gray-800 p-8 rounded-lg shadow-md dark:shadow-gray-900/50">
@@ -100,7 +122,8 @@ const ContactSection = () => {
           <div className="animate-slideUp" style={{animationDelay: '0.2s', animationFillMode: 'both'}}>
             <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700">
               <h3 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Send us a Message</h3>
-              
+              {success && <div className="mb-4 text-green-600 dark:text-green-400 font-semibold">{success}</div>}
+              {error && <div className="mb-4 text-red-600 dark:text-red-400 font-semibold">{error}</div>}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label htmlFor="name" className="block text-gray-700 dark:text-gray-300 mb-2">Your Name</label>
@@ -176,8 +199,9 @@ const ContactSection = () => {
               <button
                 type="submit"
                 className="px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-300 flex items-center justify-center"
+                disabled={loading}
               >
-                Send Message <Send size={16} className="ml-2" />
+                {loading ? 'Sending...' : 'Send Message'} <Send size={16} className="ml-2" />
               </button>
             </form>
           </div>
