@@ -485,12 +485,14 @@ const JobBoard: React.FC = () => {
                   </p>
                 </div>
                 {selectedJob.how_to_apply && (
-                  <button
-                    className="inline-block mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-semibold text-sm"
-                    onClick={() => navigate('/apply-job', { state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id } })}
-                  >
-                    Apply Online
-                  </button>
+                  <div className="flex justify-center">
+                    <button
+                      className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-semibold text-sm max-w-xs w-full sm:w-auto"
+                      onClick={() => navigate('/apply-job', { state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id } })}
+                    >
+                      Apply Online
+                    </button>
+                  </div>
                 )}
               </div>
             )}

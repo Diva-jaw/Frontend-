@@ -5,6 +5,7 @@ import { User, MapPin, GraduationCap, Layers, Briefcase, ClipboardCheck, ListChe
 // import Footer from '../components/layout/Footer';
 import axios from 'axios';
 import { useAuth } from '../components/AuthContext';
+import { useToast } from '../components/ToastContext';
 
 const initialFormData = {
   fullName: '',
@@ -90,6 +91,7 @@ const ApplyJobPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [jobError, setJobError] = useState('');
+  const { setToast } = useToast();
 
   // Redirect to login if not logged in
   useEffect(() => {
@@ -216,6 +218,10 @@ const ApplyJobPage: React.FC = () => {
       formDataToSend.append('data', JSON.stringify({ ...fieldsToSend, jobTitle, user_id: user?.id, jobpost_id }));
       await axios.post('http://localhost:5000/application/upload', formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setToast({
+        message: 'Application submitted successfully! We will contact you soon.',
+        icon: <CheckCircle className="text-green-500" size={28} />
       });
       setSubmitted(true);
       setShowPopup(true);
