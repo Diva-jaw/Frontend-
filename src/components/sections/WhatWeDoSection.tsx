@@ -21,7 +21,7 @@ const DropdownItem = ({ title, icon, content, isOpen, onClick }: DropdownItemPro
       >
         <div className="flex items-center gap-3">
           {icon}
-          <span className="text-xl font-semibold">{title}</span>
+          <span className="text-xl font-semibold text-black">{title}</span>
         </div>
         {isOpen ? <ChevronUp className="text-blue-500" /> : <ChevronDown className="text-blue-500" />}
       </button>
@@ -49,7 +49,7 @@ const WhatWeDoSection = () => {
   const sections = {
     incubation: {
       title: "Incubation Centre",
-      icon: <Rocket className="text-blue-500\" size={24} />,
+      icon: <Rocket className="text-blue-500" size={24} />,
       content: {
         description: "We transform promising startups into successful unicorns through our comprehensive incubation program.",
         features: [
@@ -83,7 +83,7 @@ const WhatWeDoSection = () => {
     },
     training: {
       title: "Trainings",
-      icon: <GraduationCap className="text-blue-500\" size={24} />,
+      icon: <GraduationCap className="text-blue-500" size={24} />,
       content: {
         description: "Comprehensive training programs designed to create the next generation of AI professionals.",
         features: [
@@ -108,7 +108,7 @@ const WhatWeDoSection = () => {
     <section id="what-we-do" className="py-20 bg-gray-50 pt-32 animate-fadeIn">
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16 animate-slideUp">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">What We Do</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">What We Do</h2>
           <div className="w-20 h-1 bg-blue-500 mx-auto mb-6"></div>
           <p className="text-gray-600 text-lg">
             Discover our comprehensive range of services and facilities designed to foster innovation and growth.
