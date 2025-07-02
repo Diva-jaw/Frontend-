@@ -20,7 +20,7 @@ const navItems = [
     icon: <FileText size={20} />,
   },
   {
-    name: 'See Applied Jobs',
+    name: 'See Applied Job',
     path: '/hr/applied-jobs',
     icon: <FileText size={20} />,
   },
