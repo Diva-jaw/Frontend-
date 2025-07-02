@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, User, Mail, Lock, Eye, EyeOff, Send, Phone, MessageSquare, MapPin, Building, Calendar, FileText, CheckCircle, ChevronLeft, ChevronRight, Upload, GraduationCap, Briefcase, Globe, Layers, ListChecks, ClipboardCheck, FilePlus, LogOut } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl, API_CONFIG } from '../config/api';
 
 // --- User Interface ---
 interface User {
@@ -485,7 +486,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
       if (formData.academics) formDataToSend.append('academics', formData.academics);
       const { resume, academics, ...fieldsToSend } = formData;
       formDataToSend.append('data', JSON.stringify(fieldsToSend));
-              const response = await axios.post(getApiUrl('/upload'), formDataToSend, {
+      
+      // Use multiple fallback methods to get the API URL
+      let apiUrl: string;
+      try {
+        apiUrl = getApiUrl('/upload');
+      } catch (apiError) {
+        console.warn('getApiUrl failed, using fallback:', apiError);
+        apiUrl = `${API_CONFIG.BASE_URL}/upload`;
+      }
+      
+      const response = await axios.post(apiUrl, formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setSubmitted(true);
