@@ -15,8 +15,8 @@ const TeamSection = () => {
     },
     {
       name: "Sandhaya Ghangas",
-      position: "HR ",
-      image: "/s1.jpg",
+      position: "HR",
+      image: "/sandhya1.jpg",
       bio: "Leads HR initiatives focused on talent acquisition, employee relations, and organizational development. Ensures a positive work environment and promotes policies that support employee growth and company values."
     },
    

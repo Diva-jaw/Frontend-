@@ -96,7 +96,7 @@ const Navbar = () => {
           {/* Left: Logo and Nav */}
           <div className="flex items-center flex-shrink-0">
             <img
-              src="/public/RFT logo.png"
+              src="/RFT logo.png"
               alt="Logo"
               className="h-16 w-16 rounded-full border-4 border-blue-400 dark:border-blue-500 mr-8"
             />

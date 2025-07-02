@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Briefcase, MapPin, DollarSign, Clock, Users, Send, Plus, X, Check } from 'lucide-react';
+import { getJobUrl } from '../../../config/api';
 
 const PostJob = () => {
   const [formData, setFormData] = useState({
