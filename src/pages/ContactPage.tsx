@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { X, User, Mail, Lock, Eye, EyeOff, Send, Phone, MessageSquare, MapPin, Building, Calendar, FileText, CheckCircle, ChevronLeft, ChevronRight, Upload, GraduationCap, Briefcase, Globe, Layers, ListChecks, ClipboardCheck, FilePlus, LogOut } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { getApiUrl } from '../config/api';
 
 // --- User Interface ---
 interface User {
@@ -16,7 +15,8 @@ const AuthModal: React.FC<{
   onClose: () => void;
   onLogin: (email: string, password: string) => void;
   onSignup: (name: string, email: string, password: string) => void;
-}> = ({ isOpen, onClose, onLogin, onSignup }) => {
+  darkMode: boolean;
+}> = ({ isOpen, onClose, onLogin, onSignup, darkMode }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -81,34 +81,34 @@ const AuthModal: React.FC<{
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative animate-in fade-in zoom-in duration-200">
+    <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 ${darkMode ? 'dark' : ''}`}>
+      <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md relative animate-in fade-in zoom-in duration-200 ${darkMode ? 'dark' : ''}`}>
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-colors"
+          className={`absolute right-4 top-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors ${darkMode ? 'dark' : ''}`}
         >
           <X size={24} />
         </button>
         <div className="p-8">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            <h2 className={`text-3xl font-bold text-gray-900 dark:text-white mb-2 ${darkMode ? 'dark' : ''}`}>
               {isLoginMode ? 'Welcome Back' : 'Create Account'}
             </h2>
-            <p className="text-gray-600">
+            <p className={`text-gray-600 dark:text-gray-300 ${darkMode ? 'dark' : ''}`}>
               {isLoginMode ? 'Sign in to submit your queries' : 'Join us to get started'}
             </p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             {!isLoginMode && (
               <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">Full Name</label>
+                <label className={`block text-sm font-medium text-gray-900 dark:text-gray-200 mb-2 ${darkMode ? 'dark' : ''}`}>Full Name</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                    className={`w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-black dark:text-white ${darkMode ? 'dark' : ''}`}
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -116,34 +116,34 @@ const AuthModal: React.FC<{
               </div>
             )}
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">Email Address</label>
+              <label className={`block text-sm font-medium text-gray-900 dark:text-gray-200 mb-2 ${darkMode ? 'dark' : ''}`}>Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-black dark:text-white ${darkMode ? 'dark' : ''}`}
                   placeholder="Enter your email"
                 />
               </div>
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">Password</label>
+              <label className={`block text-sm font-medium text-gray-900 dark:text-gray-200 mb-2 ${darkMode ? 'dark' : ''}`}>Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-black dark:text-white ${darkMode ? 'dark' : ''}`}
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 ${darkMode ? 'dark' : ''}`}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -152,14 +152,14 @@ const AuthModal: React.FC<{
             </div>
             {!isLoginMode && (
               <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">Confirm Password</label>
+                <label className={`block text-sm font-medium text-gray-900 dark:text-gray-200 mb-2 ${darkMode ? 'dark' : ''}`}>Confirm Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={20} />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
                     onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                    className={`w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-black dark:text-white ${darkMode ? 'dark' : ''}`}
                     placeholder="Confirm your password"
                   />
                 </div>
@@ -169,13 +169,13 @@ const AuthModal: React.FC<{
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${darkMode ? 'dark' : ''}`}
             >
               {isLoading ? 'Processing...' : (isLoginMode ? 'Sign In' : 'Create Account')}
             </button>
           </form>
           <div className="mt-6 text-center">
-            <p className="text-gray-600">
+            <p className={`text-gray-600 dark:text-gray-300 ${darkMode ? 'dark' : ''}`}>
               {isLoginMode ? "Don't have an account? " : "Already have an account? "}
               <button
                 onClick={() => {
@@ -183,7 +183,7 @@ const AuthModal: React.FC<{
                   setErrors({});
                   setFormData({ name: '', email: '', password: '', confirmPassword: '' });
                 }}
-                className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+                className={`text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold transition-colors ${darkMode ? 'dark' : ''}`}
               >
                 {isLoginMode ? 'Create Account' : 'Sign In'}
               </button>
@@ -200,8 +200,10 @@ const Header: React.FC<{
   user: User | null;
   onAuthClick: () => void;
   onLogout: () => void;
-}> = ({ user, onAuthClick, onLogout }) => (
-  <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
+  darkMode: boolean;
+  toggleDarkMode: () => void;
+}> = ({ user, onAuthClick, onLogout, darkMode, toggleDarkMode }) => (
+  <header className={`bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 ${darkMode ? 'dark' : ''}`}>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex justify-between items-center h-16">
         <div className="flex items-center">
@@ -210,27 +212,34 @@ const Header: React.FC<{
               <img
                 src="/logo1.jpg"
                 alt="Ruhil Future Technologies Logo"
-                className="w-12 h-12 object-contain rounded-full border-4 border-blue-600 bg-white shadow-md"
+                className="w-12 h-12 object-contain rounded-full border-4 border-blue-600 bg-white dark:bg-gray-700 shadow-md"
               />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900 ml-3">Ruhil Future Technologies</h1>
+              <h1 className={`text-xl font-bold text-gray-900 dark:text-white ml-3 ${darkMode ? 'dark' : ''}`}>Ruhil Future Technologies</h1>
             </div>
           </div>
         </div>
         <div className="flex items-center space-x-4">
+          <button
+            onClick={toggleDarkMode}
+            className={`p-2 rounded-full ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-gray-200 text-gray-700'}`}
+            title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
           {user ? (
             <div className="flex items-center space-x-3">
               <div className="hidden sm:block text-right">
-                <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.email}</p>
+                <p className={`text-sm font-medium text-gray-900 dark:text-white ${darkMode ? 'dark' : ''}`}>{user.name}</p>
+                <p className={`text-xs text-gray-500 dark:text-gray-400 ${darkMode ? 'dark' : ''}`}>{user.email}</p>
               </div>
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <User className="text-blue-600" size={16} />
+              <div className={`w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center ${darkMode ? 'dark' : ''}`}>
+                <User className="text-blue-600 dark:text-blue-300" size={16} />
               </div>
               <button
                 onClick={onLogout}
-                className="p-2 text-gray-500 hover:text-red-600 transition-colors"
+                className={`p-2 text-gray-500 hover:text-red-600 dark:hover:text-red-400 transition-colors ${darkMode ? 'dark' : ''}`}
                 title="Logout"
               >
                 <LogOut size={20} />
@@ -239,7 +248,7 @@ const Header: React.FC<{
           ) : (
             <button
               onClick={onAuthClick}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className={`bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors ${darkMode ? 'dark' : ''}`}
             >
               Sign In
             </button>
@@ -253,6 +262,7 @@ const Header: React.FC<{
 // --- ContactForm ---
 interface ContactFormProps {
   user: { name: string; email: string } | null;
+  darkMode: boolean;
 }
 
 const initialFormData = {
@@ -321,13 +331,12 @@ const shiftOptions = ['Yes', 'No'];
 const joiningOptions = ['Yes', 'No', 'Notice Period'];
 const locationOptions = [
   'Rohtak', 'Gurgaon', 'North India', 'East India', 'Central India', 'West India', 'South India', 'All over India'
-
 ];
 const languageOptions = [
   'English', 'Hindi'
 ];
 
-const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
+const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
   const [formData, setFormData] = useState<
     typeof initialFormData & { [key: string]: any }
   >({
@@ -385,10 +394,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       if (!formData.course.trim()) newErrors.course = 'Course Name is required';
       if (!formData.college.trim()) newErrors.college = 'College/University is required';
       if (!formData.graduationYear.trim()) newErrors.graduationYear = 'Year of Passing is required';
-      else if (!/^\d{4}$/.test(formData.graduationYear) || parseInt(formData.graduationYear) < 1050 || parseInt(formData.graduationYear) > 2025)
+      else if (!/^\d{4}$/.test(formData.graduationYear) || parseInt(formData.graduationYear) < 1050 || parseInt(formData.graduationYear) > 2030)
         newErrors.graduationYear = 'Year must be between 1050 and 2025';
       if (!formData.marks.trim()) newErrors.marks = 'Aggregate Marks/CGPA is required';
-      else if (!/^\d{1,2}(\.\d{1,2})?$/.test(formData.marks) || parseFloat(formData.marks) < 0 || parseFloat(formData.marks) > 100)
+      else if (!/^\d{1,2}(\.\d{1,2})?$/.test(formData.marks) || parseFloat(formData.marks) < 0 || parseFloat(formData.marks) > 101)
         newErrors.marks = 'Marks must be between 0 and 100';
       if (!formData.allSemCleared) newErrors.allSemCleared = 'This field is required';
     }
@@ -476,7 +485,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       if (formData.academics) formDataToSend.append('academics', formData.academics);
       const { resume, academics, ...fieldsToSend } = formData;
       formDataToSend.append('data', JSON.stringify(fieldsToSend));
-      const response = await axios.post(getApiUrl('/upload'), formDataToSend, {
+              const response = await axios.post(getApiUrl('/upload'), formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setSubmitted(true);
@@ -499,12 +508,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
 
   if (submitted && !showPopup) {
     return (
-      <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <Send className="text-green-600" size={32} />
+      <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center ${darkMode ? 'dark' : ''}`}>
+        <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Send className="text-green-600 dark:text-green-300" size={32} />
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">Form Submitted Successfully!</h3>
-        <p className="text-gray-600 mb-6">
+        <h3 className={`text-2xl font-bold text-gray-900 dark:text-white mb-4 ${darkMode ? 'dark' : ''}`}>Form Submitted Successfully!</h3>
+        <p className={`text-gray-600 dark:text-gray-300 mb-6 ${darkMode ? 'dark' : ''}`}>
           Thank you for your enquiry. We will get back to you soon.
         </p>
         <button
@@ -512,7 +521,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
             setSubmitted(false);
             setStep(0);
           }}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          className={`bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors ${darkMode ? 'dark' : ''}`}
         >
           Fill Another Form
         </button>
@@ -525,36 +534,36 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 0:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center"><User className="mr-2" />Personal Details</h2>
+            <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><User className="mr-2" />Personal Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Full Name *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Full Name *</label>
                 <input
                   type="text"
                   value={formData.fullName}
                   onChange={e => handleInputChange('fullName', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="As per Aadhaar or ID"
                 />
                 {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Date of Birth *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Date of Birth *</label>
                 <input
                   type="date"
                   value={formData.dob}
                   onChange={e => handleInputChange('dob', e.target.value)}
                   max="2020-12-31"
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 />
                 {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Gender *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Gender *</label>
                 <select
                   value={formData.gender}
                   onChange={e => handleInputChange('gender', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 >
                   <option value="">Select</option>
                   {genderOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -562,7 +571,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 {errors.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Mobile Number *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Mobile Number *</label>
                 <input
                   type="tel"
                   value={formData.mobile}
@@ -575,7 +584,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                       e.preventDefault();
                     }
                   }}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="Primary Mobile"
                   maxLength={10}
                 />
@@ -585,7 +594,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Alternate Contact Number</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Alternate Contact Number</label>
                 <input
                   type="tel"
                   value={formData.altMobile}
@@ -598,7 +607,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                       e.preventDefault();
                     }
                   }}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="Optional"
                   maxLength={10}
                 />
@@ -608,12 +617,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 {errors.altMobile && <p className="text-red-500 text-sm">{errors.altMobile}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Email Address *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Email Address *</label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={e => handleInputChange('email', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="Official / Personal"
                 />
                 {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
@@ -624,34 +633,34 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 1:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center"><MapPin className="mr-2" />Location Details</h2>
+            <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><MapPin className="mr-2" />Location Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Current City *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Current City *</label>
                 <input
                   type="text"
                   value={formData.currentCity}
                   onChange={e => handleInputChange('currentCity', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 />
                 {errors.currentCity && <p className="text-red-500 text-sm">{errors.currentCity}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Home Town / Permanent Address *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Home Town / Permanent Address *</label>
                 <input
                   type="text"
                   value={formData.homeTown}
                   onChange={e => handleInputChange('homeTown', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 />
                 {errors.homeTown && <p className="text-red-500 text-sm">{errors.homeTown}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Willing to Relocate? *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Willing to Relocate? *</label>
                 <select
                   value={formData.willingToRelocate}
                   onChange={e => handleInputChange('willingToRelocate', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 >
                   <option value="">Select</option>
                   <option value="Yes">Yes</option>
@@ -665,14 +674,14 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 2:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center"><GraduationCap className="mr-2" />Educational Background</h2>
+            <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><GraduationCap className="mr-2" />Educational Background</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Highest Qualification *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Highest Qualification *</label>
                 <select
                   value={formData.qualification}
                   onChange={e => handleInputChange('qualification', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 >
                   <option value="">Select</option>
                   {qualificationOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -680,36 +689,36 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 {errors.qualification && <p className="text-red-500 text-sm">{errors.qualification}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Course Name & Specialization *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Course Name & Specialization *</label>
                 <input
                   type="text"
                   value={formData.course}
                   onChange={e => handleInputChange('course', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 />
                 {errors.course && <p className="text-red-500 text-sm">{errors.course}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">College/Institute Name *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>College/Institute Name *</label>
                 <input
                   type="text"
                   value={formData.college}
                   onChange={e => handleInputChange('college', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 />
                 {errors.college && <p className="text-red-500 text-sm">{errors.college}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Affiliated University (if applicable)</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Affiliated University (if applicable)</label>
                 <input
                   type="text"
                   value={formData.affiliatedUniv}
                   onChange={e => handleInputChange('affiliatedUniv', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 />
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Year of Passing / Expected Graduation *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Year of Passing / Expected Graduation *</label>
                 <input
                   type="text"
                   value={formData.graduationYear}
@@ -717,14 +726,14 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                     const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 4);
                     handleInputChange('graduationYear', value);
                   }}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="YYYY"
                   maxLength={4}
                 />
                 {errors.graduationYear && <p className="text-red-500 text-sm">{errors.graduationYear}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Aggregate Marks / CGPA (Till Now) *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Aggregate Marks / CGPA (Till Now) *</label>
                 <input
                   type="text"
                   value={formData.marks}
@@ -739,17 +748,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                       setErrors(prev => ({ ...prev, marks: '' }));
                     }
                   }}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="e.g., 85 or 8.5"
                 />
                 {errors.marks && <p className="text-red-500 text-sm">{errors.marks}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Are all semesters cleared? *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Are all semesters cleared? *</label>
                 <select
                   value={formData.allSemCleared}
                   onChange={e => handleInputChange('allSemCleared', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 >
                   <option value="">Select</option>
                   {yesNoOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -762,9 +771,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 3:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center"><Layers className="mr-2" />Technical / Domain Skills</h2>
+            <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><Layers className="mr-2" />Technical / Domain Skills</h2>
             <div className="mb-4">
-              <label className="block mb-1 font-medium text-gray-900">Which technical skills do you possess? *</label>
+              <label className={`block mb-1 font-medium text-black dark:text-white`}>Which technical skills do you possess? *</label>
               <div className="flex flex-wrap gap-3">
                 {techSkillOptions.map(skill => (
                   <label key={skill} className="flex items-center space-x-2">
@@ -774,7 +783,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                       onChange={() => handleCheckboxChange('techSkills', skill)}
                       className="accent-blue-600"
                     />
-                    <span>{skill}</span>
+                    <span className={darkMode ? 'text-gray-200' : ''}>{skill}</span>
                   </label>
                 ))}
               </div>
@@ -782,23 +791,23 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
             </div>
             {formData.techSkills.includes('Others') && (
               <div className="mb-4">
-                <label className="block mb-1 font-medium text-gray-900">Other Technical Skills (comma-separated)</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Other Technical Skills (comma-separated)</label>
                 <input
                   type="text"
                   value={formData.otherTechSkills}
                   onChange={e => handleInputChange('otherTechSkills', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="e.g., TypeScript, React Native, AWS"
                 />
               </div>
             )}
             <div>
-              <label className="block mb-1 font-medium text-gray-900">Any certification courses completed? (Optional)</label>
+              <label className={`block mb-1 font-medium text-black dark:text-white`}>Any certification courses completed? (Optional)</label>
               <input
                 type="text"
                 value={formData.certifications}
                 onChange={e => handleInputChange('certifications', e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
               />
             </div>
           </div>
@@ -806,13 +815,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 4:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center"><Briefcase className="mr-2" />Internship or Project Experience</h2>
+            <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><Briefcase className="mr-2" />Internship or Project Experience</h2>
             <div className="mb-4">
-              <label className="block mb-1 font-medium text-gray-900">Have you done any internship or major project? *</label>
+              <label className={`block mb-1 font-medium text-black dark:text-white`}>Have you done any internship or major project? *</label>
               <select
                 value={formData.hasInternship}
                 onChange={e => handleInputChange('hasInternship', e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
               >
                 <option value="">Select</option>
                 {yesNoOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -821,11 +830,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
             </div>
             {formData.hasInternship === 'Yes' && (
               <div className="mb-4">
-                <label className="block mb-1 font-medium text-gray-900">Brief Description of Project / Internship *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Brief Description of Project / Internship *</label>
                 <textarea
                   value={formData.projectDesc}
                   onChange={e => handleInputChange('projectDesc', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                   rows={4}
                 />
                 {errors.projectDesc && <p className="text-red-500 text-sm">{errors.projectDesc}</p>}
@@ -833,22 +842,22 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-1 font-medium text-gray-900">GitHub Profile (Optional)</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>GitHub Profile (Optional)</label>
                 <input
                   type="url"
                   value={formData.github}
                   onChange={e => handleInputChange('github', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="https://github.com/username"
                 />
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">LinkedIn Profile (Optional)</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>LinkedIn Profile (Optional)</label>
                 <input
                   type="url"
                   value={formData.linkedin}
                   onChange={e => handleInputChange('linkedin', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="https://linkedin.com/in/username"
                 />
               </div>
@@ -858,21 +867,21 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 5:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center"><ClipboardCheck className="mr-2" />Job Preferences</h2>
+            <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><ClipboardCheck className="mr-2" />Job Preferences</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Preferred Role / Function Area *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Preferred Role / Function Area *</label>
                 <input
                   type="text"
                   value={formData.preferredRole}
                   onChange={e => handleInputChange('preferredRole', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="e.g., Software Developer"
                 />
                 {errors.preferredRole && <p className="text-red-500 text-sm">{errors.preferredRole}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Preferred Job Location(s) *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Preferred Job Location(s) *</label>
                 <div className="flex flex-wrap gap-3">
                   {locationOptions.map(loc => (
                     <label key={loc} className="flex items-center space-x-2">
@@ -882,18 +891,18 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                         onChange={() => handleCheckboxChange('preferredLocations', loc)}
                         className="accent-blue-600"
                       />
-                      <span>{loc}</span>
+                      <span className={darkMode ? 'text-gray-200' : ''}>{loc}</span>
                     </label>
                   ))}
                 </div>
                 {errors.preferredLocations && <p className="text-red-500 text-sm">{errors.preferredLocations}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Immediate Joining Availability? *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Immediate Joining Availability? *</label>
                 <select
                   value={formData.joining}
                   onChange={e => handleInputChange('joining', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 >
                   <option value="">Select</option>
                   {joiningOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -901,11 +910,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 {errors.joining && <p className="text-red-500 text-sm">{errors.joining}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Open to work in rotational/night shifts? *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Open to work in rotational/night shifts? *</label>
                 <select
                   value={formData.shifts}
                   onChange={e => handleInputChange('shifts', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 >
                   <option value="">Select</option>
                   {shiftOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -913,7 +922,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 {errors.shifts && <p className="text-red-500 text-sm">{errors.shifts}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Expected CTC (if applicable)</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Expected CTC (if applicable)</label>
                 <input
                   type="text"
                   value={formData.expectedCTC}
@@ -921,7 +930,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                     const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 8);
                     handleInputChange('expectedCTC', value);
                   }}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="e.g., 500000"
                 />
                 {errors.expectedCTC && <p className="text-red-500 text-sm">{errors.expectedCTC}</p>}
@@ -932,24 +941,24 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 6:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center"><ListChecks className="mr-2" />General Questions</h2>
+            <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><ListChecks className="mr-2" />General Questions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-1 font-medium text-gray-900">How did you hear about this opportunity? *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>How did you hear about this opportunity? *</label>
                 <input
                   type="text"
                   value={formData.source}
                   onChange={e => handleInputChange('source', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 />
                 {errors.source && <p className="text-red-500 text-sm">{errors.source}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Are you available for online tests and interviews? *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Are you available for online tests and interviews? *</label>
                 <select
                   value={formData.onlineTest}
                   onChange={e => handleInputChange('onlineTest', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 >
                   <option value="">Select</option>
                   {yesNoOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -957,11 +966,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 {errors.onlineTest && <p className="text-red-500 text-sm">{errors.onlineTest}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Do you have a working laptop and stable internet connection? *</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Do you have a working laptop and stable internet connection? *</label>
                 <select
                   value={formData.laptop}
                   onChange={e => handleInputChange('laptop', e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                 >
                   <option value="">Select</option>
                   {yesNoOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -969,7 +978,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 {errors.laptop && <p className="text-red-500 text-sm">{errors.laptop}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Languages Known (Optional)</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Languages Known (Optional)</label>
                 <div className="flex flex-wrap gap-3">
                   {languageOptions.map(lang => (
                     <label key={lang} className="flex items-center space-x-2">
@@ -979,42 +988,42 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                         onChange={() => handleCheckboxChange('languages', lang)}
                         className="accent-blue-600"
                       />
-                      <span>{lang}</span>
+                      <span className={darkMode ? 'text-gray-200' : ''}>{lang}</span>
                     </label>
                   ))}
                 </div>
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Aadhar Number (Optional)</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Aadhar Number (Optional)</label>
                 <input
                   type="text"
                   value={formData.aadhar}
                   onChange={e => handleInputChange('aadhar', e.target.value.replace(/[^0-9]/g, '').slice(0, 12))}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="12-digit Aadhar"
                   maxLength={12}
                 />
                 {errors.aadhar && <p className="text-red-500 text-sm">{errors.aadhar}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">PAN Number (Optional)</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>PAN Number (Optional)</label>
                 <input
                   type="text"
                   value={formData.pan}
                   onChange={e => handleInputChange('pan', e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 10))}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="ABCDE1234F"
                   maxLength={10}
                 />
                 {errors.pan && <p className="text-red-500 text-sm">{errors.pan}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-gray-900">Passport Number (Optional)</label>
+                <label className={`block mb-1 font-medium text-black dark:text-white`}>Passport Number (Optional)</label>
                 <input
                   type="text"
                   value={formData.passport}
                   onChange={e => handleInputChange('passport', e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 9))}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500"
+                  className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="8-9 alphanumeric"
                   maxLength={9}
                 />
@@ -1026,24 +1035,24 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 7:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center"><FilePlus className="mr-2" />Resume & Documents</h2>
+            <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><FilePlus className="mr-2" />Resume & Documents</h2>
             <div className="mb-4">
-              <label className="block mb-1 font-medium text-gray-900">Upload Resume (PDF) *</label>
+              <label className={`block mb-1 font-medium text-black dark:text-white`}>Upload Resume (PDF) *</label>
               <input
                 type="file"
                 accept="application/pdf"
                 onChange={e => handleFileChange('resume', e.target.files ? e.target.files[0] : null)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
               />
               {errors.resume && <p className="text-red-500 text-sm">{errors.resume}</p>}
             </div>
             <div className="mb-4">
-              <label className="block mb-1 font-medium text-gray-900">Upload Academic Documents (Optional, PDF)</label>
+              <label className={`block mb-1 font-medium text-black dark:text-white`}>Upload Academic Documents (Optional, PDF)</label>
               <input
                 type="file"
                 accept="application/pdf"
                 onChange={e => handleFileChange('academics', e.target.files ? e.target.files[0] : null)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
               />
             </div>
           </div>
@@ -1051,9 +1060,9 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 8:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center"><CheckCircle className="mr-2" />Declaration</h2>
+            <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><CheckCircle className="mr-2" />Declaration</h2>
             <div className="mb-4">
-              <p className="mb-2">“I hereby declare that the information provided above is true and correct to the best of my knowledge. I understand that any misrepresentation may lead to disqualification.”</p>
+              <p className={`mb-2 ${darkMode ? 'text-gray-300' : ''}`}>"I hereby declare that the information provided above is true and correct to the best of my knowledge. I understand that any misrepresentation may lead to disqualification."</p>
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
@@ -1061,7 +1070,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                   onChange={e => handleInputChange('agree', e.target.checked)}
                   className="accent-blue-600"
                 />
-                <span>I agree to be contacted via phone, WhatsApp, and email regarding this hiring process.</span>
+                <span className={darkMode ? 'text-gray-300' : ''}>I agree to be contacted via, Phone, WhatsApp, and Email regarding hiring process and could be considered for any future opprotunities and programs.</span>
               </label>
               {errors.agree && <p className="text-red-500 text-sm">{errors.agree}</p>}
             </div>
@@ -1086,15 +1095,15 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
           </button>
         </div>
       )}
-      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto">
+      <div className={`w-full max-w-lg md:max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 sm:p-4 md:p-8`}>
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-3xl font-bold text-gray-900">Enquiry Form</h2>
-            <span className="text-gray-500">Step {step + 1} of {steps.length}</span>
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black dark:text-white`}>Enquiry Form</h2>
+            <span className={`text-gray-500 dark:text-gray-400`}>Step {step + 1} of {steps.length}</span>
           </div>
           <div className="flex space-x-2 mb-6">
             {steps.map((s, i) => (
-              <div key={s} className={`flex-1 h-2 rounded-full ${i <= step ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
+              <div key={s} className={`flex-1 h-2 rounded-full ${i <= step ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-600'}`}></div>
             ))}
           </div>
         </div>
@@ -1106,7 +1115,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 type="button" 
                 onClick={handleBack} 
                 disabled={isSubmitting}
-                className="flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors disabled:opacity-50"
+                className={`flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors disabled:opacity-50 ${darkMode ? 'dark' : ''}`}
               >
                 <ChevronLeft className="mr-2" /> Back
               </button>
@@ -1117,7 +1126,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
                 type="button" 
                 onClick={handleNext} 
                 disabled={isSubmitting}
-                className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors ml-auto disabled:opacity-50"
+                className={`flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors ml-auto disabled:opacity-50 ${darkMode ? 'dark' : ''}`}
               >
                 Next <ChevronRight className="ml-2" />
               </button>
@@ -1126,7 +1135,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
               <button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="flex items-center px-6 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors ml-auto disabled:opacity-50"
+                className={`flex items-center px-6 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors ml-auto disabled:opacity-50 ${darkMode ? 'dark' : ''}`}
               >
                 {isSubmitting ? (
                   <>
@@ -1149,86 +1158,70 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
 
 // --- ContactPage ---
 const ContactPage: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [darkMode, setDarkMode] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    if (!darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
-  }, []);
+  };
 
   const handleLogin = (email: string, password: string) => {
-    const newUser = { name: 'John Doe', email };
-    setUser(newUser);
-    localStorage.setItem('user', JSON.stringify(newUser));
+    // In a real app, you would verify credentials with your backend
+    setUser({ name: 'Demo User', email });
     setIsAuthModalOpen(false);
-    setSuccessMessage('Successfully signed in!');
-    setShowSuccessPopup(true);
-    setTimeout(() => setShowSuccessPopup(false), 2000);
   };
 
   const handleSignup = (name: string, email: string, password: string) => {
-    const newUser = { name, email };
-    setUser(newUser);
-    localStorage.setItem('user', JSON.stringify(newUser));
+    // In a real app, you would create a new user in your backend
+    setUser({ name, email });
     setIsAuthModalOpen(false);
-    setSuccessMessage('Account created and signed in!');
-    setShowSuccessPopup(true);
-    setTimeout(() => setShowSuccessPopup(false), 2000);
   };
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    navigate('/');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <Header
-        user={user}
-        onAuthClick={() => setIsAuthModalOpen(true)}
-        onLogout={handleLogout}
+    <div className={`min-h-screen ${darkMode ? 'dark bg-gray-900' : 'bg-white'}`}>
+      <Header 
+        user={user} 
+        onAuthClick={() => setIsAuthModalOpen(true)} 
+        onLogout={handleLogout} 
+        darkMode={darkMode} 
+        toggleDarkMode={toggleDarkMode} 
       />
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+        onLogin={handleLogin} 
+        onSignup={handleSignup} 
+        darkMode={darkMode}
+      />
+      
+      <main className="w-full px-2 sm:px-4 md:px-8 py-8 mt-24">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black">
             Candidate Enquiry Form
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl max-w-2xl mx-auto text-black">
             Please fill out the form below to submit your enquiry.
           </p>
         </div>
-        <ContactForm user={user} />
+        <ContactForm user={user} darkMode={darkMode} />
       </main>
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onLogin={handleLogin}
-        onSignup={handleSignup}
-      />
-      {showSuccessPopup && (
-        <div className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all animate-bounce">
-          {successMessage}
-        </div>
-      )}
-      <footer className="bg-white border-t border-gray-200 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <p className="text-gray-600">
-              © 2025 Ruhil Future Technologies. All rights reserved. Ready to innovate?{' '}
-              <a href="#" className="text-blue-600 hover:text-blue-700 font-medium">
-                Let's Connect
-              </a>
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
 
 export default ContactPage;
+
+export { ContactForm };
