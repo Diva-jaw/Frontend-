@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const EmployeeTestimonials: React.FC = () => {
   const [currentOneLiner, setCurrentOneLiner] = useState(0);
@@ -7,76 +7,76 @@ const EmployeeTestimonials: React.FC = () => {
   const testimonials = [
     {
       id: 1,
-      name: 'Riya Singh',
-      role: 'Product Manager',
-      photo: '/Riya Singh.jpg',
-      text: '"The work-life balance here is exceptional. Management truly cares about employee wellbeing and provides the flexibility we need to thrive."',
-      rating: 5
+      name: "Sandhya",
+      role: "HR Manager",
+      photo: "/sandhya.jpg",
+      text: '"Working here has been incredibly fulfilling. The people-first culture, open communication, and strong team values make every day engaging and meaningful."',
+      rating: 4,
     },
     {
       id: 2,
-      name: 'Riya Girotra',
-      role: 'UX Designer',
-      photo: '/Riya Girotra.jpg',
-      text: '"I\'ve never felt more supported in my professional growth. The mentorship programs and learning opportunities are outstanding."',
-      rating: 5
+      name: "Sudhanshu",
+      role: "General Manager",
+      photo: "/sudhanshu.jpg",
+      text: '"Leading such a dynamic and driven team is a privilege. The culture here encourages innovation, accountability, and continuous growth."',
+      rating: 5,
     },
     {
       id: 3,
-      name: 'Anshika',
-      role: 'Marketing Specialist',
-      photo: '/anshika.jpg',
-      text: '"The diversity and inclusion initiatives here aren\'t just talk - they\'re lived values that make everyone feel valued and heard."',
-      rating: 5
+      name: "Anshika",
+      role: "Assistant Developer",
+      photo: "/anshika.jpg",
+      text: '"As an Assistant Developer, I’ve been given real opportunities to grow my skills and contribute meaningfully. The mentorship and team support make it a great place to learn and thrive."',
+      rating: 4,
     },
     {
       id: 4,
-      name: 'Ronit',
-      role: 'Data Scientist',
-      photo: '/ronit.jpg',
-      text: '"The cutting-edge technology and resources available here allow me to do my best work and stay ahead of industry trends."',
-      rating: 5
+      name: "Riya Girotra",
+      role: "QA & CRM Specialist",
+      photo: "/Riya Girotra.jpg",
+      text: '"Working across Quality Assurance and Customer Relationship Management has given me a unique perspective. The team’s commitment to excellence and user satisfaction makes every task impactful."',
+      rating: 4,
     },
     {
       id: 5,
-      name: 'Sadaf',
-      role: 'Sales Representative',
-      photo: '/sadaf.jpg',
-      text: '"From day one, I felt like part of a family. The onboarding process was smooth and the team was incredibly welcoming."',
-      rating: 5
+      name: "Divya",
+      role: "SDE & Product Lead",
+      photo: "/divya.jpg",
+      text: '"From building scalable backend systems to leading product strategy, the journey here has been both challenging and rewarding. The culture fosters continuous learning, innovation, and true ownership."',
+      rating: 5,
     },
     {
       id: 6,
-      name: 'Sandhya',
-      role: 'DevOps Engineer',
-      photo: '/sandhya.jpg',
-      text: '"The technical challenges here are exciting and the team collaboration makes solving complex problems enjoyable and rewarding."',
-      rating: 5
+      name: "Riya Singh",
+      role: "Junior Developer",
+      photo: "/Riya Singh.jpg",
+      text: '"As a Junior Developer, I’ve had the chance to work on real projects from day one. The guidance from senior team members and the collaborative culture make it the perfect environment to grow."',
+      rating: 5,
     },
     {
       id: 7,
-      name: 'Sudhanshu',
-      role: 'Frontend Developer',
-      photo: '/sudhanshu.jpg',
-      text: '"I love the creative freedom I have here. The projects are challenging and the learning opportunities are endless."',
-      rating: 5
+      name: "Sadaf",
+      role: "Assistant Developer",
+      photo: "/sadaf.jpg",
+      text: '"Joining as an Assistant Developer has been an amazing experience. The team’s support and the hands-on learning environment have helped me build confidence and sharpen my skills every day."',
+      rating: 4,
     },
     {
       id: 8,
-      name: 'Divya',
-      role: 'Backend Developer',
-      photo: '/divya.jpg',
-      text: '"The code quality standards and best practices here have helped me grow as a developer. The team is incredibly supportive."',
-      rating: 5
+      name: "Anirudh",
+      role: "Assistant Developer",
+      photo: "/anirudhh.jpg",
+      text: '"As an Assistant Developer, I’ve been exposed to a wide range of technologies and real-world coding practices. It’s a great place to build a strong foundation and grow with the team."',
+      rating: 5,
     },
     {
       id: 9,
-      name: 'Anirudh',
-      role: 'Full Stack Developer',
-      photo: '/anirudhh.jpg',
-      text: '"The full-stack development opportunities here are amazing. I get to work on both frontend and backend technologies."',
-      rating: 5
-    }
+      name: "Ronit",
+      role: "AI Engineer",
+      photo: "/ronit.jpg",
+      text: '"Working on AI-driven solutions here has been an exciting journey. The access to advanced tools, real-world datasets, and a collaborative environment keeps me inspired to push the boundaries of what’s possible."',
+      rating: 4,
+    },
   ];
 
   const oneLiners = [
@@ -86,14 +86,14 @@ const EmployeeTestimonials: React.FC = () => {
     '"Work feels like play when you love what you do."',
     '"Growth opportunities are endless here."',
     '"Flexible hours, maximum impact."',
-    '"Where talent meets opportunity."'
+    '"Where talent meets opportunity."',
   ];
 
   const stats = [
-    { number: '95%', label: 'Employee Satisfaction' },
-    { number: '4.8/5', label: 'Glassdoor Rating' },
-    { number: '92%', label: 'Retention Rate' },
-    { number: '3+', label: 'Years Average Tenure' }
+    { number: "95%", label: "Employee Satisfaction" },
+    { number: "4.8/5", label: "Glassdoor Rating" },
+    { number: "92%", label: "Retention Rate" },
+    { number: "3+", label: "Years Average Tenure" },
   ];
 
   const showOneLiner = (index: number) => {
@@ -116,20 +116,24 @@ const EmployeeTestimonials: React.FC = () => {
   }, []);
 
   const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
   };
 
   const getGradientColor = (index: number) => {
     const gradients = [
-      'from-pink-400 to-red-500',
-      'from-blue-400 to-purple-500',
-      'from-green-400 to-teal-500',
-      'from-yellow-400 to-orange-500',
-      'from-indigo-400 to-blue-500',
-      'from-purple-400 to-pink-500',
-      'from-teal-400 to-green-500',
-      'from-orange-400 to-red-500',
-      'from-cyan-400 to-blue-500'
+      "from-pink-400 to-red-500",
+      "from-blue-400 to-purple-500",
+      "from-green-400 to-teal-500",
+      "from-yellow-400 to-orange-500",
+      "from-indigo-400 to-blue-500",
+      "from-purple-400 to-pink-500",
+      "from-teal-400 to-green-500",
+      "from-orange-400 to-red-500",
+      "from-cyan-400 to-blue-500",
     ];
     return gradients[index % gradients.length];
   };
@@ -143,7 +147,8 @@ const EmployeeTestimonials: React.FC = () => {
             What Our Employees Say
           </h1>
           <p className="text-xl md:text-2xl text-blue-900 dark:text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Discover why our team loves working with us through their authentic voices and experiences
+            Discover why our team loves working with us through their authentic
+            voices and experiences
           </p>
         </div>
 
@@ -153,31 +158,37 @@ const EmployeeTestimonials: React.FC = () => {
             <div
               key={testimonial.id}
               className={`bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 transition-all duration-500 cursor-pointer relative overflow-hidden group hover:bg-white/15 hover:-translate-y-4 hover:shadow-2xl hover:scale-[1.02] ${
-                highlightedCard === testimonial.id ? 'scale-105 shadow-2xl bg-white/20' : ''
+                highlightedCard === testimonial.id
+                  ? "scale-105 shadow-2xl bg-white/20"
+                  : ""
               }`}
               onClick={() => highlightCard(testimonial.id)}
-              style={{ 
+              style={{
                 animationDelay: `${index * 0.1}s`,
-                animation: 'fadeInUp 0.6s ease-out forwards'
+                animation: "fadeInUp 0.6s ease-out forwards",
               }}
             >
               {/* Shimmer effect on hover */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-              
+
               {/* Photo Section - Large and Prominent */}
               <div className="flex flex-col items-center mb-6">
                 <div className="relative mb-4">
                   <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/30 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110">
-                    <img 
-                      src={testimonial.photo} 
+                    <img
+                      src={testimonial.photo}
                       alt={testimonial.name}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
+                        target.style.display = "none";
                         const parent = target.parentElement;
                         if (parent) {
-                          parent.innerHTML = `<div class=\"w-full h-full bg-gradient-to-br ${getGradientColor(index)} flex items-center justify-center text-3xl font-bold text-blue-900 dark:text-blue-100 shadow-inner\">${getInitials(testimonial.name)}</div>`;
+                          parent.innerHTML = `<div class=\"w-full h-full bg-gradient-to-br ${getGradientColor(
+                            index
+                          )} flex items-center justify-center text-3xl font-bold text-blue-900 dark:text-blue-100 shadow-inner\">${getInitials(
+                            testimonial.name
+                          )}</div>`;
                         }
                       }}
                     />
@@ -185,20 +196,31 @@ const EmployeeTestimonials: React.FC = () => {
                   {/* Decorative ring */}
                   <div className="absolute inset-0 w-32 h-32 rounded-full border-2 border-white/20 animate-pulse"></div>
                 </div>
-                
+
                 {/* Name and Role */}
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold mb-2 text-blue-900 dark:text-blue-100 drop-shadow-sm">{testimonial.name}</h3>
-                  <p className="text-blue-800 dark:text-blue-100 font-medium text-lg">{testimonial.role}</p>
+                  <h3 className="text-2xl font-bold mb-2 text-blue-900 dark:text-blue-100 drop-shadow-sm">
+                    {testimonial.name}
+                  </h3>
+                  <p className="text-blue-800 dark:text-blue-100 font-medium text-lg">
+                    {testimonial.role}
+                  </p>
                 </div>
                 {/* Star Rating */}
                 <div className="flex justify-center mt-2">
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+                    <svg
+                      key={i}
+                      className="w-5 h-5 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.967z" />
+                    </svg>
                   ))}
                 </div>
               </div>
-              
+
               {/* Testimonial Text */}
               <div className="text-center">
                 <p className="text-lg leading-relaxed text-blue-900 dark:text-blue-100 italic font-light">
@@ -211,23 +233,25 @@ const EmployeeTestimonials: React.FC = () => {
 
         {/* One Liners Section */}
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-10 border border-white/20 mb-10">
-          <h2 className="text-4xl font-bold text-center mb-10 text-blue-900 dark:text-blue-100">Employee One-Liners</h2>
-          
+          <h2 className="text-4xl font-bold text-center mb-10 text-blue-900 dark:text-blue-100">
+            Employee One-Liners
+          </h2>
+
           <div className="relative h-32 overflow-hidden mb-8">
             {oneLiners.map((oneLiner, index) => (
               <div
                 key={index}
                 className={`absolute w-full text-center text-2xl md:text-3xl font-light transition-all duration-800 ${
                   currentOneLiner === index
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
                 } text-blue-900 dark:text-blue-100`}
               >
                 {oneLiner}
               </div>
             ))}
           </div>
-          
+
           <div className="flex justify-center gap-3">
             {oneLiners.map((_, index) => (
               <button
@@ -235,8 +259,8 @@ const EmployeeTestimonials: React.FC = () => {
                 onClick={() => showOneLiner(index)}
                 className={`w-4 h-4 rounded-full transition-all duration-300 cursor-pointer hover:scale-125 ${
                   currentOneLiner === index
-                    ? 'bg-blue-900 dark:bg-blue-100 scale-125 shadow-lg'
-                    : 'bg-blue-300 dark:bg-blue-700 hover:bg-blue-400 dark:hover:bg-blue-600'
+                    ? "bg-blue-900 dark:bg-blue-100 scale-125 shadow-lg"
+                    : "bg-blue-300 dark:bg-blue-700 hover:bg-blue-400 dark:hover:bg-blue-600"
                 }`}
               />
             ))}
@@ -253,7 +277,9 @@ const EmployeeTestimonials: React.FC = () => {
               <div className="text-4xl md:text-5xl font-bold mb-3 text-blue-900 dark:text-blue-100">
                 {stat.number}
               </div>
-              <div className="text-blue-800 dark:text-blue-100 font-medium">{stat.label}</div>
+              <div className="text-blue-800 dark:text-blue-100 font-medium">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>
@@ -275,4 +301,4 @@ const EmployeeTestimonials: React.FC = () => {
   );
 };
 
-export default EmployeeTestimonials; 
+export default EmployeeTestimonials;

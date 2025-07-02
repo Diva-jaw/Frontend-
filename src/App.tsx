@@ -33,6 +33,13 @@ import HRLayout from './pages/hrDashboard/HRLayout';
 import JobView from './pages/hrDashboard/jobPost/JobView';
 import ApplyJobPage from './pages/ApplyJobPage';
 import ApplicationManagementDashboard from './pages/hrDashboard/ApplicationManagementDashboard';
+import EngineeringApplications from './pages/hrDashboard/EngineeringApplications';
+import DesignApplications from './pages/hrDashboard/DesignApplications';
+import MarketingApplications from './pages/hrDashboard/MarketingApplications';
+import SalesApplications from './pages/hrDashboard/SalesApplications';
+import HRApplications from './pages/hrDashboard/HRApplications';
+import FinanceApplications from './pages/hrDashboard/FinanceApplications';
+import OperationsApplications from './pages/hrDashboard/OperationsApplications';
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -98,6 +105,13 @@ function App() {
                     <Route path="posted-job" element={<JobDashboard />} />
                     <Route path="posted-job/:id" element={<JobView />} />
                     <Route path="applied-jobs" element={<ApplicationManagementDashboard />} />
+                    <Route path="applied-jobs/engineering" element={<EngineeringApplications />} />
+                    <Route path="applied-jobs/design" element={<DesignApplications />} />
+                    <Route path="applied-jobs/marketing" element={<MarketingApplications />} />
+                    <Route path="applied-jobs/sales" element={<SalesApplications />} />
+                    <Route path="applied-jobs/hr" element={<HRApplications />} />
+                    <Route path="applied-jobs/finance" element={<FinanceApplications />} />
+                    <Route path="applied-jobs/operations" element={<OperationsApplications />} />
                   </Route>
                   <Route path="/apply-job" element={<ApplyJobPage />} />
                 </Routes>

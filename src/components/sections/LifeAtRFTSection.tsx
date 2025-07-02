@@ -237,7 +237,7 @@ const LifeAtRFTSection: React.FC = () => {
       <section className="py-20 section max-w-4xl mx-auto" id="careers">
         <h2 className="text-4xl font-bold text-center mb-8">Join Our Journey</h2>
         <div className="text-center max-w-2xl mx-auto">
-          <p className="text-lg mb-8 text-gray-700">
+          <p className="text-lg mb-8 text-gray-700 dark:text-white">
             Ready to be part of something extraordinary? We're always looking for passionate individuals who want to shape the future of technology.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
