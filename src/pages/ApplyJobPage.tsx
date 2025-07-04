@@ -83,8 +83,18 @@ const ApplyJobPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const jobTitle = location.state?.jobTitle || '';
-  const jobpost_id = location.state?.jobpost_id;
+  // Read job info from location.state or localStorage
+  const jobTitle = location.state?.jobTitle || localStorage.getItem('jobTitle') || '';
+  const jobpost_id = location.state?.jobpost_id || localStorage.getItem('jobpost_id');
+
+  // Store job info in localStorage if present in location.state
+  useEffect(() => {
+    if (location.state?.jobTitle && location.state?.jobpost_id) {
+      localStorage.setItem('jobTitle', location.state.jobTitle);
+      localStorage.setItem('jobpost_id', location.state.jobpost_id);
+    }
+  }, [location.state]);
+
   const [formData, setFormData] = useState<typeof initialFormData & { [key: string]: any }>({ ...initialFormData });
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -101,7 +111,7 @@ const ApplyJobPage: React.FC = () => {
     }
   }, [user, navigate]);
 
-  // Redirect to job board if jobpost_id is missing
+  // Redirect to job board if jobpost_id is missing after both checks
   useEffect(() => {
     if (!jobpost_id) {
       setJobError('No job selected. Please apply from the Job Board.');
@@ -110,6 +120,18 @@ const ApplyJobPage: React.FC = () => {
       }, 2500);
     }
   }, [jobpost_id, navigate]);
+
+  // Auto-fill fullName and email if user is logged in and fields are empty
+  useEffect(() => {
+    if (user) {
+      if (user.name && !formData.fullName) {
+        setFormData(prev => ({ ...prev, fullName: user.name }));
+      }
+      if (user.email && !formData.email) {
+        setFormData(prev => ({ ...prev, email: user.email }));
+      }
+    }
+  }, [user, formData.fullName, formData.email]);
 
   const validateStep = () => {
     const newErrors: Record<string, string> = {};

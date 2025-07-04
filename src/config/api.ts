@@ -1,5 +1,5 @@
 // API Configuration for Frontend
-const BASE_URL_RAW = import.meta.env.VITE_API_BASE_URL || 'https://rftsystemsbackend-testing.up.railway.app';
+const BASE_URL_RAW = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 // Remove trailing slash to prevent double slashes
 const BASE_URL = BASE_URL_RAW.endsWith('/') ? BASE_URL_RAW.slice(0, -1) : BASE_URL_RAW;
 

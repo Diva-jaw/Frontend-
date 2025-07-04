@@ -3,9 +3,11 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import axios from 'axios';
 import { getMessageUrl } from '../../config/api';
 import { useAuth } from '../AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const ContactSection = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -16,6 +18,7 @@ const ContactSection = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [loginPopup, setLoginPopup] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -28,8 +31,12 @@ const ContactSection = () => {
     setSuccess('');
     setError('');
     if (!user || !user.id) {
-      setError('You must be logged in to send a message. Please sign in or sign up.');
+      setLoginPopup(true);
       setLoading(false);
+      setTimeout(() => {
+        setLoginPopup(false);
+        navigate('/signin');
+      }, 1500);
       return;
     }
     try {
@@ -60,6 +67,14 @@ const ContactSection = () => {
 
   return (
     <section id="contact" className="py-20 bg-white dark:bg-gray-900 pt-32 animate-fadeIn transition-colors duration-300">
+      {loginPopup && (
+        <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border border-blue-200 dark:border-blue-700 shadow-2xl rounded-2xl px-12 py-6 flex items-center justify-center space-x-4 animate-fade-in-up" style={{ minWidth: '340px', minHeight: '80px' }}>
+            <svg className="w-10 h-10 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" /></svg>
+            <span className="font-bold text-blue-900 dark:text-blue-200 text-2xl">Please login first</span>
+          </div>
+        </div>
+      )}
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16 animate-slideUp">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-gray-200">Get In Touch</h2>
@@ -129,7 +144,6 @@ const ContactSection = () => {
             <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md dark:shadow-gray-900/50 border border-gray-100 dark:border-gray-700">
               <h3 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Send us a Message</h3>
               {success && <div className="mb-4 text-green-600 dark:text-green-400 font-semibold">{success}</div>}
-              {error && <div className="mb-4 text-red-600 dark:text-red-400 font-semibold">{error}</div>}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label htmlFor="name" className="block text-gray-700 dark:text-gray-300 mb-2">Your Name</label>

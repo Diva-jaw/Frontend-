@@ -328,7 +328,7 @@ const JobBoard: React.FC = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M9 17v-2a4 4 0 018 0v2m-4-4v4m0 0v2m0-2a4 4 0 01-4-4V7a4 4 0 018 0v6a4 4 0 01-4 4z"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No Jobs Found</h3>
@@ -356,6 +356,8 @@ const JobBoard: React.FC = () => {
                         className={`font-semibold text-base truncate underline cursor-pointer ${selectedJob?.id === job.id ? 'text-white' : 'text-gray-900'}`}
                         onClick={e => {
                           e.stopPropagation();
+                          localStorage.setItem('jobTitle', job.job_title);
+                          localStorage.setItem('jobpost_id', String(job.id));
                           navigate('/apply-job', { state: { jobTitle: job.job_title, jobpost_id: job.id } });
                         }}
                       >
@@ -403,7 +405,11 @@ const JobBoard: React.FC = () => {
                   </div>
                   <button
                     className="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md transition-colors duration-200 text-lg"
-                    onClick={() => navigate('/apply-job', { state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id } })}
+                    onClick={() => {
+                      localStorage.setItem('jobTitle', selectedJob.job_title);
+                      localStorage.setItem('jobpost_id', String(selectedJob.id));
+                      navigate('/apply-job', { state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id } });
+                    }}
                   >
                     Apply
                   </button>
@@ -489,7 +495,11 @@ const JobBoard: React.FC = () => {
                   <div className="flex justify-center">
                     <button
                       className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-semibold text-sm max-w-xs w-full sm:w-auto"
-                      onClick={() => navigate('/apply-job', { state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id } })}
+                      onClick={() => {
+                        localStorage.setItem('jobTitle', selectedJob.job_title);
+                        localStorage.setItem('jobpost_id', String(selectedJob.id));
+                        navigate('/apply-job', { state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id } });
+                      }}
                     >
                       Apply Online
                     </button>

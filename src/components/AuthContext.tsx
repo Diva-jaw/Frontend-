@@ -40,23 +40,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     const userData = localStorage.getItem('user');
-    
+    console.log('[AuthContext] On mount: authToken =', token, 'userData =', userData);
     if (token && userData) {
       try {
         const parsedUser = JSON.parse(userData);
         setIsLoggedIn(true);
         setUser(parsedUser);
+        console.log('[AuthContext] User restored from localStorage:', parsedUser);
       } catch (error) {
-        console.error('Error parsing user data:', error);
+        console.error('[AuthContext] Error parsing user data:', error);
         // Clear invalid data
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
         setIsLoggedIn(false);
         setUser(null);
+        console.log('[AuthContext] Cleared invalid user data from localStorage');
       }
     } else {
       setIsLoggedIn(false);
       setUser(null);
+      console.log('[AuthContext] No valid authToken or userData found, user set to null');
     }
   }, []);
 

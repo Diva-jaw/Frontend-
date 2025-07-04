@@ -12,6 +12,10 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { isLoggedIn, user, logout } = useAuth();
+  const [careersDropdownOpen, setCareersDropdownOpen] = useState(false);
+  const [learnDropdownOpen, setLearnDropdownOpen] = useState(false);
+  const learnDropdownRef = useRef<HTMLDivElement>(null);
+  const careersDropdownRef = useRef<HTMLDivElement>(null);
 
   // Get first character of user's name for avatar
   const getUserInitial = (name: string) => {
@@ -48,6 +52,36 @@ const Navbar = () => {
       document.removeEventListener("keydown", handleEscKey);
     };
   }, [mainDropdownOpen]);
+
+  // Add useEffect for Learn dropdown
+  useEffect(() => {
+    if (!learnDropdownOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        learnDropdownRef.current &&
+        !learnDropdownRef.current.contains(event.target as Node)
+      ) {
+        setLearnDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [learnDropdownOpen]);
+
+  // Add useEffect for Careers dropdown
+  useEffect(() => {
+    if (!careersDropdownOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        careersDropdownRef.current &&
+        !careersDropdownRef.current.contains(event.target as Node)
+      ) {
+        setCareersDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [careersDropdownOpen]);
 
   const handleNavClick = (e: React.MouseEvent, sectionId: string) => {
     e.preventDefault();
@@ -125,125 +159,112 @@ const Navbar = () => {
               >
                 What We Do
               </a>
-              {/* Learn More Dropdown */}
-              <div className="relative" ref={dropdownRef}>
+              {/* Learn Dropdown */}
+              <div className="relative" ref={learnDropdownRef}>
                 <button
                   onClick={() => {
-                    setMainDropdownOpen(!mainDropdownOpen);
-                    setSubDropdown(null);
+                    setLearnDropdownOpen(!learnDropdownOpen);
+                    setCareersDropdownOpen(false);
                   }}
                   className={linkClass}
+                  style={{ textTransform: 'uppercase' }}
                 >
-                  Learn More
+                  Learn
                 </button>
                 <AnimatePresence>
-                  {mainDropdownOpen && (
+                  {learnDropdownOpen && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.18 }}
-                      className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[600px] z-50 p-0 border border-gray-100 dark:border-gray-700 flex transition-colors duration-300"
+                      className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[300px] z-50 p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
                     >
-                      {/* Left panel: categories */}
-                      <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 py-4 flex flex-col bg-gray-50 dark:bg-gray-900 rounded-l-xl">
-                        <button
-                          onClick={() => setSubDropdown("careers")}
-                          className={`text-left px-6 py-2 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-none transition-colors ${
-                            subDropdown === "careers"
-                              ? "bg-white dark:bg-gray-800 border-l-4 border-indigo-500 text-indigo-700 dark:text-indigo-400"
-                              : ""
-                          }`}
-                        >
-                          Careers
-                        </button>
-                        <button
-                          onClick={() => setSubDropdown("learn")}
-                          className={`text-left px-6 py-2 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-none transition-colors ${
-                            subDropdown === "learn"
-                              ? "bg-white dark:bg-gray-800 border-l-4 border-indigo-500 text-indigo-700 dark:text-indigo-400"
-                              : ""
-                          }`}
-                        >
-                          Learn
-                        </button>
-                      </div>
-                      {/* Right panel: links for selected category */}
-                      <div className="w-2/3 py-4 px-6">
-                        {subDropdown === "careers" && (
-                          <ul className="grid grid-cols-1 gap-2">
-                            <li>
-                              <Link
-                                to="/life-at-rft"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                Life at RFT
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                to="/employee-says"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                What Our Employees Say
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                to="/apply"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                Apply
-                              </Link>
-                            </li>
-                          </ul>
-                        )}
-                        {subDropdown === "learn" && (
-                          <ul className="grid grid-cols-1 gap-2">
-                            <li>
-                              <Link
-                                to="/mdu"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                MDU
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                to="/crd"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                CRD
-                              </Link>
-                            </li>
-                          </ul>
-                        )}
-                        {subDropdown === null && (
-                          <div className="text-gray-500 dark:text-gray-400 text-sm">
-                            Select a category to see more options.
-                          </div>
-                        )}
-                      </div>
+                      <ul className="grid grid-cols-1 gap-2">
+                        <li>
+                          <Link
+                            to="/mdu"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setLearnDropdownOpen(false);
+                            }}
+                          >
+                            MDU
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/crd"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setLearnDropdownOpen(false);
+                            }}
+                          >
+                            CRD
+                          </Link>
+                        </li>
+                      </ul>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              {/* Careers Dropdown */}
+              <div className="relative" ref={careersDropdownRef}>
+                <button
+                  onClick={() => {
+                    setCareersDropdownOpen(!careersDropdownOpen);
+                    setMainDropdownOpen(false);
+                    setSubDropdown(null);
+                  }}
+                  className={linkClass}
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  Careers
+                </button>
+                <AnimatePresence>
+                  {careersDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.18 }}
+                      className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[300px] z-50 p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
+                    >
+                      <ul className="grid grid-cols-1 gap-2">
+                        <li>
+                          <Link
+                            to="/life-at-rft"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setCareersDropdownOpen(false);
+                            }}
+                          >
+                            Life at RFT
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/employee-says"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setCareersDropdownOpen(false);
+                            }}
+                          >
+                            What Our Employees Say
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/apply"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setCareersDropdownOpen(false);
+                            }}
+                          >
+                            Apply
+                          </Link>
+                        </li>
+                      </ul>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -295,7 +316,7 @@ const Navbar = () => {
                 </button>
                 <button
                   onClick={handleNewUserClick}
-                  className="px-4 py-2 bg-gradient-to-b from-blue-500 to-blue-700 dark:from-blue-700 dark:to-blue-900 text-white rounded-full hover:from-blue-600 hover:to-blue-800 dark:hover:from-blue-800 dark:hover:to-blue-950 font-semibold text-sm shadow-lg transition-colors duration-200"
+                  className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200"
                 >
                   Register
                 </button>

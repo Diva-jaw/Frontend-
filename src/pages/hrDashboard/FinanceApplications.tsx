@@ -57,28 +57,28 @@ const FinanceApplications: React.FC = () => {
         <div className="flex flex-wrap gap-4 justify-center mb-8 w-full p-4 rounded-xl bg-gradient-to-r from-blue-100 via-white to-blue-50 shadow">
           <div>
             <label className="block text-sm font-bold mb-1 text-blue-900">Job Title</label>
-            <select value={jobTitle} onChange={e => setJobTitle(e.target.value)} className="rounded-lg px-4 py-2 border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-blue-900 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 outline-none">
+            <select value={jobTitle} onChange={e => setJobTitle(e.target.value)} className="rounded-lg px-4 py-2 border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-blue-900 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 outline-none text-black">
               <option value="">All</option>
               {jobTitles.map(title => <option key={title} value={title}>{title}</option>)}
             </select>
           </div>
           <div>
             <label className="block text-sm font-bold mb-1 text-blue-900">Job Type</label>
-            <select value={jobType} onChange={e => setJobType(e.target.value)} className="rounded-lg px-4 py-2 border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-blue-900 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 outline-none">
+            <select value={jobType} onChange={e => setJobType(e.target.value)} className="rounded-lg px-4 py-2 border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-blue-900 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 outline-none text-black">
               <option value="">All</option>
               {jobTypes.map(type => <option key={type} value={type}>{type}</option>)}
             </select>
           </div>
           <div>
             <label className="block text-sm font-bold mb-1 text-blue-900">Gender</label>
-            <select value={gender} onChange={e => setGender(e.target.value)} className="rounded-lg px-4 py-2 border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-blue-900 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 outline-none">
+            <select value={gender} onChange={e => setGender(e.target.value)} className="rounded-lg px-4 py-2 border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-blue-900 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 outline-none text-black">
               <option value="">All</option>
               {genders.map(g => <option key={g} value={g}>{g.charAt(0).toUpperCase() + g.slice(1)}</option>)}
             </select>
           </div>
           <div>
             <label className="block text-sm font-bold mb-1 text-blue-900">Applied Date</label>
-            <input type="date" value={date} onChange={e => setDate(e.target.value)} className="rounded-lg px-4 py-2 border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-blue-900 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 outline-none" />
+            <input type="date" value={date} onChange={e => setDate(e.target.value)} className="rounded-lg px-4 py-2 border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-blue-900 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 outline-none text-black" />
           </div>
         </div>
         {loading ? (

@@ -111,6 +111,7 @@ const AuthModal: React.FC<{
                     onChange={(e) => handleInputChange('name', e.target.value)}
                     className={`w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-black dark:text-white ${darkMode ? 'dark' : ''}`}
                     placeholder="Enter your full name"
+                    autoComplete="name"
                   />
                 </div>
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
@@ -351,6 +352,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
+  const [loginPopup, setLoginPopup] = useState(false);
 
   useEffect(() => {
     let loaded = { ...initialFormData };
@@ -477,6 +479,14 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) {
+      setLoginPopup(true);
+      setTimeout(() => {
+        setLoginPopup(false);
+        window.location.href = '/signin';
+      }, 1500);
+      return;
+    }
     if (!validateStep()) return;
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -555,6 +565,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
                   onChange={e => handleInputChange('fullName', e.target.value)}
                   className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="As per Aadhaar or ID"
+                  autoComplete="name"
                 />
                 {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
               </div>
@@ -1104,6 +1115,14 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
           >
             <X size={20} />
           </button>
+        </div>
+      )}
+      {loginPopup && (
+        <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border border-blue-200 dark:border-blue-700 shadow-2xl rounded-xl px-8 py-4 flex items-center justify-center space-x-3 animate-fade-in-up">
+            <svg className="w-7 h-7 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" /></svg>
+            <span className="font-semibold text-blue-900 dark:text-blue-200 text-lg">Please login first</span>
+          </div>
         </div>
       )}
       <div className={`w-full max-w-lg md:max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 sm:p-4 md:p-8`}>
