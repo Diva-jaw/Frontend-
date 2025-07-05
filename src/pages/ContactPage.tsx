@@ -250,7 +250,7 @@ const Header: React.FC<{
           ) : (
             <button
               onClick={onAuthClick}
-              className={`bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors ${darkMode ? 'dark' : ''}`}
+              className={`hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors ${darkMode ? 'dark' : ''}`}
             >
               Sign In
             </button>
@@ -469,7 +469,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
   const handleClosePopup = () => {
     setShowPopup(false);
     setSubmitted(false);
-    navigate('/');
+    // For enquiry form, stay on the same page and reset to first step
+    // Don't navigate away - just reset the form
     setFormData({ ...initialFormData, fullName: user?.name || '', email: user?.email || '' });
     setStep(0);
     if (user && user.email) {
@@ -479,14 +480,6 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      setLoginPopup(true);
-      setTimeout(() => {
-        setLoginPopup(false);
-        window.location.href = '/signin';
-      }, 1500);
-      return;
-    }
     if (!validateStep()) return;
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -1106,7 +1099,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
   return (
     <>
       {showPopup && (
-        <div className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-8 py-4 rounded-xl shadow-2xl z-50 text-lg font-semibold flex items-center animate-bounce">
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-8 py-4 rounded-xl shadow-2xl z-[9999] text-lg font-semibold flex items-center animate-bounce border-2 border-green-400">
           <span>🎉 Your form was submitted successfully!</span>
           <button
             onClick={handleClosePopup}

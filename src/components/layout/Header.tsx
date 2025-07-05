@@ -42,7 +42,7 @@ const Header = ({ isScrolled }: HeaderProps) => {
       {isMenuOpen && (
         <div className="fixed inset-0 z-[1200] bg-black/60 backdrop-blur-sm flex justify-center items-start" onClick={() => setIsMenuOpen(false)}>
           <div className="md:hidden mt-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 py-4 px-2 absolute top-16 left-4 right-4 transition-colors duration-300" onClick={e => e.stopPropagation()}>
-            <nav className="flex flex-col space-y-4">
+          <nav className="flex flex-col space-y-4">
               {/* Auth/User Info at top */}
               <div className="flex flex-col gap-2 mb-2">
                 {isLoggedIn ? (
@@ -95,9 +95,9 @@ const Header = ({ isScrolled }: HeaderProps) => {
                 </div>
               </details>
               <a href="/#contact" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between">
-                Contact Us
-              </a>
-            </nav>
+              Contact Us
+            </a>
+          </nav>
           </div>
         </div>
       )}
