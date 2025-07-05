@@ -14,7 +14,7 @@ const SignIn: React.FC = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/apply-job', { replace: true });
+      navigate('/', { replace: true });
     }
   }, [isLoggedIn, navigate]);
 

@@ -195,18 +195,93 @@ const JobBoard: React.FC = () => {
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col">
       <header className="bg-white px-4 md:px-10 py-4 flex flex-col sm:flex-row items-center justify-between border-b border-gray-200 gap-4">
         <div className="flex items-center gap-3">
-          {/* Remove the <span className="font-bold text-xl tracking-wide">Milao</span> element */}
+          {/* Logo or other header content can go here if needed */}
         </div>
-        <nav className="flex-1 flex flex-col sm:flex-row justify-center gap-4 sm:gap-8 text-base font-medium w-full sm:w-auto">
-          <a href="#" className="text-blue-600 border-b-2 border-blue-600 pb-1">Find Job</a>
-          <a href="#" className="hover:text-blue-700">Company Review</a>
-          <a href="#" className="hover:text-blue-700">Find Salaries</a>
-        </nav>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-gray-300" />
           <span className="hidden md:inline">Suhayol A. Nasim</span>
         </div>
       </header>
+      {/* Mobile-only filter sidebar above job list */}
+      <div className="block md:hidden w-full px-2 mt-4">
+        <div className="rounded-2xl border border-gray-200 bg-white shadow-lg p-6 w-full flex flex-col gap-8">
+          <div>
+            <h3 className="font-semibold mb-2">Department / Team</h3>
+            <select
+              className="w-full px-3 py-2 rounded bg-white text-gray-900 border border-gray-300 focus:outline-none"
+              value={selectedDepartment}
+              onChange={e => setSelectedDepartment(e.target.value)}
+            >
+              <option value="">All Departments</option>
+              {departmentOptions.map(dep => (
+                <option key={dep} value={dep}>{dep}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2">Job Type</h3>
+            <div className="flex flex-wrap gap-2">
+              {['Full-time', 'Part-time', 'Contract', 'Internship', 'Remote', 'On-site', 'Hybrid'].map(type => (
+                <label key={type} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    className="accent-blue-500"
+                    checked={selectedJobTypes.includes(type)}
+                    onChange={e => {
+                      setSelectedJobTypes(prev =>
+                        e.target.checked ? [...prev, type] : prev.filter(t => t !== type)
+                      );
+                    }}
+                  />
+                  {type}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2">Salary Range (LPA)</h3>
+            <div className="flex flex-col gap-2">
+              {salaryLpaRanges.map(range => (
+                <label key={range.label} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    className="accent-blue-500"
+                    checked={selectedSalaryRanges.includes(range.label)}
+                    onChange={e => {
+                      setSelectedSalaryRanges(prev =>
+                        e.target.checked ? [...prev, range.label] : prev.filter(l => l !== range.label)
+                      );
+                    }}
+                  />
+                  {range.label}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2">Work Level / Seniority</h3>
+            <div className="flex flex-wrap gap-2">
+              {['Entry Level', 'Mid Level', 'Senior Level', 'Directors', 'VP or Above'].map(level => (
+                <label key={level} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    className="accent-blue-500"
+                    checked={selectedWorkLevels.includes(level)}
+                    onChange={e => {
+                      setSelectedWorkLevels(prev =>
+                        e.target.checked ? [...prev, level] : prev.filter(l => l !== level)
+                      );
+                    }}
+                  />
+                  {level}
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="w-full my-3">
+          <div className="h-2 w-full rounded-full bg-gray-800 shadow-lg"></div>
+        </div>
+      </div>
       <main className="flex-1 flex flex-col md:flex-row bg-gray-100 min-w-0 min-h-0 h-full">
         <aside
           className="hidden md:flex w-full md:w-[260px] flex-shrink-0 border-r border-gray-200 min-w-[120px] max-w-full md:max-w-xs h-full min-h-0 bg-white"
@@ -295,8 +370,7 @@ const JobBoard: React.FC = () => {
         />
         <section className="flex-1 flex flex-col md:flex-row min-w-0">
           <div
-            className="bg-white p-4 flex flex-col gap-2 w-full md:min-w-[150px] md:max-w-md overflow-y-auto h-full min-h-0 scrollbar-thin scrollbar-thumb-blue-700/60 scrollbar-track-transparent"
-            style={{ width: listWidth }}
+            className={`bg-white p-4 flex flex-col gap-2 w-full md:min-w-[150px] md:max-w-md overflow-y-auto h-full min-h-0 scrollbar-thin scrollbar-thumb-blue-700/60 scrollbar-track-transparent ${typeof listWidth === 'number' ? 'md:w-[' + listWidth + 'px]' : ''}`}
           >
             <div className="flex flex-col sm:flex-row gap-2 mb-4 w-full">
               <input

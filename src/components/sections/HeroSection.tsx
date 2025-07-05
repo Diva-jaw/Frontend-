@@ -32,7 +32,9 @@ const HeroSection = () => {
           className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000 ${current === idx ? 'opacity-100' : 'opacity-0'}`}
         />
       ))}
-      <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent z-10 flex items-start p-3 md:hidden">
+        <img src="/RFT logo.png" alt="Logo" className="h-12 w-12 rounded-full border-4 border-blue-400 dark:border-blue-500 mt-12" />
+      </div>
       <div className="container mx-auto px-4 md:px-8 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1 animate-slideUp">

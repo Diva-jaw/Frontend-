@@ -146,7 +146,23 @@ const Navbar = () => {
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
             >
-              <Menu className="w-7 h-7 text-blue-700 dark:text-blue-200" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="black"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-menu w-7 h-7"
+                style={{ stroke: 'black' }}
+              >
+                <line x1="4" x2="20" y1="12" y2="12"></line>
+                <line x1="4" x2="20" y1="6" y2="6"></line>
+                <line x1="4" x2="20" y1="18" y2="18"></line>
+              </svg>
             </button>
             {/* Desktop Nav */}
             <div className="hidden lg:flex items-center space-x-4">
@@ -286,8 +302,8 @@ const Navbar = () => {
               </div>
               <a
                 href="/#contact"
-                onClick={(e) => handleNavClick(e, "contact")}
-                className={linkClass}
+                onClick={e => handleNavClick(e, "contact") }
+                className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between w-full text-left"
               >
                 Contact Us
               </a>
@@ -458,7 +474,7 @@ const Navbar = () => {
                     <Link to="/apply" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">Apply</Link>
                   </div>
                 </details>
-                <a href="/#contact" onClick={e => handleNavClick(e, "contact") } className={linkClass + " w-full text-left"}>Contact Us</a>
+                <a href="/#contact" onClick={e => handleNavClick(e, "contact") } className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between w-full text-left">Contact Us</a>
                 {/* Auth Links in nav for mobile - only show if not logged in */}
                 {!isLoggedIn && (
                   <>
