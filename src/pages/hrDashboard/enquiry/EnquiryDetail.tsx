@@ -210,9 +210,9 @@ const EnquiryDashboard: React.FC = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 md:px-8 py-8">
+      <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -245,9 +245,9 @@ const EnquiryDashboard: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter Candidates</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">Filter Candidates</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block mb-1 font-medium text-gray-700">Filter by Email</label>
               <div className="relative">
@@ -302,7 +302,7 @@ const EnquiryDashboard: React.FC = () => {
         </div>
 
         {/* Candidates List */}
-        <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+        <div className="space-y-4 sm:space-y-6 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto pr-1 sm:pr-2">
           {candidates.length === 0 ? (
             <div className="bg-white rounded-xl shadow-sm p-12 text-center">
               <User className="mx-auto text-gray-400 mb-4" size={48} />
@@ -386,7 +386,7 @@ const EnquiryDashboard: React.FC = () => {
 
         {/* Pagination */}
         {pagination.totalPages > 1 && (
-          <div className="flex justify-center items-center space-x-2 mt-8">
+          <div className="flex flex-wrap justify-center items-center space-x-2 mt-6 sm:mt-8">
             <button
               onClick={() => handlePageChange(pagination.currentPage - 1)}
               disabled={pagination.currentPage === 1}
@@ -410,8 +410,8 @@ const EnquiryDashboard: React.FC = () => {
 
       {/* Candidate Detail Modal */}
       {selectedCandidate && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-full sm:max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-black">{selectedCandidate.fullName}</h2>
@@ -510,8 +510,8 @@ const EnquiryDashboard: React.FC = () => {
 
       {/* Delete Confirmation Modal */}
       {deleteModalOpen && candidateToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full text-center animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-2 sm:p-0">
+          <div className="bg-white rounded-xl shadow-2xl p-4 sm:p-8 max-w-full sm:max-w-md w-full text-center animate-fade-in">
             <Trash2 size={40} className="mx-auto text-red-500 mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Delete Candidate?</h2>
             <p className="text-gray-700 mb-6">Are you sure you want to delete <span className="font-semibold text-black">{candidateToDelete.fullName}</span>? This action cannot be undone.</p>

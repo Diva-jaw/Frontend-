@@ -12,14 +12,14 @@ const Footer = () => {
       {/* Subtle background animation */}
       <div className="absolute inset-0 bg-pattern animate-bg-slide opacity-20" />
 
-      <div className="container mx-auto px-4 md:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div className="animate-slideUpAndRotate" style={{ animationDelay: '0.1s', animationFillMode: 'both' }}>
             <h3 className="text-lg font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400 animate-pulse">
               Ruhil Future Technologies
             </h3>
-            <p className="text-gray-300 mb-3 leading-relaxed text-sm">
+            <p className="text-gray-300 mb-3 leading-relaxed text-sm sm:text-base">
               Igniting innovation with cutting-edge solutions for a smarter, sustainable tomorrow.
             </p>
             <div className="flex space-x-4">
@@ -54,7 +54,7 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
               Quick Links
             </h3>
-            <ul className="space-y-1 text-sm">
+            <ul className="space-y-1 text-sm sm:text-base">
               {[
                 { href: '#home', label: 'Home' },
                 { href: '#about', label: 'About Us' },
@@ -81,7 +81,7 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
               Our Services
             </h3>
-            <ul className="space-y-1 text-sm">
+            <ul className="space-y-1 text-sm sm:text-base">
               {[
                 { href: '#services', label: 'AI-Powered Educational Solutions' },
                 { href: '#services', label: 'Startup Incubation' },
@@ -108,7 +108,7 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
               Contact Us
             </h3>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-sm sm:text-base">
               {[
                 {
                   icon: <MapPin size={20} className="text-blue-400 animate-pulse" />,
@@ -136,11 +136,11 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-blue-900/50 pt-4 animate-fadeIn" style={{ animationDelay: '0.5s', animationFillMode: 'both' }}>
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-300 text-xs mb-2 md:mb-0">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-2 md:gap-0">
+            <p className="text-gray-300 text-xs sm:text-sm mb-2 md:mb-0 text-center md:text-left">
               © {currentYear} Ruhil Future Technologies. All Rights Reserved.
             </p>
-            <div className="flex space-x-4 text-xs">
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 text-xs sm:text-sm items-center">
               {[
                 { href: '#privacy', label: 'Privacy Policy' },
                 { href: '#terms', label: 'Terms of Service' },

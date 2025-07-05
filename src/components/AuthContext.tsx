@@ -14,6 +14,7 @@ interface AuthContextType {
   login: (token: string, userData: User) => void;
   logout: () => void;
   updateUser: (userData: User) => void;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,6 +36,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [logoutCallback, setLogoutCallback] = useState<(() => void) | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // Check authentication status on mount
   useEffect(() => {
@@ -55,11 +57,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setIsLoggedIn(false);
         setUser(null);
         console.log('[AuthContext] Cleared invalid user data from localStorage');
+      } finally {
+        setLoading(false);
       }
     } else {
       setIsLoggedIn(false);
       setUser(null);
       console.log('[AuthContext] No valid authToken or userData found, user set to null');
+      setLoading(false);
     }
   }, []);
 
@@ -108,6 +113,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     login,
     logout,
     updateUser,
+    loading,
   };
 
   return (

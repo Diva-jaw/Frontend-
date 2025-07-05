@@ -51,10 +51,10 @@ const HRApplications: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center py-12 px-2 bg-gradient-to-br from-blue-50 via-white to-blue-100">
-      <div className="w-full max-w-7xl bg-gradient-to-br from-white via-blue-50 to-blue-100 rounded-3xl shadow-2xl p-8 md:p-12 flex flex-col items-center border border-blue-100 animate-fadeIn">
-        <h1 className="text-3xl md:text-4xl font-bold text-blue-900 mb-6 text-center tracking-tight drop-shadow">HR Applications</h1>
-        <div className="flex flex-wrap gap-4 justify-center mb-8 w-full p-4 rounded-xl bg-gradient-to-r from-blue-100 via-white to-blue-50 shadow">
+    <div className="min-h-[70vh] flex flex-col items-center justify-center py-8 sm:py-12 px-2 bg-gradient-to-br from-blue-50 via-white to-blue-100">
+      <div className="w-full max-w-full sm:max-w-7xl bg-gradient-to-br from-white via-blue-50 to-blue-100 rounded-3xl shadow-2xl p-4 sm:p-8 md:p-12 flex flex-col items-center border border-blue-100 animate-fadeIn">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-900 mb-6 text-center tracking-tight drop-shadow">HR Applications</h1>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center mb-8 w-full p-2 sm:p-4 rounded-xl bg-gradient-to-r from-blue-100 via-white to-blue-50 shadow">
           <div>
             <label className="block text-sm font-bold mb-1 text-blue-900">Job Title</label>
             <select value={jobTitle} onChange={e => setJobTitle(e.target.value)} className="rounded-lg px-4 py-2 border border-blue-200 bg-gradient-to-br from-white via-blue-50 to-blue-100 text-blue-900 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 outline-none text-black">
@@ -89,7 +89,7 @@ const HRApplications: React.FC = () => {
           <div className="text-gray-500 italic py-8">No applicants found.</div>
         ) : (
           <div className="w-full overflow-x-auto">
-            <table className="w-full text-sm text-left rounded-xl overflow-hidden shadow-lg">
+            <table className="w-full text-sm text-left rounded-xl overflow-hidden shadow-lg min-w-[700px]">
               <thead>
                 <tr className="bg-gradient-to-r from-blue-700 to-blue-500 text-white shadow">
                   <th className="px-4 py-3">Name</th>

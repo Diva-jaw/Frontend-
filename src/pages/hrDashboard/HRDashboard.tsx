@@ -29,16 +29,16 @@ const HRDashboard = () => {
     <div className="min-h-screen bg-gray-50">
       {/* HR Hero Section */}
       <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-20">
-        <div className="container mx-auto px-4 md:px-8">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight">
               HR Management <span className="text-blue-300">Dashboard</span>
             </h2>
             {/* <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
               Streamline your recruitment process with our comprehensive HR tools. 
               Manage candidate enquiries, post job opportunities, and track applications all in one place.
             </p> */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-12">
               {navItems.map((item, index) => (
                 <Link
                   key={item.path}
@@ -63,8 +63,8 @@ const HRDashboard = () => {
 
       {/* Quick Stats Section */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             <div className="text-center p-6 bg-blue-50 rounded-xl">
               <div className="text-3xl font-bold text-blue-600 mb-2">150+</div>
               <div className="text-gray-600">Total Enquiries</div>

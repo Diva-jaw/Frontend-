@@ -1125,21 +1125,21 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
           </div>
         </div>
       )}
-      <div className={`w-full max-w-lg md:max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 sm:p-4 md:p-8`}>
+      <div className={`w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 sm:p-4 md:p-8`}>
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
             <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black dark:text-white`}>Enquiry Form</h2>
-            <span className={`text-gray-500 dark:text-gray-400`}>Step {step + 1} of {steps.length}</span>
+            <span className={`text-gray-500 dark:text-gray-400 whitespace-nowrap`}>Step {step + 1} of {steps.length}</span>
           </div>
-          <div className="flex space-x-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-6">
             {steps.map((s, i) => (
-              <div key={s} className={`flex-1 h-2 rounded-full ${i <= step ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-600'}`}></div>
+              <div key={s} className={`flex-1 h-2 rounded-full min-w-[32px] ${i <= step ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-600'}`}></div>
             ))}
           </div>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="w-full">
           {renderStep()}
-          <div className="flex justify-between mt-8">
+          <div className="flex flex-col sm:flex-row justify-between mt-8 gap-4">
             {step > 0 && (
               <button 
                 type="button" 
@@ -1150,7 +1150,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
                 <ChevronLeft className="mr-2" /> Back
               </button>
             )}
-            <div className="flex-1"></div>
+            <div className="flex-1" />
             {step < steps.length - 1 && (
               <button 
                 type="button" 

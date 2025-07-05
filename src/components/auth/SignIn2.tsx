@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import { useAuth } from '../AuthContext';
 
@@ -9,7 +9,14 @@ const SignIn: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isLoggedIn } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/apply-job', { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

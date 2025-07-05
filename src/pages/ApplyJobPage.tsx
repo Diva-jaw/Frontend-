@@ -82,7 +82,7 @@ const languageOptions = [
 const ApplyJobPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   // Read job info from location.state or localStorage
   const jobTitle = location.state?.jobTitle || localStorage.getItem('jobTitle') || '';
   const jobpost_id = location.state?.jobpost_id || localStorage.getItem('jobpost_id');
@@ -95,8 +95,14 @@ const ApplyJobPage: React.FC = () => {
     }
   }, [location.state]);
 
-  const [formData, setFormData] = useState<typeof initialFormData & { [key: string]: any }>({ ...initialFormData });
-  const [step, setStep] = useState(0);
+  const [formData, setFormData] = useState<typeof initialFormData & { [key: string]: any }>(() => {
+    const saved = localStorage.getItem('applyJobFormData');
+    return saved ? { ...initialFormData, ...JSON.parse(saved) } : { ...initialFormData };
+  });
+  const [step, setStep] = useState(() => {
+    const savedStep = localStorage.getItem('applyJobFormStep');
+    return savedStep ? parseInt(savedStep, 10) : 0;
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -104,12 +110,22 @@ const ApplyJobPage: React.FC = () => {
   const [jobError, setJobError] = useState('');
   const { setToast } = useToast();
 
+  // Persist form data to localStorage on every change
+  useEffect(() => {
+    localStorage.setItem('applyJobFormData', JSON.stringify(formData));
+  }, [formData]);
+
+  // Persist step to localStorage on every change
+  useEffect(() => {
+    localStorage.setItem('applyJobFormStep', String(step));
+  }, [step]);
+
   // Redirect to login if not logged in
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       navigate('/signin');
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   // Redirect to job board if jobpost_id is missing after both checks
   useEffect(() => {
@@ -624,31 +640,44 @@ const ApplyJobPage: React.FC = () => {
           {jobError}
         </div>
       )}
-      <div className="w-full max-w-lg md:max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-2 sm:p-4 md:p-8">
+      <div className="w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-2 sm:p-4 md:p-8">
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black">Job Application Form</h2>
           </div>
           {jobTitle && (
             <div className="mb-4 text-blue-700 font-semibold text-xl">Applying for: <span className="font-bold">{jobTitle}</span></div>
           )}
-          <div className="flex space-x-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-6">
             {steps.map((s, i) => (
-              <div key={s} className={`flex-1 h-2 rounded-full ${i <= step ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
+              <div
+                key={s}
+                className={`flex-1 h-2 rounded-full min-w-[32px] ${i <= step ? 'bg-blue-600' : 'bg-gray-400'} shadow-[0_2px_8px_2px_rgba(0,0,0,0.7)] border border-gray-800`}
+              ></div>
             ))}
           </div>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="w-full">
           {renderStep()}
-          <div className="flex justify-between mt-8">
+          <div className="flex flex-col sm:flex-row justify-between mt-8 gap-4">
             {step > 0 && (
-              <button type="button" onClick={handleBack} disabled={isSubmitting} className="flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors disabled:opacity-50">
+              <button
+                type="button"
+                onClick={handleBack}
+                disabled={isSubmitting}
+                className="flex items-center w-full sm:w-auto block px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors disabled:opacity-50 justify-center"
+              >
                 <ChevronLeft className="mr-2" /> Back
               </button>
             )}
             <div className="flex-1"></div>
             {step < steps.length - 1 && (
-              <button type="button" onClick={handleNext} disabled={isSubmitting} className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors ml-auto disabled:opacity-50">
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={isSubmitting}
+                className="flex items-center w-full sm:w-auto block px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors ml-auto disabled:opacity-50 justify-center"
+              >
                 Next <ChevronRight className="ml-2" />
               </button>
             )}

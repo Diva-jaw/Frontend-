@@ -193,12 +193,11 @@ const JobBoard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col">
-      <header className="bg-white px-4 md:px-10 py-4 flex items-center justify-between border-b border-gray-200">
+      <header className="bg-white px-4 md:px-10 py-4 flex flex-col sm:flex-row items-center justify-between border-b border-gray-200 gap-4">
         <div className="flex items-center gap-3">
-          <img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png" alt="Logo" className="w-8 h-8 rounded-full" />
-          <span className="font-bold text-xl tracking-wide">Milao</span>
+          {/* Remove the <span className="font-bold text-xl tracking-wide">Milao</span> element */}
         </div>
-        <nav className="flex-1 flex justify-center gap-8 text-base font-medium">
+        <nav className="flex-1 flex flex-col sm:flex-row justify-center gap-4 sm:gap-8 text-base font-medium w-full sm:w-auto">
           <a href="#" className="text-blue-600 border-b-2 border-blue-600 pb-1">Find Job</a>
           <a href="#" className="hover:text-blue-700">Company Review</a>
           <a href="#" className="hover:text-blue-700">Find Salaries</a>
@@ -210,7 +209,7 @@ const JobBoard: React.FC = () => {
       </header>
       <main className="flex-1 flex flex-col md:flex-row bg-gray-100 min-w-0 min-h-0 h-full">
         <aside
-          className="w-full md:w-[260px] flex-shrink-0 border-r border-gray-200 flex min-w-[120px] max-w-full md:max-w-xs hidden md:flex h-full min-h-0 bg-white"
+          className="hidden md:flex w-full md:w-[260px] flex-shrink-0 border-r border-gray-200 min-w-[120px] max-w-full md:max-w-xs h-full min-h-0 bg-white"
           style={{ width: sidebarWidth }}
         >
           <div className="rounded-2xl border border-gray-200 bg-white shadow-lg p-6 w-full flex flex-col gap-8">
@@ -296,7 +295,7 @@ const JobBoard: React.FC = () => {
         />
         <section className="flex-1 flex flex-col md:flex-row min-w-0">
           <div
-            className="bg-white p-4 flex flex-col gap-2 min-w-[150px] max-w-full md:max-w-md overflow-y-auto h-full min-h-0 scrollbar-thin scrollbar-thumb-blue-700/60 scrollbar-track-transparent"
+            className="bg-white p-4 flex flex-col gap-2 w-full md:min-w-[150px] md:max-w-md overflow-y-auto h-full min-h-0 scrollbar-thin scrollbar-thumb-blue-700/60 scrollbar-track-transparent"
             style={{ width: listWidth }}
           >
             <div className="flex flex-col sm:flex-row gap-2 mb-4 w-full">
@@ -379,12 +378,16 @@ const JobBoard: React.FC = () => {
               ))
             )}
           </div>
+          {/* Separation for mobile view */}
+          <div className="block md:hidden w-full my-2">
+            <div className="h-2 w-full rounded-full bg-gray-800 shadow-lg"></div>
+          </div>
           <div
             className="hidden md:block cursor-col-resize bg-[#23263a] hover:bg-blue-500 transition-colors duration-150"
             style={{ width: 6, minWidth: 6, maxWidth: 12 }}
             onMouseDown={onListMouseDown}
           />
-          <div className="flex-1 h-full flex flex-col min-w-0 min-h-0">
+          <div className="flex-1 h-full flex flex-col min-w-0 min-h-0 w-full">
             {selectedJob && (
               <div className="rounded-2xl border border-white/30 bg-white/70 backdrop-blur-md shadow-lg p-6 h-full flex flex-col overflow-y-auto min-w-0 min-h-0 text-gray-900">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">

@@ -134,25 +134,25 @@ const CandidateDetail: React.FC = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-6 text-white">
-          <div className="flex justify-between items-start">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 sm:p-6 text-white">
+          <div className="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-0">
             <div>
-              <h1 className="text-3xl font-bold">{candidate.fullName}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold">{candidate.fullName}</h1>
               <p className="text-blue-100 mt-1">{candidate.preferredRole}</p>
             </div>
-            <span className="bg-white text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+            <span className="bg-white text-blue-800 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold mt-2 sm:mt-0">
               ID: {candidateId}
             </span>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {/* Contact & Personal Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Contact Information</h3>
               <div className="space-y-2">
@@ -209,7 +209,7 @@ const CandidateDetail: React.FC = () => {
           </div>
 
           {/* Documents Section */}
-          <div className="bg-gray-50 p-4 rounded-lg mb-8">
+          <div className="bg-gray-50 p-4 rounded-lg mb-6 sm:mb-8">
             <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Documents</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -246,7 +246,7 @@ const CandidateDetail: React.FC = () => {
           </div>
 
           {/* Education & Skills */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Education Details</h3>
               <div className="space-y-2">
@@ -288,7 +288,7 @@ const CandidateDetail: React.FC = () => {
           </div>
 
           {/* Job Preferences & Other Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Job Preferences</h3>
               <div className="space-y-2">
@@ -316,10 +316,10 @@ const CandidateDetail: React.FC = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end mt-6">
+          <div className="flex flex-col sm:flex-row justify-end mt-4 sm:mt-6 gap-2 sm:gap-4">
             <button
               onClick={() => navigate('/hr/enquiry')}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 sm:px-6 rounded-lg transition duration-300"
             >
               Back to Candidates List
             </button>
