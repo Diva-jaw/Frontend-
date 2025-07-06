@@ -40,8 +40,8 @@ const Header = ({ isScrolled }: HeaderProps) => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-[1200] bg-black/60 backdrop-blur-sm flex justify-center items-start" onClick={() => setIsMenuOpen(false)}>
-          <div className="md:hidden mt-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 py-4 px-2 absolute top-16 left-4 right-4 transition-colors duration-300" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[1200] bg-black/60 backdrop-blur-sm flex justify-end items-start pt-16" onClick={() => setIsMenuOpen(false)}>
+          <div className="md:hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 py-4 px-2 mr-4 max-h-[calc(100vh-8rem)] overflow-y-auto transition-colors duration-300" onClick={e => e.stopPropagation()}>
           <nav className="flex flex-col space-y-4">
               {/* Auth/User Info at top */}
               <div className="flex flex-col gap-2 mb-2">
