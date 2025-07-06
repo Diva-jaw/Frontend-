@@ -41,8 +41,8 @@ const Header = ({ isScrolled }: HeaderProps) => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-[1200] bg-black/60 backdrop-blur-sm flex justify-end items-start pt-16" onClick={() => setIsMenuOpen(false)}>
-          <div className="md:hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 py-4 px-2 mr-4 max-h-[calc(100vh-8rem)] overflow-y-auto transition-colors duration-300" onClick={e => e.stopPropagation()}>
-          <nav className="flex flex-col space-y-4">
+          <div className="md:hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 py-4 px-2 mr-4 max-h-[60vh] overflow-y-scroll scrollbar transition-colors duration-300" onClick={e => e.stopPropagation()}>
+            <nav className="flex flex-col space-y-4 overflow-y-auto max-h-full">
               {/* Auth/User Info at top */}
               <div className="flex flex-col gap-2 mb-2">
                 {isLoggedIn ? (
@@ -97,7 +97,7 @@ const Header = ({ isScrolled }: HeaderProps) => {
               <a href="/#contact" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between">
               Contact Us
             </a>
-          </nav>
+            </nav>
           </div>
         </div>
       )}
