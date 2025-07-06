@@ -109,6 +109,7 @@ const ApplyJobPage: React.FC = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [jobError, setJobError] = useState('');
   const { setToast } = useToast();
+  const [popupMessage, setPopupMessage] = useState('');
 
   // Clear localStorage data when user changes and reset form
   useEffect(() => {
@@ -273,7 +274,7 @@ const ApplyJobPage: React.FC = () => {
       if (formData.academics) formDataToSend.append('academics', formData.academics);
       const { resume, academics, ...fieldsToSend } = formData;
       formDataToSend.append('data', JSON.stringify({ ...fieldsToSend, jobTitle, user_id: user?.id, jobpost_id }));
-              await axios.post(getApiUrl('/application/upload'), formDataToSend, {
+      await axios.post(getApiUrl('/application/upload'), formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setToast({
@@ -281,20 +282,32 @@ const ApplyJobPage: React.FC = () => {
         icon: <CheckCircle className="text-green-500" size={28} />
       });
       setSubmitted(true);
+      setPopupMessage('Application submitted successfully!');
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);
         setSubmitted(false);
         setStep(0);
         setFormData({ ...initialFormData });
+        setPopupMessage('');
         navigate('/');
       }, 3000);
     } catch (error) {
-      setShowPopup(true);
-      setTimeout(() => {
-        setShowPopup(false);
-      }, 3000);
-      alert('An error occurred during submission. Please try again.');
+      if (error.response && error.response.status === 409) {
+        setPopupMessage(error.response.data.message || 'You have already applied for this job.');
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+          setPopupMessage('');
+        }, 3000);
+      } else {
+        setShowPopup(true);
+        setPopupMessage('An error occurred during submission. Please try again.');
+        setTimeout(() => {
+          setShowPopup(false);
+          setPopupMessage('');
+        }, 3000);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -717,10 +730,10 @@ const ApplyJobPage: React.FC = () => {
         </form>
       </div>
       {showPopup && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-100/90 text-blue-900 px-8 py-4 rounded-xl shadow-2xl z-[9999] text-lg font-semibold flex items-center backdrop-blur-md border border-blue-300" style={{backdropFilter: 'blur(6px)'}}>
-          <span>🎉 Application submitted successfully!</span>
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-100/90 text-blue-900 px-8 py-4 rounded-xl shadow-2xl z-[9999] text-lg font-semibold flex items-center backdrop-blur-md border border-blue-300">
+          <span>{popupMessage}</span>
           <button
-            onClick={() => setShowPopup(false)}
+            onClick={() => { setShowPopup(false); setPopupMessage(''); }}
             className="ml-4 p-1 bg-blue-200 rounded-full hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
             aria-label="Close popup"
           >
