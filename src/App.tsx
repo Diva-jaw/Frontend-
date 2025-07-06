@@ -15,6 +15,8 @@ import EmployerForgotPassword from './components/auth/EmployerForgotPassword';
 import JobBoard from './pages/JobBoard';
 import EmployeeTestimonials from './pages/EmployeeTestimonials';
 import LifeAtRFTSection from './components/sections/LifeAtRFTSection';
+import MDUPage from './pages/MDU';
+import CRDPage from './pages/CRD';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import type {} from 'react-router-dom';
 import { MessageSquareDot, Send, CheckCircle2 } from 'lucide-react';
@@ -22,6 +24,7 @@ import { ToastProvider } from './components/ToastContext'; // Import ToastProvid
 import { ThemeProvider } from './components/ThemeContext'; // Import ThemeProvider
 import { AuthProvider } from './components/AuthContext'; // Import AuthProvider
 import { useAuth } from './components/AuthContext';
+
 
 import HRDashboard from './pages/hrDashboard/HRDashboard';
 import EnquiryDashboard from './pages/hrDashboard/enquiry/EnquiryDetail';
@@ -95,6 +98,8 @@ function App() {
                   <Route path="/apply" element={<JobBoard />} />
                   <Route path="/job-board" element={<JobBoard />} />
                   <Route path="/employee-says" element={<EmployeeTestimonials />} />
+                  <Route path="/mdu" element={<MDUPage />}/>
+                  <Route path="/crd" element={<CRDPage />} />
                   {/* HR Dashboard Routes */}
                   <Route path="/hr/signin" element={<SignIn />} />
                   <Route path="/hr" element={<HRLayout><Outlet /></HRLayout>}>
