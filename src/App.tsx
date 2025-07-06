@@ -43,6 +43,9 @@ import SalesApplications from './pages/hrDashboard/SalesApplications';
 import HRApplications from './pages/hrDashboard/HRApplications';
 import FinanceApplications from './pages/hrDashboard/FinanceApplications';
 import OperationsApplications from './pages/hrDashboard/OperationsApplications';
+import AppliedForms from './pages/hrDashboard/AppliedForms';
+import DepartmentHiringProcess from './pages/hrDashboard/DepartmentHiringProcess';
+import StepAppliedFormsList from './pages/hrDashboard/StepAppliedFormsList';
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -117,6 +120,9 @@ function App() {
                     <Route path="applied-jobs/hr" element={<HRApplications />} />
                     <Route path="applied-jobs/finance" element={<FinanceApplications />} />
                     <Route path="applied-jobs/operations" element={<OperationsApplications />} />
+                    <Route path="applied-forms" element={<AppliedForms />} />
+                    <Route path="applied-forms/:department" element={<DepartmentHiringProcess />} />
+                    <Route path="applied-forms/:department/:step" element={<StepAppliedFormsList />} />
                   </Route>
                   <Route path="/apply-job" element={<ApplyJobPage />} />
                 </Routes>

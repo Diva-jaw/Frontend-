@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { User, MapPin, GraduationCap, Layers, Briefcase, ClipboardCheck, ListChecks, FilePlus, CheckCircle, ChevronLeft, ChevronRight, Send } from 'lucide-react';
+import { User, MapPin, GraduationCap, Layers, Briefcase, ClipboardCheck, ListChecks, FilePlus, CheckCircle, ChevronLeft, ChevronRight, Send, X } from 'lucide-react';
 // import Header from '../components/layout/Header';
 // import Footer from '../components/layout/Footer';
 import axios from 'axios';
@@ -110,10 +110,40 @@ const ApplyJobPage: React.FC = () => {
   const [jobError, setJobError] = useState('');
   const { setToast } = useToast();
 
-  // Persist form data to localStorage on every change
+  // Clear localStorage data when user changes and reset form
   useEffect(() => {
-    localStorage.setItem('applyJobFormData', JSON.stringify(formData));
-  }, [formData]);
+    if (user) {
+      const savedData = localStorage.getItem('applyJobFormData');
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        // Check if the saved data belongs to a different user
+        if (parsedData.email && parsedData.email !== user.email) {
+          // Clear old user's data and reset form
+          localStorage.removeItem('applyJobFormData');
+          localStorage.removeItem('applyJobFormStep');
+          setFormData({ ...initialFormData, fullName: user.name, email: user.email });
+          setStep(0);
+        } else if (!parsedData.email || !parsedData.fullName) {
+          // If no user data in localStorage, set current user's data
+          setFormData(prev => ({ ...prev, fullName: user.name, email: user.email }));
+        }
+      } else {
+        // No saved data, set current user's data
+        setFormData(prev => ({ ...prev, fullName: user.name, email: user.email }));
+      }
+    } else {
+      // User logged out, clear localStorage
+      localStorage.removeItem('applyJobFormData');
+      localStorage.removeItem('applyJobFormStep');
+    }
+  }, [user]);
+
+  // Persist form data to localStorage on every change (only if user is logged in)
+  useEffect(() => {
+    if (user && formData.email === user.email) {
+      localStorage.setItem('applyJobFormData', JSON.stringify(formData));
+    }
+  }, [formData, user]);
 
   // Persist step to localStorage on every change
   useEffect(() => {
@@ -136,18 +166,6 @@ const ApplyJobPage: React.FC = () => {
       }, 2500);
     }
   }, [jobpost_id, navigate]);
-
-  // Auto-fill fullName and email if user is logged in and fields are empty
-  useEffect(() => {
-    if (user) {
-      if (user.name && !formData.fullName) {
-        setFormData(prev => ({ ...prev, fullName: user.name }));
-      }
-      if (user.email && !formData.email) {
-        setFormData(prev => ({ ...prev, email: user.email }));
-      }
-    }
-  }, [user, formData.fullName, formData.email]);
 
   const validateStep = () => {
     const newErrors: Record<string, string> = {};
@@ -698,6 +716,18 @@ const ApplyJobPage: React.FC = () => {
           </div>
         </form>
       </div>
+      {showPopup && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-100/90 text-blue-900 px-8 py-4 rounded-xl shadow-2xl z-[9999] text-lg font-semibold flex items-center backdrop-blur-md border border-blue-300" style={{backdropFilter: 'blur(6px)'}}>
+          <span>🎉 Application submitted successfully!</span>
+          <button
+            onClick={() => setShowPopup(false)}
+            className="ml-4 p-1 bg-blue-200 rounded-full hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            aria-label="Close popup"
+          >
+            <X size={20} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
