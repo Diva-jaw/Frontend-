@@ -12,7 +12,6 @@ interface Candidate {
   email: string;
   preferredRole: string;
   skills: string[];
-  preferredLocations: string[];
   languages: string[];
   resumePath?: string;
   academicDocsPath?: string;
@@ -324,7 +323,6 @@ const EnquiryDashboard: React.FC = () => {
                   </div>
                   <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
                     <span className="flex items-center gap-1"><FileText size={14} />{candidate.preferredRole}</span>
-                    <span className="flex items-center gap-1"><MapPin size={14} />{Array.isArray(candidate.preferredLocations) ? candidate.preferredLocations.join(', ') : ''}</span>
                     {candidate.skills.length > 0 && (
                       <span className="flex items-center gap-1"><strong>Skills:</strong> {candidate.skills.join(', ')}</span>
                     )}
@@ -442,12 +440,6 @@ const EnquiryDashboard: React.FC = () => {
                   <div className="space-y-2 text-sm text-black">
                     <div>
                       <strong>Preferred Role:</strong> {selectedCandidate.preferredRole}
-                    </div>
-                    <div>
-                      <strong>Preferred Locations:</strong> {selectedCandidate.preferredLocations.join(', ')}
-                    </div>
-                    <div>
-                      <strong>Languages:</strong> {selectedCandidate.languages.join(', ')}
                     </div>
                   </div>
                 </div>

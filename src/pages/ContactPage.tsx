@@ -292,7 +292,6 @@ const initialFormData = {
   github: '',
   linkedin: '',
   preferredRole: '',
-  preferredLocations: [] as string[],
   joining: '',
   shifts: '',
   expectedCTC: '',
@@ -353,6 +352,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [loginPopup, setLoginPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   useEffect(() => {
     let loaded = { ...initialFormData };
@@ -508,12 +508,18 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
         handleClosePopup();
       }, 3000);
     } catch (error) {
+      let errorMsg = 'An error occurred during submission. Please try again.';
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 409 && error.response.data && error.response.data.error) {
+          errorMsg = error.response.data.error;
+        }
+      }
       setShowPopup(true);
+      setPopupMessage(errorMsg);
       setTimeout(() => {
         setShowPopup(false);
       }, 3000);
       console.error('Submission error:', error);
-      alert('An error occurred during submission. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -1082,7 +1088,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
     <>
       {showPopup && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-100/90 text-blue-900 px-8 py-4 rounded-xl shadow-2xl z-[9999] text-lg font-semibold flex items-center backdrop-blur-md border border-blue-300" style={{backdropFilter: 'blur(6px)'}}>
-          <span>🎉 Your form was submitted successfully!</span>
+          <span>{popupMessage}</span>
           <button
             onClick={handleClosePopup}
             className="ml-4 p-1 bg-blue-200 rounded-full hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300"

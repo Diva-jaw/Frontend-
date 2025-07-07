@@ -79,7 +79,6 @@ const candidateDetailsMock: Record<string, any> = {
     linkedin: 'https://linkedin.com/in/username',
     // Preferences
     preferredRole: 'Software Developer',
-    preferredLocations: ['Rohtak'],
     joining: 'Yes',
     shifts: 'Yes',
     expectedCTC: '40000',

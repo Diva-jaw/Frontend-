@@ -15,7 +15,6 @@ interface Candidate {
   dateOfBirth: string;
   gender: string;
   willingToRelocate: boolean;
-  preferredLocations: string[];
   languages: string[];
   linkedinLink?: string;
   githubLink?: string;
@@ -170,8 +169,6 @@ const CandidateDetail: React.FC = () => {
                 <p><span className="font-medium text-gray-700">Date of Birth:</span> {new Date(candidate.dateOfBirth).toLocaleDateString()}</p>
                 <p><span className="font-medium text-gray-700">Gender:</span> {candidate.gender}</p>
                 <p><span className="font-medium text-gray-700">Willing to Relocate:</span> {candidate.willingToRelocate ? 'Yes' : 'No'}</p>
-                <p><span className="font-medium text-gray-700">Preferred Locations:</span> {candidate.preferredLocations.join(', ')}</p>
-                <p><span className="font-medium text-gray-700">Languages:</span> {candidate.languages.join(', ')}</p>
               </div>
             </div>
 
