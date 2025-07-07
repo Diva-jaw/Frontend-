@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 
 const videos = [
   '/rft3.mp4',
-  '/rft 1.mp4',
+  '/video1.mp4',
   '/rft2.mp4',
 ];
 
