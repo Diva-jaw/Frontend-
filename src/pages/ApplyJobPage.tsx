@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { User, MapPin, GraduationCap, Layers, Briefcase, ClipboardCheck, ListChecks, FilePlus, CheckCircle, ChevronLeft, ChevronRight, Send, X } from 'lucide-react';
 // import Header from '../components/layout/Header';
 // import Footer from '../components/layout/Footer';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useAuth } from '../components/AuthContext';
 import { useToast } from '../components/ToastContext';
 import { getApiUrl } from '../config/api';
@@ -33,7 +33,6 @@ const initialFormData = {
   github: '',
   linkedin: '',
   preferredRole: '',
-  preferredLocations: [] as string[],
   joining: '',
   shifts: '',
   expectedCTC: '',
@@ -206,7 +205,6 @@ const ApplyJobPage: React.FC = () => {
     }
     if (step === 5) {
       if (!formData.preferredRole.trim()) newErrors.preferredRole = 'Preferred Role is required';
-      if (formData.preferredLocations.length === 0) newErrors.preferredLocations = 'Select at least one location';
       if (!formData.joining) newErrors.joining = 'This field is required';
       if (!formData.shifts) newErrors.shifts = 'This field is required';
       if (formData.expectedCTC && (!/^\d+$/.test(formData.expectedCTC) || parseInt(formData.expectedCTC) < 0 || parseInt(formData.expectedCTC) > 10000000))
@@ -292,9 +290,10 @@ const ApplyJobPage: React.FC = () => {
         setPopupMessage('');
         navigate('/');
       }, 3000);
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        setPopupMessage(error.response.data.message || 'You have already applied for this job.');
+    } catch (error: any) {
+      if (error?.response?.status === 409) {
+        const message = error?.response?.data?.message || 'You have already applied for this job.';
+        setPopupMessage(message);
         setShowPopup(true);
         setTimeout(() => {
           setShowPopup(false);
@@ -503,18 +502,6 @@ const ApplyJobPage: React.FC = () => {
                 {errors.preferredRole && <p className="text-red-500 text-sm">{errors.preferredRole}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-black">Preferred Job Location(s) *</label>
-                <div className="flex flex-wrap gap-3">
-                  {locationOptions.map(loc => (
-                    <label key={loc} className="flex items-center space-x-2">
-                      <input type="checkbox" checked={formData.preferredLocations.includes(loc)} onChange={() => handleCheckboxChange('preferredLocations', loc)} className="accent-blue-600" />
-                      <span className="text-black">{loc}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.preferredLocations && <p className="text-red-500 text-sm">{errors.preferredLocations}</p>}
-              </div>
-              <div>
                 <label className="block mb-1 font-medium text-black">Immediate Joining Availability? *</label>
                 <select value={formData.joining} onChange={e => handleInputChange('joining', e.target.value)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
                   <option value="">Select</option>
@@ -671,7 +658,7 @@ const ApplyJobPage: React.FC = () => {
           {jobError}
         </div>
       )}
-      <div className="w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-2 sm:p-4 md:p-8">
+      <div className="w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-2 sm:p-4 md:p-8 mt-20">
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black">Job Application Form</h2>

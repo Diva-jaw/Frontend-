@@ -413,7 +413,6 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
     }
     if (step === 5) {
       if (!formData.preferredRole.trim()) newErrors.preferredRole = 'Preferred Role is required';
-      if (formData.preferredLocations.length === 0) newErrors.preferredLocations = 'Select at least one location';
       if (!formData.joining) newErrors.joining = 'This field is required';
       if (!formData.shifts) newErrors.shifts = 'This field is required';
       if (formData.expectedCTC && (!/^\d+$/.test(formData.expectedCTC) || parseInt(formData.expectedCTC) < 0 || parseInt(formData.expectedCTC) > 10000000))
@@ -894,23 +893,6 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
                   placeholder="e.g., Software Developer"
                 />
                 {errors.preferredRole && <p className="text-red-500 text-sm">{errors.preferredRole}</p>}
-              </div>
-              <div>
-                <label className={`block mb-1 font-medium text-black dark:text-white`}>Preferred Job Location(s) *</label>
-                <div className="flex flex-wrap gap-3">
-                  {locationOptions.map(loc => (
-                    <label key={loc} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={formData.preferredLocations.includes(loc)}
-                        onChange={() => handleCheckboxChange('preferredLocations', loc)}
-                        className="accent-blue-600"
-                      />
-                      <span className={darkMode ? 'text-gray-200' : ''}>{loc}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.preferredLocations && <p className="text-red-500 text-sm">{errors.preferredLocations}</p>}
               </div>
               <div>
                 <label className={`block mb-1 font-medium text-black dark:text-white`}>Immediate Joining Availability? *</label>
