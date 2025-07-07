@@ -3,10 +3,8 @@ import { useTheme } from '../components/ThemeContext';
 
 const glimpses = [
   { src: '/crd1.jpg' },
-  { src: '/crd2.jpg' },
   { src: '/crd4.jpg' },
   { src: '/crd5.jpg' },
-  { src: '/crd6.jpg' },
   { src: '/crd7.jpg' },
   { src: '/crd8.jpg' },
   { src: '/crd9.jpg' },
@@ -20,7 +18,6 @@ const glimpses = [
   { src: '/crd17.jpg' },
   { src: '/crd18.jpg' },
   { src: '/crd19.jpg' },
-  { src: '/crd20.jpg' },
 ];
 
 const CRDPage: React.FC = () => {
