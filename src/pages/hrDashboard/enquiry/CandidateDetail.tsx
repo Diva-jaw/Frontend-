@@ -155,20 +155,20 @@ const CandidateDetail: React.FC = () => {
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Contact Information</h3>
               <div className="space-y-2">
-                <p><span className="font-medium text-gray-700">Email:</span> {candidate.email}</p>
-                <p><span className="font-medium text-gray-700">Mobile:</span> {candidate.mobileNumber}</p>
-                <p><span className="font-medium text-gray-700">Alternate Contact:</span> {candidate.alternateContactNumber || 'N/A'}</p>
-                <p><span className="font-medium text-gray-700">Current City:</span> {candidate.currentCity}</p>
-                <p><span className="font-medium text-gray-700">Home Town:</span> {candidate.homeTown}</p>
+                <p><span className="font-medium text-blue-900">Email:</span> <span className="text-gray-900">{candidate.email}</span></p>
+                <p><span className="font-medium text-blue-900">Mobile:</span> <span className="text-gray-900">{candidate.mobileNumber}</span></p>
+                <p><span className="font-medium text-blue-900">Alternate Contact:</span> <span className="text-gray-900">{candidate.alternateContactNumber || 'N/A'}</span></p>
+                <p><span className="font-medium text-blue-900">Current City:</span> <span className="text-gray-900">{candidate.currentCity}</span></p>
+                <p><span className="font-medium text-blue-900">Home Town:</span> <span className="text-gray-900">{candidate.homeTown}</span></p>
               </div>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Personal Details</h3>
               <div className="space-y-2">
-                <p><span className="font-medium text-gray-700">Date of Birth:</span> {new Date(candidate.dateOfBirth).toLocaleDateString()}</p>
-                <p><span className="font-medium text-gray-700">Gender:</span> {candidate.gender}</p>
-                <p><span className="font-medium text-gray-700">Willing to Relocate:</span> {candidate.willingToRelocate ? 'Yes' : 'No'}</p>
+                <p><span className="font-medium text-blue-900">Date of Birth:</span> <span className="text-gray-900">{new Date(candidate.dateOfBirth).toLocaleDateString()}</span></p>
+                <p><span className="font-medium text-blue-900">Gender:</span> <span className="text-gray-900">{candidate.gender}</span></p>
+                <p><span className="font-medium text-blue-900">Willing to Relocate:</span> <span className="text-gray-900">{candidate.willingToRelocate ? 'Yes' : 'No'}</span></p>
               </div>
             </div>
 
@@ -176,7 +176,7 @@ const CandidateDetail: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Professional Links</h3>
               <div className="space-y-2">
                 <p>
-                  <span className="font-medium text-gray-700">LinkedIn:</span>
+                  <span className="font-medium text-blue-900">LinkedIn:</span>
                   {candidate.linkedinLink ? (
                     <button
                       onClick={() => handleExternalLinkClick(candidate.linkedinLink)}
@@ -185,11 +185,11 @@ const CandidateDetail: React.FC = () => {
                       View Profile
                     </button>
                   ) : (
-                    'N/A'
+                    <span className="text-gray-900">N/A</span>
                   )}
                 </p>
                 <p>
-                  <span className="font-medium text-gray-700">GitHub:</span>
+                  <span className="font-medium text-blue-900">GitHub:</span>
                   {candidate.githubLink ? (
                     <button
                       onClick={() => handleExternalLinkClick(candidate.githubLink)}
@@ -198,7 +198,7 @@ const CandidateDetail: React.FC = () => {
                       View Profile
                     </button>
                   ) : (
-                    'N/A'
+                    <span className="text-gray-900">N/A</span>
                   )}
                 </p>
               </div>
@@ -211,7 +211,7 @@ const CandidateDetail: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p>
-                  <span className="font-medium text-gray-700">Resume:</span>
+                  <span className="font-medium text-blue-900">Resume:</span>
                   {candidate.resumePath ? (
                     <button
                       onClick={() => handleExternalLinkClick(candidate.resumePath)}
@@ -220,13 +220,13 @@ const CandidateDetail: React.FC = () => {
                       Download Resume
                     </button>
                   ) : (
-                    'N/A'
+                    <span className="text-gray-900">N/A</span>
                   )}
                 </p>
               </div>
               <div>
                 <p>
-                  <span className="font-medium text-gray-700">Academic Documents:</span>
+                  <span className="font-medium text-blue-900">Academic Documents:</span>
                   {candidate.academicDocsPath ? (
                     <button
                       onClick={() => handleExternalLinkClick(candidate.academicDocsPath)}
@@ -235,7 +235,7 @@ const CandidateDetail: React.FC = () => {
                       View Documents
                     </button>
                   ) : (
-                    'N/A'
+                    <span className="text-gray-900">N/A</span>
                   )}
                 </p>
               </div>
@@ -247,13 +247,13 @@ const CandidateDetail: React.FC = () => {
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Education Details</h3>
               <div className="space-y-2">
-                <p><span className="font-medium text-gray-700">Highest Qualification:</span> {candidate.highestQualification}</p>
-                <p><span className="font-medium text-gray-700">Course:</span> {candidate.courseName}</p>
-                <p><span className="font-medium text-gray-700">College/University:</span> {candidate.collegeUniversity}</p>
-                <p><span className="font-medium text-gray-700">Affiliated University:</span> {candidate.affiliatedUniversity}</p>
-                <p><span className="font-medium text-gray-700">Year of Passing:</span> {candidate.yearOfPassing}</p>
-                <p><span className="font-medium text-gray-700">Aggregate Marks:</span> {candidate.aggregateMarks}%</p>
-                <p><span className="font-medium text-gray-700">All Semesters Cleared:</span> {candidate.allSemestersCleared ? 'Yes' : 'No'}</p>
+                <p><span className="font-medium text-blue-900">Highest Qualification:</span> <span className="text-gray-900">{candidate.highestQualification}</span></p>
+                <p><span className="font-medium text-blue-900">Course:</span> <span className="text-gray-900">{candidate.courseName}</span></p>
+                <p><span className="font-medium text-blue-900">College/University:</span> <span className="text-gray-900">{candidate.collegeUniversity}</span></p>
+                <p><span className="font-medium text-blue-900">Affiliated University:</span> <span className="text-gray-900">{candidate.affiliatedUniversity}</span></p>
+                <p><span className="font-medium text-blue-900">Year of Passing:</span> <span className="text-gray-900">{candidate.yearOfPassing}</span></p>
+                <p><span className="font-medium text-blue-900">Aggregate Marks:</span> <span className="text-gray-900">{candidate.aggregateMarks}%</span></p>
+                <p><span className="font-medium text-blue-900">All Semesters Cleared:</span> <span className="text-gray-900">{candidate.allSemestersCleared ? 'Yes' : 'No'}</span></p>
               </div>
             </div>
 
@@ -261,7 +261,7 @@ const CandidateDetail: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Skills & Experience</h3>
               <div className="space-y-2">
                 <p>
-                  <span className="font-medium text-gray-700">Skills:</span>
+                  <span className="font-medium text-blue-900">Skills:</span>
                   <div className="flex flex-wrap gap-2 mt-1">
                     {candidate.skills.map((skill, index) => (
                       <span key={index} className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
@@ -271,13 +271,13 @@ const CandidateDetail: React.FC = () => {
                   </div>
                 </p>
                 <p>
-                  <span className="font-medium text-gray-700">Project Experience:</span>{' '}
-                  {candidate.internshipProjectExperience ? 'Yes' : 'No'}
+                  <span className="font-medium text-blue-900">Project Experience:</span>{' '}
+                  <span className="text-gray-900">{candidate.internshipProjectExperience ? 'Yes' : 'No'}</span>
                 </p>
                 {candidate.projectDescription && (
                   <p>
-                    <span className="font-medium text-gray-700">Project Description:</span>{' '}
-                    {candidate.projectDescription}
+                    <span className="font-medium text-blue-900">Project Description:</span>{' '}
+                    <span className="text-gray-900">{candidate.projectDescription}</span>
                   </p>
                 )}
               </div>
@@ -289,24 +289,24 @@ const CandidateDetail: React.FC = () => {
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Job Preferences</h3>
               <div className="space-y-2">
-                <p><span className="font-medium text-gray-700">Preferred Role:</span> {candidate.preferredRole}</p>
-                <p><span className="font-medium text-gray-700">Expected CTC:</span> ₹{candidate.expectedCTC || 'N/A'}</p>
-                <p><span className="font-medium text-gray-700">Immediate Joining:</span> {candidate.immediateJoining ? 'Yes' : 'No'}</p>
-                <p><span className="font-medium text-gray-700">Open to Shifts:</span> {candidate.openToShifts ? 'Yes' : 'No'}</p>
-                <p><span className="font-medium text-gray-700">Opportunity Source:</span> {candidate.opportunitySource}</p>
+                <p><span className="font-medium text-blue-900">Preferred Role:</span> <span className="text-gray-900">{candidate.preferredRole}</span></p>
+                <p><span className="font-medium text-blue-900">Expected CTC:</span> <span className="text-gray-900">₹{candidate.expectedCTC || 'N/A'}</span></p>
+                <p><span className="font-medium text-blue-900">Immediate Joining:</span> <span className="text-gray-900">{candidate.immediateJoining ? 'Yes' : 'No'}</span></p>
+                <p><span className="font-medium text-blue-900">Open to Shifts:</span> <span className="text-gray-900">{candidate.openToShifts ? 'Yes' : 'No'}</span></p>
+                <p><span className="font-medium text-blue-900">Opportunity Source:</span> <span className="text-gray-900">{candidate.opportunitySource}</span></p>
               </div>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg">
               <h3 className="text-lg font-semibold text-gray-800 border-b pb-2 mb-3">Other Information</h3>
               <div className="space-y-2">
-                <p><span className="font-medium text-gray-700">Available for Online Tests:</span> {candidate.availableForOnlineTests ? 'Yes' : 'No'}</p>
-                <p><span className="font-medium text-gray-700">Has Laptop/Internet:</span> {candidate.hasLaptopInternet ? 'Yes' : 'No'}</p>
-                <p><span className="font-medium text-gray-700">Aadhar Number:</span> {candidate.aadharNumber || 'N/A'}</p>
-                <p><span className="font-medium text-gray-700">PAN Number:</span> {candidate.panNo || 'N/A'}</p>
-                <p><span className="font-medium text-gray-700">Passport Available:</span> {candidate.passportAvailable ? 'Yes' : 'No'}</p>
+                <p><span className="font-medium text-blue-900">Available for Online Tests:</span> <span className="text-gray-900">{candidate.availableForOnlineTests ? 'Yes' : 'No'}</span></p>
+                <p><span className="font-medium text-blue-900">Has Laptop/Internet:</span> <span className="text-gray-900">{candidate.hasLaptopInternet ? 'Yes' : 'No'}</span></p>
+                <p><span className="font-medium text-blue-900">Aadhar Number:</span> <span className="text-gray-900">{candidate.aadharNumber || 'N/A'}</span></p>
+                <p><span className="font-medium text-blue-900">PAN Number:</span> <span className="text-gray-900">{candidate.panNo || 'N/A'}</span></p>
+                <p><span className="font-medium text-blue-900">Passport Available:</span> <span className="text-gray-900">{candidate.passportAvailable ? 'Yes' : 'No'}</span></p>
                 {candidate.certificateName && (
-                  <p><span className="font-medium text-gray-700">Certificate Name:</span> {candidate.certificateName}</p>
+                  <p><span className="font-medium text-blue-900">Certificate Name:</span> <span className="text-gray-900">{candidate.certificateName}</span></p>
                 )}
               </div>
             </div>
