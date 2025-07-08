@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Info, Eye } from 'lucide-react';
 
 const acceptOptions = [
@@ -98,6 +98,7 @@ const candidateDetailsMock: Record<string, any> = {
 
 const StepAppliedFormsList: React.FC = () => {
   const { department, step } = useParams<{ department: string; step: string }>();
+  const navigate = useNavigate();
   const [acceptDropdown, setAcceptDropdown] = useState<{ [id: number]: string }>({});
   const [rejectDropdown, setRejectDropdown] = useState<{ [id: number]: string }>({});
   const [acceptDraft, setAcceptDraft] = useState({ ...defaultAcceptDraft });
@@ -107,6 +108,9 @@ const StepAppliedFormsList: React.FC = () => {
   const [selectedAcceptId, setSelectedAcceptId] = useState<number | null>(null);
   const [selectedRejectId, setSelectedRejectId] = useState<number | null>(null);
   const [showDetailsId, setShowDetailsId] = useState<number | null>(null);
+  const [showMailModal, setShowMailModal] = useState<{id: number, status: string} | null>(null);
+  const [mailMessage, setMailMessage] = useState('');
+  const [mailLink, setMailLink] = useState('');
 
   // Accept/Reject candidate lists
   const acceptedCandidates = appliedForms.filter(f => acceptDropdown[f.id]);
@@ -165,284 +169,123 @@ const StepAppliedFormsList: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 px-2 flex flex-col items-center justify-center">
-      <h2 className="text-3xl font-extrabold text-center mb-10 text-blue-900 capitalize tracking-tight drop-shadow">{department} - {step?.replace(/-/g, ' ')}: Applied Forms</h2>
-      <div className="w-full max-w-7xl mx-auto">
-        <div className="overflow-x-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:divide-x md:divide-blue-100">
-            {/* Column 1: Candidate Info */}
-            <div>
-              <table className="min-w-full divide-y divide-blue-100">
-                <thead className="sticky top-0 bg-gray-50 z-10">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-blue-800 font-bold text-lg">Name</th>
-                    <th className="px-4 py-3 text-left text-blue-800 font-bold text-lg">Email</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {appliedForms.map((form, idx) => (
-                    <tr key={form.id} className={idx % 2 === 0 ? 'bg-white/80' : 'bg-blue-50/60'}>
-                      <td className="px-4 py-3 font-semibold text-blue-900 transition-colors duration-150">{form.name}</td>
-                      <td className="px-4 py-3 text-blue-700 transition-colors duration-150">{form.email}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {/* Column 2: Actions */}
-            <div>
-              <table className="min-w-full divide-y divide-blue-100">
-                <thead className="sticky top-0 bg-gray-50 z-10">
-                  <tr>
-                    <th className="px-4 py-3 text-center text-blue-800 font-bold text-lg">Accept</th>
-                    <th className="px-4 py-3 text-center text-blue-800 font-bold text-lg">Reject</th>
-                    <th className="px-4 py-3 text-center text-blue-800 font-bold text-lg">Info</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {appliedForms.map((form, idx) => (
-                    <tr key={form.id} className={idx % 2 === 0 ? 'bg-white/80' : 'bg-blue-50/60'}>
-                      <td className="px-4 py-3 text-center">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 mb-2 capitalize tracking-tight">
+            {department} - {step?.replace(/-/g, ' ')}
+          </h2>
+          <p className="text-lg text-gray-600 font-medium">Applied Forms Management</p>
+        </div>
+        
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead className="bg-gradient-to-r from-blue-600 to-indigo-600">
+                <tr>
+                  <th className="px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Name</th>
+                  <th className="px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Email</th>
+                  <th className="px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Status</th>
+                  <th className="px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Move to</th>
+                  <th className="px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {appliedForms.map((form, idx) => {
+                  const status = acceptDropdown[form.id] || '';
+                  return (
+                    <tr key={form.id} className={`hover:bg-gray-50 transition-colors duration-200 ${
+                      idx % 2 === 0 ? 'bg-white' : 'bg-gray-25'
+                    }`}>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">
+                            {form.name.charAt(0).toUpperCase()}
+                          </div>
+                          <span className="font-semibold text-gray-900 text-lg">{form.name}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-gray-700 font-medium">{form.email}</span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
                         <select
-                          className="border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 shadow-sm hover:shadow-md"
-                          value={acceptDropdown[form.id] || ''}
+                          className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
+                            status === 'Accept' 
+                              ? 'border-green-300 bg-green-50 text-green-800' 
+                              : status === 'Reject'
+                              ? 'border-red-300 bg-red-50 text-red-800'
+                              : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400'
+                          }`}
+                          value={status}
                           onChange={(e) => setAcceptDropdown({ ...acceptDropdown, [form.id]: e.target.value })}
                         >
-                          <option value="">Accept</option>
-                          {acceptOptions.map((opt) => (
-                            <option key={opt} value={opt}>{opt}</option>
-                          ))}
+                          <option value="">Select Status</option>
+                          <option value="Accept">✅ Accept</option>
+                          <option value="Reject">❌ Reject</option>
                         </select>
                       </td>
-                      <td className="px-4 py-3 text-center">
-                        <select
-                          className="border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-red-400 transition-all duration-200 shadow-sm hover:shadow-md"
-                          value={rejectDropdown[form.id] || ''}
-                          onChange={(e) => setRejectDropdown({ ...rejectDropdown, [form.id]: e.target.value })}
-                        >
-                          <option value="">Reject</option>
-                          {rejectOptions.map((opt) => (
-                            <option key={opt} value={opt}>{opt}</option>
-                          ))}
-                        </select>
+                      <td className="px-6 py-4 text-center">
+                        {status !== 'Reject' && (
+                          <select
+                            className="w-full max-w-xs border-2 border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium bg-white text-gray-700 hover:border-blue-400"
+                            value={form.moveTo || ''}
+                            onChange={(e) => {
+                              // You may want to store this in state if needed
+                              // For now, just a placeholder
+                            }}
+                          >
+                            <option value="">Select Round</option>
+                            <option value="Resume Screening">📋 Resume Screening</option>
+                            <option value="Round 1">🎯 Round 1</option>
+                            <option value="Round 2">🎯 Round 2</option>
+                            <option value="Final Round">🏆 Final Round</option>
+                            <option value="HR Round">👥 HR Round</option>
+                          </select>
+                        )}
                       </td>
-                      <td className="px-4 py-3 text-center">
-                        <button
-                          className="text-blue-600 hover:text-blue-900 transition-colors duration-200"
-                          title="See candidate info"
-                          onClick={() => setShowDetailsId(form.id)}
-                        >
-                          <Eye size={20} />
-                        </button>
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex items-center justify-center space-x-3">
+                          <button
+                            className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                            title="View candidate details"
+                            onClick={() => setShowDetailsId(form.id)}
+                          >
+                            <Eye size={20} />
+                          </button>
+                          <button
+                            className={`px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 shadow-sm ${
+                              status 
+                                ? 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white cursor-pointer transform hover:scale-105' 
+                                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            }`}
+                            title={status ? "Send Mail" : "Select Status first"}
+                            onClick={() => status && setShowMailModal({id: form.id, status: status})}
+                            disabled={!status}
+                          >
+                            📧 Send Mail
+                          </button>
+                        </div>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {/* Column 3: Email Drafts */}
-            <div>
-              <div className="mb-8">
-                {/* Accept Draft */}
-                <div className="mb-6 p-4 bg-gradient-to-br from-blue-100 via-white to-blue-50 rounded-2xl shadow-lg flex flex-col gap-2 border-2 border-blue-200">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-blue-800 flex items-center gap-2">Accept Email Draft <span className="inline-block px-2 py-0.5 rounded bg-green-100 text-green-700 text-xs font-bold">Accept</span></span>
-                    <button
-                      className="text-blue-600 hover:underline text-sm font-medium px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
-                      onClick={() => toggleEditMode('accept')}
-                    >
-                      {acceptDraft.editMode ? 'Save' : 'Edit'}
-                    </button>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <div>
-                      <label className="block text-blue-700 text-sm font-medium mb-1">Image for Email (optional):</label>
-                      {acceptDraft.editMode ? (
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleImageChange('accept', e.target.files ? e.target.files[0] : null)}
-                        />
-                      ) : acceptDraft.image && acceptDraft.image instanceof File ? (
-                        <img src={URL.createObjectURL(acceptDraft.image)} alt="Uploaded" className="max-h-24 rounded shadow" />
-                      ) : (
-                        <span className="text-gray-400 text-xs">No image uploaded</span>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-blue-700 text-sm font-medium mb-1">Text for Email:</label>
-                      {acceptDraft.editMode ? (
-                        <textarea
-                          className="w-full border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
-                          rows={3}
-                          value={acceptDraft.greeting}
-                          onChange={(e) => handleDraftEdit('accept', 'greeting', e.target.value)}
-                        />
-                      ) : (
-                        <div className="bg-white rounded px-2 py-1 min-h-[48px] text-gray-800 whitespace-pre-line">{acceptDraft.greeting}</div>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-blue-700 text-sm font-medium mb-1">Link for Test:</label>
-                      {acceptDraft.editMode ? (
-                        <input
-                          className="w-full border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                          value={acceptDraft.link}
-                          onChange={(e) => handleDraftEdit('accept', 'link', e.target.value)}
-                        />
-                      ) : (
-                        <div className="bg-white rounded px-2 py-1 min-h-[40px] text-gray-800 break-all">{acceptDraft.link}</div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex gap-4 mt-2">
-                    <button
-                      className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded shadow transition-all duration-200"
-                      onClick={() => handleSendAll('accept')}
-                    >
-                      Send to all
-                    </button>
-                    <button
-                      className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded shadow transition-all duration-200"
-                      onClick={() => handleSendOne('accept')}
-                    >
-                      Send to one
-                    </button>
-                  </div>
-                  {showAcceptSelect && (
-                    <div className="mt-2 flex gap-2 items-center">
-                      <select
-                        className="border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        value={selectedAcceptId || ''}
-                        onChange={e => setSelectedAcceptId(Number(e.target.value))}
-                      >
-                        <option value="">Select candidate</option>
-                        {acceptedCandidates.map(c => (
-                          <option key={c.id} value={c.id}>{c.name} ({c.email})</option>
-                        ))}
-                      </select>
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-3 py-1 rounded shadow transition-all duration-200"
-                        onClick={() => handleSendToSelected('accept')}
-                        disabled={!selectedAcceptId}
-                      >
-                        Send
-                      </button>
-                      <button
-                        className="text-gray-500 hover:text-gray-700 ml-2"
-                        onClick={() => { setShowAcceptSelect(false); setSelectedAcceptId(null); }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  )}
-                </div>
-                {/* Reject Draft */}
-                <div className="mb-6 p-4 bg-gradient-to-br from-red-100 via-white to-red-50 rounded-2xl shadow-lg flex flex-col gap-2 border-2 border-red-200">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-red-800 flex items-center gap-2">Reject Email Draft <span className="inline-block px-2 py-0.5 rounded bg-red-100 text-red-700 text-xs font-bold">Reject</span></span>
-                    <button
-                      className="text-blue-600 hover:underline text-sm font-medium px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
-                      onClick={() => toggleEditMode('reject')}
-                    >
-                      {rejectDraft.editMode ? 'Save' : 'Edit'}
-                    </button>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <div>
-                      <label className="block text-red-700 text-sm font-medium mb-1">Image for Email (optional):</label>
-                      {rejectDraft.editMode ? (
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleImageChange('reject', e.target.files ? e.target.files[0] : null)}
-                        />
-                      ) : rejectDraft.image && rejectDraft.image instanceof File ? (
-                        <img src={URL.createObjectURL(rejectDraft.image)} alt="Uploaded" className="max-h-24 rounded shadow" />
-                      ) : (
-                        <span className="text-gray-400 text-xs">No image uploaded</span>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-red-700 text-sm font-medium mb-1">Text for Email:</label>
-                      {rejectDraft.editMode ? (
-                        <textarea
-                          className="w-full border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-red-400 resize-none"
-                          rows={3}
-                          value={rejectDraft.greeting}
-                          onChange={(e) => handleDraftEdit('reject', 'greeting', e.target.value)}
-                        />
-                      ) : (
-                        <div className="bg-white rounded px-2 py-1 min-h-[48px] text-gray-800 whitespace-pre-line">{rejectDraft.greeting}</div>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-red-700 text-sm font-medium mb-1">Link for Test:</label>
-                      {rejectDraft.editMode ? (
-                        <input
-                          className="w-full border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-red-400"
-                          value={rejectDraft.link}
-                          onChange={(e) => handleDraftEdit('reject', 'link', e.target.value)}
-                        />
-                      ) : (
-                        <div className="bg-white rounded px-2 py-1 min-h-[40px] text-gray-800 break-all">{rejectDraft.link}</div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex gap-4 mt-2">
-                    <button
-                      className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded shadow transition-all duration-200"
-                      onClick={() => handleSendAll('reject')}
-                    >
-                      Send to all
-                    </button>
-                    <button
-                      className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded shadow transition-all duration-200"
-                      onClick={() => handleSendOne('reject')}
-                    >
-                      Send to one
-                    </button>
-                  </div>
-                  {showRejectSelect && (
-                    <div className="mt-2 flex gap-2 items-center">
-                      <select
-                        className="border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-red-400"
-                        value={selectedRejectId || ''}
-                        onChange={e => setSelectedRejectId(Number(e.target.value))}
-                      >
-                        <option value="">Select candidate</option>
-                        {rejectedCandidates.map(c => (
-                          <option key={c.id} value={c.id}>{c.name} ({c.email})</option>
-                        ))}
-                      </select>
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-3 py-1 rounded shadow transition-all duration-200"
-                        onClick={() => handleSendToSelected('reject')}
-                        disabled={!selectedRejectId}
-                      >
-                        Send
-                      </button>
-                      <button
-                        className="text-gray-500 hover:text-gray-700 ml-2"
-                        onClick={() => { setShowRejectSelect(false); setSelectedRejectId(null); }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
+      
       {showDetailsId && (
-        <div className="fixed inset-0 z-[9999] flex items-start justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-3xl shadow-xl w-full max-w-[900px] mx-auto relative mt-20 flex flex-col p-6 sm:p-8">
-            <div className="sticky top-0 z-10 bg-white rounded-t-3xl px-0 pt-0 pb-4 flex items-center justify-between border-b border-blue-100">
-              <h3 className="text-2xl font-extrabold text-blue-900 tracking-tight">Candidate Details</h3>
+        <div className="fixed inset-0 z-[9999] flex items-start justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-[900px] mx-auto relative mt-20 flex flex-col p-8">
+            <div className="sticky top-0 z-10 bg-white rounded-t-3xl px-0 pt-0 pb-6 flex items-center justify-between border-b border-gray-200">
+              <div>
+                <h3 className="text-3xl font-bold text-gray-900 tracking-tight">Candidate Details</h3>
+                <p className="text-gray-600 mt-1">Complete profile information</p>
+              </div>
               <button
-                className="text-gray-400 hover:text-gray-700 text-2xl font-bold"
+                className="text-gray-400 hover:text-gray-700 text-3xl font-bold p-2 hover:bg-gray-100 rounded-full transition-all duration-200"
                 onClick={() => setShowDetailsId(null)}
                 aria-label="Close"
               >
@@ -450,10 +293,13 @@ const StepAppliedFormsList: React.FC = () => {
               </button>
             </div>
             {candidateDetailsMock[String(showDetailsId)] ? (
-              <div className="space-y-12 max-h-[80vh] overflow-y-auto pt-4 pb-10 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
-                <section className="border-b border-blue-100 pb-6 mb-8">
-                  <h4 className="text-lg font-bold text-blue-800 mb-6 tracking-wide">Personal Details</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+              <div className="space-y-8 max-h-[80vh] overflow-y-auto pt-6 pb-10 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
+                <section className="border-b border-gray-200 pb-8">
+                  <h4 className="text-xl font-bold text-gray-900 mb-6 tracking-wide flex items-center">
+                    <span className="w-2 h-8 bg-blue-500 rounded-full mr-3"></span>
+                    Personal Details
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                     <Detail label="Full Name" value={<span className="font-bold text-blue-900">{candidateDetailsMock[String(showDetailsId)].fullName}</span>} />
                     <Detail label="Date of Birth" value={candidateDetailsMock[String(showDetailsId)].dob} />
                     <Detail label="Gender" value={candidateDetailsMock[String(showDetailsId)].gender} />
@@ -462,17 +308,23 @@ const StepAppliedFormsList: React.FC = () => {
                     <Detail label="Email" value={<a href={`mailto:${candidateDetailsMock[String(showDetailsId)].email}`} className="font-bold text-blue-700 underline break-words">{candidateDetailsMock[String(showDetailsId)].email}</a>} />
                   </div>
                 </section>
-                <section className="border-b border-blue-100 pb-6 mb-8">
-                  <h4 className="text-lg font-bold text-blue-800 mb-6 tracking-wide">Location Details</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+                <section className="border-b border-gray-200 pb-8">
+                  <h4 className="text-xl font-bold text-gray-900 mb-6 tracking-wide flex items-center">
+                    <span className="w-2 h-8 bg-green-500 rounded-full mr-3"></span>
+                    Location Details
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                     <Detail label="Current City" value={candidateDetailsMock[String(showDetailsId)].currentCity} />
                     <Detail label="Home Town / Permanent Address" value={candidateDetailsMock[String(showDetailsId)].homeTown} />
                     <Detail label="Willing to Relocate?" value={candidateDetailsMock[String(showDetailsId)].willingToRelocate} />
                   </div>
                 </section>
-                <section className="border-b border-blue-100 pb-6 mb-8">
-                  <h4 className="text-lg font-bold text-blue-800 mb-6 tracking-wide">Educational Background</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+                <section className="border-b border-gray-200 pb-8">
+                  <h4 className="text-xl font-bold text-gray-900 mb-6 tracking-wide flex items-center">
+                    <span className="w-2 h-8 bg-purple-500 rounded-full mr-3"></span>
+                    Educational Background
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                     <Detail label="Highest Qualification" value={candidateDetailsMock[String(showDetailsId)].qualification} />
                     <Detail label="Course Name & Specialization" value={candidateDetailsMock[String(showDetailsId)].course} />
                     <Detail label="College/Institute Name" value={candidateDetailsMock[String(showDetailsId)].college} />
@@ -483,16 +335,88 @@ const StepAppliedFormsList: React.FC = () => {
                   </div>
                 </section>
                 <section className="pt-2 pb-8">
-                  <h4 className="text-lg font-bold text-blue-800 mb-6 tracking-wide">Resume & Documents</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+                  <h4 className="text-xl font-bold text-gray-900 mb-6 tracking-wide flex items-center">
+                    <span className="w-2 h-8 bg-orange-500 rounded-full mr-3"></span>
+                    Resume & Documents
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
                     <Detail label="Resume" value={candidateDetailsMock[String(showDetailsId)].resume || '—'} />
                     <Detail label="Academic Documents" value={candidateDetailsMock[String(showDetailsId)].academics || '—'} />
                   </div>
                 </section>
               </div>
             ) : (
-              <div className="text-gray-500">No details available.</div>
+              <div className="text-gray-500 text-center py-8">No details available.</div>
             )}
+          </div>
+        </div>
+      )}
+      
+      {showMailModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md mx-auto p-8 relative">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold p-2 hover:bg-gray-100 rounded-full transition-all duration-200"
+              onClick={() => { setShowMailModal(null); setMailMessage(''); setMailLink(''); }}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <div className="text-center mb-6">
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+                showMailModal.status === 'Reject' ? 'bg-red-100' : 'bg-green-100'
+              }`}>
+                {showMailModal.status === 'Reject' ? (
+                  <span className="text-2xl">❌</span>
+                ) : (
+                  <span className="text-2xl">✅</span>
+                )}
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                {showMailModal.status === 'Reject' ? 'Send Rejection Mail' : 'Send Acceptance Mail'}
+              </h3>
+              <p className="text-gray-600">Customize your message for {appliedForms.find(f => f.id === showMailModal.id)?.name}</p>
+            </div>
+            
+            <div className="space-y-6">
+              <div>
+                <label className="block text-gray-700 text-sm font-semibold mb-2">Message:</label>
+                <textarea
+                  className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200"
+                  rows={4}
+                  value={mailMessage}
+                  onChange={e => setMailMessage(e.target.value)}
+                  placeholder={showMailModal.status === 'Reject' ? 'Enter rejection message...' : 'Enter acceptance message...'}
+                />
+              </div>
+              
+              {showMailModal.status === 'Accept' && (
+                <div>
+                  <label className="block text-gray-700 text-sm font-semibold mb-2">Link:</label>
+                  <input
+                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                    value={mailLink}
+                    onChange={e => setMailLink(e.target.value)}
+                    placeholder="Enter test or next round link..."
+                  />
+                </div>
+              )}
+              
+              <button
+                className={`w-full py-3 px-6 rounded-xl font-semibold text-white shadow-lg transition-all duration-200 transform hover:scale-105 ${
+                  showMailModal.status === 'Reject' 
+                    ? 'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700' 
+                    : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
+                }`}
+                onClick={() => {
+                  // Implement send logic here
+                  alert(`Mail sent to ${appliedForms.find(f => f.id === showMailModal.id)?.name} (${showMailModal.status})\nMessage: ${mailMessage}${showMailModal.status === 'Accept' ? `\nLink: ${mailLink}` : ''}`);
+                  setShowMailModal(null); setMailMessage(''); setMailLink('');
+                }}
+              >
+                📧 Send Mail
+              </button>
+            </div>
           </div>
         </div>
       )}
