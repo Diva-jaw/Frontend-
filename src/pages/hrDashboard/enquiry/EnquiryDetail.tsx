@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { getCandidateUrl } from '../../../config/api';
+import { getCandidateUrl, API_CONFIG } from '../../../config/api';
 import { useNavigate, Link } from 'react-router-dom';
-import { User, ChevronLeft, ChevronRight, ArrowLeft, Mail, MapPin, FileText, Download, Eye, Trash2 } from 'lucide-react';
+import { User, ChevronLeft, ChevronRight, ArrowLeft, Mail, MapPin, FileText, Download, Eye, Trash2, X } from 'lucide-react';
 import debounce from 'lodash.debounce';
 
 // Define TypeScript interfaces
@@ -57,6 +57,12 @@ const EnquiryDashboard: React.FC = () => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [deleteSuccess, setDeleteSuccess] = useState<string | null>(null);
+  const [rejectionModalOpen, setRejectionModalOpen] = useState(false);
+  const [candidateToReject, setCandidateToReject] = useState<Candidate | null>(null);
+  const [rejectionReason, setRejectionReason] = useState('');
+  const [rejectionLoading, setRejectionLoading] = useState(false);
+  const [rejectionError, setRejectionError] = useState<string | null>(null);
+  const [rejectionSuccess, setRejectionSuccess] = useState<string | null>(null);
 
   // Debounce filter and date changes
   const debounceFilters = useCallback(
@@ -156,6 +162,28 @@ const EnquiryDashboard: React.FC = () => {
     } finally {
       setDeleteLoading(false);
       setTimeout(() => setDeleteSuccess(null), 2000);
+    }
+  };
+
+  // Rejection handler
+  const handleSendRejectionEmail = async () => {
+    if (!candidateToReject) return;
+    setRejectionLoading(true);
+    setRejectionError(null);
+    try {
+      await axios.post(`${API_CONFIG.BASE_URL}/api/candidates/${candidateToReject.id}/reject`, {
+        reason: rejectionReason || 'We regret to inform you that we are unable to move forward with your application at this time.'
+      });
+      setRejectionSuccess('Rejection email sent successfully!');
+      setRejectionModalOpen(false);
+      setCandidateToReject(null);
+      setRejectionReason('');
+    } catch (err: any) {
+      console.error('Rejection email error:', err);
+      setRejectionError('Failed to send rejection email.');
+    } finally {
+      setRejectionLoading(false);
+      setTimeout(() => setRejectionSuccess(null), 2000);
     }
   };
 
@@ -370,6 +398,14 @@ const EnquiryDashboard: React.FC = () => {
                     View
                   </button>
                   <button
+                    onClick={() => { setCandidateToReject(candidate); setRejectionModalOpen(true); }}
+                    className="px-2 py-1 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-xs flex items-center gap-1"
+                    title="Send Rejection Email"
+                  >
+                    <Mail size={12} />
+                    Reject
+                  </button>
+                  <button
                     onClick={() => { setCandidateToDelete(candidate); setDeleteModalOpen(true); }}
                     className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                     title="Delete Candidate"
@@ -523,6 +559,54 @@ const EnquiryDashboard: React.FC = () => {
                 disabled={deleteLoading}
               >
                 {deleteLoading ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rejection Email Modal */}
+      {rejectionModalOpen && candidateToReject && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-2 sm:p-0">
+          <div className="bg-white rounded-xl shadow-2xl p-4 sm:p-8 max-w-full sm:max-w-md w-full text-center animate-fade-in">
+            <Mail size={40} className="mx-auto text-orange-500 mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Send Rejection Email</h2>
+            <p className="text-gray-700 mb-4">Send a rejection email to <span className="font-semibold text-black">{candidateToReject.fullName}</span>?</p>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 text-left mb-2">
+                Rejection Reason (Optional):
+              </label>
+              <textarea
+                value={rejectionReason}
+                onChange={(e) => setRejectionReason(e.target.value)}
+                placeholder="Enter custom rejection reason or leave blank for default message..."
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
+                rows={4}
+              />
+            </div>
+
+            {rejectionError && <div className="text-red-600 mb-2">{rejectionError}</div>}
+            {rejectionSuccess && <div className="text-green-600 mb-2">{rejectionSuccess}</div>}
+            
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  setRejectionModalOpen(false);
+                  setCandidateToReject(null);
+                  setRejectionReason('');
+                }}
+                className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-100 transition"
+                disabled={rejectionLoading}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSendRejectionEmail}
+                className="px-6 py-2 rounded-lg bg-orange-600 text-white font-semibold hover:bg-orange-700 transition flex items-center justify-center"
+                disabled={rejectionLoading}
+              >
+                {rejectionLoading ? 'Sending...' : 'Send Email'}
               </button>
             </div>
           </div>
