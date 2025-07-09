@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getApplicantUrl } from '../../config/api';
+import { apiService } from '../../services/api';
 
 const DesignApplications: React.FC = () => {
   const [jobTitle, setJobTitle] = useState('');
@@ -17,8 +18,10 @@ const DesignApplications: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await axios.get(getApplicantUrl('design'));
-        setApplicants(Array.isArray(res.data.data) ? res.data.data : []);
+        // Assume round is a prop or state, or default to 'Round 1'
+        const round = 'Round 1';
+        const data = await apiService.fetchApplicantsByDepartment('design', round, 1, 10);
+        setApplicants(Array.isArray(data.data) ? data.data : []);
       } catch (err) {
         setError('Failed to fetch applicants.');
         setApplicants([]);

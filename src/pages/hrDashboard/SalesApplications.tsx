@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getApplicantUrl } from '../../config/api';
+import { apiService } from '../../services/api';
 
 const SalesApplications: React.FC = () => {
   const [jobTitle, setJobTitle] = useState('');
@@ -11,14 +12,18 @@ const SalesApplications: React.FC = () => {
   const [filtered, setFiltered] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [department, setDepartment] = useState('sales');
+  const [round, setRound] = useState('Round 1');
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
 
   useEffect(() => {
     const fetchApplicants = async () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await axios.get(getApplicantUrl('sales'));
-        setApplicants(Array.isArray(res.data.data) ? res.data.data : []);
+        const data = await apiService.fetchApplicantsByDepartment(department, round, page, limit);
+        setApplicants(Array.isArray(data.data) ? data.data : []);
       } catch (err) {
         setError('Failed to fetch applicants.');
         setApplicants([]);
@@ -27,7 +32,7 @@ const SalesApplications: React.FC = () => {
       }
     };
     fetchApplicants();
-  }, []);
+  }, [department, round, page, limit]);
 
   const jobTitles = Array.from(new Set(applicants.map(app => app.job_title).filter(Boolean)));
   const jobTypes = Array.from(new Set(applicants.map(app => app.job_type).filter(Boolean)));

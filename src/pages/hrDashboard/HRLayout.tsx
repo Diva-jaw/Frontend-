@@ -29,15 +29,17 @@ const navItems = [
 
 const HRLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  const { isLoggedIn, user, logout } = useAuth();
+  const { isLoggedIn, user, logout, loading } = useAuth();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
-    if (!isLoggedIn || user?.role !== 'hr') {
-      navigate('/');
+    if (!loading) {
+      if (!isLoggedIn || user?.role !== 'hr') {
+        navigate('/');
+      }
     }
-  }, [isLoggedIn, user, navigate]);
+  }, [isLoggedIn, user, loading, navigate]);
 
   // Get first character of user's name for avatar
   const getUserInitial = (name: string) => {

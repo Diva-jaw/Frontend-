@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Eye } from 'lucide-react';
+import { apiService } from '../../services/api';
 
 // Define acceptOptions for "Move to" dropdown
 const acceptOptions = ['Round 1', 'Round 2', 'Round 3', 'Final Round', 'HR Round'];
@@ -88,7 +89,7 @@ const StepAppliedFormsList: React.FC = () => {
   const limit = 10; // Number of candidates per page
 
   // State for UI interactions
-  const [acceptDropdown, setAcceptDropdown] = useState<{ [id: number]: string }>({});
+  const [statusDropdown, setStatusDropdown] = useState<{ [id: number]: string }>({});
   const [rejectDropdown, setRejectDropdown] = useState<{ [id: number]: string }>({});
   const [moveToDropdown, setMoveToDropdown] = useState<{ [id: number]: string }>({});
   const [acceptDraft, setAcceptDraft] = useState<Draft>({ ...defaultAcceptDraft });
@@ -98,21 +99,86 @@ const StepAppliedFormsList: React.FC = () => {
   const [mailMessage, setMailMessage] = useState<string>('');
   const [mailLink, setMailLink] = useState<string>('');
 
+  // Map route param to round name
+  const roundNameMap: Record<string, string> = {
+    'applied': 'Applied',
+    'resume-screening': 'Resume Screening',
+    'round-1': 'Round 1',
+    'round-2': 'Round 2',
+    'final-round': 'Final Round',
+    'hr-round': 'HR Round',
+    'selected': 'Selected',
+    'rejected': 'Rejected'
+  };
+  const roundParam = step ? roundNameMap[step] || step : '';
+
+  // Helper to map backend applicant details to frontend keys
+  function mapApplicantDetails(raw: any) {
+    // General snake_case to camelCase
+    const camel: any = {};
+    for (const key in raw) {
+      const camelKey = key.replace(/_([a-z])/g, g => g[1].toUpperCase());
+      camel[camelKey] = raw[key];
+    }
+    // Explicit mapping for fields your UI expects
+    return {
+      fullName: camel.fullName,
+      dob: camel.dateOfBirth,
+      gender: camel.gender,
+      mobile: camel.mobileNumber,
+      altMobile: camel.alternateContactNumber,
+      email: camel.email,
+      currentCity: camel.currentCity,
+      homeTown: camel.homeTown,
+      willingToRelocate: camel.willingToRelocate,
+      qualification: camel.highestQualification,
+      course: camel.courseName,
+      college: camel.collegeUniversity,
+      affiliatedUniv: camel.affiliatedUniversity,
+      graduationYear: camel.yearOfPassing,
+      marks: camel.aggregateMarks,
+      allSemCleared: camel.allSemestersCleared,
+      techSkills: camel.techSkills || [],
+      otherTechSkills: camel.otherTechSkills,
+      certifications: camel.certificateName,
+      hasInternship: camel.internshipProjectExperience,
+      projectDesc: camel.projectDescription,
+      github: camel.githubLink,
+      linkedin: camel.linkedinLink,
+      preferredRole: camel.preferredRole,
+      joining: camel.immediateJoining,
+      shifts: camel.openToShifts,
+      expectedCTC: camel.expectedCtc,
+      source: camel.opportunitySource,
+      onlineTest: camel.availableForOnlineTests,
+      laptop: camel.hasLaptopInternet,
+      languages: camel.languages || [],
+      aadhar: camel.aadharNumber,
+      pan: camel.panNo,
+      passport: camel.passportAvailable,
+      resume: camel.resumePath,
+      academics: camel.academicDocsPath,
+      // Add any other fields as needed
+    };
+  }
+
   // Fetch candidate details
-  const fetchCandidateDetails = async (candidateId: number) => {
+  const fetchCandidateDetails = async (applicantId: number) => {
     try {
       setDetailsError(null);
-      const response = await fetch(`/api/candidate-details/${candidateId}`, {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/application/api/applicants/${applicantId}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`, // Replace with your auth logic
+          Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
         },
       });
-      if (!response.ok) throw new Error('Failed to fetch candidate details');
-      const data: CandidateDetails = await response.json();
-      setCandidateDetails((prev) => ({ ...prev, [candidateId]: data }));
+      if (!response.ok) throw new Error('Failed to fetch applicant details');
+      const data = await response.json();
+      const mappedData = mapApplicantDetails(data);
+      setCandidateDetails((prev) => ({ ...prev, [applicantId]: mappedData }));
     } catch (err) {
-      setDetailsError('Error fetching candidate details. Please try again.');
-      console.error(`Error fetching details for candidate ${candidateId}:`, err);
+      setDetailsError('Error fetching applicant details. Please try again.');
+      console.error(`Error fetching details for applicant ${applicantId}:`, err);
     }
   };
 
@@ -122,15 +188,17 @@ const StepAppliedFormsList: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`/api/candidates?department=${department}&step=${step}&page=${page}&limit=${limit}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`, // Replace with your auth logic
-          },
-        });
-        if (!response.ok) throw new Error('Failed to fetch candidates');
-        const data: { candidates: Candidate[]; total: number } = await response.json();
-        setAppliedForms(data.candidates);
-        setTotalPages(Math.ceil(data.total / limit));
+        if (!department || !step) throw new Error('Missing department or step');
+        const data = await apiService.fetchApplicantsByDepartment(department, roundParam, page, limit);
+        // Map backend data to Candidate[]
+        setAppliedForms(
+          data.data.map((app: any) => ({
+            id: app.applicant_id,
+            name: app.full_name,
+            email: app.email || '', // fallback if email is missing
+          }))
+        );
+        setTotalPages(data.pagination.totalPages);
       } catch (err) {
         setError('Error fetching candidates. Please try again.');
       } finally {
@@ -140,6 +208,17 @@ const StepAppliedFormsList: React.FC = () => {
     fetchCandidates();
   }, [department, step, page]);
 
+  // Add a function to move applicant to next round
+  const moveApplicant = async (id: number, toRound: string, status: 'cleared' | 'rejected') => {
+    if (!department) return;
+    try {
+      await apiService.moveApplicantToRound(department, id, toRound, status);
+      // Optionally refetch applicants or update UI
+    } catch (err) {
+      alert('Failed to move applicant');
+    }
+  };
+
   // Fetch details when showDetailsId changes
   useEffect(() => {
     if (showDetailsId && !candidateDetails[showDetailsId]) {
@@ -148,8 +227,8 @@ const StepAppliedFormsList: React.FC = () => {
   }, [showDetailsId]);
 
   // Accept/Reject candidate lists
-  const acceptedCandidates = appliedForms.filter((f) => acceptDropdown[f.id]);
-  const rejectedCandidates = appliedForms.filter((f) => rejectDropdown[f.id]);
+  const acceptedCandidates = appliedForms.filter((f) => statusDropdown[f.id] === 'Accept');
+  const rejectedCandidates = appliedForms.filter((f) => statusDropdown[f.id] === 'Reject');
 
   // Draft edit handlers
   const handleDraftEdit = (draftType: 'accept' | 'reject', field: 'greeting' | 'link', value: string) => {
@@ -204,15 +283,9 @@ const StepAppliedFormsList: React.FC = () => {
   };
 
   const handleStatusChange = (id: number, value: string) => {
-    if (value === 'Accept') {
-      setAcceptDropdown((prev) => ({ ...prev, [id]: value }));
-      setRejectDropdown((prev) => ({ ...prev, [id]: '' }));
-    } else if (value === 'Reject') {
-      setRejectDropdown((prev) => ({ ...prev, [id]: value }));
-      setAcceptDropdown((prev) => ({ ...prev, [id]: '' }));
-    } else {
-      setAcceptDropdown((prev) => ({ ...prev, [id]: '' }));
-      setRejectDropdown((prev) => ({ ...prev, [id]: '' }));
+    setStatusDropdown((prev) => ({ ...prev, [id]: value }));
+    if (value === 'Reject') {
+      setMoveToDropdown((prev) => ({ ...prev, [id]: '' }));
     }
   };
 
@@ -243,75 +316,7 @@ const StepAppliedFormsList: React.FC = () => {
         </div>
 
         {/* Draft Editing UI */}
-        <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white p-6 rounded-xl shadow-md">
-            <h3 className="text-xl font-bold mb-4">Acceptance Draft</h3>
-            <textarea
-              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 mb-4"
-              rows={4}
-              value={acceptDraft.greeting}
-              onChange={(e) => handleDraftEdit('accept', 'greeting', e.target.value)}
-              disabled={!acceptDraft.editMode}
-            />
-            <input
-              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 mb-4"
-              value={acceptDraft.link}
-              onChange={(e) => handleDraftEdit('accept', 'link', e.target.value)}
-              disabled={!acceptDraft.editMode}
-              placeholder="Enter test link..."
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageChange('accept', e.target.files?.[0] || null)}
-              disabled={!acceptDraft.editMode}
-              className="mb-4"
-            />
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-              onClick={() => toggleEditMode('accept')}
-            >
-              {acceptDraft.editMode ? 'Save' : 'Edit'}
-            </button>
-            <button
-              className="ml-4 px-4 py-2 bg-green-500 text-white rounded-lg"
-              onClick={() => handleSendAll('accept')}
-              disabled={acceptedCandidates.length === 0}
-            >
-              Send to All Accepted
-            </button>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-md">
-            <h3 className="text-xl font-bold mb-4">Rejection Draft</h3>
-            <textarea
-              className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 mb-4"
-              rows={4}
-              value={rejectDraft.greeting}
-              onChange={(e) => handleDraftEdit('reject', 'greeting', e.target.value)}
-              disabled={!rejectDraft.editMode}
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageChange('reject', e.target.files?.[0] || null)}
-              disabled={!rejectDraft.editMode}
-              className="mb-4"
-            />
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-              onClick={() => toggleEditMode('reject')}
-            >
-              {rejectDraft.editMode ? 'Save' : 'Edit'}
-            </button>
-            <button
-              className="ml-4 px-4 py-2 bg-red-500 text-white rounded-lg"
-              onClick={() => handleSendAll('reject')}
-              disabled={rejectedCandidates.length === 0}
-            >
-              Send to All Rejected
-            </button>
-          </div>
-        </div>
+        {/* REMOVE the global Acceptance Draft and Rejection Draft boxes here */}
 
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
@@ -334,7 +339,7 @@ const StepAppliedFormsList: React.FC = () => {
                   </tr>
                 ) : (
                   appliedForms.map((form, idx) => {
-                    const status = acceptDropdown[form.id] || rejectDropdown[form.id] || '';
+                    const status = statusDropdown[form.id];
                     return (
                       <tr
                         key={form.id}
@@ -360,7 +365,7 @@ const StepAppliedFormsList: React.FC = () => {
                                 ? 'border-red-300 bg-red-50 text-red-800'
                                 : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400'
                             }`}
-                            value={status}
+                            value={status || ''}
                             onChange={(e) => handleStatusChange(form.id, e.target.value)}
                           >
                             <option value="">Select Status</option>
@@ -368,8 +373,9 @@ const StepAppliedFormsList: React.FC = () => {
                             <option value="Reject">❌ Reject</option>
                           </select>
                         </td>
-                        <td className="px-6 py-4 text-center">
-                          {status !== 'Reject' && (
+                        {/* Conditionally render Move to dropdown only if status is not Reject */}
+                        {status !== 'Reject' ? (
+                          <td className="px-6 py-4 text-center">
                             <select
                               className="w-full max-w-xs border-2 border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium bg-white text-gray-700 hover:border-blue-400"
                               value={moveToDropdown[form.id] || ''}
@@ -382,36 +388,35 @@ const StepAppliedFormsList: React.FC = () => {
                                 </option>
                               ))}
                             </select>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <div className="flex items-center justify-center space-x-3">
-                            <button
-                              className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all duration-200"
-                              title="View candidate details"
-                              onClick={() => setShowDetailsId(form.id)}
-                            >
-                              <Eye size={20} />
-                            </button>
-                            <button
-                              className={`px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 shadow-sm ${
-                                status
-                                  ? 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white cursor-pointer transform hover:scale-105'
-                                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                              }`}
-                              title={status ? 'Send Mail' : 'Select Status first'}
-                              onClick={() => {
-                                if (status) {
-                                  setShowMailModal({ id: form.id, status });
-                                  setMailMessage(status === 'Accept' ? acceptDraft.greeting : rejectDraft.greeting);
-                                  setMailLink(status === 'Accept' ? acceptDraft.link : '');
-                                }
-                              }}
-                              disabled={!status}
-                            >
-                              📧 Send Mail
-                            </button>
-                          </div>
+                          </td>
+                        ) : (
+                          <td className="px-6 py-4 text-center"></td>
+                        )}
+                        <td className="px-6 py-4 text-center flex items-center justify-center gap-2">
+                          {/* Eye icon for details */}
+                          <button
+                            className="text-blue-600 hover:text-blue-800 focus:outline-none mr-2"
+                            onClick={() => setShowDetailsId(form.id)}
+                            title="View Details"
+                          >
+                            <Eye size={22} />
+                          </button>
+                          {/* Send Mail button logic */}
+                          <button
+                            className={`flex items-center gap-1 px-4 py-2 rounded-lg font-semibold text-white shadow transition-all duration-200 ${
+                              (status === 'Reject' || (status === 'Accept' && moveToDropdown[form.id]))
+                                ? 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 cursor-pointer'
+                                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            }`}
+                            disabled={!(status === 'Reject' || (status === 'Accept' && moveToDropdown[form.id]))}
+                            onClick={() => {
+                              if (status === 'Reject' || (status === 'Accept' && moveToDropdown[form.id])) {
+                                setShowMailModal({ id: form.id, status });
+                              }
+                            }}
+                          >
+                            <span role="img" aria-label="mail">📧</span> Send Mail
+                          </button>
                         </td>
                       </tr>
                     );
@@ -585,7 +590,7 @@ const StepAppliedFormsList: React.FC = () => {
                     placeholder={showMailModal.status === 'Reject' ? 'Enter rejection message...' : 'Enter acceptance message...'}
                   />
                 </div>
-
+                {/* Only show Link field if status is Accept */}
                 {showMailModal.status === 'Accept' && (
                   <div>
                     <label className="block text-gray-700 text-sm font-semibold mb-2">Link:</label>
@@ -618,6 +623,13 @@ const StepAppliedFormsList: React.FC = () => {
                     const candidate = appliedForms.find((f) => f.id === showMailModal.id);
                     if (candidate) {
                       try {
+                        // 1. Update backend (moveApplicant)
+                        if (showMailModal.status === 'Accept') {
+                          await moveApplicant(candidate.id, moveToDropdown[candidate.id], 'cleared');
+                        } else if (showMailModal.status === 'Reject') {
+                          await moveApplicant(candidate.id, '', 'rejected');
+                        }
+                        // 2. Send mail
                         const formData = new FormData();
                         formData.append('email', candidate.email);
                         formData.append('message', mailMessage);
@@ -627,13 +639,13 @@ const StepAppliedFormsList: React.FC = () => {
                         await fetch('/api/send-email', {
                           method: 'POST',
                           headers: {
-                            Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`, // Replace with your auth logic
+                            Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
                           },
                           body: formData,
                         });
                         alert(`Mail sent to ${candidate.name} (${showMailModal.status})`);
                       } catch (error) {
-                        alert('Error sending email');
+                        alert('Error sending email or updating status');
                       }
                     }
                     setShowMailModal(null);
@@ -653,17 +665,42 @@ const StepAppliedFormsList: React.FC = () => {
 };
 
 // Helper component for details row
-const Detail = ({ label, value }: { label: string; value: React.ReactNode }) => (
-  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 gap-1">
-    <span className="font-medium text-blue-900 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-wide">{label}</span>
-    <span className="text-blue-700 text-left sm:text-right break-words max-w-full">
-      {typeof value === 'string' && value.endsWith('.pdf') ? (
-        <a href="#" className="text-blue-700 underline break-words">{value}</a>
-      ) : (
-        value
-      )}
-    </span>
-  </div>
-);
+const Detail = ({ label, value }: { label: string; value: React.ReactNode }) => {
+  // Helper to get full URL for resume/docs
+  const getFullUrl = (file: string) => {
+    if (!file) return '#';
+    if (file.startsWith('http')) return file;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    // Remove leading slash if present
+    const path = file.startsWith('/') ? file : `/${file}`;
+    return `${baseUrl}${path}`;
+  };
+
+  // Helper to format date
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
+  let displayValue = value;
+  if (label === 'Date of Birth' && typeof value === 'string') {
+    displayValue = formatDate(value);
+  }
+
+  return (
+    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 gap-1">
+      <span className="font-medium text-blue-900 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-wide">{label}</span>
+      <span className="text-blue-700 text-left sm:text-right break-words max-w-full">
+        {typeof displayValue === 'string' && displayValue.endsWith('.pdf') && (label === 'Resume' || label === 'Academic Documents') ? (
+          <a href={getFullUrl(displayValue)} className="text-blue-700 underline break-words" target="_blank" rel="noopener noreferrer">{label}</a>
+        ) : (
+          displayValue
+        )}
+      </span>
+    </div>
+  );
+};
 
 export default StepAppliedFormsList;

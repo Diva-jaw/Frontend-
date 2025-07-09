@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { getApplicantUrl } from '../../config/api';
+import { apiService } from '../../services/api';
 
 interface Applicant {
   applicant_id: number;
@@ -32,8 +33,10 @@ const EngineeringApplications: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await axios.get(getApplicantUrl(department));
-        setApplicants(Array.isArray(res.data.data) ? res.data.data : []);
+        // Assume round is a prop or state, or default to 'Round 1'
+        const round = 'Round 1';
+        const data = await apiService.fetchApplicantsByDepartment(department, round, 1, 10);
+        setApplicants(Array.isArray(data.data) ? data.data : []);
       } catch (err) {
         setError('Failed to fetch applicants.');
         setApplicants([]);
@@ -42,7 +45,7 @@ const EngineeringApplications: React.FC = () => {
       }
     };
     fetchApplicants();
-  }, []);
+  }, [department]);
 
   // Get unique job titles, job types, and genders from applicants
   const jobTitles = Array.from(new Set(applicants.map(app => app.job_title).filter(Boolean)));
