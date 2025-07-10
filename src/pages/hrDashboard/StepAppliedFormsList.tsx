@@ -361,14 +361,32 @@ const StepAppliedFormsList: React.FC = () => {
                           <span className="text-gray-700 font-medium">{form.email}</span>
                         </td>
                         <td className="px-6 py-4 text-center">
-                          {roundStatus === 'cleared' ? (
-                            <span className="px-4 py-2 rounded-lg font-semibold bg-green-100 text-green-800">
-                              ✅ Accepted
-                            </span>
-                          ) : roundStatus === 'rejected' ? (
-                            <span className="px-4 py-2 rounded-lg font-semibold bg-red-100 text-red-800">
-                              ❌ Rejected
-                            </span>
+                          {step === 'hr-round' ? (
+                            roundStatus === 'cleared' ? (
+                              <span className="px-4 py-2 rounded-lg font-semibold bg-green-100 text-green-800">
+                                ✅ Accepted
+                              </span>
+                            ) : roundStatus === 'rejected' ? (
+                              <span className="px-4 py-2 rounded-lg font-semibold bg-red-100 text-red-800">
+                                ❌ Rejected
+                              </span>
+                            ) : (
+                              <select
+                                className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
+                                  status === 'Accept'
+                                    ? 'border-green-300 bg-green-50 text-green-800'
+                                    : status === 'Reject'
+                                    ? 'border-red-300 bg-red-50 text-red-800'
+                                    : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400'
+                                }`}
+                                value={status || ''}
+                                onChange={(e) => handleStatusChange(form.id, e.target.value)}
+                              >
+                                <option value="">Select Status</option>
+                                <option value="Accept">✅ Accept</option>
+                                <option value="Reject">❌ Reject</option>
+                              </select>
+                            )
                           ) : (
                             <select
                               className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
@@ -618,10 +636,11 @@ const StepAppliedFormsList: React.FC = () => {
                 )}
 
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">Attach Image (Optional):</label>
+                  <label className="block text-gray-700 text-sm font-semibold mb-2">Attach PDF (Optional):</label>
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="application/pdf"
+                    name="pdf"
                     onChange={(e) => handleImageChange(showMailModal.status === 'Accept' ? 'accept' : 'reject', e.target.files?.[0] || null)}
                     className="w-full border-2 border-gray-300 rounded-xl px-4 py-3"
                   />
@@ -637,27 +656,27 @@ const StepAppliedFormsList: React.FC = () => {
                     const candidate = appliedForms.find((f) => f.id === showMailModal.id);
                     if (candidate) {
                       try {
-                        // 1. Update backend (moveApplicant)
-                        if (showMailModal.status === 'Accept') {
-                          await moveApplicant(candidate.id, moveToDropdown[candidate.id], 'cleared');
-                        } else if (showMailModal.status === 'Reject') {
-                          await moveApplicant(candidate.id, '', 'rejected');
-                        }
-                        // 2. Send mail
+                        // Prepare requests
+                        const movePromise = showMailModal.status === 'Accept'
+                          ? moveApplicant(candidate.id, moveToDropdown[candidate.id], 'cleared')
+                          : moveApplicant(candidate.id, '', 'rejected');
                         const formData = new FormData();
                         formData.append('email', candidate.email);
                         formData.append('message', mailMessage);
                         if (showMailModal.status === 'Accept') formData.append('link', mailLink);
                         if (showMailModal.status === 'Accept' ? acceptDraft.image : rejectDraft.image)
-                          formData.append('image', showMailModal.status === 'Accept' ? acceptDraft.image! : rejectDraft.image!);
-                        await fetch('/api/send-email', {
+                          formData.append('pdf', showMailModal.status === 'Accept' ? acceptDraft.image! : rejectDraft.image!);
+                        const mailPromise = fetch('/api/send-email', {
                           method: 'POST',
                           headers: {
                             Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
                           },
                           body: formData,
                         });
-                        alert(`Mail sent to ${candidate.name} (${showMailModal.status})`);
+                        // Run both in parallel
+                        const [moveRes, mailRes] = await Promise.all([movePromise, mailPromise]);
+                        if (!mailRes.ok) throw new Error('Mail send failed');
+                        window.alert(`Mail sent to ${candidate.name} (${showMailModal.status}) and status updated!`);
                       } catch (error) {
                         alert('Error sending email or updating status');
                       }
@@ -667,7 +686,7 @@ const StepAppliedFormsList: React.FC = () => {
                     setMailLink('');
                   }}
                 >
-                  📧 Send Mail
+                  {showMailModal.status === 'Reject' ? 'Send Rejection Mail' : 'Send Acceptance Mail'}
                 </button>
               </div>
             </div>
