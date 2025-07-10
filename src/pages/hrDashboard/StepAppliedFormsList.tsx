@@ -361,32 +361,14 @@ const StepAppliedFormsList: React.FC = () => {
                           <span className="text-gray-700 font-medium">{form.email}</span>
                         </td>
                         <td className="px-6 py-4 text-center">
-                          {step === 'hr-round' ? (
-                            roundStatus === 'cleared' ? (
-                              <span className="px-4 py-2 rounded-lg font-semibold bg-green-100 text-green-800">
-                                ✅ Accepted
-                              </span>
-                            ) : roundStatus === 'rejected' ? (
-                              <span className="px-4 py-2 rounded-lg font-semibold bg-red-100 text-red-800">
-                                ❌ Rejected
-                              </span>
-                            ) : (
-                              <select
-                                className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
-                                  status === 'Accept'
-                                    ? 'border-green-300 bg-green-50 text-green-800'
-                                    : status === 'Reject'
-                                    ? 'border-red-300 bg-red-50 text-red-800'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400'
-                                }`}
-                                value={status || ''}
-                                onChange={(e) => handleStatusChange(form.id, e.target.value)}
-                              >
-                                <option value="">Select Status</option>
-                                <option value="Accept">✅ Accept</option>
-                                <option value="Reject">❌ Reject</option>
-                              </select>
-                            )
+                          {roundStatus === 'cleared' ? (
+                            <span className="px-4 py-2 rounded-lg font-semibold bg-green-100 text-green-800">
+                              ✅ Accepted
+                            </span>
+                          ) : roundStatus === 'rejected' ? (
+                            <span className="px-4 py-2 rounded-lg font-semibold bg-red-100 text-red-800">
+                              ❌ Rejected
+                            </span>
                           ) : (
                             <select
                               className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
@@ -659,7 +641,7 @@ const StepAppliedFormsList: React.FC = () => {
                         // Prepare requests
                         const movePromise = showMailModal.status === 'Accept'
                           ? moveApplicant(candidate.id, moveToDropdown[candidate.id], 'cleared')
-                          : moveApplicant(candidate.id, '', 'rejected');
+                          : moveApplicant(candidate.id, roundParam, 'rejected');
                         const formData = new FormData();
                         formData.append('email', candidate.email);
                         formData.append('message', mailMessage);
