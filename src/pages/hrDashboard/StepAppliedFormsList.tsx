@@ -11,6 +11,7 @@ interface Candidate {
   id: number;
   name: string;
   email: string;
+  round_status: string; // add this line
 }
 
 interface CandidateDetails {
@@ -196,6 +197,7 @@ const StepAppliedFormsList: React.FC = () => {
             id: app.applicant_id,
             name: app.full_name,
             email: app.email || '', // fallback if email is missing
+            round_status: app.round_status || 'in_progress', // add round_status
           }))
         );
         setTotalPages(data.pagination.totalPages);
@@ -340,6 +342,8 @@ const StepAppliedFormsList: React.FC = () => {
                 ) : (
                   appliedForms.map((form, idx) => {
                     const status = statusDropdown[form.id];
+                    // Use round_status from backend
+                    const roundStatus = form.round_status;
                     return (
                       <tr
                         key={form.id}
@@ -357,24 +361,34 @@ const StepAppliedFormsList: React.FC = () => {
                           <span className="text-gray-700 font-medium">{form.email}</span>
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <select
-                            className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
-                              status === 'Accept'
-                                ? 'border-green-300 bg-green-50 text-green-800'
-                                : status === 'Reject'
-                                ? 'border-red-300 bg-red-50 text-red-800'
-                                : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400'
-                            }`}
-                            value={status || ''}
-                            onChange={(e) => handleStatusChange(form.id, e.target.value)}
-                          >
-                            <option value="">Select Status</option>
-                            <option value="Accept">✅ Accept</option>
-                            <option value="Reject">❌ Reject</option>
-                          </select>
+                          {roundStatus === 'cleared' ? (
+                            <span className="px-4 py-2 rounded-lg font-semibold bg-green-100 text-green-800">
+                              ✅ Accepted
+                            </span>
+                          ) : roundStatus === 'rejected' ? (
+                            <span className="px-4 py-2 rounded-lg font-semibold bg-red-100 text-red-800">
+                              ❌ Rejected
+                            </span>
+                          ) : (
+                            <select
+                              className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
+                                status === 'Accept'
+                                  ? 'border-green-300 bg-green-50 text-green-800'
+                                  : status === 'Reject'
+                                  ? 'border-red-300 bg-red-50 text-red-800'
+                                  : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400'
+                              }`}
+                              value={status || ''}
+                              onChange={(e) => handleStatusChange(form.id, e.target.value)}
+                            >
+                              <option value="">Select Status</option>
+                              <option value="Accept">✅ Accept</option>
+                              <option value="Reject">❌ Reject</option>
+                            </select>
+                          )}
                         </td>
-                        {/* Conditionally render Move to dropdown only if status is not Reject */}
-                        {status !== 'Reject' ? (
+                        {/* Conditionally render Move to dropdown only if status is not Reject and roundStatus is not cleared/rejected */}
+                        {roundStatus === 'in_progress' && status !== 'Reject' ? (
                           <td className="px-6 py-4 text-center">
                             <select
                               className="w-full max-w-xs border-2 border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium bg-white text-gray-700 hover:border-blue-400"
