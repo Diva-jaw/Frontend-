@@ -111,6 +111,7 @@ const AuthModal: React.FC<{
                     onChange={(e) => handleInputChange('name', e.target.value)}
                     className={`w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-black dark:text-white ${darkMode ? 'dark' : ''}`}
                     placeholder="Enter your full name"
+                    autoComplete="name"
                   />
                 </div>
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
@@ -249,7 +250,7 @@ const Header: React.FC<{
           ) : (
             <button
               onClick={onAuthClick}
-              className={`bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors ${darkMode ? 'dark' : ''}`}
+              className={`hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors ${darkMode ? 'dark' : ''}`}
             >
               Sign In
             </button>
@@ -291,7 +292,6 @@ const initialFormData = {
   github: '',
   linkedin: '',
   preferredRole: '',
-  preferredLocations: [] as string[],
   joining: '',
   shifts: '',
   expectedCTC: '',
@@ -351,6 +351,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
+  const [loginPopup, setLoginPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
 
   useEffect(() => {
     let loaded = { ...initialFormData };
@@ -411,7 +413,6 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
     }
     if (step === 5) {
       if (!formData.preferredRole.trim()) newErrors.preferredRole = 'Preferred Role is required';
-      if (formData.preferredLocations.length === 0) newErrors.preferredLocations = 'Select at least one location';
       if (!formData.joining) newErrors.joining = 'This field is required';
       if (!formData.shifts) newErrors.shifts = 'This field is required';
       if (formData.expectedCTC && (!/^\d+$/.test(formData.expectedCTC) || parseInt(formData.expectedCTC) < 0 || parseInt(formData.expectedCTC) > 10000000))
@@ -467,7 +468,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
   const handleClosePopup = () => {
     setShowPopup(false);
     setSubmitted(false);
-    navigate('/');
+    // For enquiry form, stay on the same page and reset to first step
+    // Don't navigate away - just reset the form
     setFormData({ ...initialFormData, fullName: user?.name || '', email: user?.email || '' });
     setStep(0);
     if (user && user.email) {
@@ -506,12 +508,18 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
         handleClosePopup();
       }, 3000);
     } catch (error) {
+      let errorMsg = 'An error occurred during submission. Please try again.';
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 409 && error.response.data && error.response.data.error) {
+          errorMsg = error.response.data.error;
+        }
+      }
       setShowPopup(true);
+      setPopupMessage(errorMsg);
       setTimeout(() => {
         setShowPopup(false);
       }, 3000);
       console.error('Submission error:', error);
-      alert('An error occurred during submission. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -555,6 +563,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
                   onChange={e => handleInputChange('fullName', e.target.value)}
                   className={`w-full p-2 border ${darkMode ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500`}
                   placeholder="As per Aadhaar or ID"
+                  autoComplete="name"
                 />
                 {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
               </div>
@@ -892,23 +901,6 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
                 {errors.preferredRole && <p className="text-red-500 text-sm">{errors.preferredRole}</p>}
               </div>
               <div>
-                <label className={`block mb-1 font-medium text-black dark:text-white`}>Preferred Job Location(s) *</label>
-                <div className="flex flex-wrap gap-3">
-                  {locationOptions.map(loc => (
-                    <label key={loc} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        checked={formData.preferredLocations.includes(loc)}
-                        onChange={() => handleCheckboxChange('preferredLocations', loc)}
-                        className="accent-blue-600"
-                      />
-                      <span className={darkMode ? 'text-gray-200' : ''}>{loc}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.preferredLocations && <p className="text-red-500 text-sm">{errors.preferredLocations}</p>}
-              </div>
-              <div>
                 <label className={`block mb-1 font-medium text-black dark:text-white`}>Immediate Joining Availability? *</label>
                 <select
                   value={formData.joining}
@@ -1095,32 +1087,40 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
   return (
     <>
       {showPopup && (
-        <div className="fixed top-6 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-8 py-4 rounded-xl shadow-2xl z-50 text-lg font-semibold flex items-center animate-bounce">
-          <span>🎉 Your form was submitted successfully!</span>
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-100/90 text-blue-900 px-8 py-4 rounded-xl shadow-2xl z-[9999] text-lg font-semibold flex items-center backdrop-blur-md border border-blue-300" style={{backdropFilter: 'blur(6px)'}}>
+          <span>{popupMessage}</span>
           <button
             onClick={handleClosePopup}
-            className="ml-4 p-1 bg-green-600 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300"
+            className="ml-4 p-1 bg-blue-200 rounded-full hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
             aria-label="Close popup"
           >
             <X size={20} />
           </button>
         </div>
       )}
-      <div className={`w-full max-w-lg md:max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 sm:p-4 md:p-8`}>
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black dark:text-white`}>Enquiry Form</h2>
-            <span className={`text-gray-500 dark:text-gray-400`}>Step {step + 1} of {steps.length}</span>
+      {loginPopup && (
+        <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border border-blue-200 dark:border-blue-700 shadow-2xl rounded-xl px-8 py-4 flex items-center justify-center space-x-3 animate-fade-in-up">
+            <svg className="w-7 h-7 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" /></svg>
+            <span className="font-semibold text-blue-900 dark:text-blue-200 text-lg">Please login first</span>
           </div>
-          <div className="flex space-x-2 mb-6">
+        </div>
+      )}
+      <div className={`w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 sm:p-4 md:p-8`}>
+        <div className="mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black dark:text-white`}>Enquiry Form</h2>
+            <span className={`text-gray-500 dark:text-gray-400 whitespace-nowrap`}>Step {step + 1} of {steps.length}</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-6">
             {steps.map((s, i) => (
-              <div key={s} className={`flex-1 h-2 rounded-full ${i <= step ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-600'}`}></div>
+              <div key={s} className={`flex-1 h-2 rounded-full min-w-[32px] ${i <= step ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-600'}`}></div>
             ))}
           </div>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="w-full">
           {renderStep()}
-          <div className="flex justify-between mt-8">
+          <div className="flex flex-col sm:flex-row justify-between mt-8 gap-4">
             {step > 0 && (
               <button 
                 type="button" 
@@ -1131,7 +1131,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
                 <ChevronLeft className="mr-2" /> Back
               </button>
             )}
-            <div className="flex-1"></div>
+            <div className="flex-1" />
             {step < steps.length - 1 && (
               <button 
                 type="button" 

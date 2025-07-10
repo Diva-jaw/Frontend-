@@ -29,15 +29,17 @@ const navItems = [
 
 const HRLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
-  const { isLoggedIn, user, logout } = useAuth();
+  const { isLoggedIn, user, logout, loading } = useAuth();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
-    if (!isLoggedIn || user?.role !== 'hr') {
-      navigate('/');
+    if (!loading) {
+      if (!isLoggedIn || user?.role !== 'hr') {
+        navigate('/');
+      }
     }
-  }, [isLoggedIn, user, navigate]);
+  }, [isLoggedIn, user, loading, navigate]);
 
   // Get first character of user's name for avatar
   const getUserInitial = (name: string) => {
@@ -49,22 +51,22 @@ const HRLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {/* HR Top Navbar */}
       <nav className="bg-white dark:bg-gray-900 shadow-sm dark:shadow-gray-800/20 sticky top-0 z-50 w-full transition-colors duration-300">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center h-16 w-full">
+          <div className="flex flex-col md:flex-row items-center h-auto md:h-16 w-full gap-4 md:gap-0">
             {/* Left: Logo and Nav */}
-            <div className="flex items-center flex-shrink-0">
+            <div className="flex items-center flex-shrink-0 mb-2 md:mb-0">
               <img
                 src="/RFT logo1.jpg"
                 alt="RFT Logo"
-                className="h-12 w-12 rounded-full border-4 border-blue-400 dark:border-blue-500 mr-6"
+                className="h-12 w-12 rounded-full border-4 border-blue-400 dark:border-blue-500 mr-4 md:mr-6"
               />
               <span className="font-bold text-2xl text-blue-900 dark:text-blue-200 tracking-wide">HR Dashboard</span>
             </div>
-            <div className="flex-1 flex items-center justify-center space-x-2 md:space-x-8">
+            <div className="flex-1 flex flex-wrap md:flex-nowrap items-center justify-center gap-2 md:gap-8 w-full">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`text-gray-800 dark:text-gray-200 font-medium text-sm uppercase tracking-wide relative rounded-full px-4 py-2 transition-all duration-200 ease-in-out hover:text-indigo-700 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-md hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-600 flex items-center justify-center gap-2 ${
+                  className={`text-gray-800 dark:text-gray-200 font-medium text-sm uppercase tracking-wide relative rounded-full px-4 py-2 transition-all duration-200 ease-in-out hover:text-indigo-700 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-md hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-600 flex items-center justify-center gap-2 whitespace-nowrap ${
                     location.pathname === item.path
                       ? 'bg-blue-100 dark:bg-gray-800 text-blue-700 dark:text-blue-300 shadow border border-blue-200 dark:border-blue-700'
                       : ''
@@ -75,7 +77,7 @@ const HRLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </Link>
               ))}
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 mt-2 md:mt-0">
               <button
                 onClick={toggleTheme}
                 className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

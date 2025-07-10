@@ -1,4 +1,5 @@
 import { getAuthUrl } from '../config/api';
+import { getApplicantUrl } from '../config/api';
 
 export interface AuthResponse {
   message: string;
@@ -13,6 +14,20 @@ export interface AuthResponse {
 
 export interface ErrorResponse {
   error: string;
+}
+
+export interface Applicant {
+  applicant_id: number;
+  user_id: number;
+  full_name: string;
+  date_of_birth: string;
+  gender: string;
+  highest_qualification: string;
+  round_status: string;
+  round_name: string;
+  job_title: string;
+  job_type: string;
+  applied_at: string;
 }
 
 class ApiService {
@@ -93,6 +108,46 @@ class ApiService {
       method: 'POST',
       body: JSON.stringify({ email, otp, newPassword }),
     });
+  }
+
+  async fetchApplicantsByDepartment(
+    department: string,
+    round: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<{ data: Applicant[]; pagination: any }> {
+    const url = `${getApplicantUrl(department)}?round=${encodeURIComponent(round)}&page=${page}&limit=${limit}`;
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch applicants');
+    }
+    return response.json();
+  }
+
+  async moveApplicantToRound(
+    department: string,
+    applicantId: number,
+    toRound: string,
+    status: 'cleared' | 'rejected'
+  ): Promise<any> {
+    const url = `${getApplicantUrl(department)}/${applicantId}/move`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
+      },
+      body: JSON.stringify({ toRound, status }),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to move applicant');
+    }
+    return response.json();
   }
 }
 

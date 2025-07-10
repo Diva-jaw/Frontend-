@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { User, MapPin, GraduationCap, Layers, Briefcase, ClipboardCheck, ListChecks, FilePlus, CheckCircle, ChevronLeft, ChevronRight, Send } from 'lucide-react';
+import { User, MapPin, GraduationCap, Layers, Briefcase, ClipboardCheck, ListChecks, FilePlus, CheckCircle, ChevronLeft, ChevronRight, Send, X } from 'lucide-react';
 // import Header from '../components/layout/Header';
 // import Footer from '../components/layout/Footer';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useAuth } from '../components/AuthContext';
 import { useToast } from '../components/ToastContext';
 import { getApiUrl } from '../config/api';
@@ -33,7 +33,6 @@ const initialFormData = {
   github: '',
   linkedin: '',
   preferredRole: '',
-  preferredLocations: [] as string[],
   joining: '',
   shifts: '',
   expectedCTC: '',
@@ -82,26 +81,83 @@ const languageOptions = [
 const ApplyJobPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const jobTitle = location.state?.jobTitle || '';
-  const jobpost_id = location.state?.jobpost_id;
-  const [formData, setFormData] = useState<typeof initialFormData & { [key: string]: any }>({ ...initialFormData });
-  const [step, setStep] = useState(0);
+  const { user, loading } = useAuth();
+  // Read job info from location.state or localStorage
+  const jobTitle = location.state?.jobTitle || localStorage.getItem('jobTitle') || '';
+  const jobpost_id = location.state?.jobpost_id || localStorage.getItem('jobpost_id');
+
+  // Store job info in localStorage if present in location.state
+  useEffect(() => {
+    if (location.state?.jobTitle && location.state?.jobpost_id) {
+      localStorage.setItem('jobTitle', location.state.jobTitle);
+      localStorage.setItem('jobpost_id', location.state.jobpost_id);
+    }
+  }, [location.state]);
+
+  const [formData, setFormData] = useState<typeof initialFormData & { [key: string]: any }>(() => {
+    const saved = localStorage.getItem('applyJobFormData');
+    return saved ? { ...initialFormData, ...JSON.parse(saved) } : { ...initialFormData };
+  });
+  const [step, setStep] = useState(() => {
+    const savedStep = localStorage.getItem('applyJobFormStep');
+    return savedStep ? parseInt(savedStep, 10) : 0;
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [jobError, setJobError] = useState('');
   const { setToast } = useToast();
+  const [popupMessage, setPopupMessage] = useState('');
+
+  // Clear localStorage data when user changes and reset form
+  useEffect(() => {
+    if (user) {
+      const savedData = localStorage.getItem('applyJobFormData');
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        // Check if the saved data belongs to a different user
+        if (parsedData.email && parsedData.email !== user.email) {
+          // Clear old user's data and reset form
+          localStorage.removeItem('applyJobFormData');
+          localStorage.removeItem('applyJobFormStep');
+          setFormData({ ...initialFormData, fullName: user.name, email: user.email });
+          setStep(0);
+        } else if (!parsedData.email || !parsedData.fullName) {
+          // If no user data in localStorage, set current user's data
+          setFormData(prev => ({ ...prev, fullName: user.name, email: user.email }));
+        }
+      } else {
+        // No saved data, set current user's data
+        setFormData(prev => ({ ...prev, fullName: user.name, email: user.email }));
+      }
+    } else {
+      // User logged out, clear localStorage
+      localStorage.removeItem('applyJobFormData');
+      localStorage.removeItem('applyJobFormStep');
+    }
+  }, [user]);
+
+  // Persist form data to localStorage on every change (only if user is logged in)
+  useEffect(() => {
+    if (user && formData.email === user.email) {
+      localStorage.setItem('applyJobFormData', JSON.stringify(formData));
+    }
+  }, [formData, user]);
+
+  // Persist step to localStorage on every change
+  useEffect(() => {
+    localStorage.setItem('applyJobFormStep', String(step));
+  }, [step]);
 
   // Redirect to login if not logged in
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       navigate('/signin');
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
-  // Redirect to job board if jobpost_id is missing
+  // Redirect to job board if jobpost_id is missing after both checks
   useEffect(() => {
     if (!jobpost_id) {
       setJobError('No job selected. Please apply from the Job Board.');
@@ -149,7 +205,6 @@ const ApplyJobPage: React.FC = () => {
     }
     if (step === 5) {
       if (!formData.preferredRole.trim()) newErrors.preferredRole = 'Preferred Role is required';
-      if (formData.preferredLocations.length === 0) newErrors.preferredLocations = 'Select at least one location';
       if (!formData.joining) newErrors.joining = 'This field is required';
       if (!formData.shifts) newErrors.shifts = 'This field is required';
       if (formData.expectedCTC && (!/^\d+$/.test(formData.expectedCTC) || parseInt(formData.expectedCTC) < 0 || parseInt(formData.expectedCTC) > 10000000))
@@ -217,7 +272,7 @@ const ApplyJobPage: React.FC = () => {
       if (formData.academics) formDataToSend.append('academics', formData.academics);
       const { resume, academics, ...fieldsToSend } = formData;
       formDataToSend.append('data', JSON.stringify({ ...fieldsToSend, jobTitle, user_id: user?.id, jobpost_id }));
-              await axios.post(getApiUrl('/application/upload'), formDataToSend, {
+      await axios.post(getApiUrl('/application/upload'), formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setToast({
@@ -225,20 +280,33 @@ const ApplyJobPage: React.FC = () => {
         icon: <CheckCircle className="text-green-500" size={28} />
       });
       setSubmitted(true);
+      setPopupMessage('Application submitted successfully!');
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);
         setSubmitted(false);
         setStep(0);
         setFormData({ ...initialFormData });
+        setPopupMessage('');
         navigate('/');
       }, 3000);
-    } catch (error) {
-      setShowPopup(true);
-      setTimeout(() => {
-        setShowPopup(false);
-      }, 3000);
-      alert('An error occurred during submission. Please try again.');
+    } catch (error: any) {
+      if (error?.response?.status === 409) {
+        const message = error?.response?.data?.message || 'You have already applied for this job.';
+        setPopupMessage(message);
+        setShowPopup(true);
+        setTimeout(() => {
+          setShowPopup(false);
+          setPopupMessage('');
+        }, 3000);
+      } else {
+        setShowPopup(true);
+        setPopupMessage('An error occurred during submission. Please try again.');
+        setTimeout(() => {
+          setShowPopup(false);
+          setPopupMessage('');
+        }, 3000);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -434,18 +502,6 @@ const ApplyJobPage: React.FC = () => {
                 {errors.preferredRole && <p className="text-red-500 text-sm">{errors.preferredRole}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-black">Preferred Job Location(s) *</label>
-                <div className="flex flex-wrap gap-3">
-                  {locationOptions.map(loc => (
-                    <label key={loc} className="flex items-center space-x-2">
-                      <input type="checkbox" checked={formData.preferredLocations.includes(loc)} onChange={() => handleCheckboxChange('preferredLocations', loc)} className="accent-blue-600" />
-                      <span className="text-black">{loc}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.preferredLocations && <p className="text-red-500 text-sm">{errors.preferredLocations}</p>}
-              </div>
-              <div>
                 <label className="block mb-1 font-medium text-black">Immediate Joining Availability? *</label>
                 <select value={formData.joining} onChange={e => handleInputChange('joining', e.target.value)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
                   <option value="">Select</option>
@@ -602,31 +658,44 @@ const ApplyJobPage: React.FC = () => {
           {jobError}
         </div>
       )}
-      <div className="w-full max-w-lg md:max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-2 sm:p-4 md:p-8">
+      <div className="w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-2 sm:p-4 md:p-8 mt-20">
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black">Job Application Form</h2>
           </div>
           {jobTitle && (
             <div className="mb-4 text-blue-700 font-semibold text-xl">Applying for: <span className="font-bold">{jobTitle}</span></div>
           )}
-          <div className="flex space-x-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-6">
             {steps.map((s, i) => (
-              <div key={s} className={`flex-1 h-2 rounded-full ${i <= step ? 'bg-blue-600' : 'bg-gray-200'}`}></div>
+              <div
+                key={s}
+                className={`flex-1 h-2 rounded-full min-w-[32px] ${i <= step ? 'bg-blue-600' : 'bg-gray-400'} shadow-[0_2px_8px_2px_rgba(0,0,0,0.7)] border border-gray-800`}
+              ></div>
             ))}
           </div>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="w-full">
           {renderStep()}
-          <div className="flex justify-between mt-8">
+          <div className="flex flex-col sm:flex-row justify-between mt-8 gap-4">
             {step > 0 && (
-              <button type="button" onClick={handleBack} disabled={isSubmitting} className="flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors disabled:opacity-50">
+              <button
+                type="button"
+                onClick={handleBack}
+                disabled={isSubmitting}
+                className="flex items-center w-full sm:w-auto block px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition-colors disabled:opacity-50 justify-center"
+              >
                 <ChevronLeft className="mr-2" /> Back
               </button>
             )}
             <div className="flex-1"></div>
             {step < steps.length - 1 && (
-              <button type="button" onClick={handleNext} disabled={isSubmitting} className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors ml-auto disabled:opacity-50">
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={isSubmitting}
+                className="flex items-center w-full sm:w-auto block px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors ml-auto disabled:opacity-50 justify-center"
+              >
                 Next <ChevronRight className="ml-2" />
               </button>
             )}
@@ -647,6 +716,18 @@ const ApplyJobPage: React.FC = () => {
           </div>
         </form>
       </div>
+      {showPopup && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-100/90 text-blue-900 px-8 py-4 rounded-xl shadow-2xl z-[9999] text-lg font-semibold flex items-center backdrop-blur-md border border-blue-300">
+          <span>{popupMessage}</span>
+          <button
+            onClick={() => { setShowPopup(false); setPopupMessage(''); }}
+            className="ml-4 p-1 bg-blue-200 rounded-full hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            aria-label="Close popup"
+          >
+            <X size={20} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

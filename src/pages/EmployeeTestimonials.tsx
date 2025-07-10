@@ -26,7 +26,7 @@ const EmployeeTestimonials: React.FC = () => {
       name: "Anshika",
       role: "Assistant Developer",
       photo: "/anshika.jpg",
-      text: '"As an Assistant Developer, I’ve been given real opportunities to grow my skills and contribute meaningfully. The mentorship and team support make it a great place to learn and thrive."',
+      text: '"As an Assistant Developer, I\'ve been given real opportunities to grow my skills and contribute meaningfully. The mentorship and team support make it a great place to learn and thrive."',
       rating: 4,
     },
     {
@@ -34,7 +34,7 @@ const EmployeeTestimonials: React.FC = () => {
       name: "Riya Girotra",
       role: "QA & CRM Specialist",
       photo: "/Riya Girotra.jpg",
-      text: '"Working across Quality Assurance and Customer Relationship Management has given me a unique perspective. The team’s commitment to excellence and user satisfaction makes every task impactful."',
+      text: '"Working across Quality Assurance and Customer Relationship Management has given me a unique perspective. The team\'s commitment to excellence and user satisfaction makes every task impactful."',
       rating: 4,
     },
     {
@@ -50,7 +50,7 @@ const EmployeeTestimonials: React.FC = () => {
       name: "Riya Singh",
       role: "Junior Developer",
       photo: "/Riya Singh.jpg",
-      text: '"As a Junior Developer, I’ve had the chance to work on real projects from day one. The guidance from senior team members and the collaborative culture make it the perfect environment to grow."',
+      text: '"As a Junior Developer, I\'ve had the chance to work on real projects from day one. The guidance from senior team members and the collaborative culture make it the perfect environment to grow."',
       rating: 5,
     },
     {
@@ -58,7 +58,7 @@ const EmployeeTestimonials: React.FC = () => {
       name: "Sadaf",
       role: "Assistant Developer",
       photo: "/sadaf.jpg",
-      text: '"Joining as an Assistant Developer has been an amazing experience. The team’s support and the hands-on learning environment have helped me build confidence and sharpen my skills every day."',
+      text: '"Joining as an Assistant Developer has been an amazing experience. The team\'s support and the hands-on learning environment have helped me build confidence and sharpen my skills every day."',
       rating: 4,
     },
     {
@@ -66,7 +66,7 @@ const EmployeeTestimonials: React.FC = () => {
       name: "Anirudh",
       role: "Assistant Developer",
       photo: "/anirudhh.jpg",
-      text: '"As an Assistant Developer, I’ve been exposed to a wide range of technologies and real-world coding practices. It’s a great place to build a strong foundation and grow with the team."',
+      text: '"As an Assistant Developer, I\'ve been exposed to a wide range of technologies and real-world coding practices. It\'s a great place to build a strong foundation and grow with the team."',
       rating: 5,
     },
     {
@@ -74,7 +74,7 @@ const EmployeeTestimonials: React.FC = () => {
       name: "Ronit",
       role: "AI Engineer",
       photo: "/ronit.jpg",
-      text: '"Working on AI-driven solutions here has been an exciting journey. The access to advanced tools, real-world datasets, and a collaborative environment keeps me inspired to push the boundaries of what’s possible."',
+      text: '"Working on AI-driven solutions here has been an exciting journey. The access to advanced tools, real-world datasets, and a collaborative environment keeps me inspired to push the boundaries of what\'s possible."',
       rating: 4,
     },
   ];

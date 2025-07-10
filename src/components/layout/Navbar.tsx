@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon, LogOut, User } from "lucide-react";
+import { Sun, Moon, LogOut, User, Menu, X } from "lucide-react";
 import { useTheme } from "../ThemeContext";
 import { useAuth } from "../AuthContext";
 
@@ -12,6 +12,11 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { isLoggedIn, user, logout } = useAuth();
+  const [careersDropdownOpen, setCareersDropdownOpen] = useState(false);
+  const [learnDropdownOpen, setLearnDropdownOpen] = useState(false);
+  const learnDropdownRef = useRef<HTMLDivElement>(null);
+  const careersDropdownRef = useRef<HTMLDivElement>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Get first character of user's name for avatar
   const getUserInitial = (name: string) => {
@@ -48,6 +53,41 @@ const Navbar = () => {
       document.removeEventListener("keydown", handleEscKey);
     };
   }, [mainDropdownOpen]);
+
+  // Add useEffect for Learn dropdown
+  useEffect(() => {
+    if (!learnDropdownOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        learnDropdownRef.current &&
+        !learnDropdownRef.current.contains(event.target as Node)
+      ) {
+        setLearnDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [learnDropdownOpen]);
+
+  // Add useEffect for Careers dropdown
+  useEffect(() => {
+    if (!careersDropdownOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        careersDropdownRef.current &&
+        !careersDropdownRef.current.contains(event.target as Node)
+      ) {
+        setCareersDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [careersDropdownOpen]);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const handleNavClick = (e: React.MouseEvent, sectionId: string) => {
     e.preventDefault();
@@ -98,8 +138,33 @@ const Navbar = () => {
             <img
               src="/RFT logo.png"
               alt="Logo"
-              className="h-16 w-16 rounded-full border-4 border-blue-400 dark:border-blue-500 mr-8"
+              className="h-16 w-16 rounded-full border-4 border-blue-400 dark:border-blue-500 mr-4"
             />
+            {/* Hamburger for mobile */}
+            <button
+              className="lg:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="black"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-menu w-7 h-7"
+                style={{ stroke: 'black' }}
+              >
+                <line x1="4" x2="20" y1="12" y2="12"></line>
+                <line x1="4" x2="20" y1="6" y2="6"></line>
+                <line x1="4" x2="20" y1="18" y2="18"></line>
+              </svg>
+            </button>
+            {/* Desktop Nav */}
             <div className="hidden lg:flex items-center space-x-4">
               <a href="/" onClick={handleHomeClick} className={linkClass}>
                 Home
@@ -120,140 +185,127 @@ const Navbar = () => {
               </a>
               <a
                 href="/#what-we-do"
-                onClick={(e) => handleNavClick(e, "what-we-do")}
-                className={linkClass}
+                onClick={e => handleNavClick(e, "what-we-do")}
+                className={linkClass + " whitespace-nowrap min-w-[140px] text-center"}
               >
                 What We Do
               </a>
-              {/* Learn More Dropdown */}
-              <div className="relative" ref={dropdownRef}>
+              {/* Learn Dropdown */}
+              <div className="relative" ref={learnDropdownRef}>
                 <button
                   onClick={() => {
-                    setMainDropdownOpen(!mainDropdownOpen);
-                    setSubDropdown(null);
+                    setLearnDropdownOpen(!learnDropdownOpen);
+                    setCareersDropdownOpen(false);
                   }}
                   className={linkClass}
+                  style={{ textTransform: 'uppercase' }}
                 >
-                  Learn More
+                  Learn
                 </button>
                 <AnimatePresence>
-                  {mainDropdownOpen && (
+                  {learnDropdownOpen && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.18 }}
-                      className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[600px] z-50 p-0 border border-gray-100 dark:border-gray-700 flex transition-colors duration-300"
+                      className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[300px] z-50 p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
                     >
-                      {/* Left panel: categories */}
-                      <div className="w-1/3 border-r border-gray-200 dark:border-gray-700 py-4 flex flex-col bg-gray-50 dark:bg-gray-900 rounded-l-xl">
-                        <button
-                          onClick={() => setSubDropdown("careers")}
-                          className={`text-left px-6 py-2 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-none transition-colors ${
-                            subDropdown === "careers"
-                              ? "bg-white dark:bg-gray-800 border-l-4 border-indigo-500 text-indigo-700 dark:text-indigo-400"
-                              : ""
-                          }`}
-                        >
-                          Careers
-                        </button>
-                        <button
-                          onClick={() => setSubDropdown("learn")}
-                          className={`text-left px-6 py-2 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-none transition-colors ${
-                            subDropdown === "learn"
-                              ? "bg-white dark:bg-gray-800 border-l-4 border-indigo-500 text-indigo-700 dark:text-indigo-400"
-                              : ""
-                          }`}
-                        >
-                          Learn
-                        </button>
-                      </div>
-                      {/* Right panel: links for selected category */}
-                      <div className="w-2/3 py-4 px-6">
-                        {subDropdown === "careers" && (
-                          <ul className="grid grid-cols-1 gap-2">
-                            <li>
-                              <Link
-                                to="/life-at-rft"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                Life at RFT
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                to="/employee-says"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                What Our Employees Say
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                to="/apply"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                Apply
-                              </Link>
-                            </li>
-                          </ul>
-                        )}
-                        {subDropdown === "learn" && (
-                          <ul className="grid grid-cols-1 gap-2">
-                            <li>
-                              <Link
-                                to="/mdu"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                MDU
-                              </Link>
-                            </li>
-                            <li>
-                              <Link
-                                to="/crd"
-                                className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                                onClick={() => {
-                                  setMainDropdownOpen(false);
-                                  setSubDropdown(null);
-                                }}
-                              >
-                                CRD
-                              </Link>
-                            </li>
-                          </ul>
-                        )}
-                        {subDropdown === null && (
-                          <div className="text-gray-500 dark:text-gray-400 text-sm">
-                            Select a category to see more options.
-                          </div>
-                        )}
-                      </div>
+                      <ul className="grid grid-cols-1 gap-2">
+                        <li>
+                          <Link
+                            to="/mdu"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setLearnDropdownOpen(false);
+                            }}
+                          >
+                            MDU
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/crd"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setLearnDropdownOpen(false);
+                            }}
+                          >
+                            CRD
+                          </Link>
+                        </li>
+                      </ul>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              {/* Careers Dropdown */}
+              <div className="relative" ref={careersDropdownRef}>
+                <button
+                  onClick={() => {
+                    setCareersDropdownOpen(!careersDropdownOpen);
+                    setMainDropdownOpen(false);
+                    setSubDropdown(null);
+                  }}
+                  className={linkClass}
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  Careers
+                </button>
+                <AnimatePresence>
+                  {careersDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      transition={{ duration: 0.18 }}
+                      className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[300px] z-50 p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
+                    >
+                      <ul className="grid grid-cols-1 gap-2">
+                        <li>
+                          <Link
+                            to="/life-at-rft"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setCareersDropdownOpen(false);
+                            }}
+                          >
+                            Life at RFT
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/employee-says"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setCareersDropdownOpen(false);
+                            }}
+                          >
+                            What Our Employees Say
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="/apply"
+                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                            onClick={() => {
+                              setCareersDropdownOpen(false);
+                            }}
+                          >
+                            Apply
+                          </Link>
+                        </li>
+                      </ul>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
               <a
                 href="/#contact"
-                onClick={(e) => handleNavClick(e, "contact")}
-                className={linkClass}
+                onClick={e => handleNavClick(e, "contact")}
+                className={linkClass + " uppercase"}
               >
-                Contact Us
+                CONTACT US
               </a>
             </div>
           </div>
@@ -295,7 +347,7 @@ const Navbar = () => {
                 </button>
                 <button
                   onClick={handleNewUserClick}
-                  className="px-4 py-2 bg-gradient-to-b from-blue-500 to-blue-700 dark:from-blue-700 dark:to-blue-900 text-white rounded-full hover:from-blue-600 hover:to-blue-800 dark:hover:from-blue-800 dark:hover:to-blue-950 font-semibold text-sm shadow-lg transition-colors duration-200"
+                  className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200"
                 >
                   Register
                 </button>
@@ -322,6 +374,120 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className="w-80 max-w-full h-full bg-white dark:bg-gray-900 shadow-2xl p-0 flex flex-col relative"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Sticky Auth Buttons at very top, always visible */}
+              <div className="sticky top-0 left-0 w-full bg-white dark:bg-gray-900 z-[200] pb-2 pt-2 flex flex-col gap-2 border-b border-gray-200 dark:border-gray-700 px-6" style={{maxWidth:'100vw',overflowX:'auto'}}>
+                {isLoggedIn ? (
+                  <>
+                    <div className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative mb-2 min-w-0" style={{maxWidth:'100vw',overflowX:'auto'}}>
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md min-w-0" style={{minWidth:'2rem'}}>
+                        {getUserInitial(user?.name || "User")}
+                      </div>
+                      <span className="text-sm font-medium text-green-700 dark:text-green-300 truncate min-w-0" style={{maxWidth:'60vw',overflow:'hidden',textOverflow:'ellipsis'}}>
+                        {user?.name || "User"}
+                      </span>
+                    </div>
+                    <button
+                      onClick={logout}
+                      className="w-full px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:from-red-600 hover:to-red-700 font-semibold text-sm shadow-md transition-all duration-200 flex items-center gap-2 mb-2 min-w-0"
+                      title="Logout"
+                      style={{maxWidth:'100vw',overflowX:'auto',textOverflow:'ellipsis'}}
+                    >
+                      <LogOut size={16} /> <span className="truncate min-w-0">Logout</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleSignInClick}
+                      className="w-full px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 mb-2 min-w-0"
+                      style={{maxWidth:'100vw',overflowX:'auto',textOverflow:'ellipsis'}}
+                    >
+                      <span className="truncate min-w-0">Login</span>
+                    </button>
+                    <button
+                      onClick={handleNewUserClick}
+                      className="w-full px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 mb-2 min-w-0"
+                      style={{maxWidth:'100vw',overflowX:'auto',textOverflow:'ellipsis'}}
+                    >
+                      <span className="truncate min-w-0">Register</span>
+                    </button>
+                    <Link
+                      to="/employers-login"
+                      className="w-full px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 flex items-center gap-2 mb-2 min-w-0"
+                      style={{maxWidth:'100vw',overflowX:'auto',textOverflow:'ellipsis'}}
+                    >
+                      <span className="truncate min-w-0">Employer Login</span>
+                    </Link>
+                  </>
+                )}
+              </div>
+              {/* Logo and close button (below sticky auth bar) */}
+              <div className="flex items-center justify-between mb-8 px-6 pt-2">
+                <img src="/RFT logo.png" alt="Logo" className="h-12 w-12 rounded-full border-2 border-blue-400 dark:border-blue-500" />
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  aria-label="Close menu"
+                >
+                  <X className="w-7 h-7 text-blue-700 dark:text-blue-200" />
+                </button>
+              </div>
+              {/* Scrollable nav links below */}
+              <nav className="flex flex-col gap-2 flex-1 overflow-y-auto pt-2 min-w-0 px-6">
+                <a href="/" onClick={handleHomeClick} className={linkClass + " w-full text-left"}>Home</a>
+                <a href="/#services" onClick={e => handleNavClick(e, "services") } className={linkClass + " w-full text-left"}>Services</a>
+                <a href="/#about" onClick={e => handleNavClick(e, "about") } className={linkClass + " w-full text-left"}>About</a>
+                <a href="/#what-we-do" onClick={e => handleNavClick(e, "what-we-do") } className={linkClass + " w-full text-left"}>What We Do</a>
+                {/* Learn Dropdown (collapsible) */}
+                <details className="group">
+                  <summary className={linkClass + " w-full text-left cursor-pointer flex items-center justify-between"}>Learn <span className="ml-2">▼</span></summary>
+                  <div className="pl-4 flex flex-col gap-1 mt-1">
+                    <Link to="/mdu" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">MDU</Link>
+                    <Link to="/crd" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">CRD</Link>
+                  </div>
+                </details>
+                {/* Careers Dropdown (collapsible) */}
+                <details className="group">
+                  <summary className={linkClass + " w-full text-left cursor-pointer flex items-center justify-between"}>Careers <span className="ml-2">▼</span></summary>
+                  <div className="pl-4 flex flex-col gap-1 mt-1">
+                    <Link to="/life-at-rft" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">Life at RFT</Link>
+                    <Link to="/employee-says" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">What Our Employees Say</Link>
+                    <Link to="/apply" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">Apply</Link>
+                  </div>
+                </details>
+                <a href="/#contact" onClick={e => handleNavClick(e, "contact")} className={linkClass + " uppercase"}>CONTACT US</a>
+                {/* Auth Links in nav for mobile - only show if not logged in */}
+                {!isLoggedIn && (
+                  <>
+                    <a href="/signin" className={linkClass + " w-full text-left"}>Login</a>
+                    <a href="/signup" className={linkClass + " w-full text-left"}>Register</a>
+                    <Link to="/employers-login" className={linkClass + " w-full text-left"}>Employer Login</Link>
+                  </>
+                )}
+              </nav>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

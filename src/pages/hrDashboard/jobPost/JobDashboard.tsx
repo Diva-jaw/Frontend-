@@ -81,8 +81,8 @@ const JobDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header with Gradient */}
       <header className="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg">
-        <div className="container mx-auto px-4 md:px-8 py-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-4">
             <div className="flex items-center space-x-4">
               <Link
                 to="/hr"
@@ -121,10 +121,10 @@ const JobDashboard = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 md:px-8 py-8">
+      <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-8">
         {/* Filter and Stats Section */}
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-4 mb-4 sm:mb-6">
             <div className="flex items-center space-x-4">
               <h2 className="text-xl font-bold text-gray-800">Job Postings</h2>
               <div className="flex items-center space-x-4 bg-white rounded-lg p-2 shadow-sm">
@@ -168,7 +168,7 @@ const JobDashboard = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
               <div className="flex items-center justify-between">
                 <div>
@@ -210,7 +210,7 @@ const JobDashboard = () => {
         </div>
 
         {/* Jobs List */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {filteredJobs.length === 0 ? (
             <div className="bg-white rounded-xl shadow-md p-12 text-center">
               <Briefcase className="mx-auto text-gray-400 mb-4" size={48} />
@@ -252,7 +252,7 @@ const JobDashboard = () => {
                         </div>
                         <div>
                           <h3 className="text-xl font-bold text-gray-900">{job.job_title}</h3>
-                          <p className="text-sm text-gray-500 mt-1">{job.company || 'Ruhil Future Technologies'}</p>
+                          <p className="text-sm text-gray-500 mt-1">Ruhil Future Technologies</p>
                           {isExpired && (
                             <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-md">
                               Expired
@@ -331,8 +331,8 @@ const JobDashboard = () => {
 
       {/* Delete Confirmation Modal */}
       {deleteJobId !== null && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 transform transition-all duration-300 scale-100">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-full sm:max-w-md w-full p-4 sm:p-6 transform transition-all duration-300 scale-100">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-gray-900">Confirm Delete</h3>
               <button

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Users, Briefcase, FileText, ChevronRight } from 'lucide-react';
+import { Users, Briefcase, FileText, ChevronRight, ClipboardList } from 'lucide-react';
 
 const HRDashboard = () => {
   const location = useLocation();
@@ -22,6 +22,12 @@ const HRDashboard = () => {
       path: '/hr/posted-job',
       icon: <FileText size={20} />,
       description: 'Review applications for posted positions'
+    },
+    {
+      name: 'View Applied Forms',
+      path: '/hr/applied-forms',
+      icon: <ClipboardList size={20} />,
+      description: 'See all forms submitted by candidates'
     }
   ];
 
@@ -29,16 +35,16 @@ const HRDashboard = () => {
     <div className="min-h-screen bg-gray-50">
       {/* HR Hero Section */}
       <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-20">
-        <div className="container mx-auto px-4 md:px-8">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight">
               HR Management <span className="text-blue-300">Dashboard</span>
             </h2>
             {/* <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
               Streamline your recruitment process with our comprehensive HR tools. 
               Manage candidate enquiries, post job opportunities, and track applications all in one place.
             </p> */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
               {navItems.map((item, index) => (
                 <Link
                   key={item.path}
@@ -50,7 +56,7 @@ const HRDashboard = () => {
                   </div>
                   <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
                   <p className="text-blue-100 text-sm">{item.description}</p>
-                  <div className="flex items-center justify-center mt-4 text-blue-300 group-hover:text-white transition-colors">
+                  <div className="flex flex-row items-center justify-center mt-4 text-blue-300 group-hover:text-white transition-colors">
                     <span className="text-sm font-medium">Get Started</span>
                     <ChevronRight size={16} className="ml-1" />
                   </div>
@@ -63,8 +69,8 @@ const HRDashboard = () => {
 
       {/* Quick Stats Section */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             <div className="text-center p-6 bg-blue-50 rounded-xl">
               <div className="text-3xl font-bold text-blue-600 mb-2">150+</div>
               <div className="text-gray-600">Total Enquiries</div>

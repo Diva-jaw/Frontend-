@@ -90,8 +90,8 @@ const JobView = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header with Gradient */}
       <header className="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg">
-        <div className="container mx-auto px-4 md:px-8 py-6">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
             <Link
               to="/hr/posted-job"
               className="flex items-center space-x-2 px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all backdrop-blur-sm"
@@ -106,9 +106,9 @@ const JobView = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 md:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto transform transition-all duration-300 hover:shadow-xl">
-          <div className="flex items-center justify-between mb-6">
+      <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-8">
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 max-w-full sm:max-w-4xl mx-auto transform transition-all duration-300 hover:shadow-xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
             <h1 className="text-3xl font-bold text-gray-900">{job.job_title}</h1>
             <span
               className={`px-3 py-1 text-sm font-medium rounded-full ${
@@ -119,7 +119,7 @@ const JobView = () => {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-gray-700">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 sm:mb-6 text-gray-700">
             <div className="flex items-center space-x-2">
               <Briefcase className="text-blue-500" size={18} />
               <span>{job.department}</span>
@@ -146,7 +146,7 @@ const JobView = () => {
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">Summary</h2>
               <p className="text-gray-700 leading-relaxed">{job.job_summary}</p>
@@ -210,7 +210,7 @@ const JobView = () => {
             </div>
           </div>
 
-          <div className="mt-8 flex justify-end">
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-end gap-2 sm:gap-4">
             <Link
               to="/hr/posted-job"
               className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"

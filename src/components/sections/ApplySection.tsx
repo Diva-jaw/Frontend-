@@ -9,10 +9,10 @@ const ApplySection: React.FC = () => {
   }, []);
 
   const handleApplyClick = () => {
-    // Replace with your navigation logic
-    console.log('Navigate to /apply');
-    // For demo purposes, could open a new tab or trigger a callback
-    window.open('/apply', '_blank');
+    // Store placeholder job info for general application
+    localStorage.setItem('jobTitle', 'General Application');
+    localStorage.setItem('jobpost_id', '0');
+    window.open('/apply-job', '_blank');
   };
 
   const handleLearnMoreClick = () => {

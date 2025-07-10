@@ -25,33 +25,33 @@ const PostJob = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleArrayChange = (index, field, value) => {
+  const handleArrayChange = (index: number, field: keyof typeof formData, value: string) => {
     setFormData(prev => ({
       ...prev,
-      [field]: prev[field].map((item, i) => (i === index ? value : item)),
+      [field]: (prev[field] as string[]).map((item: string, i: number) => (i === index ? value : item)),
     }));
   };
 
-  const addArrayItem = (field) => {
+  const addArrayItem = (field: keyof typeof formData) => {
     setFormData(prev => ({
       ...prev,
-      [field]: [...prev[field], ''],
+      [field]: [...(prev[field] as string[]), ''],
     }));
   };
 
-  const removeArrayItem = (field, index) => {
+  const removeArrayItem = (field: keyof typeof formData, index: number) => {
     setFormData(prev => ({
       ...prev,
-      [field]: prev[field].filter((_, i) => i !== index),
+      [field]: (prev[field] as string[]).filter((_, i: number) => i !== index),
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -91,7 +91,7 @@ const PostJob = () => {
         required_qualifications: [''],
         preferred_skills: [''],
       });
-    } catch (error) {
+    } catch (error: any) {
       setPopupMessage('Failed to post job: ' + error.message);
       setShowPopup(true);
     } finally {
@@ -134,8 +134,8 @@ const PostJob = () => {
 
       {/* Header with Gradient */}
       <header className="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg">
-        <div className="container mx-auto px-4 md:px-8 py-6">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
             <Link
               to="/hr"
               className="flex items-center space-x-2 px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all backdrop-blur-sm"
@@ -152,13 +152,13 @@ const PostJob = () => {
       </header>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 md:px-8 py-8">
-        <div className="max-w-5xl mx-auto">
+      <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-8">
+        <div className="max-w-full sm:max-w-5xl mx-auto">
           {/* Card with Floating Effect */}
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl">
             {/* Card Header */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 border-b border-gray-200">
-              <div className="flex items-center space-x-4">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 sm:p-8 border-b border-gray-200">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                 <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center shadow-md">
                   <Briefcase className="text-white" size={28} />
                 </div>
@@ -170,9 +170,9 @@ const PostJob = () => {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="p-8 space-y-8">
+            <form onSubmit={handleSubmit} className="p-4 sm:p-8 space-y-6 sm:space-y-8">
               {/* Basic Information Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* Job Title */}
                 <div className="space-y-1">
                   <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Job Title *</label>
@@ -182,7 +182,7 @@ const PostJob = () => {
                     value={formData.job_title}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                     placeholder="e.g., Senior React Developer"
                   />
                 </div>
@@ -194,7 +194,7 @@ const PostJob = () => {
                     name="department"
                     value={formData.department}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] text-black"
                   >
                     <option value="">Select Department</option>
                     <option value="Engineering">Engineering</option>
@@ -220,7 +220,7 @@ const PostJob = () => {
                       value={formData.location}
                       onChange={handleChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                       placeholder="e.g., Rohtak, Haryana"
                     />
                   </div>
@@ -234,7 +234,7 @@ const PostJob = () => {
                     value={formData.job_type}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem]"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] text-black"
                   >
                     <option value="Full-time">Full-time</option>
                     <option value="Part-time">Part-time</option>
@@ -256,7 +256,7 @@ const PostJob = () => {
                       name="salary_range"
                       value={formData.salary_range}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                       placeholder="e.g., ₹5-7 LPA"
                     />
                   </div>
@@ -275,7 +275,7 @@ const PostJob = () => {
                       value={formData.experience_level}
                       onChange={handleChange}
                       min="0"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                       placeholder="e.g., 3"
                     />
                   </div>
@@ -290,7 +290,7 @@ const PostJob = () => {
                       name="application_deadline"
                       value={formData.application_deadline}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                     />
                   </div>
                 </div>
@@ -305,13 +305,13 @@ const PostJob = () => {
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                   placeholder="Describe the role, responsibilities, and what the candidate will be doing..."
                 />
               </div>
 
               {/* Dynamic Fields Section */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Responsibilities */}
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Responsibilities</label>
@@ -323,7 +323,7 @@ const PostJob = () => {
                             type="text"
                             value={responsibility}
                             onChange={(e) => handleArrayChange(index, 'responsibilities', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                             placeholder={`Responsibility ${index + 1}`}
                           />
                           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 font-bold">{index + 1}.</span>
@@ -362,7 +362,7 @@ const PostJob = () => {
                             type="text"
                             value={qualification}
                             onChange={(e) => handleArrayChange(index, 'required_qualifications', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                             placeholder={`Qualification ${index + 1}`}
                           />
                           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 font-bold">{index + 1}.</span>
@@ -401,7 +401,7 @@ const PostJob = () => {
                             type="text"
                             value={skill}
                             onChange={(e) => handleArrayChange(index, 'preferred_skills', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                             placeholder={`Skill ${index + 1}`}
                           />
                           <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 font-bold">{index + 1}.</span>
@@ -438,7 +438,7 @@ const PostJob = () => {
                   value={formData.equal_opportunity_statement}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                   placeholder="Our company is an equal opportunity employer..."
                 />
               </div>
@@ -451,26 +451,19 @@ const PostJob = () => {
                   value={formData.how_to_apply}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                   placeholder="Provide application instructions or link..."
                 />
               </div>
 
-              {/* Form Actions */}
-              <div className="flex justify-end space-x-4 pt-8 border-t border-gray-200">
-                <Link
-                  to="/hr"
-                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium"
-                >
-                  Cancel
-                </Link>
+              {/* Submit Button */}
+              <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md disabled:opacity-70 disabled:cursor-not-allowed font-medium flex items-center space-x-2"
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <Send size={18} />
-                  <span>{isSubmitting ? 'Posting...' : 'Post Job'}</span>
+                  {isSubmitting ? 'Posting...' : 'Post Job'}
                 </button>
               </div>
             </form>
