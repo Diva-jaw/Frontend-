@@ -261,20 +261,21 @@ const StepAppliedFormsList: React.FC = () => {
   const handleSendAll = async (draftType: 'accept' | 'reject') => {
     const list = draftType === 'accept' ? acceptedCandidates : rejectedCandidates;
     const draft = draftType === 'accept' ? acceptDraft : rejectDraft;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
     try {
       await Promise.all(
         list.map((candidate) => {
-          const formData = new FormData();
-          formData.append('email', candidate.email);
-          formData.append('message', draft.greeting);
-          if (draftType === 'accept') formData.append('link', draft.link);
-          if (draft.image) formData.append('image', draft.image);
-          return fetch('/api/send-email', {
+          return fetch(`${baseUrl}/application/api/send-email`, {
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`, // Replace with your auth logic
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
             },
-            body: formData,
+            body: JSON.stringify({
+              email: candidate.email,
+              message: draft.greeting,
+              link: draftType === 'accept' ? draft.link : undefined,
+            }),
           });
         })
       );
@@ -604,27 +605,14 @@ const StepAppliedFormsList: React.FC = () => {
                     placeholder={showMailModal.status === 'Reject' ? 'Enter rejection message...' : 'Enter acceptance message...'}
                   />
                 </div>
-                {/* Only show Link field if status is Accept */}
-                {showMailModal.status === 'Accept' && (
-                  <div>
-                    <label className="block text-gray-700 text-sm font-semibold mb-2">Link:</label>
-                    <input
-                      className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                      value={mailLink}
-                      onChange={(e) => setMailLink(e.target.value)}
-                      placeholder="Enter test or next round link..."
-                    />
-                  </div>
-                )}
-
+                {/* Show Link field for both Accept and Reject, but make it optional */}
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">Attach PDF (Optional):</label>
+                  <label className="block text-gray-700 text-sm font-semibold mb-2">Link (optional):</label>
                   <input
-                    type="file"
-                    accept="application/pdf"
-                    name="pdf"
-                    onChange={(e) => handleImageChange(showMailModal.status === 'Accept' ? 'accept' : 'reject', e.target.files?.[0] || null)}
-                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3"
+                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                    value={mailLink}
+                    onChange={(e) => setMailLink(e.target.value)}
+                    placeholder="Enter test or next round link..."
                   />
                 </div>
 
@@ -638,22 +626,23 @@ const StepAppliedFormsList: React.FC = () => {
                     const candidate = appliedForms.find((f) => f.id === showMailModal.id);
                     if (candidate) {
                       try {
+                        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
                         // Prepare requests
                         const movePromise = showMailModal.status === 'Accept'
                           ? moveApplicant(candidate.id, moveToDropdown[candidate.id], 'cleared')
                           : moveApplicant(candidate.id, roundParam, 'rejected');
-                        const formData = new FormData();
-                        formData.append('email', candidate.email);
-                        formData.append('message', mailMessage);
-                        if (showMailModal.status === 'Accept') formData.append('link', mailLink);
-                        if (showMailModal.status === 'Accept' ? acceptDraft.image : rejectDraft.image)
-                          formData.append('pdf', showMailModal.status === 'Accept' ? acceptDraft.image! : rejectDraft.image!);
-                        const mailPromise = fetch('/api/send-email', {
+                        // Send mail as JSON (no FormData)
+                        const mailPromise = fetch(`${baseUrl}/application/api/send-email`, {
                           method: 'POST',
                           headers: {
+                            'Content-Type': 'application/json',
                             Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
                           },
-                          body: formData,
+                          body: JSON.stringify({
+                            email: candidate.email,
+                            message: mailMessage,
+                            link: mailLink,
+                          }),
                         });
                         // Run both in parallel
                         const [moveRes, mailRes] = await Promise.all([movePromise, mailPromise]);
