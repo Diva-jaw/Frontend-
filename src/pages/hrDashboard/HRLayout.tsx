@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Users, Briefcase, FileText, UserCircle2, Sun, Moon, LogOut, User } from 'lucide-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../components/AuthContext';
 import { useTheme } from '../../components/ThemeContext';
 
@@ -32,6 +32,25 @@ const HRLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isLoggedIn, user, logout, loading } = useAuth();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Click-away logic
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setShowUserDropdown(false);
+      }
+    }
+    if (showUserDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUserDropdown]);
 
   useEffect(() => {
     if (!loading) {
@@ -86,25 +105,14 @@ const HRLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 {theme === 'dark' ? <Sun className="text-yellow-400" size={22} /> : <Moon className="text-blue-700" size={22} />}
               </button>
               {isLoggedIn && user ? (
-                <>
-                  <div className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-full relative">
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
-                      {getUserInitial(user?.name || 'User')}
-                    </div>
-                    <span className="text-sm font-medium text-green-700 dark:text-green-300">
-                      {user?.name || 'User'}
-                    </span>
-                  </div>
-                  <button
-                    onClick={logout}
-                    className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:from-red-600 hover:to-red-700 font-semibold text-sm shadow-md transition-all duration-200 flex items-center gap-2"
-                    title="Logout"
-                  >
-                    <LogOut size={16} />
-                    Logout
-                  </button>
-                </>
+                <button
+                  onClick={logout}
+                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:from-red-600 hover:to-red-700 font-semibold text-sm shadow-md transition-all duration-200 flex items-center gap-2"
+                  title="Logout"
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
               ) : (
                 <Link to="/hr/signin" className="hover:bg-blue-50 dark:hover:bg-gray-800 rounded-full p-2 transition-colors" title="Sign In / Account">
                   <User size={32} className="text-blue-700 dark:text-blue-300" />

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import { apiService } from '../../services/api';
+import { useAuth } from '../../components/AuthContext';
 
 // Define acceptOptions for "Move to" dropdown
-const acceptOptions = ['Round 1', 'Round 2', 'Round 3', 'Final Round', 'HR Round'];
+const acceptOptions = ['Round 1', 'Round 2', 'Final Round', 'HR Round'];
 
 // Types for data
 interface Candidate {
@@ -78,6 +79,7 @@ const defaultRejectDraft: Draft = {
 const StepAppliedFormsList: React.FC = () => {
   const { department, step } = useParams<{ department: string; step: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   // State for dynamic data
   const [appliedForms, setAppliedForms] = useState<Candidate[]>([]);
@@ -99,6 +101,27 @@ const StepAppliedFormsList: React.FC = () => {
   const [showMailModal, setShowMailModal] = useState<{ id: number; status: string } | null>(null);
   const [mailMessage, setMailMessage] = useState<string>('');
   const [mailLink, setMailLink] = useState<string>('');
+  const [sendingMail, setSendingMail] = useState(false);
+  const [mailSentFor, setMailSentFor] = useState<{ [id: number]: boolean }>({});
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Click-away logic
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setShowUserDropdown(false);
+      }
+    }
+    if (showUserDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUserDropdown]);
 
   // Map route param to round name
   const roundNameMap: Record<string, string> = {
@@ -310,6 +333,7 @@ const StepAppliedFormsList: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-2 capitalize tracking-tight">
@@ -423,7 +447,7 @@ const StepAppliedFormsList: React.FC = () => {
                                 ? 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 cursor-pointer'
                                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                             }`}
-                            disabled={!(status === 'Reject' || (status === 'Accept' && moveToDropdown[form.id]))}
+                            disabled={mailSentFor[form.id] || !(status === 'Reject' || (status === 'Accept' && moveToDropdown[form.id]))}
                             onClick={() => {
                               if (status === 'Reject' || (status === 'Accept' && moveToDropdown[form.id])) {
                                 setShowMailModal({ id: form.id, status });
@@ -598,7 +622,7 @@ const StepAppliedFormsList: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 text-sm font-semibold mb-2">Message:</label>
                   <textarea
-                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200"
+                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200 text-black"
                     rows={4}
                     value={mailMessage}
                     onChange={(e) => setMailMessage(e.target.value)}
@@ -609,7 +633,7 @@ const StepAppliedFormsList: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 text-sm font-semibold mb-2">Link (optional):</label>
                   <input
-                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-black"
                     value={mailLink}
                     onChange={(e) => setMailLink(e.target.value)}
                     placeholder="Enter test or next round link..."
@@ -623,6 +647,7 @@ const StepAppliedFormsList: React.FC = () => {
                       : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
                   }`}
                   onClick={async () => {
+                    setSendingMail(true);
                     const candidate = appliedForms.find((f) => f.id === showMailModal.id);
                     if (candidate) {
                       try {
@@ -642,12 +667,14 @@ const StepAppliedFormsList: React.FC = () => {
                             email: candidate.email,
                             message: mailMessage,
                             link: mailLink,
+                            status: showMailModal.status === 'Accept' ? 'accept' : 'reject',
                           }),
                         });
                         // Run both in parallel
                         const [moveRes, mailRes] = await Promise.all([movePromise, mailPromise]);
                         if (!mailRes.ok) throw new Error('Mail send failed');
                         window.alert(`Mail sent to ${candidate.name} (${showMailModal.status}) and status updated!`);
+                        setMailSentFor(prev => ({ ...prev, [candidate.id]: true }));
                       } catch (error) {
                         alert('Error sending email or updating status');
                       }
@@ -655,9 +682,13 @@ const StepAppliedFormsList: React.FC = () => {
                     setShowMailModal(null);
                     setMailMessage('');
                     setMailLink('');
+                    setSendingMail(false);
                   }}
+                  disabled={sendingMail}
                 >
-                  {showMailModal.status === 'Reject' ? 'Send Rejection Mail' : 'Send Acceptance Mail'}
+                  {sendingMail
+                    ? (showMailModal.status === 'Reject' ? 'Sending Rejection Mail...' : 'Sending Acceptance Mail...')
+                    : (showMailModal.status === 'Reject' ? 'Send Rejection Mail' : 'Send Acceptance Mail')}
                 </button>
               </div>
             </div>

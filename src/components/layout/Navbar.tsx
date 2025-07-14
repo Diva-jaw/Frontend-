@@ -17,6 +17,8 @@ const Navbar = () => {
   const learnDropdownRef = useRef<HTMLDivElement>(null);
   const careersDropdownRef = useRef<HTMLDivElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   // Get first character of user's name for avatar
   const getUserInitial = (name: string) => {
@@ -83,6 +85,23 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [careersDropdownOpen]);
+
+  // Click-away logic for user dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setShowUserDropdown(false);
+      }
+    }
+    if (showUserDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUserDropdown]);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -313,31 +332,66 @@ const Navbar = () => {
           <div className="flex-1" />
           {/* Right: Login/Register/For Employer's and Theme Toggle */}
           <div className="hidden lg:flex items-center space-x-4">
-            {isLoggedIn ? (
-              // Logged in state - show user avatar, name and logout
+            {isLoggedIn && user && user.role !== 'hr' && (
               <>
-                {/* User Avatar with First Character */}
-                <div className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative">
-                  {/* Online Status Indicator */}
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
-                    {getUserInitial(user?.name || "User")}
-                  </div>
-                  <span className="text-sm font-medium text-green-700 dark:text-green-300">
-                    {user?.name || "User"}
-                  </span>
+                <div className="relative inline-block" ref={userDropdownRef}>
+                  <button
+                    type="button"
+                    className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    onClick={() => setShowUserDropdown((prev) => !prev)}
+                    aria-haspopup="true"
+                    aria-expanded={showUserDropdown}
+                  >
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                      {getUserInitial(user?.name || 'User')}
+                    </div>
+                    <span className="text-sm font-medium text-green-700 dark:text-green-300">{user?.name || 'User'}</span>
+                  </button>
+                  {showUserDropdown && (
+                    <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg z-50 p-4 border border-gray-100 dark:border-gray-800 animate-fade-in">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">{getUserInitial(user?.name || 'User')}</div>
+                        <div>
+                          <div className="font-semibold text-gray-900 dark:text-white">{user?.name || 'User'}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-300">{user?.email || 'user@email.com'}</div>
+                        </div>
+                      </div>
+                      <button className="w-full mb-2 py-2 px-4 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Courses Enrolled</button>
+                      <button className="w-full py-2 px-4 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition">Tracking Application</button>
+                    </div>
+                  )}
                 </div>
                 <button
                   onClick={logout}
-                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:from-red-600 hover:to-red-700 font-semibold text-sm shadow-md transition-all duration-200 flex items-center gap-2"
+                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:from-red-600 hover:to-red-700 font-semibold text-sm shadow-md transition-all duration-200 flex items-center gap-2 ml-2"
                   title="Logout"
                 >
                   <LogOut size={16} />
                   Logout
                 </button>
               </>
-            ) : (
-              // Not logged in state - show login/register buttons
+            )}
+            {isLoggedIn && user && user.role === 'hr' && (
+              <div className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative select-none cursor-default">
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                  {getUserInitial(user?.name || 'User')}
+                </div>
+                <span className="text-sm font-medium text-green-700 dark:text-green-300">{user?.name || 'User'}</span>
+              </div>
+            )}
+            {isLoggedIn && user && user.role === 'hr' && (
+              <button
+                onClick={logout}
+                className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:from-red-600 hover:to-red-700 font-semibold text-sm shadow-md transition-all duration-200 flex items-center gap-2 ml-2"
+                title="Logout"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            )}
+            {!isLoggedIn && (
               <>
                 <button
                   onClick={handleSignInClick}
