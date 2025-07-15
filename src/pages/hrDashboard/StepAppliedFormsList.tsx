@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Eye } from 'lucide-react';
 import { apiService } from '../../services/api';
+import { useAuth } from '../../components/AuthContext';
 
 // Define acceptOptions for "Move to" dropdown
-const acceptOptions = ['Round 1', 'Round 2', 'Round 3', 'Final Round', 'HR Round'];
+const acceptOptions = ['Round 1', 'Round 2', 'Final Round', 'HR Round'];
 
 // Types for data
 interface Candidate {
@@ -78,6 +79,7 @@ const defaultRejectDraft: Draft = {
 const StepAppliedFormsList: React.FC = () => {
   const { department, step } = useParams<{ department: string; step: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   // State for dynamic data
   const [appliedForms, setAppliedForms] = useState<Candidate[]>([]);
@@ -99,6 +101,27 @@ const StepAppliedFormsList: React.FC = () => {
   const [showMailModal, setShowMailModal] = useState<{ id: number; status: string } | null>(null);
   const [mailMessage, setMailMessage] = useState<string>('');
   const [mailLink, setMailLink] = useState<string>('');
+  const [sendingMail, setSendingMail] = useState(false);
+  const [mailSentFor, setMailSentFor] = useState<{ [id: number]: boolean }>({});
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Click-away logic
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setShowUserDropdown(false);
+      }
+    }
+    if (showUserDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUserDropdown]);
 
   // Map route param to round name
   const roundNameMap: Record<string, string> = {
@@ -261,20 +284,21 @@ const StepAppliedFormsList: React.FC = () => {
   const handleSendAll = async (draftType: 'accept' | 'reject') => {
     const list = draftType === 'accept' ? acceptedCandidates : rejectedCandidates;
     const draft = draftType === 'accept' ? acceptDraft : rejectDraft;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
     try {
       await Promise.all(
         list.map((candidate) => {
-          const formData = new FormData();
-          formData.append('email', candidate.email);
-          formData.append('message', draft.greeting);
-          if (draftType === 'accept') formData.append('link', draft.link);
-          if (draft.image) formData.append('image', draft.image);
-          return fetch('/api/send-email', {
+          return fetch(`${baseUrl}/application/api/send-email`, {
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`, // Replace with your auth logic
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
             },
-            body: formData,
+            body: JSON.stringify({
+              email: candidate.email,
+              message: draft.greeting,
+              link: draftType === 'accept' ? draft.link : undefined,
+            }),
           });
         })
       );
@@ -309,6 +333,7 @@ const StepAppliedFormsList: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-2 capitalize tracking-tight">
@@ -361,32 +386,14 @@ const StepAppliedFormsList: React.FC = () => {
                           <span className="text-gray-700 font-medium">{form.email}</span>
                         </td>
                         <td className="px-6 py-4 text-center">
-                          {step === 'hr-round' ? (
-                            roundStatus === 'cleared' ? (
-                              <span className="px-4 py-2 rounded-lg font-semibold bg-green-100 text-green-800">
-                                ✅ Accepted
-                              </span>
-                            ) : roundStatus === 'rejected' ? (
-                              <span className="px-4 py-2 rounded-lg font-semibold bg-red-100 text-red-800">
-                                ❌ Rejected
-                              </span>
-                            ) : (
-                              <select
-                                className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
-                                  status === 'Accept'
-                                    ? 'border-green-300 bg-green-50 text-green-800'
-                                    : status === 'Reject'
-                                    ? 'border-red-300 bg-red-50 text-red-800'
-                                    : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400'
-                                }`}
-                                value={status || ''}
-                                onChange={(e) => handleStatusChange(form.id, e.target.value)}
-                              >
-                                <option value="">Select Status</option>
-                                <option value="Accept">✅ Accept</option>
-                                <option value="Reject">❌ Reject</option>
-                              </select>
-                            )
+                          {roundStatus === 'cleared' ? (
+                            <span className="px-4 py-2 rounded-lg font-semibold bg-green-100 text-green-800">
+                              ✅ Accepted
+                            </span>
+                          ) : roundStatus === 'rejected' ? (
+                            <span className="px-4 py-2 rounded-lg font-semibold bg-red-100 text-red-800">
+                              ❌ Rejected
+                            </span>
                           ) : (
                             <select
                               className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
@@ -440,7 +447,7 @@ const StepAppliedFormsList: React.FC = () => {
                                 ? 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 cursor-pointer'
                                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                             }`}
-                            disabled={!(status === 'Reject' || (status === 'Accept' && moveToDropdown[form.id]))}
+                            disabled={mailSentFor[form.id] || !(status === 'Reject' || (status === 'Accept' && moveToDropdown[form.id]))}
                             onClick={() => {
                               if (status === 'Reject' || (status === 'Accept' && moveToDropdown[form.id])) {
                                 setShowMailModal({ id: form.id, status });
@@ -615,34 +622,21 @@ const StepAppliedFormsList: React.FC = () => {
                 <div>
                   <label className="block text-gray-700 text-sm font-semibold mb-2">Message:</label>
                   <textarea
-                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200"
+                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200 text-black"
                     rows={4}
                     value={mailMessage}
                     onChange={(e) => setMailMessage(e.target.value)}
                     placeholder={showMailModal.status === 'Reject' ? 'Enter rejection message...' : 'Enter acceptance message...'}
                   />
                 </div>
-                {/* Only show Link field if status is Accept */}
-                {showMailModal.status === 'Accept' && (
-                  <div>
-                    <label className="block text-gray-700 text-sm font-semibold mb-2">Link:</label>
-                    <input
-                      className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
-                      value={mailLink}
-                      onChange={(e) => setMailLink(e.target.value)}
-                      placeholder="Enter test or next round link..."
-                    />
-                  </div>
-                )}
-
+                {/* Show Link field for both Accept and Reject, but make it optional */}
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">Attach PDF (Optional):</label>
+                  <label className="block text-gray-700 text-sm font-semibold mb-2">Link (optional):</label>
                   <input
-                    type="file"
-                    accept="application/pdf"
-                    name="pdf"
-                    onChange={(e) => handleImageChange(showMailModal.status === 'Accept' ? 'accept' : 'reject', e.target.files?.[0] || null)}
-                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3"
+                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-black"
+                    value={mailLink}
+                    onChange={(e) => setMailLink(e.target.value)}
+                    placeholder="Enter test or next round link..."
                   />
                 </div>
 
@@ -653,30 +647,34 @@ const StepAppliedFormsList: React.FC = () => {
                       : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
                   }`}
                   onClick={async () => {
+                    setSendingMail(true);
                     const candidate = appliedForms.find((f) => f.id === showMailModal.id);
                     if (candidate) {
                       try {
+                        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
                         // Prepare requests
                         const movePromise = showMailModal.status === 'Accept'
                           ? moveApplicant(candidate.id, moveToDropdown[candidate.id], 'cleared')
-                          : moveApplicant(candidate.id, '', 'rejected');
-                        const formData = new FormData();
-                        formData.append('email', candidate.email);
-                        formData.append('message', mailMessage);
-                        if (showMailModal.status === 'Accept') formData.append('link', mailLink);
-                        if (showMailModal.status === 'Accept' ? acceptDraft.image : rejectDraft.image)
-                          formData.append('pdf', showMailModal.status === 'Accept' ? acceptDraft.image! : rejectDraft.image!);
-                        const mailPromise = fetch('/api/send-email', {
+                          : moveApplicant(candidate.id, roundParam, 'rejected');
+                        // Send mail as JSON (no FormData)
+                        const mailPromise = fetch(`${baseUrl}/application/api/send-email`, {
                           method: 'POST',
                           headers: {
+                            'Content-Type': 'application/json',
                             Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
                           },
-                          body: formData,
+                          body: JSON.stringify({
+                            email: candidate.email,
+                            message: mailMessage,
+                            link: mailLink,
+                            status: showMailModal.status === 'Accept' ? 'accept' : 'reject',
+                          }),
                         });
                         // Run both in parallel
                         const [moveRes, mailRes] = await Promise.all([movePromise, mailPromise]);
                         if (!mailRes.ok) throw new Error('Mail send failed');
                         window.alert(`Mail sent to ${candidate.name} (${showMailModal.status}) and status updated!`);
+                        setMailSentFor(prev => ({ ...prev, [candidate.id]: true }));
                       } catch (error) {
                         alert('Error sending email or updating status');
                       }
@@ -684,9 +682,13 @@ const StepAppliedFormsList: React.FC = () => {
                     setShowMailModal(null);
                     setMailMessage('');
                     setMailLink('');
+                    setSendingMail(false);
                   }}
+                  disabled={sendingMail}
                 >
-                  {showMailModal.status === 'Reject' ? 'Send Rejection Mail' : 'Send Acceptance Mail'}
+                  {sendingMail
+                    ? (showMailModal.status === 'Reject' ? 'Sending Rejection Mail...' : 'Sending Acceptance Mail...')
+                    : (showMailModal.status === 'Reject' ? 'Send Rejection Mail' : 'Send Acceptance Mail')}
                 </button>
               </div>
             </div>
