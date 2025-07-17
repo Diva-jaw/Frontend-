@@ -106,6 +106,7 @@ const StepAppliedFormsList: React.FC = () => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const userDropdownRef = useRef<HTMLDivElement>(null);
   const [showSuccessPopup, setShowSuccessPopup] = useState<{ name: string; status: string } | null>(null);
+  const mailLinkRef = useRef("");
 
   // Click-away logic
   useEffect(() => {
@@ -319,6 +320,7 @@ const StepAppliedFormsList: React.FC = () => {
   const handleSendMail = async (candidate: Candidate, status: string, moveTo: string) => {
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      console.log('Sending mail with link:', mailLinkRef.current); // Debug log
       const movePromise = status === 'Accept'
         ? moveApplicant(candidate.id, moveTo, 'cleared')
         : moveApplicant(candidate.id, roundParam, 'rejected');
@@ -331,7 +333,7 @@ const StepAppliedFormsList: React.FC = () => {
         body: JSON.stringify({
           email: candidate.email,
           message: mailMessage,
-          link: mailLink,
+          link: mailLinkRef.current,
           status: status === 'Accept' ? 'accept' : 'reject',
         }),
       });
@@ -629,6 +631,7 @@ const StepAppliedFormsList: React.FC = () => {
                   setShowMailModal(null);
                   setMailMessage('');
                   setMailLink('');
+                  mailLinkRef.current = ''; // Reset ref
                 }}
                 aria-label="Close"
               >
@@ -665,7 +668,10 @@ const StepAppliedFormsList: React.FC = () => {
                   <input
                     className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-black"
                     value={mailLink}
-                    onChange={(e) => setMailLink(e.target.value)}
+                    onChange={(e) => {
+                      setMailLink(e.target.value);
+                      mailLinkRef.current = e.target.value;
+                    }}
                     placeholder="Enter test or next round link..."
                   />
                 </div>
@@ -685,6 +691,7 @@ const StepAppliedFormsList: React.FC = () => {
                     setShowMailModal(null);
                     setMailMessage('');
                     setMailLink('');
+                    mailLinkRef.current = ''; // Reset ref
                     setSendingMail(false);
                   }}
                   disabled={sendingMail}
