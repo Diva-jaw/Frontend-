@@ -1110,7 +1110,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
       <div className={`w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 sm:p-4 md:p-8`}>
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black dark:text-white transition-colors duration-300">
               Candidate Enquiry Form
             </h2>
             <span className={`text-gray-500 dark:text-gray-400 whitespace-nowrap`}>Step {step + 1} of {steps.length}</span>
@@ -1223,12 +1223,10 @@ const ContactPage: React.FC = () => {
       
       <main className="w-full px-2 sm:px-4 md:px-8 py-8 mt-24">
         <div className="text-center mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black dark:text-white transition-colors duration-300">
             Candidate Enquiry Form
           </h1>
-          <p className="text-xl max-w-2xl mx-auto text-black">
-            Please fill out the form below to submit your enquiry.
-          </p>
+          <p className="text-xl max-w-2xl mx-auto text-black dark:text-white transition-colors duration-300">Please fill out the form below to submit your enquiry.</p>
         </div>
         <ContactForm user={user} darkMode={darkMode} />
       </main>
