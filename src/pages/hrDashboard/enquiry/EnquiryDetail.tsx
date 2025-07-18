@@ -63,6 +63,11 @@ const EnquiryDashboard: React.FC = () => {
   const [rejectionLoading, setRejectionLoading] = useState(false);
   const [rejectionError, setRejectionError] = useState<string | null>(null);
   const [rejectionSuccess, setRejectionSuccess] = useState<string | null>(null);
+  const [acceptanceModalOpen, setAcceptanceModalOpen] = useState(false);
+  const [candidateToAccept, setCandidateToAccept] = useState<Candidate | null>(null);
+  const [acceptanceLoading, setAcceptanceLoading] = useState(false);
+  const [acceptanceError, setAcceptanceError] = useState<string | null>(null);
+  const [acceptanceSuccess, setAcceptanceSuccess] = useState<string | null>(null);
 
   // Debounce filter and date changes
   const debounceFilters = useCallback(
@@ -406,6 +411,14 @@ const EnquiryDashboard: React.FC = () => {
                     Reject
                   </button>
                   <button
+                    onClick={() => { setCandidateToAccept(candidate); setAcceptanceModalOpen(true); }}
+                    className="px-2 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs flex items-center gap-1"
+                    title="Send Acceptance Email"
+                  >
+                    <Mail size={12} />
+                    Accept
+                  </button>
+                  <button
                     onClick={() => { setCandidateToDelete(candidate); setDeleteModalOpen(true); }}
                     className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                     title="Delete Candidate"
@@ -607,6 +620,59 @@ const EnquiryDashboard: React.FC = () => {
                 disabled={rejectionLoading}
               >
                 {rejectionLoading ? 'Sending...' : 'Send Email'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Acceptance Email Modal */}
+      {acceptanceModalOpen && candidateToAccept && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 p-2 sm:p-0">
+          <div className="bg-white rounded-xl shadow-2xl p-4 sm:p-8 max-w-full sm:max-w-md w-full text-center animate-fade-in">
+            <Mail size={40} className="mx-auto text-green-500 mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Send Acceptance Email</h2>
+            <p className="text-gray-700 mb-4">Send an acceptance email to <span className="font-semibold text-black">{candidateToAccept.fullName}</span>?</p>
+            {acceptanceError && <div className="text-red-600 mb-2">{acceptanceError}</div>}
+            {acceptanceSuccess && <div className="text-green-600 mb-2">{acceptanceSuccess}</div>}
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  setAcceptanceModalOpen(false);
+                  setCandidateToAccept(null);
+                  setAcceptanceError(null);
+                  setAcceptanceSuccess(null);
+                }}
+                className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-100 transition"
+                disabled={acceptanceLoading}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  setAcceptanceLoading(true);
+                  setAcceptanceError(null);
+                  setAcceptanceSuccess(null);
+                  try {
+                    await axios.post(`${API_CONFIG.BASE_URL}/api/candidates/send-acceptance`, {
+                      email: candidateToAccept.email
+                    });
+                    setAcceptanceSuccess('Acceptance email sent successfully!');
+                    setTimeout(() => {
+                      setAcceptanceModalOpen(false);
+                      setCandidateToAccept(null);
+                      setAcceptanceSuccess(null);
+                    }, 2000);
+                  } catch (err: any) {
+                    setAcceptanceError('Failed to send acceptance email.');
+                  } finally {
+                    setAcceptanceLoading(false);
+                  }
+                }}
+                className="px-6 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition flex items-center justify-center"
+                disabled={acceptanceLoading}
+              >
+                {acceptanceLoading ? 'Sending...' : 'Send Email'}
               </button>
             </div>
           </div>

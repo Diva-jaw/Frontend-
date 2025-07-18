@@ -105,6 +105,8 @@ const StepAppliedFormsList: React.FC = () => {
   const [mailSentFor, setMailSentFor] = useState<{ [id: number]: boolean }>({});
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const userDropdownRef = useRef<HTMLDivElement>(null);
+  const [showSuccessPopup, setShowSuccessPopup] = useState<{ name: string; status: string } | null>(null);
+  const mailLinkRef = useRef("");
 
   // Click-away logic
   useEffect(() => {
@@ -315,6 +317,36 @@ const StepAppliedFormsList: React.FC = () => {
     }
   };
 
+  const handleSendMail = async (candidate: Candidate, status: string, moveTo: string) => {
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      console.log('Sending mail with link:', mailLinkRef.current); // Debug log
+      const movePromise = status === 'Accept'
+        ? moveApplicant(candidate.id, moveTo, 'cleared')
+        : moveApplicant(candidate.id, roundParam, 'rejected');
+      const mailPromise = fetch(`${baseUrl}/application/api/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
+        },
+        body: JSON.stringify({
+          email: candidate.email,
+          message: mailMessage,
+          link: mailLinkRef.current,
+          status: status === 'Accept' ? 'accept' : 'reject',
+        }),
+      });
+      const [moveRes, mailRes] = await Promise.all([movePromise, mailPromise]);
+      if (!mailRes.ok) throw new Error('Mail send failed');
+      setMailSentFor(prev => ({ ...prev, [candidate.id]: true }));
+      setShowSuccessPopup({ name: candidate.name, status });
+      setTimeout(() => setShowSuccessPopup(null), 3000);
+    } catch (error) {
+      alert('Error sending email or updating status');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -337,7 +369,7 @@ const StepAppliedFormsList: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-2 capitalize tracking-tight">
-            {department} - {step?.replace(/-/g, ' ')}
+            {department} - {step?.replace(/-/g, ' ') === 'final round' ? 'Round 3' : step?.replace(/-/g, ' ')}
           </h2>
           <p className="text-lg text-gray-600 font-medium">Applied Forms Management</p>
         </div>
@@ -423,7 +455,7 @@ const StepAppliedFormsList: React.FC = () => {
                               <option value="">Select Round</option>
                               {acceptOptions.map((option) => (
                                 <option key={option} value={option}>
-                                  {option}
+                                  {option === 'Final Round' ? 'Round 3' : option}
                                 </option>
                               ))}
                             </select>
@@ -599,6 +631,7 @@ const StepAppliedFormsList: React.FC = () => {
                   setShowMailModal(null);
                   setMailMessage('');
                   setMailLink('');
+                  mailLinkRef.current = ''; // Reset ref
                 }}
                 aria-label="Close"
               >
@@ -635,7 +668,10 @@ const StepAppliedFormsList: React.FC = () => {
                   <input
                     className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-black"
                     value={mailLink}
-                    onChange={(e) => setMailLink(e.target.value)}
+                    onChange={(e) => {
+                      setMailLink(e.target.value);
+                      mailLinkRef.current = e.target.value;
+                    }}
                     placeholder="Enter test or next round link..."
                   />
                 </div>
@@ -650,38 +686,12 @@ const StepAppliedFormsList: React.FC = () => {
                     setSendingMail(true);
                     const candidate = appliedForms.find((f) => f.id === showMailModal.id);
                     if (candidate) {
-                      try {
-                        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-                        // Prepare requests
-                        const movePromise = showMailModal.status === 'Accept'
-                          ? moveApplicant(candidate.id, moveToDropdown[candidate.id], 'cleared')
-                          : moveApplicant(candidate.id, roundParam, 'rejected');
-                        // Send mail as JSON (no FormData)
-                        const mailPromise = fetch(`${baseUrl}/application/api/send-email`, {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
-                          },
-                          body: JSON.stringify({
-                            email: candidate.email,
-                            message: mailMessage,
-                            link: mailLink,
-                            status: showMailModal.status === 'Accept' ? 'accept' : 'reject',
-                          }),
-                        });
-                        // Run both in parallel
-                        const [moveRes, mailRes] = await Promise.all([movePromise, mailPromise]);
-                        if (!mailRes.ok) throw new Error('Mail send failed');
-                        window.alert(`Mail sent to ${candidate.name} (${showMailModal.status}) and status updated!`);
-                        setMailSentFor(prev => ({ ...prev, [candidate.id]: true }));
-                      } catch (error) {
-                        alert('Error sending email or updating status');
-                      }
+                      await handleSendMail(candidate, showMailModal.status, moveToDropdown[candidate.id]);
                     }
                     setShowMailModal(null);
                     setMailMessage('');
                     setMailLink('');
+                    mailLinkRef.current = ''; // Reset ref
                     setSendingMail(false);
                   }}
                   disabled={sendingMail}
@@ -691,6 +701,22 @@ const StepAppliedFormsList: React.FC = () => {
                     : (showMailModal.status === 'Reject' ? 'Send Rejection Mail' : 'Send Acceptance Mail')}
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+        {showSuccessPopup && (
+          <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-[99999]">
+            <div className="px-8 py-4 rounded-2xl shadow-2xl text-center text-blue-900 font-bold text-xl animate-fadeIn"
+              style={{
+                background: 'rgba(173, 216, 230, 0.85)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                border: '1.5px solid rgba(255,255,255,0.18)',
+                backdropFilter: 'blur(8px)',
+                borderRadius: '2rem',
+                fontFamily: 'inherit',
+                letterSpacing: '0.03em',
+              }}>
+              {showSuccessPopup.status === 'Reject' ? 'Rejection mail sent to ' : 'Acceptance mail sent to '}{showSuccessPopup.name}!
             </div>
           </div>
         )}

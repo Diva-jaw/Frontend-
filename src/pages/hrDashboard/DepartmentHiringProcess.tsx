@@ -34,7 +34,7 @@ const DepartmentHiringProcess: React.FC = () => {
               style={{ animationDelay: `${idx * 0.07}s` }}
             >
               <span className="mb-2">{step.icon}</span>
-              <span className="font-semibold text-lg text-blue-800 group-hover:text-blue-900 transition-colors">{step.name}</span>
+              <span className="font-semibold text-lg text-blue-800 group-hover:text-blue-900 transition-colors">{step.name === 'Final Round' ? 'Round 3' : step.name}</span>
             </button>
           ))}
         </div>
