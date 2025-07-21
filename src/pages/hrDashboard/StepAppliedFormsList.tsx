@@ -12,7 +12,8 @@ interface Candidate {
   id: number;
   name: string;
   email: string;
-  round_status: string; // add this line
+  round_status: string;
+  jobTitle: string;
 }
 
 interface CandidateDetails {
@@ -52,6 +53,7 @@ interface CandidateDetails {
   passport: string;
   resume: string;
   academics: string;
+  jobTitle: string;
 }
 
 interface Draft {
@@ -184,6 +186,7 @@ const StepAppliedFormsList: React.FC = () => {
       passport: camel.passportAvailable,
       resume: camel.resumePath,
       academics: camel.academicDocsPath,
+      jobTitle: camel.jobTitle,
       // Add any other fields as needed
     };
   }
@@ -223,6 +226,7 @@ const StepAppliedFormsList: React.FC = () => {
             name: app.full_name,
             email: app.email || '', // fallback if email is missing
             round_status: app.round_status || 'in_progress', // add round_status
+            jobTitle: app.job_title || '—',
           }))
         );
         setTotalPages(data.pagination.totalPages);
@@ -382,6 +386,7 @@ const StepAppliedFormsList: React.FC = () => {
             <table className="min-w-full">
               <thead className="bg-gradient-to-r from-blue-600 to-indigo-600">
                 <tr>
+                  <th className="px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Job Title</th>
                   <th className="px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Name</th>
                   <th className="px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Email</th>
                   <th className="px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Status</th>
@@ -392,7 +397,7 @@ const StepAppliedFormsList: React.FC = () => {
               <tbody className="divide-y divide-gray-100">
                 {appliedForms.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                    <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
                       No candidates found for this department and step.
                     </td>
                   </tr>
@@ -401,11 +406,13 @@ const StepAppliedFormsList: React.FC = () => {
                     const status = statusDropdown[form.id];
                     // Use round_status from backend
                     const roundStatus = form.round_status;
+                    const jobTitle = form.jobTitle || '—';
                     return (
                       <tr
                         key={form.id}
                         className={`hover:bg-gray-50 transition-colors duration-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-25'}`}
                       >
+                        <td className="px-6 py-4 font-semibold text-blue-900 whitespace-nowrap">{jobTitle}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">
@@ -568,6 +575,7 @@ const StepAppliedFormsList: React.FC = () => {
                           </a>
                         }
                       />
+                      <Detail label="Job Title" value={candidateDetails[String(showDetailsId)].jobTitle || '—'} />
                     </div>
                   </section>
                   <section className="border-b border-gray-200 pb-8">

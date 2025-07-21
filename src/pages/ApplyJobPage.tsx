@@ -291,9 +291,24 @@ const ApplyJobPage: React.FC = () => {
         navigate('/');
       }, 3000);
     } catch (error: any) {
-      if (error?.response?.status === 409) {
-        const message = error?.response?.data?.message || 'You have already applied for this job.';
-        setPopupMessage(message);
+      // Log for debugging
+      console.log('Submission error:', error);
+      console.log('error.response:', error?.response);
+      console.log('error.response.data:', error?.response?.data);
+      // Fallback: check stringified error for duplicate entry
+      const errorString = JSON.stringify(error);
+      const isDuplicate =
+        error?.response?.status === 409 ||
+        error?.code === 'ER_DUP_ENTRY' ||
+        (typeof error?.sqlMessage === 'string' && error.sqlMessage.includes('Duplicate entry')) ||
+        (error?.response?.data?.code === 'ER_DUP_ENTRY') ||
+        (typeof error?.response?.data?.sqlMessage === 'string' && error.response.data.sqlMessage.includes('Duplicate entry')) ||
+        (typeof error?.response?.data?.details === 'string' && error.response.data.details.includes('Duplicate entry')) ||
+        errorString.includes('ER_DUP_ENTRY') ||
+        errorString.includes('Duplicate entry');
+
+      if (isDuplicate) {
+        setPopupMessage('You have already applied for this job.');
         setShowPopup(true);
         setTimeout(() => {
           setShowPopup(false);
@@ -307,7 +322,6 @@ const ApplyJobPage: React.FC = () => {
           setPopupMessage('');
         }, 3000);
       }
-    } finally {
       setIsSubmitting(false);
     }
   };
