@@ -88,6 +88,11 @@ import HRApplications from "./pages/hrDashboard/HRApplications";
 import FinanceApplications from "./pages/hrDashboard/FinanceApplications";
 import OperationsApplications from "./pages/hrDashboard/OperationsApplications";
 import AppliedForms from "./pages/hrDashboard/AppliedForms";
+import AppliedCourses from "./pages/hrDashboard/AppliedCourses";
+import CourseLevels from "./pages/hrDashboard/CourseLevels";
+import CourseApplications from "./pages/hrDashboard/CourseApplications";
+import ModuleCategories from "./pages/hrDashboard/ModuleCategories";
+import DesignCategoryLevels from "./pages/hrDashboard/DesignCategoryLevels";
 import DepartmentHiringProcess from "./pages/hrDashboard/DepartmentHiringProcess";
 import StepAppliedFormsList from "./pages/hrDashboard/StepAppliedFormsList";
 import UserProfilePopup from "./components/auth/UserProfilePopup";
@@ -221,6 +226,15 @@ function App() {
                     <Route path="applied-forms" element={<AppliedForms />} />
                     <Route path="applied-forms/:department" element={<DepartmentHiringProcess />} />
                     <Route path="applied-forms/:department/:step" element={<StepAppliedFormsList />} />
+                    <Route path="applied-courses" element={<AppliedCourses />} />
+                    <Route path="applied-courses/:courseName" element={<CourseLevels />} />
+                    <Route path="applied-courses/:courseName/level-1" element={<CourseApplications />} />
+                    <Route path="applied-courses/:courseName/level-2" element={<CourseApplications />} />
+                    <Route path="applied-courses/:courseName/level-3" element={<CourseApplications />} />
+                    <Route path="applied-courses/:courseName/:categoryName" element={<DesignCategoryLevels />} />
+                    <Route path="applied-courses/:courseName/:moduleName" element={<ModuleCategories />} />
+                    <Route path="applied-courses/:courseName/:moduleName/:category" element={<CourseApplications />} />
+                    <Route path="applied-courses/:courseName/:categoryName/:level" element={<CourseApplications />} />
                   </Route>
                   <Route path="/apply-job" element={<ApplyJobPage />} />
                 </Routes>

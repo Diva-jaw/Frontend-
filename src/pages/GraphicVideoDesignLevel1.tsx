@@ -285,32 +285,6 @@ const GraphicVideoDesignLevel1 = () => {
         </div>
       </section>
 
-      {/* Call to Action Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-indigo-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-              Ready to Master Graphic & Video Design?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Start your journey in graphic design and video content creation with industry-standard tools and professional guidance.
-            </p>
-            <motion.button
-              onClick={() => setShowEnrollmentModal(true)}
-              className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Enroll Now
-            </motion.button>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Enrollment Modal */}
       <EnrollmentModal
         isOpen={showEnrollmentModal}

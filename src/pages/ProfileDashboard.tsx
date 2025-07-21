@@ -283,7 +283,7 @@ const ProfileDashboard = () => {
                 {[
                   { id: 'overview', label: 'Overview', icon: Eye },
                   { id: 'applications', label: ' Track Applications', icon: BookOpen },
-                  { id: 'courses', label: 'Track Courses', icon: Award }
+                  { id: 'courses', label: 'Courses Applied', icon: Award }
                 ].map((tab) => (
                   <button
                     key={tab.id}
