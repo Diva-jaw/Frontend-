@@ -370,7 +370,7 @@ const StepAppliedFormsList: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-screen-2xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-2 capitalize tracking-tight">
             {department} - {step?.replace(/-/g, ' ') === 'final round' ? 'Round 3' : step?.replace(/-/g, ' ')}
@@ -383,15 +383,15 @@ const StepAppliedFormsList: React.FC = () => {
 
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full">
+            <table className="w-full table-fixed">
               <thead className="bg-gradient-to-r from-blue-600 to-indigo-600">
                 <tr>
-                  <th className="px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Job Title</th>
-                  <th className="px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Name</th>
-                  <th className="px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Email</th>
-                  <th className="px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Status</th>
-                  <th className="px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Move to</th>
-                  <th className="px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Actions</th>
+                  <th className="w-[18%] px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Job Title</th>
+                  <th className="w-[15%] px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Name</th>
+                  <th className="w-[22%] px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Email</th>
+                  <th className="w-[15%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Status</th>
+                  <th className="w-[15%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Move to</th>
+                  <th className="w-[15%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -435,7 +435,7 @@ const StepAppliedFormsList: React.FC = () => {
                             </span>
                           ) : (
                             <select
-                              className={`w-full max-w-xs border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
+                              className={`w-full border-2 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium ${
                                 status === 'Accept'
                                   ? 'border-green-300 bg-green-50 text-green-800'
                                   : status === 'Reject'
@@ -455,7 +455,7 @@ const StepAppliedFormsList: React.FC = () => {
                         {roundStatus === 'in_progress' && status !== 'Reject' ? (
                           <td className="px-6 py-4 text-center">
                             <select
-                              className="w-full max-w-xs border-2 border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium bg-white text-gray-700 hover:border-blue-400"
+                              className="w-full border-2 border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 font-medium bg-white text-gray-700 hover:border-blue-400"
                               value={moveToDropdown[form.id] || ''}
                               onChange={(e) => setMoveToDropdown({ ...moveToDropdown, [form.id]: e.target.value })}
                             >
@@ -527,105 +527,130 @@ const StepAppliedFormsList: React.FC = () => {
         )}
 
         {showDetailsId && (
-          <div className="fixed inset-0 z-[9999] flex items-start justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-[900px] mx-auto relative mt-20 flex flex-col p-8">
-              <div className="sticky top-0 z-10 bg-white rounded-t-3xl px-0 pt-0 pb-6 flex items-center justify-between border-b border-gray-200">
-                <div>
-                  <h3 className="text-3xl font-bold text-gray-900 tracking-tight">Candidate Details</h3>
-                  <p className="text-gray-600 mt-1">Complete profile information</p>
+          <div className="fixed inset-0 z-[9999] flex items-start justify-center overflow-y-auto bg-gray-900/60 backdrop-blur-[2px] pt-4 pb-12 px-4">
+  <div className="bg-white rounded-xl shadow-2xl w-full max-w-[1100px] mx-auto relative flex flex-col transform transition-all duration-200">
+    <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm rounded-t-xl px-8 py-6 flex items-center justify-between border-b border-gray-200/80">
+      <div>
+                  <h3 className="text-2xl font-semibold text-gray-900 tracking-tight">Applicant Details</h3>
+                  <p className="text-gray-500 mt-1.5 text-[15px] font-medium">Complete profile information</p>
                 </div>
-                <button
-                  className="text-gray-400 hover:text-gray-700 text-3xl font-bold p-2 hover:bg-gray-100 rounded-full transition-all duration-200"
+                <button 
+                  className="text-gray-400 hover:text-gray-600 text-2xl p-2 hover:bg-gray-50 active:bg-gray-100 rounded-lg transition-all duration-150 -mr-2 hover:rotate-90" 
                   onClick={() => setShowDetailsId(null)}
                   aria-label="Close"
                 >
                   ×
                 </button>
               </div>
-              {candidateDetails[String(showDetailsId)] ? (
-                <div className="space-y-8 max-h-[80vh] overflow-y-auto pt-6 pb-10 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent">
-                  <section className="border-b border-gray-200 pb-8">
-                    <h4 className="text-xl font-bold text-gray-900 mb-6 tracking-wide flex items-center">
-                      <span className="w-2 h-8 bg-blue-500 rounded-full mr-3"></span>
-                      Personal Details
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                      <Detail
-                        label="Full Name"
-                        value={<span className="font-bold text-blue-900">{candidateDetails[String(showDetailsId)].fullName}</span>}
-                      />
-                      <Detail label="Date of Birth" value={candidateDetails[String(showDetailsId)].dob} />
-                      <Detail label="Gender" value={candidateDetails[String(showDetailsId)].gender} />
-                      <Detail
-                        label="Mobile"
-                        value={<span className="font-bold text-blue-800">{candidateDetails[String(showDetailsId)].mobile}</span>}
-                      />
-                      <Detail
-                        label="Alternate Contact Number"
-                        value={candidateDetails[String(showDetailsId)].altMobile || '—'}
-                      />
-                      <Detail
-                        label="Email"
-                        value={
-                          <a
-                            href={`mailto:${candidateDetails[String(showDetailsId)].email}`}
-                            className="font-bold text-blue-700 underline break-words"
-                          >
-                            {candidateDetails[String(showDetailsId)].email}
-                          </a>
-                        }
-                      />
-                      <Detail label="Job Title" value={candidateDetails[String(showDetailsId)].jobTitle || '—'} />
+
+              <div className="space-y-10 overflow-y-auto px-8 py-7 scrollbar-thin scrollbar-thumb-gray-200 hover:scrollbar-thumb-gray-300 scrollbar-track-transparent">
+                <section className="border-b border-gray-200/80 pb-9">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-6 tracking-tight flex items-center group">
+                    <span className="w-1 h-6 bg-blue-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Personal Details</span>
+                  </h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-1.5 group hover:bg-gray-50/50 rounded-lg px-3 transition-all duration-200">
+                      <span className="font-medium text-gray-600 group-hover:text-gray-900 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
+                        Full Name
+                      </span>
+                      <span className="text-gray-900 text-left sm:text-right break-words flex-1">
+                        <span className="font-semibold">{candidateDetails[String(showDetailsId)]?.fullName}</span>
+                      </span>
                     </div>
-                  </section>
-                  <section className="border-b border-gray-200 pb-8">
-                    <h4 className="text-xl font-bold text-gray-900 mb-6 tracking-wide flex items-center">
-                      <span className="w-2 h-8 bg-green-500 rounded-full mr-3"></span>
-                      Location Details
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                      <Detail label="Current City" value={candidateDetails[String(showDetailsId)].currentCity} />
-                      <Detail label="Home Town / Permanent Address" value={candidateDetails[String(showDetailsId)].homeTown} />
-                      <Detail label="Willing to Relocate?" value={candidateDetails[String(showDetailsId)].willingToRelocate} />
+                    <Detail label="Date of Birth" value={candidateDetails[String(showDetailsId)]?.dob} />
+                    <Detail label="Gender" value={candidateDetails[String(showDetailsId)]?.gender} />
+                    <Detail
+                      label="Mobile"
+                      value={<span className="font-bold text-blue-800">{candidateDetails[String(showDetailsId)]?.mobile}</span>}
+                    />
+                    <Detail
+                      label="Alternate Contact Number"
+                      value={candidateDetails[String(showDetailsId)]?.altMobile || '—'}
+                    />
+                    <Detail
+                      label="Email"
+                      value={
+                        <a
+                          href={`mailto:${candidateDetails[String(showDetailsId)]?.email}`}
+                          className="font-bold text-blue-700 underline break-words"
+                        >
+                          {candidateDetails[String(showDetailsId)]?.email}
+                        </a>
+                      }
+                    />
+                    <Detail label="Job Title" value={candidateDetails[String(showDetailsId)]?.jobTitle || '—'} />
+                  </div>
+                </section>
+
+                <section className="border-b border-gray-200/80 pb-9">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-6 tracking-tight flex items-center group">
+                    <span className="w-1 h-6 bg-green-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Location Details</span>
+                  </h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
+                    <Detail label="Current City" value={candidateDetails[String(showDetailsId)]?.currentCity} />
+                    <Detail label="Home Town / Permanent Address" value={candidateDetails[String(showDetailsId)]?.homeTown} />
+                    <Detail 
+  label="Willing to Relocate?" 
+  value={Number(candidateDetails[String(showDetailsId)]?.willingToRelocate) === 1 ? 'Yes' : 'No'} 
+/>
+                  </div>
+                </section>
+
+                <section className="border-b border-gray-200/80 pb-9">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-6 tracking-tight flex items-center group">
+                    <span className="w-1 h-6 bg-purple-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Educational Background</span>
+                  </h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
+                    <Detail label="Highest Qualification" value={candidateDetails[String(showDetailsId)]?.qualification} />
+                    <Detail label="Course Name & Specialization" value={candidateDetails[String(showDetailsId)]?.course} />
+                    <Detail label="College/Institute Name" value={candidateDetails[String(showDetailsId)]?.college} />
+                    <Detail
+                      label="Affiliated University"
+                      value={candidateDetails[String(showDetailsId)]?.affiliatedUniv || '—'}
+                    />
+                    <Detail
+                      label="Year of Passing / Expected Graduation"
+                      value={candidateDetails[String(showDetailsId)]?.graduationYear}
+                    />
+                    <Detail label="Aggregate Marks / CGPA (Till Now)" value={candidateDetails[String(showDetailsId)]?.marks} />
+                    <Detail 
+  label="Are all semesters cleared?" 
+  value={Number(candidateDetails[String(showDetailsId)]?.allSemCleared) === 1 ? 'Yes' : 'No'} 
+/>
+                  </div>
+                </section>
+
+                <section className="pb-6">
+                  <h4 className="text-lg font-semibold text-gray-800 mb-6 tracking-tight flex items-center group">
+                    <span className="w-1 h-6 bg-orange-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Resume & Documents</span>
+                  </h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-1.5 group hover:bg-gray-50/50 rounded-lg px-3 transition-all duration-200">
+                      <span className="font-medium text-gray-600 group-hover:text-gray-900 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
+                        Resume
+                      </span>
+                      <span className="text-gray-900 text-left sm:text-right break-words flex-1">
+                        <a 
+                          href={candidateDetails[String(showDetailsId)]?.resume ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/${candidateDetails[String(showDetailsId)]?.resume}` : '#'}
+                          className="text-blue-600 hover:text-blue-700 underline break-words font-medium hover:decoration-2 transition-all duration-150 inline-flex items-center gap-1 hover:gap-2"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View Resume
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </a>
+                      </span>
                     </div>
-                  </section>
-                  <section className="border-b border-gray-200 pb-8">
-                    <h4 className="text-xl font-bold text-gray-900 mb-6 tracking-wide flex items-center">
-                      <span className="w-2 h-8 bg-purple-500 rounded-full mr-3"></span>
-                      Educational Background
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                      <Detail label="Highest Qualification" value={candidateDetails[String(showDetailsId)].qualification} />
-                      <Detail label="Course Name & Specialization" value={candidateDetails[String(showDetailsId)].course} />
-                      <Detail label="College/Institute Name" value={candidateDetails[String(showDetailsId)].college} />
-                      <Detail
-                        label="Affiliated University"
-                        value={candidateDetails[String(showDetailsId)].affiliatedUniv || '—'}
-                      />
-                      <Detail
-                        label="Year of Passing / Expected Graduation"
-                        value={candidateDetails[String(showDetailsId)].graduationYear}
-                      />
-                      <Detail label="Aggregate Marks / CGPA (Till Now)" value={candidateDetails[String(showDetailsId)].marks} />
-                      <Detail label="Are all semesters cleared?" value={candidateDetails[String(showDetailsId)].allSemCleared} />
-                    </div>
-                  </section>
-                  <section className="pt-2 pb-8">
-                    <h4 className="text-xl font-bold text-gray-900 mb-6 tracking-wide flex items-center">
-                      <span className="w-2 h-8 bg-orange-500 rounded-full mr-3"></span>
-                      Resume & Documents
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                      <Detail label="Resume" value={candidateDetails[String(showDetailsId)].resume || '—'} />
-                      <Detail label="Academic Documents" value={candidateDetails[String(showDetailsId)].academics || '—'} />
-                    </div>
-                  </section>
-                </div>
-              ) : detailsError ? (
-                <div className="text-red-500 text-center py-8">{detailsError}</div>
-              ) : (
-                <div className="text-gray-500 text-center py-8">Loading details...</div>
-              )}
+                    <Detail label="Academic Documents" value={candidateDetails[String(showDetailsId)]?.academics || '—'} />
+                  </div>
+                </section>
+              </div>
             </div>
           </div>
         )}
@@ -759,11 +784,18 @@ const Detail = ({ label, value }: { label: string; value: React.ReactNode }) => 
   }
 
   return (
-    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 gap-1">
-      <span className="font-medium text-blue-900 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-wide">{label}</span>
-      <span className="text-blue-700 text-left sm:text-right break-words max-w-full">
+    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-2 group hover:bg-gradient-to-r hover:from-slate-50 hover:to-transparent rounded-lg px-3 transition-all duration-200">
+      <span className="font-medium text-slate-600 group-hover:text-slate-800 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
+        {label}
+      </span>
+      <span className="text-slate-800 text-left sm:text-right break-words flex-1">
         {typeof displayValue === 'string' && displayValue.endsWith('.pdf') && (label === 'Resume' || label === 'Academic Documents') ? (
-          <a href={getFullUrl(displayValue)} className="text-blue-700 underline break-words" target="_blank" rel="noopener noreferrer">{label}</a>
+          <a href={getFullUrl(displayValue)} className="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1.5 hover:gap-2.5 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-full transition-all duration-150" target="_blank" rel="noopener noreferrer">
+            View {label}
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
         ) : (
           displayValue
         )}
