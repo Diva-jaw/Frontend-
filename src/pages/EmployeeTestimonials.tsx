@@ -149,10 +149,10 @@ const EmployeeTestimonials: React.FC = () => {
           <p className="text-xl md:text-2xl text-blue-900 dark:text-blue-100 max-w-3xl mx-auto leading-relaxed">
             Discover why our team loves working with us through their authentic
             voices and experiences
-          </p>
-        </div>
+        </p>
+      </div>
 
-        {/* Testimonials Grid */}
+      {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {testimonials.map((testimonial, index) => (
             <div
@@ -195,7 +195,7 @@ const EmployeeTestimonials: React.FC = () => {
                   </div>
                   {/* Decorative ring */}
                   <div className="absolute inset-0 w-32 h-32 rounded-full border-2 border-white/20 animate-pulse"></div>
-                </div>
+        </div>
 
                 {/* Name and Role */}
                 <div className="text-center">
@@ -205,7 +205,7 @@ const EmployeeTestimonials: React.FC = () => {
                   <p className="text-blue-800 dark:text-blue-100 font-medium text-lg">
                     {testimonial.role}
                   </p>
-                </div>
+        </div>
                 {/* Star Rating */}
                 <div className="flex justify-center mt-2">
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
@@ -218,7 +218,7 @@ const EmployeeTestimonials: React.FC = () => {
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.385-2.46a1 1 0 00-1.175 0l-3.385 2.46c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118l-3.385-2.46c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.967z" />
                     </svg>
                   ))}
-                </div>
+        </div>
               </div>
 
               {/* Testimonial Text */}
@@ -229,45 +229,45 @@ const EmployeeTestimonials: React.FC = () => {
               </div>
             </div>
           ))}
-        </div>
+      </div>
 
-        {/* One Liners Section */}
+      {/* One Liners Section */}
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-10 border border-white/20 mb-10">
           <h2 className="text-4xl font-bold text-center mb-10 text-blue-900 dark:text-blue-100">
             Employee One-Liners
           </h2>
 
           <div className="relative h-32 overflow-hidden mb-8">
-            {oneLiners.map((oneLiner, index) => (
-              <div
-                key={index}
+          {oneLiners.map((oneLiner, index) => (
+            <div
+              key={index}
                 className={`absolute w-full text-center text-2xl md:text-3xl font-light transition-all duration-800 ${
-                  currentOneLiner === index
+                currentOneLiner === index
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
                 } text-blue-900 dark:text-blue-100`}
-              >
-                {oneLiner}
-              </div>
-            ))}
-          </div>
-
+            >
+              {oneLiner}
+            </div>
+          ))}
+        </div>
+        
           <div className="flex justify-center gap-3">
-            {oneLiners.map((_, index) => (
+          {oneLiners.map((_, index) => (
               <button
-                key={index}
+              key={index}
                 onClick={() => showOneLiner(index)}
                 className={`w-4 h-4 rounded-full transition-all duration-300 cursor-pointer hover:scale-125 ${
-                  currentOneLiner === index
+                currentOneLiner === index
                     ? "bg-blue-900 dark:bg-blue-100 scale-125 shadow-lg"
                     : "bg-blue-300 dark:bg-blue-700 hover:bg-blue-400 dark:hover:bg-blue-600"
-                }`}
-              />
-            ))}
-          </div>
+              }`}
+            />
+          ))}
         </div>
+      </div>
 
-        {/* Stats Section */}
+      {/* Stats Section */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <div
@@ -276,11 +276,11 @@ const EmployeeTestimonials: React.FC = () => {
             >
               <div className="text-4xl md:text-5xl font-bold mb-3 text-blue-900 dark:text-blue-100">
                 {stat.number}
-              </div>
+          </div>
               <div className="text-blue-800 dark:text-blue-100 font-medium">
                 {stat.label}
-              </div>
-            </div>
+        </div>
+          </div>
           ))}
         </div>
       </div>

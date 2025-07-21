@@ -1,12 +1,15 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, LogOut, User, Menu, X } from "lucide-react";
 import { useTheme } from "../ThemeContext";
 import { useAuth } from "../AuthContext";
+import UserProfilePopup from "../auth/UserProfilePopup";
+import CoursesDropdown from "./CoursesDropdown";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mainDropdownOpen, setMainDropdownOpen] = useState(false);
   const [subDropdown, setSubDropdown] = useState<string | null>(null);
   const { theme, toggleTheme } = useTheme();
@@ -17,8 +20,9 @@ const Navbar = () => {
   const learnDropdownRef = useRef<HTMLDivElement>(null);
   const careersDropdownRef = useRef<HTMLDivElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const userDropdownRef = useRef<HTMLDivElement>(null);
+
+  const [profilePopupOpen, setProfilePopupOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   // Get first character of user's name for avatar
   const getUserInitial = (name: string) => {
@@ -86,22 +90,18 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [careersDropdownOpen]);
 
-  // Click-away logic for user dropdown
+
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
-        setShowUserDropdown(false);
+    if (!profilePopupOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfilePopupOpen(false);
       }
-    }
-    if (showUserDropdown) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showUserDropdown]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [profilePopupOpen]);
+
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -140,7 +140,7 @@ const Navbar = () => {
   };
 
   const linkClass =
-    "text-gray-800 dark:text-gray-200 font-medium text-sm uppercase tracking-wide relative rounded-full px-4 py-2 transition-all duration-200 ease-in-out hover:text-indigo-700 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-md hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-600 after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-indigo-600 dark:after:bg-indigo-400 after:transition-all after:duration-300 hover:after:w-1/2";
+    "text-gray-800 dark:text-gray-200 font-medium text-sm uppercase tracking-wide relative rounded-full px-4 py-2 transition-all duration-200 ease-in-out hover:text-indigo-700 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-600 after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-indigo-600 dark:after:bg-indigo-400 after:transition-all after:duration-300 hover:after:w-1/2";
 
   const dropdownVariants = {
     hidden: { opacity: 0, y: -10 },
@@ -151,7 +151,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white dark:bg-gray-900 shadow-sm dark:shadow-gray-800/20 sticky top-0 z-50 w-full transition-colors duration-300">
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-16 w-full">
+        <div className="flex items-center h-20 w-full">
           {/* Left: Logo and Nav */}
           <div className="flex items-center flex-shrink-0">
             <img
@@ -209,6 +209,8 @@ const Navbar = () => {
               >
                 What We Do
               </a>
+              {/* Courses Dropdown */}
+              <CoursesDropdown />
               {/* Learn Dropdown */}
               <div className="relative" ref={learnDropdownRef}>
                 <button
@@ -334,31 +336,35 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center space-x-4">
             {isLoggedIn && user && user.role !== 'hr' && (
               <>
-                <div className="relative inline-block" ref={userDropdownRef}>
+
+                {/* User Avatar with First Character - now a button */}
+                <div className="relative" ref={profileRef}>
                   <button
-                    type="button"
-                    className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    onClick={() => setShowUserDropdown((prev) => !prev)}
+                    className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
+                    onClick={() => setProfilePopupOpen((v) => !v)}
                     aria-haspopup="true"
-                    aria-expanded={showUserDropdown}
+                    aria-expanded={profilePopupOpen}
+                    type="button"
                   >
+                    {/* Online Status Indicator */}
                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
-                      {getUserInitial(user?.name || 'User')}
+                      {getUserInitial(user?.name || "User")}
                     </div>
-                    <span className="text-sm font-medium text-green-700 dark:text-green-300">{user?.name || 'User'}</span>
+                    <span className="text-sm font-medium text-green-700 dark:text-green-300">
+                      {user?.name || "User"}
+                    </span>
                   </button>
-                  {showUserDropdown && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg z-50 p-4 border border-gray-100 dark:border-gray-800 animate-fade-in">
-                      <div className="flex items-center space-x-3 mb-4">
-                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">{getUserInitial(user?.name || 'User')}</div>
-                        <div>
-                          <div className="font-semibold text-gray-900 dark:text-white">{user?.name || 'User'}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-300">{user?.email || 'user@email.com'}</div>
-                        </div>
-                      </div>
-                      <button className="w-full mb-2 py-2 px-4 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Courses Enrolled</button>
-                      <button className="w-full py-2 px-4 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition">Tracking Application</button>
+                  {profilePopupOpen && (
+                    <div className="absolute right-0 mt-3 z-50" style={{ minWidth: 320 }}>
+                      <UserProfilePopup
+                        name={user?.name || "User"}
+                        email={user?.email || "user@email.com"}
+                        onViewProfile={() => {
+                          navigate("/profile-dashboard");
+                          setProfilePopupOpen(false);
+                        }}
+                      />
                     </div>
                   )}
                 </div>
@@ -511,6 +517,11 @@ const Navbar = () => {
                 <a href="/#services" onClick={e => handleNavClick(e, "services") } className={linkClass + " w-full text-left"}>Services</a>
                 <a href="/#about" onClick={e => handleNavClick(e, "about") } className={linkClass + " w-full text-left"}>About</a>
                 <a href="/#what-we-do" onClick={e => handleNavClick(e, "what-we-do") } className={linkClass + " w-full text-left"}>What We Do</a>
+                {/* Courses Dropdown (collapsible) */}
+                <details className="group">
+                  <summary className={linkClass + " w-full text-left cursor-pointer flex items-center justify-between"}>Courses <span className="ml-2">▼</span></summary>
+                  <CoursesDropdown />
+                </details>
                 {/* Learn Dropdown (collapsible) */}
                 <details className="group">
                   <summary className={linkClass + " w-full text-left cursor-pointer flex items-center justify-between"}>Learn <span className="ml-2">▼</span></summary>

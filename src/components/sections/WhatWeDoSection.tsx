@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, Rocket, Brain, GraduationCap } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 interface DropdownItemProps {
   title: string;
@@ -14,25 +15,25 @@ interface DropdownItemProps {
 
 const DropdownItem = ({ title, icon, content, isOpen, onClick }: DropdownItemProps) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
       <button
         onClick={onClick}
-        className="w-full px-6 py-4 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
+        className="w-full px-6 py-4 flex items-center justify-between bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
       >
         <div className="flex items-center gap-3">
           {icon}
-          <span className="text-xl font-semibold text-black">{title}</span>
+          <span className="text-xl font-semibold text-black dark:text-white">{title}</span>
         </div>
-        {isOpen ? <ChevronUp className="text-blue-500" /> : <ChevronDown className="text-blue-500" />}
+        {isOpen ? <ChevronUp className="text-blue-500 dark:text-blue-400" /> : <ChevronDown className="text-blue-500 dark:text-blue-400" />}
       </button>
       
       {isOpen && (
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
-          <p className="text-gray-700 mb-4">{content.description}</p>
+        <div className="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-100 dark:border-gray-600">
+          <p className="text-gray-700 dark:text-gray-300 mb-4">{content.description}</p>
           <ul className="space-y-2">
             {content.features.map((feature, index) => (
-              <li key={index} className="flex items-center gap-2 text-gray-600">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <li key={index} className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <div className="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full"></div>
                 {feature}
               </li>
             ))}
@@ -45,11 +46,12 @@ const DropdownItem = ({ title, icon, content, isOpen, onClick }: DropdownItemPro
 
 const WhatWeDoSection = () => {
   const [openSection, setOpenSection] = useState<string | null>("incubation");
+  const { theme } = useTheme();
 
   const sections = {
     incubation: {
       title: "Incubation Centre",
-      icon: <Rocket className="text-blue-500" size={24} />,
+      icon: <Rocket className="text-blue-500 dark:text-blue-400" size={24} />,
       content: {
         description: "We transform promising startups into successful unicorns through our comprehensive incubation program.",
         features: [
@@ -66,7 +68,7 @@ const WhatWeDoSection = () => {
     },
     aiLabs: {
       title: "AI Labs",
-      icon: <Brain className="text-blue-500" size={24} />,
+      icon: <Brain className="text-blue-500 dark:text-blue-400" size={24} />,
       content: {
         description: "Our cutting-edge AI labs are equipped with the latest technology and staffed by expert researchers.",
         features: [
@@ -83,7 +85,7 @@ const WhatWeDoSection = () => {
     },
     training: {
       title: "Trainings",
-      icon: <GraduationCap className="text-blue-500" size={24} />,
+      icon: <GraduationCap className="text-blue-500 dark:text-blue-400" size={24} />,
       content: {
         description: "Comprehensive training programs designed to create the next generation of AI professionals.",
         features: [
@@ -105,12 +107,12 @@ const WhatWeDoSection = () => {
   };
 
   return (
-    <section id="what-we-do" className="py-20 bg-gray-50 pt-32 animate-fadeIn">
+    <section id="what-we-do" className="py-20 bg-gray-50 dark:bg-gray-900 pt-32 animate-fadeIn">
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16 animate-slideUp">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">What We Do</h2>
-          <div className="w-20 h-1 bg-blue-500 mx-auto mb-6"></div>
-          <p className="text-gray-600 text-lg">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black dark:text-white">What We Do</h2>
+          <div className="w-20 h-1 bg-blue-500 dark:bg-blue-400 mx-auto mb-6"></div>
+          <p className="text-gray-600 dark:text-gray-300 text-lg">
             Discover our comprehensive range of services and facilities designed to foster innovation and growth.
           </p>
         </div>

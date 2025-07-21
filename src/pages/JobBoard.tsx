@@ -1,19 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getJobUrl } from '../config/api';
 import { FaHeart } from 'react-icons/fa';
-import { FiHeart } from 'react-icons/fi';
+import { FiHeart, FiChevronDown } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
-// Constants for sidebar and list widths
-const DEFAULT_SIDEBAR_WIDTH = 260;
-const DEFAULT_LIST_WIDTH = 320;
-const MIN_SIDEBAR_WIDTH = 180;
-const MAX_SIDEBAR_WIDTH = 400;
-const MIN_LIST_WIDTH = 200;
-const MAX_LIST_WIDTH = 600;
-
-// Define Job type based on API responses
 interface JobSummary {
   id: number;
   job_title: string;
@@ -41,16 +33,14 @@ const JobBoard: React.FC = () => {
   const [error, setError] = useState('');
   const [selectedJob, setSelectedJob] = useState<JobDetails | null>(null);
   const [liked, setLiked] = useState<number[]>([]);
-  const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH);
-  const [listWidth, setListWidth] = useState(DEFAULT_LIST_WIDTH);
-  const draggingSidebar = useRef(false);
-  const draggingList = useRef(false);
   const [searchTitle, setSearchTitle] = useState('');
   const [filteredJobs, setFilteredJobs] = useState<JobSummary[]>([]);
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]);
   const [selectedSalaryRanges, setSelectedSalaryRanges] = useState<string[]>([]);
   const [selectedWorkLevels, setSelectedWorkLevels] = useState<string[]>([]);
+  const [workDropdownOpen, setWorkDropdownOpen] = useState(false);
+  const [showLikedJobs, setShowLikedJobs] = useState(false);
   const navigate = useNavigate();
 
   const salaryLpaRanges = [
@@ -61,7 +51,8 @@ const JobBoard: React.FC = () => {
     { label: '35 - 50 LPA', min: 35, max: 50 },
   ];
 
-  // Fetch initial job list
+  const workLevels = ['Entry Level', 'Mid Level', 'Senior Level', 'Directors', 'VP or Above'];
+
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);
@@ -71,7 +62,7 @@ const JobBoard: React.FC = () => {
         setJobs(response.data);
         setFilteredJobs(response.data);
         if (response.data.length > 0) {
-          await fetchJobDetails(response.data[0].id); // Fetch details for the first job
+          await fetchJobDetails(response.data[0].id);
         }
       } catch (err) {
         setError('Failed to load jobs.');
@@ -82,7 +73,6 @@ const JobBoard: React.FC = () => {
     fetchJobs();
   }, []);
 
-  // Fetch job details when a job is selected
   const fetchJobDetails = async (id: number) => {
     try {
       const response = await axios.get(getJobUrl(`/${id}`));
@@ -98,7 +88,9 @@ const JobBoard: React.FC = () => {
       filtered = filtered.filter(job => job.department === selectedDepartment);
     }
     if (selectedJobTypes.length > 0) {
-      filtered = filtered.filter(job => selectedJobTypes.some(type => job.job_type && job.job_type.trim().toLowerCase() === type.trim().toLowerCase()));
+      filtered = filtered.filter(job =>
+        selectedJobTypes.some(type => job.job_type.toLowerCase() === type.toLowerCase())
+      );
     }
     if (selectedSalaryRanges.length > 0) {
       filtered = filtered.filter(job => {
@@ -115,478 +107,427 @@ const JobBoard: React.FC = () => {
       });
     }
     if (selectedWorkLevels.length > 0) {
-      filtered = filtered.filter(job => selectedWorkLevels.includes(job.experience_level.toString()));
+      filtered = filtered.filter(job =>
+        selectedWorkLevels.includes(workLevels[job.experience_level] || '')
+      );
     }
     if (searchTitle.trim()) {
       filtered = filtered.filter(job => job.job_title.toLowerCase().includes(searchTitle.trim().toLowerCase()));
     }
     setFilteredJobs(filtered);
     if (filtered.length > 0) {
-      fetchJobDetails(filtered[0].id); // Fetch details for the first filtered job
+      fetchJobDetails(filtered[0].id);
     } else {
-      setSelectedJob(null); // Clear selected job if no jobs match filters
+      setSelectedJob(null);
     }
   }, [jobs, selectedDepartment, selectedJobTypes, selectedSalaryRanges, selectedWorkLevels, searchTitle]);
-
-  useEffect(() => {
-    const moveSidebar = (e: MouseEvent) => {
-      if (!draggingSidebar.current) return;
-      const newWidth = Math.min(Math.max(e.clientX, MIN_SIDEBAR_WIDTH), MAX_SIDEBAR_WIDTH);
-      setSidebarWidth(newWidth);
-    };
-    const upSidebar = () => {
-      draggingSidebar.current = false;
-      document.body.style.cursor = '';
-    };
-    if (draggingSidebar.current) {
-      window.addEventListener('mousemove', moveSidebar);
-      window.addEventListener('mouseup', upSidebar);
-    }
-    return () => {
-      window.removeEventListener('mousemove', moveSidebar);
-      window.removeEventListener('mouseup', upSidebar);
-    };
-  }, [draggingSidebar.current]);
-
-  useEffect(() => {
-    const moveList = (e: MouseEvent) => {
-      if (!draggingList.current) return;
-      const newWidth = Math.min(Math.max(e.clientX - sidebarWidth, MIN_LIST_WIDTH), MAX_LIST_WIDTH);
-      setListWidth(newWidth);
-    };
-    const upList = () => {
-      draggingList.current = false;
-      document.body.style.cursor = '';
-    };
-    if (draggingList.current) {
-      window.addEventListener('mousemove', moveList);
-      window.addEventListener('mouseup', upList);
-    }
-    return () => {
-      window.removeEventListener('mousemove', moveList);
-      window.removeEventListener('mouseup', upList);
-    };
-  }, [draggingList.current, sidebarWidth]);
-
-  if (loading) {
-    return <div className="flex justify-center items-center min-h-screen">Loading jobs...</div>;
-  }
-  if (error) {
-    return <div className="flex justify-center items-center min-h-screen text-red-500">{error}</div>;
-  }
 
   const toggleLike = (id: number) => {
     setLiked(prev => prev.includes(id) ? prev.filter(l => l !== id) : [...prev, id]);
   };
 
-  const onSidebarMouseDown = () => {
-    draggingSidebar.current = true;
-    document.body.style.cursor = 'col-resize';
-  };
-
-  const onListMouseDown = () => {
-    draggingList.current = true;
-    document.body.style.cursor = 'col-resize';
-  };
-
   const departmentOptions = Array.from(new Set(jobs.map(job => job.department)));
 
+  if (loading) return <div className="flex justify-center items-center min-h-screen text-blue-600 dark:text-blue-400 text-xl">Loading jobs...</div>;
+  if (error) return <div className="flex justify-center items-center min-h-screen text-red-500 dark:text-red-400">{error}</div>;
+
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 flex flex-col">
-      <header className="bg-white px-4 md:px-10 py-4 flex flex-col sm:flex-row items-center justify-between border-b border-gray-200 gap-4">
-        <div className="flex items-center gap-3">
-          {/* Logo or other header content can go here if needed */}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-gray-900 dark:text-gray-100 flex flex-col transition-colors duration-300">
+      
+      {/* Header */}
+      <div className="top-0 left-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-lg dark:shadow-gray-800/20 px-8 py-4 z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        {/* Header Content */}
+        <div className="flex justify-between items-center mb-4 pt-24">
+          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-indigo-400 dark:to-blue-400 text-transparent bg-clip-text tracking-tight">
+            Job Board
+          </h1>
+          <button
+            onClick={() => setShowLikedJobs(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold shadow hover:scale-105 transition-all"
+          >
+            Liked Jobs ({liked.length})
+          </button>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="hidden md:inline">Suhayol A. Nasim</span>
-        </div>
-      </header>
-      {/* Mobile-only filter sidebar above job list */}
-      <div className="block md:hidden w-full px-2 mt-4">
-        <div className="rounded-2xl border border-gray-200 bg-white shadow-lg p-6 w-full flex flex-col gap-8">
-          <div>
-            <h3 className="font-semibold mb-2">Department / Team</h3>
+
+        {/* Filters */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Department */}
+          <div className="relative">
             <select
-              className="w-full px-3 py-2 rounded bg-white text-gray-900 border border-gray-300 focus:outline-none"
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm appearance-none pr-10 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-300"
               value={selectedDepartment}
-              onChange={e => setSelectedDepartment(e.target.value)}
+              onChange={(e) => setSelectedDepartment(e.target.value)}
             >
               <option value="">All Departments</option>
-              {departmentOptions.map(dep => (
-                <option key={dep} value={dep}>{dep}</option>
+              {departmentOptions.map((dep) => (
+                <option key={dep} value={dep}>
+                  {dep}
+                </option>
               ))}
             </select>
+            <FiChevronDown className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none" />
           </div>
-          <div>
-            <h3 className="font-semibold mb-2">Job Type</h3>
-            <div className="flex flex-wrap gap-2">
-              {['Full-time', 'Part-time', 'Contract', 'Internship', 'Remote', 'On-site', 'Hybrid'].map(type => (
-                <label key={type} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    className="accent-blue-500"
-                    checked={selectedJobTypes.includes(type)}
-                    onChange={e => {
-                      setSelectedJobTypes(prev =>
-                        e.target.checked ? [...prev, type] : prev.filter(t => t !== type)
-                      );
-                    }}
-                  />
-                  {type}
-                </label>
-              ))}
-            </div>
+
+          {/* Job Type */}
+          <div className="flex gap-2 flex-wrap items-center bg-gray-50 dark:bg-gray-800 px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 transition-colors duration-300">
+            {['Full-time', 'Part-time', 'Contract', 'Internship'].map((type) => (
+              <label key={type} className="flex items-center gap-1 text-sm cursor-pointer text-gray-700 dark:text-gray-300">
+                <input
+                  type="checkbox"
+                  className="accent-blue-600 dark:accent-blue-400"
+                  checked={selectedJobTypes.includes(type)}
+                  onChange={(e) => {
+                    setSelectedJobTypes((prev) =>
+                      e.target.checked ? [...prev, type] : prev.filter((t) => t !== type)
+                    );
+                  }}
+                />
+                {type}
+              </label>
+            ))}
           </div>
-          <div>
-            <h3 className="font-semibold mb-2">Salary Range (LPA)</h3>
-            <div className="flex flex-col gap-2">
-              {salaryLpaRanges.map(range => (
-                <label key={range.label} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    className="accent-blue-500"
-                    checked={selectedSalaryRanges.includes(range.label)}
-                    onChange={e => {
-                      setSelectedSalaryRanges(prev =>
-                        e.target.checked ? [...prev, range.label] : prev.filter(l => l !== range.label)
-                      );
-                    }}
-                  />
+
+          {/* Salary */}
+          <div className="relative">
+            <select
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm appearance-none pr-10 focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+              onChange={(e) => setSelectedSalaryRanges(e.target.value ? [e.target.value] : [])}
+            >
+              <option value="">Salary Range</option>
+              {salaryLpaRanges.map((range) => (
+                <option key={range.label} value={range.label}>
                   {range.label}
-                </label>
+                </option>
               ))}
-            </div>
+            </select>
+            <FiChevronDown className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none" />
           </div>
-          <div>
-            <h3 className="font-semibold mb-2">Work Level / Seniority</h3>
-            <div className="flex flex-wrap gap-2">
-              {['Entry Level', 'Mid Level', 'Senior Level', 'Directors', 'VP or Above'].map(level => (
-                <label key={level} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    className="accent-blue-500"
-                    checked={selectedWorkLevels.includes(level)}
-                    onChange={e => {
-                      setSelectedWorkLevels(prev =>
-                        e.target.checked ? [...prev, level] : prev.filter(l => l !== level)
-                      );
-                    }}
-                  />
-                  {level}
-                </label>
-              ))}
-            </div>
+
+          {/* Work Level - Custom Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setWorkDropdownOpen(!workDropdownOpen)}
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 shadow-sm flex justify-between items-center focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+            >
+              {selectedWorkLevels.length > 0 ? `${selectedWorkLevels.length} Selected` : 'Select Work Level'}
+              <FiChevronDown className={`transition-transform ${workDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <AnimatePresence>
+              {workDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute mt-2 w-full bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-300 dark:border-gray-600 z-50 p-3"
+                >
+                  {workLevels.map((level) => (
+                    <label key={level} className="flex items-center gap-2 text-sm py-1 text-gray-700 dark:text-gray-300">
+                      <input
+                        type="checkbox"
+                        className="accent-blue-500 dark:accent-blue-400"
+                        checked={selectedWorkLevels.includes(level)}
+                        onChange={(e) => {
+                          setSelectedWorkLevels((prev) =>
+                            e.target.checked ? [...prev, level] : prev.filter((l) => l !== level)
+                          );
+                        }}
+                      />
+                      {level}
+                    </label>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </div>
-        <div className="w-full my-3">
-          <div className="h-2 w-full rounded-full bg-gray-800 shadow-lg"></div>
         </div>
       </div>
-      <main className="flex-1 flex flex-col md:flex-row bg-gray-100 min-w-0 min-h-0 h-full">
-        <aside
-          className="hidden md:flex w-full md:w-[260px] flex-shrink-0 border-r border-gray-200 min-w-[120px] max-w-full md:max-w-xs h-full min-h-0 bg-white"
-          style={{ width: sidebarWidth }}
+
+      {/* Main Layout */}
+      <main className="flex flex-col md:flex-row gap-6 px-4 md:px-6 pt-2 pb-10">
+        {/* Left Panel */}
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="w-full md:w-1/3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-2xl shadow-xl dark:shadow-gray-800/20 p-4 overflow-y-auto h-auto md:h-[80vh] border border-gray-200 dark:border-gray-700 transition-colors duration-300"
         >
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-lg p-6 w-full flex flex-col gap-8">
-            <div>
-              <h3 className="font-semibold mb-2">Department / Team</h3>
-              <select
-                className="w-full px-3 py-2 rounded bg-white text-gray-900 border border-gray-300 focus:outline-none"
-                value={selectedDepartment}
-                onChange={e => setSelectedDepartment(e.target.value)}
-              >
-                <option value="">All Departments</option>
-                {departmentOptions.map(dep => (
-                  <option key={dep} value={dep}>{dep}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Job Type</h3>
-              <div className="flex flex-wrap gap-2">
-                {['Full-time', 'Part-time', 'Contract', 'Internship', 'Remote', 'On-site', 'Hybrid'].map(type => (
-                  <label key={type} className="flex items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      className="accent-blue-500"
-                      checked={selectedJobTypes.includes(type)}
-                      onChange={e => {
-                        setSelectedJobTypes(prev =>
-                          e.target.checked ? [...prev, type] : prev.filter(t => t !== type)
-                        );
-                      }}
-                    />
-                    {type}
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Salary Range (LPA)</h3>
-              <div className="flex flex-col gap-2">
-                {salaryLpaRanges.map(range => (
-                  <label key={range.label} className="flex items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      className="accent-blue-500"
-                      checked={selectedSalaryRanges.includes(range.label)}
-                      onChange={e => {
-                        setSelectedSalaryRanges(prev =>
-                          e.target.checked ? [...prev, range.label] : prev.filter(l => l !== range.label)
-                        );
-                      }}
-                    />
-                    {range.label}
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Work Level / Seniority</h3>
-              <div className="flex flex-wrap gap-2">
-                {['Entry Level', 'Mid Level', 'Senior Level', 'Directors', 'VP or Above'].map(level => (
-                  <label key={level} className="flex items-center gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      className="accent-blue-500"
-                      checked={selectedWorkLevels.includes(level)}
-                      onChange={e => {
-                        setSelectedWorkLevels(prev =>
-                          e.target.checked ? [...prev, level] : prev.filter(l => l !== level)
-                        );
-                      }}
-                    />
-                    {level}
-                  </label>
-                ))}
-              </div>
-            </div>
+          {/* Search */}
+          <div className="flex items-center mb-4 bg-gray-100 dark:bg-gray-700 rounded-xl px-3 transition-colors duration-300">
+            <span className="text-gray-400 dark:text-gray-500 mr-2">🔍</span>
+            <input
+              type="text"
+              value={searchTitle}
+              onChange={(e) => setSearchTitle(e.target.value)}
+              placeholder="Search jobs..."
+              className="w-full py-3 bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
+            />
           </div>
-        </aside>
-        <div
-          className="hidden md:block cursor-col-resize bg-[#23263a] hover:bg-blue-500 transition-colors duration-150"
-          style={{ width: 6, minWidth: 6, maxWidth: 12 }}
-          onMouseDown={onSidebarMouseDown}
-        />
-        <section className="flex-1 flex flex-col md:flex-row min-w-0">
-          <div
-            className={`bg-white p-4 flex flex-col gap-2 w-full md:min-w-[150px] md:max-w-md overflow-y-auto h-full min-h-0 scrollbar-thin scrollbar-thumb-blue-700/60 scrollbar-track-transparent ${typeof listWidth === 'number' ? 'md:w-[' + listWidth + 'px]' : ''}`}
-          >
-            <div className="flex flex-col sm:flex-row gap-2 mb-4 w-full">
-              <input
-                type="text"
-                value={searchTitle}
-                onChange={e => setSearchTitle(e.target.value)}
-                placeholder="Search Job Title..."
-                className="flex-1 px-3 py-2 rounded bg-white text-gray-900 border border-gray-300 focus:outline-none"
-              />
+
+          {/* Job Cards */}
+          {filteredJobs.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="text-center text-gray-500 dark:text-gray-400 py-10 flex flex-col items-center gap-4"
+            >
+              <p className="text-lg font-semibold">No jobs found for the selected filters.</p>
+              <p className="text-sm mb-4">Try adjusting your filters or resetting them.</p>
+
+              {/* Reset Filters Button */}
               <button
-                type="button"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded font-semibold transition-colors"
+                onClick={() => {
+                  setSelectedDepartment('');
+                  setSelectedJobTypes([]);
+                  setSelectedSalaryRanges([]);
+                  setSelectedWorkLevels([]);
+                  setSearchTitle('');
+                  setFilteredJobs(jobs); // Reset to all jobs
+                }}
+                className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-semibold shadow-md hover:scale-105 transition-transform"
               >
-                Search
+                🔄 Reset Filters
               </button>
-            </div>
-            {filteredJobs.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-2xl border border-gray-200 shadow-lg min-h-[300px]">
-                <svg
-                  width="64"
-                  height="64"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  className="mb-4 text-blue-500"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No Jobs Found</h3>
-                <p className="text-sm text-gray-500 text-center max-w-md">
-                  It looks like there are no jobs matching your current filters. Try adjusting your search criteria or clearing some filters to see more opportunities.
-                </p>
-              </div>
-            ) : (
-              filteredJobs.map(job => (
-                <div
-                  key={job.id}
-                  className={`rounded-2xl border transition-all min-w-0 mb-4 p-4 cursor-pointer shadow-md
-                    ${selectedJob?.id === job.id
-                      ? 'bg-blue-600 text-white ring-2 ring-blue-400 border-blue-400'
-                      : 'bg-white text-gray-900 hover:bg-blue-50 hover:border-blue-300 border-gray-200'}
-                  `}
-                  onClick={() => fetchJobDetails(job.id)}
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-lg">
-                      {job.job_title.charAt(0)}
-                    </div>
-                    <div className="min-w-0">
-                      <div
-                        className={`font-semibold text-base truncate underline cursor-pointer ${selectedJob?.id === job.id ? 'text-white' : 'text-gray-900'}`}
-                        onClick={e => {
-                          e.stopPropagation();
-                          localStorage.setItem('jobTitle', job.job_title);
-                          localStorage.setItem('jobpost_id', String(job.id));
-                          navigate('/apply-job', { state: { jobTitle: job.job_title, jobpost_id: job.id } });
-                        }}
-                      >
-                        {job.job_title}
-                      </div>
-                      <div className={`text-xs truncate ${selectedJob?.id === job.id ? 'text-blue-100' : 'text-gray-500'}`}>{job.location}</div>
-                    </div>
-                    <button className="ml-auto" onClick={e => { e.stopPropagation(); toggleLike(job.id); }}>
-                      {liked.includes(job.id)
-                        ? <FaHeart className={selectedJob?.id === job.id ? 'text-red-200' : 'text-red-500'} />
-                        : <FiHeart className={selectedJob?.id === job.id ? 'text-blue-100' : 'text-gray-400'} />}
-                    </button>
-                  </div>
-                  <div className={`flex justify-between text-xs ${selectedJob?.id === job.id ? 'text-blue-100' : 'text-gray-500'}`}> 
-                    <span>Now</span>
-                    <span>{new Date(job.created_at).toLocaleDateString()}</span>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-          {/* Separation for mobile view */}
-          <div className="block md:hidden w-full my-2">
-            <div className="h-2 w-full rounded-full bg-gray-800 shadow-lg"></div>
-          </div>
-          <div
-            className="hidden md:block cursor-col-resize bg-[#23263a] hover:bg-blue-500 transition-colors duration-150"
-            style={{ width: 6, minWidth: 6, maxWidth: 12 }}
-            onMouseDown={onListMouseDown}
-          />
-          <div className="flex-1 h-full flex flex-col min-w-0 min-h-0 w-full">
-            {selectedJob && (
-              <div className="rounded-2xl border border-white/30 bg-white/70 backdrop-blur-md shadow-lg p-6 h-full flex flex-col overflow-y-auto min-w-0 min-h-0 text-gray-900">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                  <div className="flex items-center gap-4 min-w-0">
-                    <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-2xl">
-                      {selectedJob.job_title.charAt(0)}
-                    </div>
-                    <div className="min-w-0">
-                      <h2 className="text-2xl font-bold mb-1 truncate">{selectedJob.job_title}</h2>
-                      <div className="text-blue-600 font-semibold truncate">
-                        {selectedJob.department} <span className="text-gray-500">• {selectedJob.location}</span>
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1 truncate">
-                        {selectedJob.department && <span>{selectedJob.department} | </span>}
-                        Posted {new Date(selectedJob.created_at).toLocaleDateString()}
-                      </div>
+
+              {/* Back to All Jobs Link */}
+              <button
+                onClick={() => {
+                  setShowLikedJobs(false);
+                  setFilteredJobs(jobs);
+                }}
+                className="text-blue-600 dark:text-blue-400 font-medium hover:underline mt-2"
+              >
+                View All Jobs →
+              </button>
+            </motion.div>
+          ) : (
+            filteredJobs.map(job => (
+              <motion.div
+                key={job.id}
+                whileHover={{ scale: 1.03 }}
+                className={`p-4 mb-4 rounded-xl border transition-all cursor-pointer ${
+                  selectedJob?.id === job.id
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg'
+                    : 'bg-gray-50 dark:bg-gray-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-500 hover:text-white hover:shadow-lg border-gray-200 dark:border-gray-600'
+                }`}
+                onClick={() => fetchJobDetails(job.id)}
+                onMouseEnter={() => {
+                  // Optional: Add delay to avoid rapid switching
+                  setTimeout(() => fetchJobDetails(job.id), 300);
+                }}
+              >
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h4 className="font-bold text-lg">{job.job_title}</h4>
+                    <p className="text-sm">{job.location}</p>
+                    <div className="mt-2 flex gap-2">
+                      <span className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full">{job.job_type}</span>
+                      <span className="px-2 py-1 text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-full">{job.salary_range}</span>
                     </div>
                   </div>
                   <button
-                    className="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md transition-colors duration-200 text-lg"
-                    onClick={() => {
-                      localStorage.setItem('jobTitle', selectedJob.job_title);
-                      localStorage.setItem('jobpost_id', String(selectedJob.id));
-                      navigate('/apply-job', { state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id } });
-                    }}
+                    onClick={(e) => { e.stopPropagation(); toggleLike(job.id); }}
+                    className="text-xl hover:scale-125 transition"
                   >
-                    Apply
+                    {liked.includes(job.id) ? <FaHeart className="text-red-500" /> : <FiHeart className="text-gray-400 dark:text-gray-500" />}
                   </button>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  <div className="bg-gray-100 rounded-lg p-4 text-center">
-                    <div className="text-xs text-gray-500">Experience</div>
-                    <div className="font-semibold text-gray-900">{selectedJob.experience_level} years</div>
-                  </div>
-                  <div className="bg-gray-100 rounded-lg p-4 text-center">
-                    <div className="text-xs text-gray-500">Work Level</div>
-                    <div className="font-semibold text-gray-900">
-                      {selectedJob.experience_level <= 1 ? 'Entry Level' :
-                       selectedJob.experience_level <= 3 ? 'Mid Level' :
-                       selectedJob.experience_level <= 5 ? 'Senior Level' :
-                       selectedJob.experience_level <= 7 ? 'Directors' : 'VP or Above'}
-                    </div>
-                  </div>
-                  <div className="bg-gray-100 rounded-lg p-4 text-center">
-                    <div className="text-xs text-gray-500">Employee Type</div>
-                    <div className="font-semibold text-gray-900">{selectedJob.job_type}</div>
-                  </div>
-                  <div className="bg-gray-100 rounded-lg p-4 text-center">
-                    <div className="text-xs text-gray-500">Offer Salary</div>
-                    <div className="font-semibold text-gray-900">{selectedJob.salary_range}</div>
-                  </div>
-                </div>
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Overview</h3>
-                  <p className="text-gray-700 text-sm">{selectedJob.job_summary || 'No summary available'}</p>
-                </div>
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Key Responsibilities</h3>
-                  {Array.isArray(selectedJob.responsibilities) && selectedJob.responsibilities.length > 0 ? (
-                    <ul className="list-disc pl-6 text-gray-700 text-sm space-y-1">
-                      {selectedJob.responsibilities.map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-500 italic">No responsibilities specified</p>
-                  )}
-                </div>
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Required Qualifications</h3>
-                  {Array.isArray(selectedJob.required_qualifications) && selectedJob.required_qualifications.length > 0 ? (
-                    <ul className="list-disc pl-6 text-gray-700 text-sm space-y-1">
-                      {selectedJob.required_qualifications.map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-500 italic">No qualifications specified</p>
-                  )}
-                </div>
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Preferred Skills</h3>
-                  {Array.isArray(selectedJob.preferred_skills) && selectedJob.preferred_skills.length > 0 ? (
-                    <ul className="list-disc pl-6 text-gray-700 text-sm space-y-1">
-                      {selectedJob.preferred_skills.map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-500 italic">No preferred skills specified</p>
-                  )}
-                </div>
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Application Deadline</h3>
-                  <p className="text-gray-700 text-sm">
-                    {selectedJob.application_deadline
-                      ? new Date(selectedJob.application_deadline).toLocaleDateString()
-                      : 'No deadline specified'}
+              </motion.div>
+            ))
+          )}
+        </motion.div>
+
+        {/* Right Panel - Job Details */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="w-full md:w-2/3 bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-800/20 p-6 md:p-8 overflow-y-auto h-auto md:h-[80vh] border border-gray-200 dark:border-gray-700 transition-colors duration-300"
+        >
+          {selectedJob && (
+            <div className="space-y-8">
+              {/* Job Header */}
+              <div className="flex justify-between items-start border-b border-gray-200 dark:border-gray-700 pb-4">
+                <div>
+                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
+                    {selectedJob.job_title}
+                  </h1>
+                  <p className="text-gray-600 dark:text-gray-300 text-lg">
+                    {selectedJob.department} • {selectedJob.location} • {selectedJob.job_type}
+                  </p>
+                  <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+                    Posted on {new Date(selectedJob.created_at).toLocaleDateString()}
                   </p>
                 </div>
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">Equal Opportunity Statement</h3>
-                  <p className="text-gray-700 text-sm">
-                    {selectedJob.equal_opportunity_statement || 'No statement provided'}
-                  </p>
-                </div>
-                {selectedJob.how_to_apply && (
-                  <div className="flex justify-center">
-                    <button
-                      className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-semibold text-sm max-w-xs w-full sm:w-auto"
-                      onClick={() => {
-                        localStorage.setItem('jobTitle', selectedJob.job_title);
-                        localStorage.setItem('jobpost_id', String(selectedJob.id));
-                        navigate('/apply-job', { state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id } });
-                      }}
-                    >
-                      Apply Online
-                    </button>
-                  </div>
-                )}
+                <button
+                  onClick={() => {
+                    localStorage.setItem('jobTitle', selectedJob.job_title);
+                    localStorage.setItem('jobpost_id', String(selectedJob.id));
+                    navigate('/apply-job', { state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id } });
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm shadow-md transition-colors duration-300"
+                >
+                  Apply Now
+                </button>
               </div>
-            )}
-          </div>
-        </section>
+
+              {/* Key Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4 shadow-inner">
+                <div>
+                  <h3 className="text-gray-800 dark:text-gray-200 font-semibold">Experience</h3>
+                  <p className="text-gray-700 dark:text-gray-300">{selectedJob.experience_level} years</p>
+                </div>
+                <div>
+                  <h3 className="text-gray-800 dark:text-gray-200 font-semibold">Work Level</h3>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    {selectedJob.experience_level <= 1
+                      ? 'Entry Level'
+                      : selectedJob.experience_level <= 4
+                      ? 'Mid Level'
+                      : 'Senior Level'}
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-gray-800 dark:text-gray-200 font-semibold">Employee Type</h3>
+                  <p className="text-gray-700 dark:text-gray-300">{selectedJob.job_type}</p>
+                </div>
+                <div>
+                  <h3 className="text-gray-800 dark:text-gray-200 font-semibold">Offer Salary</h3>
+                  <p className="text-gray-700 dark:text-gray-300">{selectedJob.salary_range}</p>
+                </div>
+              </div>
+
+              {/* Overview */}
+              <section>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Overview</h2>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{selectedJob.job_summary}</p>
+              </section>
+
+              {/* Responsibilities */}
+              <section>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Responsibilities</h2>
+                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+                  {selectedJob.responsibilities && selectedJob.responsibilities.length > 0
+                    ? selectedJob.responsibilities.map((item, i) => <li key={i}>{item}</li>)
+                    : <li>No responsibilities specified</li>}
+                </ul>
+              </section>
+
+              {/* Required Qualifications */}
+              <section>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Required Qualifications</h2>
+                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+                  {selectedJob.required_qualifications && selectedJob.required_qualifications.length > 0
+                    ? selectedJob.required_qualifications.map((item, i) => <li key={i}>{item}</li>)
+                    : <li>No qualifications specified</li>}
+                </ul>
+              </section>
+
+              {/* Preferred Skills */}
+              <section>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Preferred Skills</h2>
+                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+                  {selectedJob.preferred_skills && selectedJob.preferred_skills.length > 0
+                    ? selectedJob.preferred_skills.map((item, i) => <li key={i}>{item}</li>)
+                    : <li>No preferred skills specified</li>}
+                </ul>
+              </section>
+
+              {/* Additional Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 shadow">
+                  <h3 className="text-gray-800 dark:text-gray-200 font-semibold text-lg mb-2">Application Deadline</h3>
+                  <p className="text-gray-600 dark:text-gray-400">{selectedJob.application_deadline}</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 shadow">
+                  <h3 className="text-gray-800 dark:text-gray-200 font-semibold text-lg mb-2">Equal Opportunity Statement</h3>
+                  <p className="text-gray-600 dark:text-gray-400">{selectedJob.equal_opportunity_statement}</p>
+                </div>
+              </div>
+              <div className="pt-6 flex justify-center">
+                <button
+                  onClick={() => {
+                    localStorage.setItem('jobTitle', selectedJob.job_title);
+                    localStorage.setItem('jobpost_id', String(selectedJob.id));
+                    navigate('/apply-job', {
+                      state: { jobTitle: selectedJob.job_title, jobpost_id: selectedJob.id },
+                    });
+                  }}
+                  className="w-1/3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg font-semibold text-base shadow-md transition-transform hover:scale-105"
+                >
+                  Apply Now
+                </button>
+              </div>
+            </div>
+          )}
+        </motion.div>
       </main>
+
+      <AnimatePresence>
+        {showLikedJobs && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-800/20 p-6 w-11/12 md:w-1/2 max-h-[80vh] overflow-y-auto border border-gray-200 dark:border-gray-700 transition-colors duration-300"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Liked Jobs</h2>
+                <button
+                  onClick={() => setShowLikedJobs(false)}
+                  className="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 text-xl transition-colors duration-300"
+                >
+                  ✖
+                </button>
+              </div>
+
+              {liked.length === 0 ? (
+                <p className="text-gray-500 dark:text-gray-400 text-center py-6">No liked jobs yet!</p>
+              ) : (
+                <div className="space-y-4">
+                  {jobs.filter(job => liked.includes(job.id)).map(job => (
+                    <div
+                      key={job.id}
+                      className="p-4 rounded-xl border bg-gray-50 dark:bg-gray-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-500 hover:text-white transition-all flex justify-between items-center border-gray-200 dark:border-gray-600"
+                    >
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          fetchJobDetails(job.id);
+                          setShowLikedJobs(false);
+                        }}
+                      >
+                        <h4 className="font-semibold">{job.job_title}</h4>
+                        <p className="text-sm">{job.location}</p>
+                        <p className="text-xs">{job.salary_range}</p>
+                      </div>
+
+                      {/* Heart Icon for Liking/Unliking */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); // Avoid triggering job details
+                          toggleLike(job.id);
+                        }}
+                        className="text-2xl hover:scale-125 transition"
+                      >
+                        {liked.includes(job.id) ? (
+                          <FaHeart className="text-red-500" />
+                        ) : (
+                          <FiHeart className="text-gray-400 dark:text-gray-500" />
+                        )}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

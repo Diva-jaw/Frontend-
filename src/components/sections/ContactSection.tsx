@@ -48,7 +48,7 @@ const ContactSection = () => {
         message: formData.message,
         user_id: user && user.id ? user.id : undefined,
       };
-              await axios.post(getMessageUrl(), payload);
+              await axios.post(getMessageUrl('/messages'), payload);
       setSuccess('Thank you for your message! We will get back to you shortly.');
       setFormData({
         name: user?.name || '',

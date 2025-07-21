@@ -225,17 +225,6 @@ const CRDPage: React.FC = () => {
               </div>
             )}
           </section>
-
-          <footer className="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl p-8 md:p-12 text-center shadow-2xl mt-8">
-            <h2 className="text-3xl font-bold mb-4">Ready to Shape the Future with AI?</h2>
-            <p className="mb-6">Join our comprehensive AI program and transform your career with cutting-edge skills and industry-relevant projects. Limited seats available!</p>
-            <button
-              className="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-transform hover:scale-105"
-              onClick={() => alert('Contact: Ruhil Future Technologies for enrollment details')}
-            >
-              Enroll Now
-            </button>
-          </footer>
         </div>
       </div>
     </>

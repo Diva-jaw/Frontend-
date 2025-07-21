@@ -58,7 +58,7 @@ const MDUPage: React.FC = () => {
         .stat-number:nth-child(3) { animation-delay: 1s; }
         .stat-number:nth-child(4) { animation-delay: 1.5s; }
       `}</style>
-      <div className="min-h-screen bg-gradient-to-br from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 transition-colors duration-300">
+      <div className="min-h-screen bg-gradient-to-br from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 transition-colors duration-300 pt-24">
         <div className="container mx-auto p-0 md:p-8">
           <header className="bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-none md:rounded-2xl p-8 md:p-12 mb-8 text-center shadow-2xl md:mt-8">
             <h1 className="text-4xl md:text-5xl font-extrabold mb-4 font-serif tracking-wider drop-shadow-lg text-blue-900 dark:text-blue-100">
@@ -77,76 +77,76 @@ const MDUPage: React.FC = () => {
               </div>
             </div>
           </header>
-          <section className="bg-white/95 backdrop-blur-lg rounded-2xl p-8 md:p-12 mb-8 text-center shadow-xl">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <section className="bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 md:p-12 mb-8 text-center shadow-xl">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4">
               Empowering the Next Generation of AI Professionals
             </h2>
-            <p className="max-w-4xl mx-auto text-gray-600 mb-8">
+            <p className="max-w-4xl mx-auto text-gray-600 dark:text-gray-300 mb-8">
               Our comprehensive AI program combines academic excellence with industry expertise, providing students with cutting-edge knowledge and practical skills in Machine Learning, AI Agent development, and real-world project implementation.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="stat">
                 <div className="stat-number text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">100+</div>
-                <div className="stat-label text-gray-500 mt-2">Students Enrolled</div>
+                <div className="stat-label text-gray-500 dark:text-gray-400 mt-2">Students Enrolled</div>
               </div>
               <div className="stat">
                 <div className="stat-number text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">15+</div>
-                <div className="stat-label text-gray-500 mt-2">AI Projects</div>
+                <div className="stat-label text-gray-500 dark:text-gray-400 mt-2">AI Projects</div>
               </div>
               <div className="stat">
                 <div className="stat-number text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">5+</div>
-                <div className="stat-label text-gray-500 mt-2">Industry Experts</div>
+                <div className="stat-label text-gray-500 dark:text-gray-400 mt-2">Industry Experts</div>
               </div>
               <div className="stat">
                 <div className="stat-number text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">8</div>
-                <div className="stat-label text-gray-500 mt-2">Weeks Program</div>
+                <div className="stat-label text-gray-500 dark:text-gray-400 mt-2">Weeks Program</div>
               </div>
             </div>
           </section>
 
           <main className="grid md:grid-cols-2 gap-8 mb-8">
-            <div className="card bg-white/95 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+            <div className="card bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
                 <span className="icon w-10 h-10 flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-md">🤖</span>
                 Machine Learning Mastery
               </h2>
-              <ul className="space-y-3 text-gray-700">
+              <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Supervised and Unsupervised Learning</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Deep Learning with Neural Networks</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Computer Vision and NLP</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Model Optimization and Deployment</li>
               </ul>
             </div>
-            <div className="card bg-white/95 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+            <div className="card bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
                 <span className="icon w-10 h-10 flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-md">🧠</span>
                 AI Agent Development
               </h2>
-              <ul className="space-y-3 text-gray-700">
+              <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Intelligent Agent Architecture</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Reinforcement Learning</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Multi-agent Systems & Conversational AI</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Autonomous Decision Making</li>
               </ul>
             </div>
-            <div className="card bg-white/95 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+            <div className="card bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
                 <span className="icon w-10 h-10 flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-md">💼</span>
                 Industry-Ready Projects
               </h2>
-              <ul className="space-y-3 text-gray-700">
+              <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>End-to-end AI Solutions</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Business Problem Solving & API Development</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Cloud Deployment Strategies</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Portfolio Development</li>
               </ul>
             </div>
-            <div className="card bg-white/95 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+            <div className="card bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
                 <span className="icon w-10 h-10 flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-md">🎓</span>
                 Academic Excellence
               </h2>
-              <ul className="space-y-3 text-gray-700">
+              <ul className="space-y-3 text-gray-700 dark:text-gray-300">
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>MDU Faculty Collaboration</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Research-oriented Approach</li>
                 <li className="flex items-center gap-3"><span className="text-green-500 font-bold">✓</span>Peer Learning & Regular Assessments</li>
@@ -155,34 +155,34 @@ const MDUPage: React.FC = () => {
             </div>
           </main>
           
-          <section className="highlight-section bg-white/95 backdrop-blur-lg rounded-2xl p-8 md:p-12 mb-8 text-center shadow-xl">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8">Program Highlights</h2>
+          <section className="highlight-section bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 md:p-12 mb-8 text-center shadow-xl">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-8">Program Highlights</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
               <div className="gallery-item">
                 <div className="gallery-icon w-16 h-16 text-3xl flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl mx-auto mb-4">🎯</div>
-                <h3 className="font-bold text-lg mb-2">Practical Learning</h3>
-                <p className="text-gray-600">Hands-on coding sessions with real-world applications</p>
+                <h3 className="font-bold text-lg mb-2 text-gray-800 dark:text-gray-200">Practical Learning</h3>
+                <p className="text-gray-600 dark:text-gray-300">Hands-on coding sessions with real-world applications</p>
               </div>
               <div className="gallery-item">
                 <div className="gallery-icon w-16 h-16 text-3xl flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl mx-auto mb-4">👥</div>
-                <h3 className="font-bold text-lg mb-2">Expert Mentorship</h3>
-                <p className="text-gray-600">Industry professionals and academic experts as mentors</p>
+                <h3 className="font-bold text-lg mb-2 text-gray-800 dark:text-gray-200">Expert Mentorship</h3>
+                <p className="text-gray-600 dark:text-gray-300">Industry professionals and academic experts as mentors</p>
               </div>
               <div className="gallery-item">
                 <div className="gallery-icon w-16 h-16 text-3xl flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl mx-auto mb-4">🏆</div>
-                <h3 className="font-bold text-lg mb-2">Project Showcase</h3>
-                <p className="text-gray-600">Present your AI projects to industry leaders</p>
+                <h3 className="font-bold text-lg mb-2 text-gray-800 dark:text-gray-200">Project Showcase</h3>
+                <p className="text-gray-600 dark:text-gray-300">Present your AI projects to industry leaders</p>
               </div>
               <div className="gallery-item">
                 <div className="gallery-icon w-16 h-16 text-3xl flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl mx-auto mb-4">🌐</div>
-                <h3 className="font-bold text-lg mb-2">Industry Connections</h3>
-                <p className="text-gray-600">Network with professionals and potential employers</p>
+                <h3 className="font-bold text-lg mb-2 text-gray-800 dark:text-gray-200">Industry Connections</h3>
+                <p className="text-gray-600 dark:text-gray-300">Network with professionals and potential employers</p>
               </div>
             </div>
           </section>
 
-          <section className="gallery-section bg-white/95 backdrop-blur-lg rounded-2xl p-8 md:p-12 mb-8 text-center shadow-xl">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8">Glimpses of the Program</h2>
+          <section className="gallery-section bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 md:p-12 mb-8 text-center shadow-xl">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-8">Glimpses of the Program</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {glimpses.map((img, index) => (
                 <div
@@ -206,9 +206,9 @@ const MDUPage: React.FC = () => {
                 className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fadeInUp"
                 onClick={() => setModalOpen(false)}
               >
-                <div className="relative bg-white rounded-xl shadow-2xl p-4 max-w-3xl w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
+                <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-4 max-w-3xl w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
                   <button
-                    className="absolute top-2 right-2 text-2xl text-gray-500 hover:text-red-500 font-bold"
+                    className="absolute top-2 right-2 text-2xl text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 font-bold"
                     onClick={() => setModalOpen(false)}
                     aria-label="Close"
                   >
@@ -219,17 +219,6 @@ const MDUPage: React.FC = () => {
               </div>
             )}
           </section>
-
-          <footer className="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-2xl p-8 md:p-12 text-center shadow-2xl mt-8">
-            <h2 className="text-3xl font-bold mb-4">Ready to Shape the Future with AI?</h2>
-            <p className="mb-6">Join our comprehensive AI program and transform your career with cutting-edge skills and industry-relevant projects. Limited seats available!</p>
-            <button
-              className="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg shadow-lg transition-transform hover:scale-105"
-              onClick={() => alert('Contact: Ruhil Future Technologies for enrollment details')}
-            >
-              Enroll Now
-            </button>
-          </footer>
         </div>
       </div>
     </>

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 
 const videos = [
-  '/rft3.mp4',
-  '/video1.mp4',
   '/rft2.mp4',
+  '/rft3.mp4',
+  '/video1.mp4'
 ];
 
 const VIDEO_DURATION = 5000; // 5 seconds per video
@@ -38,22 +38,22 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 md:px-8 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1 animate-slideUp">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              Pioneering the <span className="text-blue-300">Future</span> of Technologies
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
+              Pioneering the <span className="text-blue-300">Future of</span> Technologies
             </h1>
-            <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-lg">
+            <p className="text-lg md:text-xl text-white mb-8 max-w-lg">
               Ruhil Future Technologies delivers cutting-edge solutions that transform businesses and drive innovation in a rapidly evolving digital landscape.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="/insights"
-                className="px-8 py-3 bg-blue-500 hover:bg-blue-600 rounded-md font-semibold transition-colors duration-300 text-center"
+                className="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-md font-semibold transition-colors duration-300 text-center text-white"
               >
                 Insights
               </a>
               <a
                 href="#contact"
-                className="px-8 py-3 bg-transparent border border-white hover:bg-white hover:text-blue-900 rounded-md font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                className="px-8 py-3 bg-transparent border border-white hover:bg-white hover:text-black rounded-md font-semibold transition-all duration-300 flex items-center justify-center gap-2 text-white"
               >
                 Contact Us <ChevronRight size={16} />
               </a>
