@@ -511,8 +511,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
     } catch (error) {
       let errorMsg = 'An error occurred during submission. Please try again.';
       if (axios.isAxiosError(error) && error.response) {
-        if (error.response.status === 409 && error.response.data && error.response.data.error) {
-          errorMsg = error.response.data.error;
+        if (error.response.status === 409) {
+          errorMsg = 'Enquiry already submitted earlier';
         }
       }
       setShowPopup(true);
