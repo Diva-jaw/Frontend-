@@ -78,6 +78,16 @@ const defaultRejectDraft: Draft = {
   image: null,
 };
 
+// Helper to get full URL for resume/docs
+const getFullUrl = (file: string) => {
+  if (!file) return '#';
+  if (file.startsWith('http')) return file;
+  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  // Remove leading slash if present
+  const path = file.startsWith('/') ? file : `/${file}`;
+  return `${baseUrl}${path}`;
+};
+
 const StepAppliedFormsList: React.FC = () => {
   const { department, step } = useParams<{ department: string; step: string }>();
   const navigate = useNavigate();
@@ -190,16 +200,6 @@ const StepAppliedFormsList: React.FC = () => {
       // Add any other fields as needed
     };
   }
-
-  // Helper to get full URL for resume/docs
-  const getFullUrl = (file: string) => {
-    if (!file) return '#';
-    if (file.startsWith('http')) return file;
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-    // Remove leading slash if present
-    const path = file.startsWith('/') ? file : `/${file}`;
-    return `${baseUrl}${path}`;
-  };
 
   // Fetch candidate details
   const fetchCandidateDetails = async (applicantId: number) => {
