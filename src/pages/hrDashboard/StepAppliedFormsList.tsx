@@ -191,6 +191,16 @@ const StepAppliedFormsList: React.FC = () => {
     };
   }
 
+  // Helper to get full URL for resume/docs
+  const getFullUrl = (file: string) => {
+    if (!file) return '#';
+    if (file.startsWith('http')) return file;
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    // Remove leading slash if present
+    const path = file.startsWith('/') ? file : `/${file}`;
+    return `${baseUrl}${path}`;
+  };
+
   // Fetch candidate details
   const fetchCandidateDetails = async (applicantId: number) => {
     try {
@@ -635,7 +645,7 @@ const StepAppliedFormsList: React.FC = () => {
                       </span>
                       <span className="text-gray-900 text-left sm:text-right break-words flex-1">
                         <a 
-                          href={candidateDetails[String(showDetailsId)]?.resume ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/${candidateDetails[String(showDetailsId)]?.resume}` : '#'}
+                          href={getFullUrl(candidateDetails[String(showDetailsId)]?.resume)}
                           className="text-blue-600 hover:text-blue-700 underline break-words font-medium hover:decoration-2 transition-all duration-150 inline-flex items-center gap-1 hover:gap-2"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -760,16 +770,6 @@ const StepAppliedFormsList: React.FC = () => {
 
 // Helper component for details row
 const Detail = ({ label, value }: { label: string; value: React.ReactNode }) => {
-  // Helper to get full URL for resume/docs
-  const getFullUrl = (file: string) => {
-    if (!file) return '#';
-    if (file.startsWith('http')) return file;
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-    // Remove leading slash if present
-    const path = file.startsWith('/') ? file : `/${file}`;
-    return `${baseUrl}${path}`;
-  };
-
   // Helper to format date
   const formatDate = (dateStr: string) => {
     if (!dateStr) return '';
