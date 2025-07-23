@@ -481,6 +481,22 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
     e.preventDefault();
     if (!validateStep()) return;
     if (isSubmitting) return;
+    
+    // Check file sizes for mobile compatibility
+    const maxFileSize = 10 * 1024 * 1024; // 10MB
+    if (formData.resume && formData.resume.size > maxFileSize) {
+      setShowPopup(true);
+      setPopupMessage('Resume file is too large. Maximum file size is 10MB. Please compress your file and try again.');
+      setTimeout(() => setShowPopup(false), 3000);
+      return;
+    }
+    if (formData.academics && formData.academics.size > maxFileSize) {
+      setShowPopup(true);
+      setPopupMessage('Academic documents are too large. Maximum file size is 10MB. Please compress your files and try again.');
+      setTimeout(() => setShowPopup(false), 3000);
+      return;
+    }
+    
     setIsSubmitting(true);
     try {
       const formDataToSend = new FormData();
@@ -500,6 +516,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
       
       const response = await axios.post(apiUrl, formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 60000, // 60 seconds timeout for mobile devices
       });
       setSubmitted(true);
       setPopupMessage('Submitted successfully!');
@@ -510,9 +527,19 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
       }, 3000);
     } catch (error) {
       let errorMsg = 'An error occurred during submission. Please try again.';
-      if (axios.isAxiosError(error) && error.response) {
-        if (error.response.status === 409) {
-          errorMsg = 'Enquiry already submitted earlier';
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          if (error.response.status === 409) {
+            errorMsg = 'Enquiry already submitted earlier';
+          } else if (error.response.status === 413) {
+            errorMsg = 'File size too large. Maximum file size is 10MB. Please compress your files and try again.';
+          } else if (error.response.status >= 500) {
+            errorMsg = 'Server error. Please try again in a few minutes.';
+          }
+        } else if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+          errorMsg = 'Request timed out. Please check your internet connection and try again.';
+        } else if (error.code === 'ERR_NETWORK') {
+          errorMsg = 'Network error. Please check your internet connection and try again.';
         }
       }
       setShowPopup(true);
@@ -1041,7 +1068,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
           <div>
             <h2 className={`text-2xl font-bold mb-4 flex items-center ${darkMode ? 'dark:text-white' : ''}`}><FilePlus className="mr-2" />Resume & Documents</h2>
             <div className="mb-4">
-              <label className={`block mb-1 font-medium text-black dark:text-white`}>Upload Resume (PDF) *</label>
+              <label className={`block mb-1 font-medium text-black dark:text-white`}>Upload Resume (PDF) * <span className="text-sm text-gray-500">(Max 10MB)</span></label>
               <input
                 type="file"
                 accept="application/pdf"
@@ -1051,7 +1078,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user, darkMode }) => {
               {errors.resume && <p className="text-red-500 text-sm">{errors.resume}</p>}
             </div>
             <div className="mb-4">
-              <label className={`block mb-1 font-medium text-black dark:text-white`}>Upload Academic Documents (Optional, PDF)</label>
+              <label className={`block mb-1 font-medium text-black dark:text-white`}>Upload Academic Documents (Optional, PDF) <span className="text-sm text-gray-500">(Max 10MB)</span></label>
               <input
                 type="file"
                 accept="application/pdf"
