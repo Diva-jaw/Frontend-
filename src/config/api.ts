@@ -52,6 +52,16 @@ export const API_CONFIG = {
     
     // Course enrollment endpoints
     ENROLLMENTS: '/api/enrollments',
+    
+    // Course endpoints
+    COURSES: '/api/courses',
+    COURSE_DETAILS: '/api/courses/{courseId}',
+    COURSE_MODULES: '/api/courses/{courseId}/modules',
+    MODULE_LEVELS: '/api/courses/{courseId}/modules/{moduleId}/levels',
+    LEVEL_TOPICS: '/api/courses/{courseId}/modules/{moduleId}/levels/{levelId}/topics',
+    TOPIC_SUBPOINTS: '/api/courses/{courseId}/modules/{moduleId}/levels/{levelId}/topics/{topicId}/subpoints',
+    COURSE_ENROLLMENT: '/api/courses/{courseId}/modules/{moduleId}/enroll',
+    COURSE_SEARCH: '/api/courses/search',
 
     // File serving
     UPLOADS: '/uploads'
@@ -93,6 +103,50 @@ export const getMessageUrl = (endpoint: string = '') => {
 // Course enrollment API URLs
 export const getEnrollmentUrl = (endpoint: string = '') => {
   return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ENROLLMENTS}${endpoint}`;
+};
+
+// Course API URLs
+export const getCourseUrl = (endpoint: string = '') => {
+  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.COURSES}${endpoint}`;
+};
+
+export const getCourseDetailsUrl = (courseId: number) => {
+  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.COURSE_DETAILS.replace('{courseId}', courseId.toString())}`;
+};
+
+export const getCourseModulesUrl = (courseId: number) => {
+  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.COURSE_MODULES.replace('{courseId}', courseId.toString())}`;
+};
+
+export const getModuleLevelsUrl = (courseId: number, moduleId: number) => {
+  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.MODULE_LEVELS
+    .replace('{courseId}', courseId.toString())
+    .replace('{moduleId}', moduleId.toString())}`;
+};
+
+export const getLevelTopicsUrl = (courseId: number, moduleId: number, levelId: number) => {
+  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LEVEL_TOPICS
+    .replace('{courseId}', courseId.toString())
+    .replace('{moduleId}', moduleId.toString())
+    .replace('{levelId}', levelId.toString())}`;
+};
+
+export const getTopicSubpointsUrl = (courseId: number, moduleId: number, levelId: number, topicId: number) => {
+  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TOPIC_SUBPOINTS
+    .replace('{courseId}', courseId.toString())
+    .replace('{moduleId}', moduleId.toString())
+    .replace('{levelId}', levelId.toString())
+    .replace('{topicId}', topicId.toString())}`;
+};
+
+export const getCourseEnrollmentUrl = (courseId: number, moduleId: number) => {
+  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.COURSE_ENROLLMENT
+    .replace('{courseId}', courseId.toString())
+    .replace('{moduleId}', moduleId.toString())}`;
+};
+
+export const getCourseSearchUrl = (query: string) => {
+  return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.COURSE_SEARCH}?q=${encodeURIComponent(query)}`;
 };
 
 // Upload file URLs
