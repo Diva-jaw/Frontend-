@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Users, Briefcase, FileText, ChevronRight, ClipboardList } from 'lucide-react';
+import { Users, Briefcase, FileText, ChevronRight, ClipboardList, BookOpen } from 'lucide-react';
 
 const HRDashboard = () => {
   const location = useLocation();
@@ -28,6 +28,12 @@ const HRDashboard = () => {
       path: '/hr/applied-forms',
       icon: <ClipboardList size={20} />,
       description: 'See all forms submitted by candidates'
+    },
+    {
+      name: 'View Applied Courses',
+      path: '/hr/applied-courses',
+      icon: <BookOpen size={20} />,
+      description: 'View all users applied in a specific Course'
     }
   ];
 
@@ -44,7 +50,7 @@ const HRDashboard = () => {
               Streamline your recruitment process with our comprehensive HR tools. 
               Manage candidate enquiries, post job opportunities, and track applications all in one place.
             </p> */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mt-12">
               {navItems.map((item, index) => (
                 <Link
                   key={item.path}

@@ -53,6 +53,7 @@ import DesignCategoryLevels from "./pages/hrDashboard/DesignCategoryLevels";
 import DepartmentHiringProcess from "./pages/hrDashboard/DepartmentHiringProcess";
 import StepAppliedFormsList from "./pages/hrDashboard/StepAppliedFormsList";
 import UserProfilePopup from "./components/auth/UserProfilePopup";
+import HRCourseManagement from "./pages/hrDashboard/HRCourseManagement";
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -140,7 +141,10 @@ function App() {
                     <Route path="applied-forms" element={<AppliedForms />} />
                     <Route path="applied-forms/:department" element={<DepartmentHiringProcess />} />
                     <Route path="applied-forms/:department/:step" element={<StepAppliedFormsList />} />
-                    <Route path="applied-courses" element={<AppliedCourses />} />
+                    <Route path="applied-courses" element={<HRCourseManagement />} />
+                    <Route path="applied-courses/:courseId" element={<HRCourseManagement />} />
+                    <Route path="applied-courses/:courseId/:moduleId" element={<HRCourseManagement />} />
+                    <Route path="applied-courses/:courseId/:moduleId/:levelId" element={<HRCourseManagement />} />
                     <Route path="applied-courses/:courseName" element={<CourseLevels />} />
                     <Route path="applied-courses/:courseName/level-1" element={<CourseApplications />} />
                     <Route path="applied-courses/:courseName/level-2" element={<CourseApplications />} />

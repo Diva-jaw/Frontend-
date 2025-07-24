@@ -60,7 +60,7 @@ export const API_CONFIG = {
     MODULE_LEVELS: '/api/courses/{courseId}/modules/{moduleId}/levels',
     LEVEL_TOPICS: '/api/courses/{courseId}/modules/{moduleId}/levels/{levelId}/topics',
     TOPIC_SUBPOINTS: '/api/courses/{courseId}/modules/{moduleId}/levels/{levelId}/topics/{topicId}/subpoints',
-    COURSE_ENROLLMENT: '/api/courses/{courseId}/modules/{moduleId}/enroll',
+    COURSE_ENROLLMENT: '/api/courses/{courseId}/modules/{moduleId}/levels/enroll',
     COURSE_SEARCH: '/api/courses/search',
 
     // File serving

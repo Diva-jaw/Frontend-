@@ -99,13 +99,34 @@ class CourseService {
       const response = await fetch(url, config);
       console.log(`Response status: ${response.status}`);
       
+      // Check if response is ok before trying to parse JSON
+      if (!response.ok) {
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (jsonError) {
+          // If JSON parsing fails, try to get text content
+          try {
+            const textContent = await response.text();
+            console.error('Response text:', textContent);
+            if (textContent.includes('<!DOCTYPE')) {
+              errorMessage = 'Server returned HTML instead of JSON. Please check if the server is running correctly.';
+            } else {
+              errorMessage = `Server error: ${textContent.substring(0, 200)}...`;
+            }
+          } catch (textError) {
+            errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+          }
+        }
+        
+        console.error(`API Error: ${response.status} - ${errorMessage}`);
+        throw new Error(errorMessage);
+      }
+      
       const data = await response.json();
       console.log(`Response data:`, data);
-
-      if (!response.ok) {
-        console.error(`API Error: ${response.status} - ${data.error || 'Unknown error'}`);
-        throw new Error(data.error || `HTTP ${response.status}: ${response.statusText}`);
-      }
 
       return data;
     } catch (error) {
