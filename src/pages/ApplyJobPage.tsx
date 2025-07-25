@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { User, MapPin, GraduationCap, Layers, Briefcase, ClipboardCheck, ListChecks, FilePlus, CheckCircle, ChevronLeft, ChevronRight, Send, X } from 'lucide-react';
 // import Header from '../components/layout/Header';
 // import Footer from '../components/layout/Footer';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { useAuth } from '../components/AuthContext';
 import { useToast } from '../components/ToastContext';
 import { getApiUrl } from '../config/api';
