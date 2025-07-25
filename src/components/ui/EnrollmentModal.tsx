@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Loader2, User, Mail, Phone, GraduationCap, Building, Calendar, CheckCircle } from 'lucide-react';
 import { courseService } from '../../services/courseService';
 import { useAuth } from '../../components/AuthContext';
-import SuccessPopup from './SuccessPopup';
 
 interface EnrollmentModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onEnrollmentSuccess: (enrollmentData: any) => void;
   courseName: string;
   levelName?: string;
   courseId: number;
@@ -27,6 +27,7 @@ interface EnrollmentFormData {
 const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
   isOpen,
   onClose,
+  onEnrollmentSuccess,
   courseName,
   levelName,
   courseId,
@@ -36,7 +37,6 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
   const { user, isLoggedIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [formData, setFormData] = useState<EnrollmentFormData>({
     name: '',
     email: '',
@@ -111,8 +111,13 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
       const result = await courseService.enrollInCourseWithDetails(courseId, moduleId, levelId, formData);
       
       console.log("Enrollment successful:", result);
-      setShowSuccessPopup(true);
       onClose();
+      onEnrollmentSuccess({
+        courseName,
+        levelName,
+        userName: user?.name || formData.name,
+        enrollmentData: result
+      });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Enrollment failed. Please try again.';
       console.error("Enrollment error:", err);
@@ -134,7 +139,7 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] p-4"
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10000] p-4"
             onClick={onClose}
           >
             <motion.div
@@ -383,15 +388,6 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
         )}
       </AnimatePresence>
       
-      {/* Success Popup */}
-      <SuccessPopup
-        isOpen={showSuccessPopup}
-        onClose={() => setShowSuccessPopup(false)}
-        courseName={courseName}
-        moduleName={levelName || 'Module'}
-        levelName={levelName || 'Level'}
-        userName={user?.name || formData.name}
-      />
     </>
   );
 };

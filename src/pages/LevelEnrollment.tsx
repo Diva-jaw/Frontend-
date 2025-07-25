@@ -13,6 +13,7 @@ import {
 import { useCourseContext } from '../contexts/CourseContext';
 import { courseService } from '../services/courseService';
 import EnrollmentModal from '../components/ui/EnrollmentModal';
+import SuccessPopup from '../components/ui/SuccessPopup';
 import { ModuleLevel, ModuleTopic } from '../services/courseService';
 import { useAuth } from '../components/AuthContext';
 
@@ -30,6 +31,8 @@ const LevelEnrollment = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [enrollmentData, setEnrollmentData] = useState<any>(null);
 
   console.log('LevelEnrollment: Component rendered with:', {
     courseId,
@@ -117,11 +120,20 @@ const LevelEnrollment = () => {
 
   const handleEnrollClick = () => {
     console.log('LevelEnrollment: Enroll button clicked');
+    
     if (!isLoggedIn) {
       alert('Please log in to enroll in courses.');
       return;
     }
+    
     setShowEnrollmentModal(true);
+  };
+
+  const handleEnrollmentSuccess = (data: any) => {
+    console.log('LevelEnrollment: Enrollment success:', data);
+    setEnrollmentData(data);
+    setShowSuccessPopup(true);
+    console.log('LevelEnrollment: Success popup should now be visible');
   };
 
   if (loading) {
@@ -403,11 +415,24 @@ const LevelEnrollment = () => {
         <EnrollmentModal
           isOpen={showEnrollmentModal}
           onClose={() => setShowEnrollmentModal(false)}
+          onEnrollmentSuccess={handleEnrollmentSuccess}
           courseName={courseDetails?.name || 'Course'}
           levelName={levelDetails?.level_name}
           courseId={parseInt(courseId)}
           moduleId={parseInt(moduleId)}
           levelId={parseInt(levelId)}
+        />
+      )}
+
+      {/* Success Popup */}
+      {showSuccessPopup && enrollmentData && (
+        <SuccessPopup
+          isOpen={showSuccessPopup}
+          onClose={() => setShowSuccessPopup(false)}
+          courseName={enrollmentData.courseName}
+          moduleName={enrollmentData.levelName || 'Module'}
+          levelName={enrollmentData.levelName || 'Level'}
+          userName={enrollmentData.userName}
         />
       )}
     </div>

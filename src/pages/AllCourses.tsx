@@ -108,9 +108,9 @@ const AllCourses = () => {
         </div>
 
         {/* Hero Section */}
-        <section className="relative overflow-hidden mt-4 sm:mt-6 lg:mt-8">
+        <section className="relative overflow-hidden mt-8 sm:mt-12 lg:mt-16">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-300/10 to-purple-300/10 dark:from-blue-600/5 dark:to-purple-600/5"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
+          <div className="relative w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
