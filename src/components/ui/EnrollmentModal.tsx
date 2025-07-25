@@ -59,10 +59,21 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // Special handling for phone number validation
+    if (name === 'phone_no') {
+      // Only allow numeric characters and limit to 10 digits
+      const numericValue = value.replace(/[^0-9]/g, '').slice(0, 10);
+      setFormData(prev => ({
+        ...prev,
+        [name]: numericValue
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,10 +97,9 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
       return;
     }
 
-    // Validate phone number (basic validation)
-    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-    if (!phoneRegex.test(formData.phone_no.replace(/\s/g, ''))) {
-      setError("Please enter a valid phone number");
+    // Validate phone number (exactly 10 digits)
+    if (!/^\d{10}$/.test(formData.phone_no)) {
+      setError("Please enter a valid 10-digit phone number");
       return;
     }
 
@@ -259,10 +269,28 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
                             name="phone_no"
                             value={formData.phone_no}
                             onChange={handleInputChange}
+                            onKeyDown={(e) => {
+                              // Prevent non-numeric keys except backspace, tab, arrow keys
+                              if (formData.phone_no.length >= 10 && 
+                                  e.key !== 'Backspace' && 
+                                  e.key !== 'Tab' && 
+                                  e.key !== 'ArrowLeft' && 
+                                  e.key !== 'ArrowRight' && 
+                                  e.key !== 'Delete') {
+                                e.preventDefault();
+                              }
+                            }}
                             className="w-full pl-12 pr-5 py-4 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all duration-200 text-base"
                             placeholder="Enter your phone number"
+                            maxLength={10}
                             required
                           />
+                          {formData.phone_no.length === 10 && (
+                            <p className="text-green-500 text-sm mt-1">✓ Valid 10-digit number</p>
+                          )}
+                          {formData.phone_no.length > 0 && formData.phone_no.length < 10 && (
+                            <p className="text-yellow-500 text-sm mt-1">Please enter exactly 10 digits</p>
+                          )}
                         </div>
                       </div>
 
