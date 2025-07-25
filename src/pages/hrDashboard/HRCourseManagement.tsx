@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  BookOpen, 
-  Users, 
-  Clock, 
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  ArrowLeft,
+  BookOpen,
+  Users,
+  Clock,
   Star,
   Loader2,
   ChevronRight,
@@ -15,13 +15,17 @@ import {
   XCircle,
   AlertCircle,
   ChevronLeft,
-  ChevronRight as ChevronRightIcon
-} from 'lucide-react';
-import { courseService } from '../../services/courseService';
-import { Course, CourseModule, ModuleLevel } from '../../services/courseService';
-import { useAuth } from '../../components/AuthContext';
-import NotificationPopup from '../../components/ui/NotificationPopup';
-import { Search } from 'lucide-react';
+  ChevronRight as ChevronRightIcon,
+} from "lucide-react";
+import { courseService } from "../../services/courseService";
+import {
+  Course,
+  CourseModule,
+  ModuleLevel,
+} from "../../services/courseService";
+import { useAuth } from "../../components/AuthContext";
+import NotificationPopup from "../../components/ui/NotificationPopup";
+import { Search } from "lucide-react";
 
 interface EnrolledUser {
   id: number;
@@ -47,17 +51,19 @@ interface PaginationInfo {
 
 const HRCourseManagement = () => {
   const navigate = useNavigate();
-  const { courseId, moduleId, levelId } = useParams<{ 
-    courseId?: string; 
-    moduleId?: string; 
-    levelId?: string; 
+  const { courseId, moduleId, levelId } = useParams<{
+    courseId?: string;
+    moduleId?: string;
+    levelId?: string;
   }>();
   const { user, isLoggedIn } = useAuth();
-  
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [modules, setModules] = useState<CourseModule[]>([]);
-  const [selectedModule, setSelectedModule] = useState<CourseModule | null>(null);
+  const [selectedModule, setSelectedModule] = useState<CourseModule | null>(
+    null
+  );
   const [levels, setLevels] = useState<ModuleLevel[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<ModuleLevel | null>(null);
   const [enrolledUsers, setEnrolledUsers] = useState<EnrolledUser[]>([]);
@@ -69,81 +75,104 @@ const HRCourseManagement = () => {
   const [sendingEmail, setSendingEmail] = useState<number | null>(null);
   const [notification, setNotification] = useState<{
     isOpen: boolean;
-    type: 'success' | 'error';
+    type: "success" | "error";
     title: string;
     message: string;
   }>({
     isOpen: false,
-    type: 'success',
-    title: '',
-    message: ''
+    type: "success",
+    title: "",
+    message: "",
   });
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<EnrolledUser[]>([]);
 
   // Get payment status based on enrollment status
   const getPaymentStatus = (status: string) => {
     switch (status) {
-      case 'requested':
-        return { text: 'Pending', color: 'bg-yellow-100 text-yellow-800 border-yellow-200' };
-      case 'contacted':
-        return { text: 'Pending', color: 'bg-yellow-100 text-yellow-800 border-yellow-200' };
-      case 'enrolled':
-        return { text: 'Done', color: 'bg-green-100 text-green-800 border-green-200' };
-      case 'cancelled':
-        return { text: 'Never', color: 'bg-red-100 text-red-800 border-red-200' };
+      case "requested":
+        return {
+          text: "Pending",
+          color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+        };
+      case "contacted":
+        return {
+          text: "Pending",
+          color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+        };
+      case "enrolled":
+        return {
+          text: "Done",
+          color: "bg-green-100 text-green-800 border-green-200",
+        };
+      case "cancelled":
+        return {
+          text: "Never",
+          color: "bg-red-100 text-red-800 border-red-200",
+        };
       default:
-        return { text: 'Unknown', color: 'bg-gray-100 text-gray-800 border-gray-200' };
+        return {
+          text: "Unknown",
+          color: "bg-gray-100 text-gray-800 border-gray-200",
+        };
     }
   };
 
   // Get status badge styling
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'requested':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'contacted':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'enrolled':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800 border-red-200';
+      case "requested":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "contacted":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "enrolled":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "cancelled":
+        return "bg-red-100 text-red-800 border-red-200";
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   // Check if email can be sent
   const canSendEmail = (status: string) => {
-    return status === 'enrolled';
+    return status === "enrolled";
   };
 
   // Update enrollment status
-  const handleStatusUpdate = async (enrollmentId: number, newStatus: string) => {
+  const handleStatusUpdate = async (
+    enrollmentId: number,
+    newStatus: string
+  ) => {
     try {
       setUpdatingStatus(enrollmentId);
-      const token = localStorage.getItem('authToken');
-      const response = await fetch(`/api/courses/enrollments/${enrollmentId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(
+        `/api/courses/enrollments/${enrollmentId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
 
       if (response.ok) {
         // Update local state
-        setEnrolledUsers(prev => prev.map(user => 
-          user.enrollment_id === enrollmentId 
-            ? { ...user, enrollment_status: newStatus }
-            : user
-        ));
+        setEnrolledUsers((prev) =>
+          prev.map((user) =>
+            user.enrollment_id === enrollmentId
+              ? { ...user, enrollment_status: newStatus }
+              : user
+          )
+        );
       } else {
-        console.error('Failed to update status');
+        console.error("Failed to update status");
       }
     } catch (err) {
-      console.error('Error updating status:', err);
+      console.error("Error updating status:", err);
     } finally {
       setUpdatingStatus(null);
     }
@@ -153,32 +182,36 @@ const HRCourseManagement = () => {
   const handleSendEmail = async (enrollmentId: number) => {
     try {
       setSendingEmail(enrollmentId);
-      const token = localStorage.getItem('authToken');
-      const response = await fetch(`/api/courses/hr/enrollments/${enrollmentId}/send-success-email`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(
+        `/api/courses/hr/enrollments/${enrollmentId}/send-success-email`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         // Update the local state to reflect the status change
-        setEnrolledUsers(prevUsers => 
-          prevUsers.map(user => 
-            user.enrollment_id === enrollmentId 
-              ? { ...user, enrollment_status: 'enrolled' }
+        setEnrolledUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.enrollment_id === enrollmentId
+              ? { ...user, enrollment_status: "enrolled" }
               : user
           )
         );
-        
+
         setNotification({
           isOpen: true,
-          type: 'success',
-          title: 'Email Sent Successfully!',
-          message: 'The congratulatory email has been sent to the user successfully and their status has been updated to Enrolled.'
+          type: "success",
+          title: "Email Sent Successfully!",
+          message:
+            "The congratulatory email has been sent to the user successfully and their status has been updated to Enrolled.",
         });
-        
+
         // Refresh the data to ensure consistency
         if (courseId && moduleId && levelId) {
           fetchEnrolledUsers();
@@ -187,18 +220,21 @@ const HRCourseManagement = () => {
         const errorData = await response.json();
         setNotification({
           isOpen: true,
-          type: 'error',
-          title: 'Failed to Send Email',
-          message: errorData.error || 'An error occurred while sending the email. Please try again.'
+          type: "error",
+          title: "Failed to Send Email",
+          message:
+            errorData.error ||
+            "An error occurred while sending the email. Please try again.",
         });
       }
     } catch (err) {
-      console.error('Error sending email:', err);
+      console.error("Error sending email:", err);
       setNotification({
         isOpen: true,
-        type: 'error',
-        title: 'Network Error',
-        message: 'Failed to send email due to a network error. Please check your connection and try again.'
+        type: "error",
+        title: "Network Error",
+        message:
+          "Failed to send email due to a network error. Please check your connection and try again.",
       });
     } finally {
       setSendingEmail(null);
@@ -211,17 +247,19 @@ const HRCourseManagement = () => {
       try {
         const fetchedCourses = await courseService.getAllCourses();
         setCourses(fetchedCourses);
-        
+
         // Set selected course if courseId is in URL
         if (courseId) {
-          const course = fetchedCourses.find(c => c.id === parseInt(courseId));
+          const course = fetchedCourses.find(
+            (c) => c.id === parseInt(courseId)
+          );
           if (course) {
             setSelectedCourse(course);
           }
         }
       } catch (err) {
-        console.error('Error fetching courses:', err);
-        setError('Failed to fetch courses');
+        console.error("Error fetching courses:", err);
+        setError("Failed to fetch courses");
       } finally {
         setLoading(false);
       }
@@ -234,18 +272,22 @@ const HRCourseManagement = () => {
     if (courseId) {
       const fetchModules = async () => {
         try {
-          const fetchedModules = await courseService.getCourseModules(parseInt(courseId));
+          const fetchedModules = await courseService.getCourseModules(
+            parseInt(courseId)
+          );
           setModules(fetchedModules);
-          
+
           // Set selected module if moduleId is in URL
           if (moduleId) {
-            const module = fetchedModules.find(m => m.id === parseInt(moduleId));
+            const module = fetchedModules.find(
+              (m) => m.id === parseInt(moduleId)
+            );
             if (module) {
               setSelectedModule(module);
             }
           }
         } catch (err) {
-          console.error('Error fetching modules:', err);
+          console.error("Error fetching modules:", err);
         }
       };
       fetchModules();
@@ -257,18 +299,21 @@ const HRCourseManagement = () => {
     if (courseId && moduleId) {
       const fetchLevels = async () => {
         try {
-          const fetchedLevels = await courseService.getModuleLevels(parseInt(courseId), parseInt(moduleId));
+          const fetchedLevels = await courseService.getModuleLevels(
+            parseInt(courseId),
+            parseInt(moduleId)
+          );
           setLevels(fetchedLevels);
-          
+
           // Set selected level if levelId is in URL
           if (levelId) {
-            const level = fetchedLevels.find(l => l.id === parseInt(levelId));
+            const level = fetchedLevels.find((l) => l.id === parseInt(levelId));
             if (level) {
               setSelectedLevel(level);
             }
           }
         } catch (err) {
-          console.error('Error fetching levels:', err);
+          console.error("Error fetching levels:", err);
         }
       };
       fetchLevels();
@@ -277,26 +322,42 @@ const HRCourseManagement = () => {
 
   // Fetch enrolled users for the current level
   const fetchEnrolledUsers = async () => {
-    if (!courseId || !moduleId || !levelId || !isLoggedIn || user?.role !== 'hr') return;
-    
+    if (
+      !courseId ||
+      !moduleId ||
+      !levelId ||
+      !isLoggedIn ||
+      user?.role !== "hr"
+    )
+      return;
+
     try {
-      const token = localStorage.getItem('authToken');
-      const searchQuery = searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : '';
-      const response = await fetch(`/api/courses/hr/enrolled-users/${courseId}/${moduleId}/${levelId}/paginated?page=${currentPage}&limit=10${searchQuery}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const token = localStorage.getItem("authToken");
+      const searchQuery = searchTerm
+        ? `&search=${encodeURIComponent(searchTerm)}`
+        : "";
+      const response = await fetch(
+        `/api/courses/hr/enrolled-users/${courseId}/${moduleId}/${levelId}/paginated?page=${currentPage}&limit=10${searchQuery}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setEnrolledUsers(data.users);
         setPagination(data.pagination);
       } else {
-        console.error('Failed to fetch enrolled users:', response.status, response.statusText);
+        console.error(
+          "Failed to fetch enrolled users:",
+          response.status,
+          response.statusText
+        );
       }
     } catch (err) {
-      console.error('Error fetching enrolled users:', err);
+      console.error("Error fetching enrolled users:", err);
     }
   };
 
@@ -311,12 +372,12 @@ const HRCourseManagement = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
-    
+
     // Clear existing timeout
     if ((window as any).searchTimeout) {
       clearTimeout((window as any).searchTimeout);
     }
-    
+
     // Set new timeout for debounced search
     (window as any).searchTimeout = setTimeout(() => {
       setCurrentPage(1);
@@ -326,7 +387,7 @@ const HRCourseManagement = () => {
 
   // Clear search
   const clearSearch = () => {
-    setSearchTerm('');
+    setSearchTerm("");
     setCurrentPage(1);
     fetchEnrolledUsers();
   };
@@ -334,7 +395,15 @@ const HRCourseManagement = () => {
   // Fetch enrolled users when level is selected
   useEffect(() => {
     fetchEnrolledUsers();
-  }, [courseId, moduleId, levelId, isLoggedIn, user?.role, currentPage, searchTerm]);
+  }, [
+    courseId,
+    moduleId,
+    levelId,
+    isLoggedIn,
+    user?.role,
+    currentPage,
+    searchTerm,
+  ]);
 
   const handleCourseClick = (course: Course) => {
     setSelectedCourse(course);
@@ -367,22 +436,26 @@ const HRCourseManagement = () => {
       navigate(`/hr/applied-courses/${courseId}`);
     } else if (moduleId) {
       // Go back to courses
-      navigate('/hr/applied-courses');
+      navigate("/hr/applied-courses");
     } else {
       // Go back to HR dashboard
-      navigate('/hr');
+      navigate("/hr");
     }
   };
 
   // Check if user is authenticated and has HR role
-  if (!isLoggedIn || user?.role !== 'hr') {
+  if (!isLoggedIn || user?.role !== "hr") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h2>
-          <p className="text-gray-600 mb-4">You need to be logged in as an HR user to access this page.</p>
-          <button 
-            onClick={() => navigate('/hr/signin')}
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Access Denied
+          </h2>
+          <p className="text-gray-600 mb-4">
+            You need to be logged in as an HR user to access this page.
+          </p>
+          <button
+            onClick={() => navigate("/hr/signin")}
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
           >
             Go to HR Login
@@ -408,7 +481,7 @@ const HRCourseManagement = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
           >
@@ -446,19 +519,25 @@ const HRCourseManagement = () => {
               {selectedCourse && (
                 <>
                   <ChevronRight className="w-4 h-4 text-gray-400" />
-                  <span className="text-blue-600 font-medium">{selectedCourse.name}</span>
+                  <span className="text-blue-600 font-medium">
+                    {selectedCourse.name}
+                  </span>
                 </>
               )}
               {selectedModule && (
                 <>
                   <ChevronRight className="w-4 h-4 text-gray-400" />
-                  <span className="text-blue-600 font-medium">{selectedModule.name}</span>
+                  <span className="text-blue-600 font-medium">
+                    {selectedModule.name}
+                  </span>
                 </>
               )}
               {selectedLevel && (
                 <>
                   <ChevronRight className="w-4 h-4 text-gray-400" />
-                                     <span className="text-blue-600 font-medium">{selectedLevel.level_name}</span>
+                  <span className="text-blue-600 font-medium">
+                    {selectedLevel.level_name}
+                  </span>
                 </>
               )}
             </div>
@@ -484,11 +563,17 @@ const HRCourseManagement = () => {
                   <div className="p-3 bg-blue-100 rounded-xl">
                     <BookOpen className="w-6 h-6 text-blue-600" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-800">{course.name}</h3>
+                  <h3 className="text-lg font-bold text-gray-800">
+                    {course.name}
+                  </h3>
                 </div>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{course.description}</p>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  {course.description}
+                </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-blue-600 font-medium">View Modules</span>
+                  <span className="text-blue-600 font-medium">
+                    View Modules
+                  </span>
                   <ChevronRight className="w-5 h-5 text-blue-600" />
                 </div>
               </motion.div>
@@ -512,11 +597,17 @@ const HRCourseManagement = () => {
                   <div className="p-3 bg-green-100 rounded-xl">
                     <Star className="w-6 h-6 text-green-600" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-800">{module.name}</h3>
+                  <h3 className="text-lg font-bold text-gray-800">
+                    {module.name}
+                  </h3>
                 </div>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{module.description}</p>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  {module.description}
+                </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-green-600 font-medium">View Levels</span>
+                  <span className="text-green-600 font-medium">
+                    View Levels
+                  </span>
                   <ChevronRight className="w-5 h-5 text-green-600" />
                 </div>
               </motion.div>
@@ -540,11 +631,17 @@ const HRCourseManagement = () => {
                   <div className="p-3 bg-purple-100 rounded-xl">
                     <Users className="w-6 h-6 text-purple-600" />
                   </div>
-                                     <h3 className="text-lg font-bold text-gray-800">{level.level_name}</h3>
-                 </div>
-                 <p className="text-gray-600 text-sm mb-4 line-clamp-2">{level.level_range}</p>
+                  <h3 className="text-lg font-bold text-gray-800">
+                    {level.level_name}
+                  </h3>
+                </div>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  {level.level_range}
+                </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-purple-600 font-medium">View Enrollments</span>
+                  <span className="text-purple-600 font-medium">
+                    View Enrollments
+                  </span>
                   <ChevronRight className="w-5 h-5 text-purple-600" />
                 </div>
               </motion.div>
@@ -578,7 +675,8 @@ const HRCourseManagement = () => {
               </div>
               {searchTerm && (
                 <div className="mt-2 text-sm text-gray-600">
-                  Searching for: <span className="font-medium">"{searchTerm}"</span>
+                  Searching for:{" "}
+                  <span className="font-medium">"{searchTerm}"</span>
                 </div>
               )}
             </div>
@@ -592,26 +690,46 @@ const HRCourseManagement = () => {
                   </span>
                 )}
               </h2>
-              
+
               {enrolledUsers.length === 0 ? (
                 <div className="text-center py-12">
                   <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 text-lg">No users enrolled in this level yet.</p>
+                  <p className="text-gray-600 text-lg">
+                    No users enrolled in this level yet.
+                  </p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[1200px]">
                     <thead>
                       <tr className="border-b border-gray-200">
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">Name</th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">Email</th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">Phone</th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">University</th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">Department</th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">Status</th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">Payment</th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">Enrolled Date</th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">Send Mail</th>
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                          Name
+                        </th>
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                          Email
+                        </th>
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                          Phone
+                        </th>
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                          University
+                        </th>
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                          Department
+                        </th>
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                          Payment
+                        </th>
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                          Enrolled Date
+                        </th>
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                          Send Mail
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -624,31 +742,50 @@ const HRCourseManagement = () => {
                           className="hover:bg-gray-50 transition-colors"
                         >
                           <td className="py-4 px-4">
-                            <div className="font-medium text-gray-900">{user.name}</div>
+                            <div className="font-medium text-gray-900">
+                              {user.name}
+                            </div>
                           </td>
                           <td className="py-4 px-4">
                             <div className="text-gray-900">{user.email}</div>
                           </td>
                           <td className="py-4 px-4">
-                            <div className="text-gray-900">{user.phone_no || 'N/A'}</div>
+                            <div className="text-gray-900">
+                              {user.phone_no || "N/A"}
+                            </div>
                           </td>
                           <td className="py-4 px-4">
-                            <div className="text-gray-900">{user.university || 'N/A'}</div>
+                            <div className="text-gray-900">
+                              {user.university || "N/A"}
+                            </div>
                           </td>
                           <td className="py-4 px-4">
-                            <div className="text-gray-900">{user.department || 'N/A'}</div>
+                            <div className="text-gray-900">
+                              {user.department || "N/A"}
+                            </div>
                           </td>
                           <td className="py-4 px-4">
-                            {user.enrollment_status === 'cancelled' ? (
-                              <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusBadge(user.enrollment_status)}`}>
+                            {user.enrollment_status === "cancelled" ? (
+                              <span
+                                className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusBadge(
+                                  user.enrollment_status
+                                )}`}
+                              >
                                 Cancelled
                               </span>
                             ) : (
                               <select
                                 value={user.enrollment_status}
-                                onChange={(e) => handleStatusUpdate(user.enrollment_id, e.target.value)}
+                                onChange={(e) =>
+                                  handleStatusUpdate(
+                                    user.enrollment_id,
+                                    e.target.value
+                                  )
+                                }
                                 disabled={updatingStatus === user.enrollment_id}
-                                className={`px-3 py-1 rounded-full text-sm font-medium border focus:outline-none focus:ring-2 focus:ring-blue-500 ${getStatusBadge(user.enrollment_status)}`}
+                                className={`px-3 py-1 rounded-full text-sm font-medium border focus:outline-none focus:ring-2 focus:ring-blue-500 ${getStatusBadge(
+                                  user.enrollment_status
+                                )}`}
                               >
                                 <option value="requested">Requested</option>
                                 <option value="contacted">Contacted</option>
@@ -661,28 +798,41 @@ const HRCourseManagement = () => {
                             )}
                           </td>
                           <td className="py-4 px-4">
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getPaymentStatus(user.enrollment_status).color}`}>
+                            <span
+                              className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${
+                                getPaymentStatus(user.enrollment_status).color
+                              }`}
+                            >
                               <DollarSign className="w-3 h-3 mr-1" />
                               {getPaymentStatus(user.enrollment_status).text}
                             </span>
                           </td>
                           <td className="py-4 px-4">
                             <div className="text-gray-900">
-                              {new Date(user.enrollment_date).toLocaleDateString()}
+                              {new Date(
+                                user.enrollment_date
+                              ).toLocaleDateString()}
                             </div>
                           </td>
                           <td className="py-4 px-4">
                             <button
-                              onClick={() => handleSendEmail(user.enrollment_id)}
-                              disabled={!canSendEmail(user.enrollment_status) || sendingEmail === user.enrollment_id}
+                              onClick={() =>
+                                handleSendEmail(user.enrollment_id)
+                              }
+                              disabled={
+                                !canSendEmail(user.enrollment_status) ||
+                                sendingEmail === user.enrollment_id
+                              }
                               className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
                                 canSendEmail(user.enrollment_status)
-                                  ? 'bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200'
-                                  : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'
+                                  ? "bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200"
+                                  : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
                               }`}
                             >
                               <Mail className="w-3 h-3 mr-1" />
-                              {sendingEmail === user.enrollment_id ? 'Sending...' : 'Send Mail'}
+                              {sendingEmail === user.enrollment_id
+                                ? "Sending..."
+                                : "Send Mail"}
                             </button>
                           </td>
                         </motion.tr>
@@ -696,8 +846,8 @@ const HRCourseManagement = () => {
               {pagination && pagination.totalPages > 1 && (
                 <div className="flex items-center justify-between mt-6">
                   <div className="text-sm text-gray-700">
-                    Showing page {pagination.currentPage} of {pagination.totalPages} 
-                    ({pagination.totalItems} total users)
+                    Showing page {pagination.currentPage} of{" "}
+                    {pagination.totalPages}({pagination.totalItems} total users)
                   </div>
                   <div className="flex items-center space-x-2">
                     <button
@@ -726,11 +876,11 @@ const HRCourseManagement = () => {
           </div>
         )}
       </div>
-      
+
       {/* Notification Popup */}
       <NotificationPopup
         isOpen={notification.isOpen}
-        onClose={() => setNotification(prev => ({ ...prev, isOpen: false }))}
+        onClose={() => setNotification((prev) => ({ ...prev, isOpen: false }))}
         type={notification.type}
         title={notification.title}
         message={notification.message}
@@ -739,4 +889,4 @@ const HRCourseManagement = () => {
   );
 };
 
-export default HRCourseManagement; 
+export default HRCourseManagement;

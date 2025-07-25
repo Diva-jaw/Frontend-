@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle, X, Mail, Clock, Users, BookOpen } from 'lucide-react';
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle, X, Mail, Clock, Users, BookOpen } from "lucide-react";
 
 interface SuccessPopupProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
   courseName,
   moduleName,
   levelName,
-  userName
+  userName,
 }) => {
   return (
     <AnimatePresence>
@@ -27,7 +27,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
           {/* Backdrop */}
           <motion.div
@@ -37,7 +37,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={onClose}
           />
-          
+
           {/* Modal */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0, y: 20 }}
@@ -98,8 +98,12 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                   Dear {userName},
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  We are pleased to confirm your enrollment with <span className="font-semibold text-blue-600">RFT Systems</span>. 
-                  Your application has been received and is currently being processed by our academic team.
+                  We are pleased to confirm your enrollment with{" "}
+                  <span className="font-semibold text-blue-600">
+                    RFT Systems
+                  </span>
+                  . Your application has been received and is currently being
+                  processed by our academic team..
                 </p>
               </motion.div>
 
@@ -112,20 +116,28 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
               >
                 <div className="flex items-center mb-4">
                   <BookOpen className="w-6 h-6 text-blue-600 mr-3" />
-                  <h4 className="text-lg font-semibold text-gray-800">Enrollment Details</h4>
+                  <h4 className="text-lg font-semibold text-gray-800">
+                    Enrollment Details
+                  </h4>
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b border-blue-100">
                     <span className="font-medium text-gray-700">Course:</span>
-                    <span className="font-semibold text-gray-800">{courseName}</span>
+                    <span className="font-semibold text-gray-800">
+                      {courseName}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-blue-100">
                     <span className="font-medium text-gray-700">Module:</span>
-                    <span className="font-semibold text-gray-800">{moduleName}</span>
+                    <span className="font-semibold text-gray-800">
+                      {moduleName}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center py-2">
                     <span className="font-medium text-gray-700">Level:</span>
-                    <span className="font-semibold text-gray-800">{levelName}</span>
+                    <span className="font-semibold text-gray-800">
+                      {levelName}
+                    </span>
                   </div>
                 </div>
               </motion.div>
@@ -139,24 +151,39 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
               >
                 <div className="flex items-center mb-4">
                   <Clock className="w-6 h-6 text-green-600 mr-3" />
-                  <h4 className="text-lg font-semibold text-gray-800">Next Steps</h4>
+                  <h4 className="text-lg font-semibold text-gray-800">
+                    Next Steps
+                  </h4>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">Our academic team will review your application within <span className="font-semibold">24-48 business hours</span></span>
+                    <span className="text-gray-700">
+                      Our academic team will review your application within{" "}
+                      <span className="font-semibold">
+                        24-48 business hours
+                      </span>
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">You will receive login credentials for your student portal</span>
+                    <span className="text-gray-700">
+                      You will receive login credentials for your student portal
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">An orientation session will be scheduled for your convenience</span>
+                    <span className="text-gray-700">
+                      An orientation session will be scheduled for your
+                      convenience
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">Course materials and schedule will be provided upon approval</span>
+                    <span className="text-gray-700">
+                      Course materials and schedule will be provided upon
+                      approval
+                    </span>
                   </li>
                 </ul>
               </motion.div>
@@ -170,10 +197,13 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
               >
                 <div className="flex items-center mb-3">
                   <Mail className="w-6 h-6 text-purple-600 mr-3" />
-                  <h4 className="text-lg font-semibold text-gray-800">Email Confirmation</h4>
+                  <h4 className="text-lg font-semibold text-gray-800">
+                    Email Confirmation
+                  </h4>
                 </div>
                 <p className="text-gray-700">
-                  A detailed confirmation has been sent to your registered email address containing your enrollment details and further instructions.
+                  We've sent a beautiful confirmation email to your registered
+                  email address with all the details and next steps.
                 </p>
               </motion.div>
 
@@ -186,15 +216,19 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
               >
                 <div className="flex items-center mb-4">
                   <Users className="w-6 h-6 text-gray-600 mr-3" />
-                  <h4 className="text-lg font-semibold text-gray-800">Academic Support</h4>
+                  <h4 className="text-lg font-semibold text-gray-800">
+                    Need Help?
+                  </h4>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="font-medium text-gray-700">Academic Affairs:</p>
+                    <p className="font-medium text-gray-700">
+                      Academic Affairs:
+                    </p>
                     <p className="text-blue-600">academic@rftsystems.com</p>
                   </div>
                   <div>
-                    <p className="font-medium text-gray-700">Student Services:</p>
+                    <p className="font-medium text-gray-700">Phone Support:</p>
                     <p className="text-blue-600">+1 (555) 123-4567</p>
                   </div>
                 </div>
@@ -202,14 +236,16 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
             </div>
 
             {/* Footer */}
-                        <motion.div
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1.0 }}
-              className="bg-gray-900 text-white p-6 text-center flex-shrink-0 border-t border-gray-700"
+              className="bg-gray-900 text-white p-6 text-center  flex-shrink-0 border-t border-gray-700"
             >
               <h5 className="text-lg font-semibold mb-2">RFT Systems</h5>
-              <p className="text-gray-300 text-sm">Excellence in Education & Professional Development</p>
+              <p className="text-gray-300 text-sm">
+                Empowering minds, transforming futures
+              </p>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -218,4 +254,4 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
   );
 };
 
-export default SuccessPopup; 
+export default SuccessPopup;
