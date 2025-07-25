@@ -54,6 +54,7 @@ import DepartmentHiringProcess from "./pages/hrDashboard/DepartmentHiringProcess
 import StepAppliedFormsList from "./pages/hrDashboard/StepAppliedFormsList";
 import UserProfilePopup from "./components/auth/UserProfilePopup";
 import HRCourseManagement from "./pages/hrDashboard/HRCourseManagement";
+import ProfileDashboard from "./pages/ProfileDashboard";
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -102,6 +103,7 @@ function App() {
                   <Route path="/signin" element={<SignIn2 />} />
                   <Route path="/signup" element={<NewUser />} />
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="/profile-dashboard" element={<ProfileDashboard />} />
                   <Route path="/all-courses" element={<AllCourses />} />
                   <Route path="/courses" element={<AllCourses />} />
                   
