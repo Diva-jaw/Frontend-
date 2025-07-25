@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
@@ -11,12 +12,28 @@ import {
   AlertCircle,
   Edit3,
   Download,
+=======
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { 
+  User, 
+  Mail, 
+  Phone, 
+  Calendar, 
+  BookOpen, 
+  CheckCircle, 
+  Clock, 
+  AlertCircle, 
+  Edit3, 
+  Download, 
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
   Eye,
   Award,
   TrendingUp,
   Settings,
   LogOut
 } from 'lucide-react';
+<<<<<<< HEAD
 import { useAuth } from '../components/AuthContext';
 import { apiService } from '../services/api';
 
@@ -52,10 +69,15 @@ interface CourseEnrollment {
 
 const ProfileDashboard = () => {
   const { user: authUser, updateUser } = useAuth();
+=======
+
+const ProfileDashboard = () => {
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
   const [activeTab, setActiveTab] = useState('overview');
   const [showEditModal, setShowEditModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
+<<<<<<< HEAD
   const [showAppChartModal, setShowAppChartModal] = useState(false);
   const [showCourseChartModal, setShowCourseChartModal] = useState(false);
   const appChartModalRef = useRef<HTMLDivElement>(null);
@@ -124,6 +146,35 @@ const ProfileDashboard = () => {
   }, [authUser]);
 
   const getStatusColor = (status: string | undefined) => {
+=======
+
+  // Mock user data
+  const user = {
+    name: 'Riya Singh',
+    email: 'riya.singh@example.com',
+    phone: '+91 98765 43210',
+    joinDate: 'March 2024',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face'
+  };
+
+  // Mock application data
+  const applications = [
+    { id: 1, title: 'Frontend Developer', company: 'TechCorp Inc.', status: 'Under Review', appliedDate: '2024-03-15', type: 'pending' },
+    { id: 2, title: 'React Developer', company: 'StartupXYZ', status: 'Interview Scheduled', appliedDate: '2024-03-10', type: 'interview' },
+    { id: 3, title: 'Full Stack Developer', company: 'Innovation Labs', status: 'Rejected', appliedDate: '2024-03-05', type: 'rejected' },
+    { id: 4, title: 'UI/UX Developer', company: 'Design Studio', status: 'Accepted', appliedDate: '2024-03-01', type: 'accepted' }
+  ];
+
+  // Mock courses data (assuming applied courses are tracked)
+  const appliedCourses = [
+    { id: 1, title: 'React.js Fundamentals', appliedDate: '2024-03-15' },
+    { id: 2, title: 'Node.js Backend Development', appliedDate: '2024-03-10' },
+    { id: 3, title: 'Python for Data Science', appliedDate: '2024-03-05' },
+    { id: 4, title: 'Angular Advanced Concepts', appliedDate: '2024-03-01' }
+  ];
+
+  const getStatusColor = (status: string) => {
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
     switch (status) {
       case 'Under Review': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'Interview Scheduled': return 'bg-blue-100 text-blue-800 border-blue-200';
@@ -133,7 +184,11 @@ const ProfileDashboard = () => {
     }
   };
 
+<<<<<<< HEAD
   const getStatusIcon = (status: string | undefined) => {
+=======
+  const getStatusIcon = (status: string) => {
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
     switch (status) {
       case 'Under Review': return <Clock className="w-4 h-4" />;
       case 'Interview Scheduled': return <Calendar className="w-4 h-4" />;
@@ -143,6 +198,7 @@ const ProfileDashboard = () => {
     }
   };
 
+<<<<<<< HEAD
   // Quick Stats (dynamic)
   const totalApplications = applications.length;
   const totalCourses = appliedCourses.length;
@@ -158,10 +214,21 @@ const ProfileDashboard = () => {
     'Accepted': normalizedApplications.filter(a => a.final_status === 'Selected' || a.current_stage === 'Accepted').length,
     'Rejected': normalizedApplications.filter(a => a.final_status === 'Rejected' || a.current_stage === 'Rejected').length
   };
+=======
+  // Data for charts
+  const applicationStats = {
+    'Under Review': applications.filter(a => a.status === 'Under Review').length,
+    'Interview Scheduled': applications.filter(a => a.status === 'Interview Scheduled').length,
+    'Accepted': applications.filter(a => a.status === 'Accepted').length,
+    'Rejected': applications.filter(a => a.status === 'Rejected').length
+  };
+
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
   const courseApplicationStats = {
     'Applied Courses': appliedCourses.length
   };
 
+<<<<<<< HEAD
   // Chart bar colors
   const appBarColors = ['#facc15', '#60a5fa', '#34d399', '#f87171'];
   const courseBarColors = ['#34d399'];
@@ -171,6 +238,8 @@ const ProfileDashboard = () => {
   if (error) return <div className="min-h-screen flex items-center justify-center text-red-600">{error}</div>;
   if (!profile) return null;
 
+=======
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100">
       {/* Header */}
@@ -197,7 +266,11 @@ const ProfileDashboard = () => {
             <a href="#courses" className="text-gray-600 hover:text-blue-600 font-medium">Courses</a>
           </nav>
             <div className="text-sm text-gray-600 hidden md:block">
+<<<<<<< HEAD
               {new Date().toLocaleString('en-US', {
+=======
+              {new Date('2025-07-17T10:06:00+05:30').toLocaleString('en-US', {
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                 weekday: 'long',
                 hour: '2-digit',
                 minute: '2-digit',
@@ -217,12 +290,28 @@ const ProfileDashboard = () => {
               transition={{ duration: 0.3 }}
             >
               <div className="relative">
+<<<<<<< HEAD
                 {/* Avatar fallback logic can be improved if you store avatar URLs */}
                 <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
                   {profile.name.charAt(0)}
                 </div>
               </div>
               <span className="text-sm font-medium text-gray-700 hidden md:inline">{profile.name.split(' ')[0]}</span>
+=======
+              <img
+                src={user.avatar}
+                alt={user.name}
+                className="w-8 h-8 rounded-full object-cover"
+                onError={() => setShowFallback(true)}
+              />
+              {showFallback && (
+                  <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold absolute top-0 left-0">
+                  {user.name.charAt(0)}
+                </div>
+              )}
+              </div>
+              <span className="text-sm font-medium text-gray-700 hidden md:inline">{user.name.split(' ')[0]}</span>
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
             </motion.button>
 
             {showUserMenu && (
@@ -259,20 +348,39 @@ const ProfileDashboard = () => {
             >
               <div className="text-center mb-4 sm:mb-6">
                 <div className="relative inline-block">
+<<<<<<< HEAD
                   <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-3xl sm:text-4xl">
                     {profile.name.charAt(0)}
                   </div>
+=======
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-white shadow-lg"
+                    onError={() => setShowFallback(true)}
+                  />
+                  {showFallback && (
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-3xl sm:text-4xl absolute top-0 left-0">
+                      {user.name.charAt(0)}
+                    </div>
+                  )}
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                   <div className="absolute -bottom-1 -right-1 w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
                     <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   </div>
                 </div>
+<<<<<<< HEAD
                 <h2 className="text-lg sm:text-xl font-bold text-gray-900 mt-2 sm:mt-4">{profile.name}</h2>
+=======
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mt-2 sm:mt-4">{user.name}</h2>
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                 <p className="text-gray-600 text-sm sm:text-base">Active Member</p>
               </div>
 
               <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
                   <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+<<<<<<< HEAD
                   <span className="text-gray-700 text-sm sm:text-base">{profile.email}</span>
                 </div>
                 <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
@@ -291,6 +399,18 @@ const ProfileDashboard = () => {
                   <Award className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                   <span className="text-gray-700 text-sm sm:text-base">{profile.department || 'N/A'}</span>
                 </div> */}
+=======
+                  <span className="text-gray-700 text-sm sm:text-base">{user.email}</span>
+                </div>
+                <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+                  <span className="text-gray-700 text-sm sm:text-base">{user.phone}</span>
+                </div>
+                <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
+                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+                  <span className="text-gray-700 text-sm sm:text-base">Member since {user.joinDate}</span>
+                </div>
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
               </div>
 
               <button
@@ -300,8 +420,11 @@ const ProfileDashboard = () => {
                 <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="text-sm sm:text-base">Edit Profile</span>
               </button>
+<<<<<<< HEAD
               {editSuccess && <div className="text-green-600 text-sm mt-2">{editSuccess}</div>}
               {editError && <div className="text-red-600 text-sm mt-2">{editError}</div>}
+=======
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
             </motion.div>
 
             {/* Quick Stats */}
@@ -311,7 +434,11 @@ const ProfileDashboard = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="bg-white rounded-xl shadow-lg p-4 sm:p-6"
             >
+<<<<<<< HEAD
 
+=======
+              
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Quick Stats</h3>
 
               <div className="flex items-center justify-between p-2 sm:p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg">
@@ -321,7 +448,11 @@ const ProfileDashboard = () => {
                     </div>
                     <div>
                       <p className="text-xs sm:text-sm text-gray-600">Track Applications</p>
+<<<<<<< HEAD
                       <p className="text-lg sm:text-xl font-bold text-gray-900">{totalApplications}</p>
+=======
+                      <p className="text-lg sm:text-xl font-bold text-gray-900">15</p>
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                     </div>
                   </div>
                 </div>
@@ -333,7 +464,11 @@ const ProfileDashboard = () => {
                     </div>
                     <div>
                       <p className="text-xs sm:text-sm text-gray-600">Courses Applied</p>
+<<<<<<< HEAD
                       <p className="text-lg sm:text-xl font-bold text-gray-900">{totalCourses}</p>
+=======
+                      <p className="text-lg sm:text-xl font-bold text-gray-900">{appliedCourses.length}</p>
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                     </div>
                   </div>
                 </div>
@@ -345,12 +480,20 @@ const ProfileDashboard = () => {
                     </div>
                     <div>
                       <p className="text-xs sm:text-sm text-gray-600">Certificates</p>
+<<<<<<< HEAD
                       <p className="text-lg sm:text-xl font-bold text-gray-900">{totalCertificates}</p>
+=======
+                      <p className="text-lg sm:text-xl font-bold text-gray-900">8</p>
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                     </div>
                   </div>
                 </div>
 
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
               </div>
             </motion.div>
           </div>
@@ -402,11 +545,35 @@ const ProfileDashboard = () => {
                     <div className="p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
                       <h4 className="text-base sm:text-lg font-semibold text-blue-900 mb-2 sm:mb-4">Application Tracking</h4>
                       <button
+<<<<<<< HEAD
                         onClick={() => setShowAppChartModal(true)}
+=======
+                        onClick={() => {
+                          const canvas = document.createElement('canvas');
+                          canvas.width = 300;
+                          canvas.height = 200;
+                          const ctx = canvas.getContext('2d');
+                          if (ctx) {
+                            ctx.fillStyle = '#f3f4f6';
+                            ctx.fillRect(0, 0, 300, 200);
+                            ctx.fillStyle = '#1e40af';
+                            let x = 50;
+                            Object.entries(applicationStats).forEach(([status, count]) => {
+                              ctx.fillRect(x, 150 - count * 20, 40, count * 20);
+                              ctx.fillStyle = '#000';
+                              ctx.fillText(status.slice(0, 3), x, 170);
+                              ctx.fillText(count.toString(), x, 150 - count * 20 - 5);
+                              x += 60;
+                            });
+                          }
+                          document.body.appendChild(canvas);
+                        }}
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                         className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base mb-2"
                       >
                         View Chart
                       </button>
+<<<<<<< HEAD
                                              {showAppChartModal && (
                          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-all">
                            <div ref={appChartModalRef} className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 animate-fade-in">
@@ -438,6 +605,8 @@ const ProfileDashboard = () => {
                           </div>
                         </div>
                       )}
+=======
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                       <div className="text-sm sm:text-base text-blue-800">
                         {Object.entries(applicationStats).map(([status, count]) => (
                           <div key={status} className="flex justify-between">
@@ -452,11 +621,32 @@ const ProfileDashboard = () => {
                     <div className="p-4 sm:p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
                       <h4 className="text-base sm:text-lg font-semibold text-green-900 mb-2 sm:mb-4">Course Applications</h4>
                       <button
+<<<<<<< HEAD
                         onClick={() => setShowCourseChartModal(true)}
+=======
+                        onClick={() => {
+                          const canvas = document.createElement('canvas');
+                          canvas.width = 300;
+                          canvas.height = 200;
+                          const ctx = canvas.getContext('2d');
+                          if (ctx) {
+                            ctx.fillStyle = '#f3f4f6';
+                            ctx.fillRect(0, 0, 300, 200);
+                            ctx.fillStyle = '#10b981';
+                            const totalApplied = appliedCourses.length;
+                            ctx.fillRect(50, 150 - totalApplied * 20, 40, totalApplied * 20);
+                            ctx.fillStyle = '#000';
+                            ctx.fillText('Applied', 50, 170);
+                            ctx.fillText(totalApplied.toString(), 50, 150 - totalApplied * 20 - 5);
+                          }
+                          document.body.appendChild(canvas);
+                        }}
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                         className="text-green-600 hover:text-green-700 font-medium text-sm sm:text-base mb-2"
                       >
                         View Chart
                       </button>
+<<<<<<< HEAD
                                              {showCourseChartModal && (
                          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-all">
                            <div ref={courseChartModalRef} className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs mx-4 animate-fade-in">
@@ -488,6 +678,8 @@ const ProfileDashboard = () => {
                           </div>
                         </div>
                       )}
+=======
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                       <div className="text-sm sm:text-base text-green-800">
                         <div className="flex justify-between">
                           <span>Applied Courses</span>
@@ -506,9 +698,15 @@ const ProfileDashboard = () => {
                     <button className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base">View All</button>
                   </div>
                   <div className="space-y-3 sm:space-y-4">
+<<<<<<< HEAD
                     {normalizedApplications.map((app, index) => (
                       <motion.div
                         key={app.applicant_id || index}
+=======
+                    {applications.map((app, index) => (
+                      <motion.div
+                        key={app.id}
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -516,6 +714,7 @@ const ProfileDashboard = () => {
                       >
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
                           <div className="flex-1 mb-2 sm:mb-0">
+<<<<<<< HEAD
                             <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{app.job_title || 'N/A'}</h4>
                             <p className="text-gray-600 text-xs sm:text-sm">{app.department || 'N/A'}</p>
                             <p className="text-gray-500 text-xs sm:text-sm">Applied on {app.application_date ? new Date(app.application_date).toLocaleDateString() : 'N/A'}</p>
@@ -525,6 +724,17 @@ const ProfileDashboard = () => {
                               <div className="flex items-center space-x-1">
                                 {getStatusIcon(app.current_stage)}
                                 <span>{app.current_stage || 'N/A'}</span>
+=======
+                            <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{app.title}</h4>
+                            <p className="text-gray-600 text-xs sm:text-sm">{app.company}</p>
+                            <p className="text-gray-500 text-xs sm:text-sm">Applied on {app.appliedDate}</p>
+                          </div>
+                          <div className="flex items-center space-x-2 sm:space-x-3">
+                            <span className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium border ${getStatusColor(app.status)}`}>
+                              <div className="flex items-center space-x-1">
+                                {getStatusIcon(app.status)}
+                                <span>{app.status}</span>
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                               </div>
                             </span>
                             <button className="text-blue-600 hover:text-blue-700">
@@ -547,7 +757,11 @@ const ProfileDashboard = () => {
                   <div className="space-y-3 sm:space-y-4">
                     {appliedCourses.map((course, index) => (
                       <motion.div
+<<<<<<< HEAD
                         key={course.enrollment_id || index}
+=======
+                        key={course.id}
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -555,10 +769,15 @@ const ProfileDashboard = () => {
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
+<<<<<<< HEAD
                             <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{course.course_name || 'N/A'}</h4>
                             <p className="text-gray-600 text-xs sm:text-sm">Module: {course.module_name || 'N/A'}</p>
                             <p className="text-gray-600 text-xs sm:text-sm">Level: {course.level_name || 'N/A'}</p>
                             <p className="text-gray-600 text-xs sm:text-sm">Enrolled on {course.created_at ? new Date(course.created_at).toLocaleDateString() : 'N/A'}</p>
+=======
+                            <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{course.title}</h4>
+                            <p className="text-gray-600 text-xs sm:text-sm">Applied on {course.appliedDate}</p>
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                           </div>
                         </div>
                       </motion.div>
@@ -591,6 +810,7 @@ const ProfileDashboard = () => {
                 </svg>
               </button>
             </div>
+<<<<<<< HEAD
             <form
               className="space-y-3 sm:space-y-4"
               onSubmit={async (e) => {
@@ -614,10 +834,15 @@ const ProfileDashboard = () => {
                 }
               }}
             >
+=======
+            
+            <form className="space-y-3 sm:space-y-4">
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
               <div>
                 <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1 sm:mb-2">Full Name</label>
                 <input
                   type="text"
+<<<<<<< HEAD
                   value={editProfileData.name}
                   onChange={e => setEditProfileData(d => ({ ...d, name: e.target.value }))}
                   className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900"
@@ -650,21 +875,45 @@ const ProfileDashboard = () => {
                   className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                 />
               </div> */}
+=======
+                  defaultValue={user.name}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                />
+              </div>
+              <div>
+                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1 sm:mb-2">Email</label>
+                <input
+                  type="email"
+                  defaultValue={user.email}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                />
+              </div>
+              
+              
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
               <div className="flex space-x-2 sm:space-x-3 pt-3 sm:pt-4">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
                   className="flex-1 py-2 sm:py-3 px-3 sm:px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors text-sm sm:text-base"
+<<<<<<< HEAD
                   disabled={editLoading}
+=======
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   className="flex-1 py-2 sm:py-3 px-3 sm:px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm sm:text-base"
+<<<<<<< HEAD
                   disabled={editLoading}
                 >
                   {editLoading ? 'Saving...' : 'Save Changes'}
+=======
+                >
+                  Save Changes
+>>>>>>> 4403830d5035acfbb6af130369d0c19dba150213
                 </button>
               </div>
             </form>

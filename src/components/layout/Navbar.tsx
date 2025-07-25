@@ -5,7 +5,6 @@ import { Sun, Moon, LogOut, User, Menu, X } from "lucide-react";
 import { useTheme } from "../ThemeContext";
 import { useAuth } from "../AuthContext";
 import UserProfilePopup from "../auth/UserProfilePopup";
-import CoursesDropdown from "./CoursesDropdown";
 
 const Navbar = () => {
   const location = useLocation();
@@ -209,8 +208,13 @@ const Navbar = () => {
               >
                 What We Do
               </a>
-              {/* Courses Dropdown */}
-              <CoursesDropdown />
+              {/* Courses Link */}
+              <Link
+                to="/courses"
+                className={linkClass}
+              >
+                Courses
+              </Link>
               {/* Learn Dropdown */}
               <div className="relative" ref={learnDropdownRef}>
                 <button
@@ -517,11 +521,8 @@ const Navbar = () => {
                 <a href="/#services" onClick={e => handleNavClick(e, "services") } className={linkClass + " w-full text-left"}>Services</a>
                 <a href="/#about" onClick={e => handleNavClick(e, "about") } className={linkClass + " w-full text-left"}>About</a>
                 <a href="/#what-we-do" onClick={e => handleNavClick(e, "what-we-do") } className={linkClass + " w-full text-left"}>What We Do</a>
-                {/* Courses Dropdown (collapsible) */}
-                <details className="group">
-                  <summary className={linkClass + " w-full text-left cursor-pointer flex items-center justify-between"}>Courses <span className="ml-2">▼</span></summary>
-                  <CoursesDropdown />
-                </details>
+                {/* Courses Link */}
+                <Link to="/courses" className={linkClass + " w-full text-left"}>Courses</Link>
                 {/* Learn Dropdown (collapsible) */}
                 <details className="group">
                   <summary className={linkClass + " w-full text-left cursor-pointer flex items-center justify-between"}>Learn <span className="ml-2">▼</span></summary>
