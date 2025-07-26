@@ -26,6 +26,7 @@ import {
 import { useAuth } from "../../components/AuthContext";
 import NotificationPopup from "../../components/ui/NotificationPopup";
 import { Search } from "lucide-react";
+import { getCourseUrl } from "../../config/api";
 
 interface EnrolledUser {
   id: number;
@@ -148,7 +149,7 @@ const HRCourseManagement = () => {
       setUpdatingStatus(enrollmentId);
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `/api/courses/enrollments/${enrollmentId}/status`,
+        `${getCourseUrl(`/enrollments/${enrollmentId}/status`)}`,
         {
           method: "PUT",
           headers: {
@@ -184,7 +185,7 @@ const HRCourseManagement = () => {
       setSendingEmail(enrollmentId);
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `/api/courses/hr/enrollments/${enrollmentId}/send-success-email`,
+        `${getCourseUrl(`/hr/enrollments/${enrollmentId}/send-success-email`)}`,
         {
           method: "POST",
           headers: {
@@ -337,7 +338,7 @@ const HRCourseManagement = () => {
         ? `&search=${encodeURIComponent(searchTerm)}`
         : "";
       const response = await fetch(
-        `/api/courses/hr/enrolled-users/${courseId}/${moduleId}/${levelId}/paginated?page=${currentPage}&limit=10${searchQuery}`,
+        `${getCourseUrl(`/hr/enrolled-users/${courseId}/${moduleId}/${levelId}/paginated?page=${currentPage}&limit=10${searchQuery}`)}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
