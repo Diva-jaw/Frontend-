@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { User, ChevronLeft, ChevronRight, ArrowLeft, Mail, MapPin, FileText, Download, Eye, Trash2, X } from 'lucide-react';
 import debounce from 'lodash.debounce';
 
-// Define TypeScript interfaces
+// Define TypeScript interfacess
 interface Candidate {
   id: number;
   fullName: string;
