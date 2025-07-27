@@ -189,11 +189,14 @@ const PostJob = () => {
 
                 {/* Department */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Department</label>
+                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Department <span className="text-gray-700">*</span>
+                  </label>
                   <select
                     name="department"
                     value={formData.department}
                     onChange={handleChange}
+                    required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] text-black"
                   >
                     <option value="">Select Department</option>
@@ -264,7 +267,9 @@ const PostJob = () => {
 
                 {/* Experience Level */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Experience (Years)</label>
+                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Experience (Years) <span className="text-gray-700">*</span>
+                  </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <Clock className="text-gray-400" size={20} />
@@ -275,6 +280,7 @@ const PostJob = () => {
                       value={formData.experience_level}
                       onChange={handleChange}
                       min="0"
+                      required
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                       placeholder="e.g., 3"
                     />
@@ -283,13 +289,16 @@ const PostJob = () => {
 
                 {/* Application Deadline */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Deadline</label>
+                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                    Deadline <span className="text-gray-700">*</span>
+                  </label>
                   <div className="relative">
                     <input
                       type="date"
                       name="application_deadline"
                       value={formData.application_deadline}
                       onChange={handleChange}
+                      required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
                     />
                   </div>

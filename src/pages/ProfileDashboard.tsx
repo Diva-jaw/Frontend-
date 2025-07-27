@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../components/AuthContext';
 import { apiService } from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 // --- Add TypeScript interfaces ---
 interface Profile {
@@ -43,11 +44,11 @@ interface Application {
 }
 
 interface CourseEnrollment {
-  enrollment_id?: number;
-  course_name?: string;
-  module_name?: string;
-  level_name?: string;
-  created_at?: string;
+  id?: number;
+  name?: string;
+  description?: string;
+  level_range?: string;
+  updated_at?: string;
 }
 
 const ProfileDashboard = () => {
@@ -61,6 +62,7 @@ const ProfileDashboard = () => {
   const appChartModalRef = useRef<HTMLDivElement>(null);
   const courseChartModalRef = useRef<HTMLDivElement>(null);
   const [showEnrollModal, setShowEnrollModal] = useState(false);
+  const navigate = useNavigate();
 
   // Dynamic state
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -100,6 +102,7 @@ const ProfileDashboard = () => {
   useEffect(() => {
     if (!authUser) return;
     setLoading(true);
+    window.scrollTo(0, 0);
     setError('');
     Promise.all([
       apiService.getUserProfile(authUser.id),
@@ -527,7 +530,7 @@ const ProfileDashboard = () => {
                               </div>
                             </span>
                             <button className="text-blue-600 hover:text-blue-700">
-                              <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
+                              {/* <Eye className="w-3 h-3 sm:w-4 sm:h-4" /> */}
                             </button>
                           </div>
                         </div>
@@ -539,15 +542,22 @@ const ProfileDashboard = () => {
 
               {activeTab === 'courses' && (
                 <div>
-                  <div className="flex items-center justify-between mb-4 sm:mb-6">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900">My Courses</h3>
+                  <div className="flex items-center justify-between mb-6 sm:mb-8">
+                    <div>
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">My Courses</h3>
+                      <p className="text-gray-600 text-sm sm:text-base">Manage your course enrollments and track your progress</p>
+                    </div>
                     <button
-                      className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base bg-blue-50 px-3 py-1 rounded-lg shadow-sm"
-                      onClick={() => setShowEnrollModal(true)}
+                      className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                      onClick={() => navigate('/all-courses')}
                     >
-                      Enroll in New Course
+                      <span className="flex items-center space-x-2">
+                        <BookOpen className="w-4 h-4" />
+                        <span>Enroll in New Course</span>
+                      </span>
                     </button>
                   </div>
+                  
                   {showEnrollModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-all">
                       <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 animate-fade-in">
@@ -562,32 +572,92 @@ const ProfileDashboard = () => {
                       </div>
                     </div>
                   )}
-                  <div className="space-y-3 sm:space-y-4">
+                  
+                  <div className="space-y-4 sm:space-y-6">
                     {loading ? (
-                      <div className="text-center text-gray-500 py-8">Loading courses...</div>
+                      <div className="text-center py-12">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <p className="text-gray-600">Loading your courses...</p>
+                      </div>
                     ) : error ? (
-                      <div className="text-center text-red-500 py-8">{error}</div>
+                      <div className="text-center py-12">
+                        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+                          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                          <p className="text-red-600 font-medium">{error}</p>
+                        </div>
+                      </div>
                     ) : appliedCourses.length === 0 ? (
-                      <div className="text-center text-gray-500 py-8">You have not applied to any courses yet.</div>
+                      <div className="text-center py-12">
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-8">
+                          <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                          <h4 className="text-lg font-semibold text-gray-700 mb-2">No Courses Yet</h4>
+                          <p className="text-gray-600 mb-4">You haven't enrolled in any courses yet. Start your learning journey today!</p>
+                          <button
+                            onClick={() => navigate('/all-courses')}
+                            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                          >
+                            Browse Courses
+                          </button>
+                        </div>
+                      </div>
                     ) : (
-                      appliedCourses.map((course, index) => (
-                        <motion.div
-                          key={course.enrollment_id || index}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: index * 0.1 }}
-                          className="border border-gray-200 rounded-xl p-3 sm:p-4 hover:shadow-md transition-shadow bg-white"
-                        >
-                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                            <div className="flex-1 mb-2 sm:mb-0">
-                              <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{course.course_name || 'N/A'}</h4>
-                              <p className="text-gray-600 text-xs sm:text-sm">Module: {course.module_name || 'N/A'}</p>
-                              <p className="text-gray-600 text-xs sm:text-sm">Level: {course.level_name || 'N/A'}</p>
-                              <p className="text-gray-500 text-xs sm:text-sm">Enrolled on {course.created_at ? new Date(course.created_at).toLocaleDateString() : 'N/A'}</p>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                        {appliedCourses.map((course, index) => (
+                          <motion.div
+                            key={course.id || index}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.1 }}
+                            className="group relative bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-all duration-300 hover:border-blue-300 overflow-hidden"
+                          >
+                            {/* Gradient overlay on hover */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 to-purple-50/0 group-hover:from-blue-50/30 group-hover:to-purple-50/30 transition-all duration-300"></div>
+                            
+                            <div className="relative">
+                              {/* Course header */}
+                              <div className="flex items-start justify-between mb-4">
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-2 mb-2">
+                                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                      <BookOpen className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div>
+                                      <h4 className="font-bold text-gray-900 text-lg">{course.name || 'N/A'}</h4>
+                                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                        {course.level_range || 'N/A'}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                                {/* <div className="flex items-center space-x-1">
+                                  <span className="text-xs text-gray-500">ID: {course.id || 'N/A'}</span>
+                                </div> */}
+                              </div>
+                              
+                              {/* Course description */}
+                              <p className="text-gray-600 text-sm mb-4 line-clamp-3">{course.description || 'N/A'}</p>
+                              
+                              {/* Course details */}
+                              <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                                <span className="flex items-center space-x-1">
+                                  <Calendar className="w-3 h-3" />
+                                  <span>Enrolled: {course.updated_at ? new Date(course.updated_at).toLocaleDateString() : 'N/A'}</span>
+                                </span>
+                              </div>
+                              
+                              {/* Action buttons */}
+                              {/* <div className="flex space-x-2">
+                                <button className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-3 rounded-lg font-medium hover:from-green-600 hover:to-emerald-700 transition-all duration-200 text-sm shadow-sm hover:shadow-md">
+                                  Continue Learning
+                                </button>
+                                <button className="flex-1 text-blue-600 hover:text-blue-700 font-medium text-sm border border-blue-200 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors">
+                                  View Progress
+                                </button>
+                              </div> */}
                             </div>
-                          </div>
-                        </motion.div>
-                      ))
+                          </motion.div>
+                        ))}
+                      </div>
                     )}
                   </div>
                 </div>

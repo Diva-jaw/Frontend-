@@ -12,16 +12,12 @@ import {
   ArrowRight,
   Loader2
 } from 'lucide-react';
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCourseContext } from '../contexts/CourseContext';
 import CourseCard from '../components/ui/CourseCard';
 import { Course } from '../services/courseService';
 
-
-
-
-
-const AllCourses = () => {
+const AllCourses: React.FC = () => {
   const navigate = useNavigate();
   const { courses, loading, error, fetchCourses } = useCourseContext();
   const [componentError, setComponentError] = useState<string | null>(null);
