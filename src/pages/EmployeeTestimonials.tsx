@@ -15,7 +15,7 @@ const EmployeeTestimonials: React.FC = () => {
     },
     {
       id: 2,
-      name: "Sudhanshu",
+      name: "Nikhil",
       role: "General Manager",
       photo: "/sudhanshu.jpg",
       text: '"Leading such a dynamic and driven team is a privilege. The culture here encourages innovation, accountability, and continuous growth."',
