@@ -368,38 +368,48 @@ const Navbar = () => {
                           navigate("/profile-dashboard");
                           setProfilePopupOpen(false);
                         }}
+                        onLogout={() => {
+                          logout();
+                          setProfilePopupOpen(false);
+                        }}
                       />
                     </div>
                   )}
                 </div>
-                <button
-                  onClick={logout}
-                  className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:from-red-600 hover:to-red-700 font-semibold text-sm shadow-md transition-all duration-200 flex items-center gap-2 ml-2"
-                  title="Logout"
-                >
-                  <LogOut size={16} />
-                  Logout
-                </button>
               </>
             )}
             {isLoggedIn && user && user.role === 'hr' && (
-              <div className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative select-none cursor-default">
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
-                  {getUserInitial(user?.name || 'User')}
-                </div>
-                <span className="text-sm font-medium text-green-700 dark:text-green-300">{user?.name || 'User'}</span>
+              <div className="relative" ref={profileRef}>
+                <button
+                  className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
+                  onClick={() => setProfilePopupOpen((v) => !v)}
+                  aria-haspopup="true"
+                  aria-expanded={profilePopupOpen}
+                  type="button"
+                >
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                    {getUserInitial(user?.name || 'User')}
+                  </div>
+                  <span className="text-sm font-medium text-green-700 dark:text-green-300">{user?.name || 'User'}</span>
+                </button>
+                {profilePopupOpen && (
+                  <div className="absolute right-0 mt-3 z-50" style={{ minWidth: 320 }}>
+                    <UserProfilePopup
+                      name={user?.name || "User"}
+                      email={user?.email || "user@email.com"}
+                      onViewProfile={() => {
+                        navigate("/profile-dashboard");
+                        setProfilePopupOpen(false);
+                      }}
+                      onLogout={() => {
+                        logout();
+                        setProfilePopupOpen(false);
+                      }}
+                    />
+                  </div>
+                )}
               </div>
-            )}
-            {isLoggedIn && user && user.role === 'hr' && (
-              <button
-                onClick={logout}
-                className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:from-red-600 hover:to-red-700 font-semibold text-sm shadow-md transition-all duration-200 flex items-center gap-2 ml-2"
-                title="Logout"
-              >
-                <LogOut size={16} />
-                Logout
-              </button>
             )}
             {!isLoggedIn && (
               <>
@@ -470,7 +480,10 @@ const Navbar = () => {
                       </span>
                     </div>
                     <button
-                      onClick={logout}
+                      onClick={() => {
+                        logout();
+                        setMobileMenuOpen(false);
+                      }}
                       className="w-full px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-full hover:from-red-600 hover:to-red-700 font-semibold text-sm shadow-md transition-all duration-200 flex items-center gap-2 mb-2 min-w-0"
                       title="Logout"
                       style={{maxWidth:'100vw',overflowX:'auto',textOverflow:'ellipsis'}}

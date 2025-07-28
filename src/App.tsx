@@ -21,6 +21,7 @@ import AllCourses from "./pages/AllCourses";
 import CourseDetails from "./pages/CourseDetails";
 import ModuleDetails from "./pages/ModuleDetails";
 import LevelEnrollment from "./pages/LevelEnrollment";
+import ScrollToTop from "./components/ScrollToTop";
 
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import { ToastProvider } from "./components/ToastContext";
@@ -92,6 +93,7 @@ function App() {
           <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans transition-colors duration-300">
             <ToastProvider>
               <Router>
+                <ScrollToTop />
                 <Header isScrolled={isScrolled} />
                 <main>
                   <Routes>
