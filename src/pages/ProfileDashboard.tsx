@@ -173,7 +173,9 @@ const ProfileDashboard = () => {
   const totalCertificates = 0; // Set to 0 or fetch dynamically if available
 
   // Ensure applications is always an array
+  console.log("applications",applications);
   const normalizedApplications = Array.isArray(applications) ? applications : applications ? [applications] : [];
+console.log("normalizedApplications",normalizedApplications);
 
   // Dashboard Overview (dynamic)
   const applicationStats = {
@@ -556,6 +558,11 @@ const ProfileDashboard = () => {
                         </div>
                       </motion.div>
                     ))}
+                  </div>
+                  
+                  {/* Minimal email note */}
+                  <div className="mt-2 text-xs text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                    📧 Check email for updates
                   </div>
                 </div>
               )}

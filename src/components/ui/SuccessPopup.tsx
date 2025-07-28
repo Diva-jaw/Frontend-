@@ -100,7 +100,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                 <p className="text-gray-600 leading-relaxed">
                   We are pleased to confirm your enrollment with{" "}
                   <span className="font-semibold text-blue-600">
-                    RFT Systems
+                  Ruhil Future Technologies
                   </span>
                   . Your application has been received and is currently being
                   processed by our academic team..
@@ -242,7 +242,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
               transition={{ delay: 1.0 }}
               className="bg-gray-900 text-white p-6 text-center  flex-shrink-0 border-t border-gray-700"
             >
-              <h5 className="text-lg font-semibold mb-2">RFT Systems</h5>
+              <h5 className="text-lg font-semibold mb-2">Ruhil Future Technologies</h5>
               <p className="text-gray-300 text-sm">
                 Empowering minds, transforming futures
               </p>
