@@ -344,7 +344,7 @@ const Navbar = () => {
                 {/* User Avatar with First Character - now a button */}
                 <div className="relative" ref={profileRef}>
                   <button
-                    className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
+                    className="flex justify-center items-center w-12 h-12 aspect-square bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
                     onClick={() => setProfilePopupOpen((v) => !v)}
                     aria-haspopup="true"
                     aria-expanded={profilePopupOpen}
@@ -355,9 +355,6 @@ const Navbar = () => {
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
                       {getUserInitial(user?.name || "User")}
                     </div>
-                    <span className="text-sm font-medium text-green-700 dark:text-green-300">
-                      {user?.name || "User"}
-                    </span>
                   </button>
                   {profilePopupOpen && (
                     <div className="absolute right-0 mt-3 z-50" style={{ minWidth: 320 }}>
@@ -381,7 +378,7 @@ const Navbar = () => {
             {isLoggedIn && user && user.role === 'hr' && (
               <div className="relative" ref={profileRef}>
                 <button
-                  className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
+                  className="flex justify-center items-center w-12 h-12 aspect-square bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
                   onClick={() => setProfilePopupOpen((v) => !v)}
                   aria-haspopup="true"
                   aria-expanded={profilePopupOpen}
@@ -391,7 +388,6 @@ const Navbar = () => {
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
                     {getUserInitial(user?.name || 'User')}
                   </div>
-                  <span className="text-sm font-medium text-green-700 dark:text-green-300">{user?.name || 'User'}</span>
                 </button>
                 {profilePopupOpen && (
                   <div className="absolute right-0 mt-3 z-50" style={{ minWidth: 320 }}>
@@ -426,12 +422,12 @@ const Navbar = () => {
                   Register
                 </button>
                 <span className="h-6 w-px bg-gray-400 dark:bg-gray-600 mx-2 rounded-full" />
-                <Link
+                {/* <Link
                   to="/employers-login"
                   className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 flex items-center gap-2"
                 >
                   Employer Login
-                </Link>
+                </Link> */}
               </>
             )}
             <button
@@ -475,9 +471,6 @@ const Navbar = () => {
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md min-w-0" style={{minWidth:'2rem'}}>
                         {getUserInitial(user?.name || "User")}
                       </div>
-                      <span className="text-sm font-medium text-green-700 dark:text-green-300 truncate min-w-0" style={{maxWidth:'60vw',overflow:'hidden',textOverflow:'ellipsis'}}>
-                        {user?.name || "User"}
-                      </span>
                     </div>
                     <button
                       onClick={() => {
@@ -507,13 +500,13 @@ const Navbar = () => {
                     >
                       <span className="truncate min-w-0">Register</span>
                     </button>
-                    <Link
+                    {/* <Link
                       to="/employers-login"
                       className="w-full px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 flex items-center gap-2 mb-2 min-w-0"
                       style={{maxWidth:'100vw',overflowX:'auto',textOverflow:'ellipsis'}}
                     >
                       <span className="truncate min-w-0">Employer Login</span>
-                    </Link>
+                    </Link> */}
                   </>
                 )}
               </div>
@@ -559,7 +552,7 @@ const Navbar = () => {
                   <>
                     <a href="/signin" className={linkClass + " w-full text-left"}>Login</a>
                     <a href="/signup" className={linkClass + " w-full text-left"}>Register</a>
-                    <Link to="/employers-login" className={linkClass + " w-full text-left"}>Employer Login</Link>
+                    {/* <Link to="/employers-login" className={linkClass + " w-full text-left"}>Employer Login</Link> */}
                   </>
                 )}
               </nav>

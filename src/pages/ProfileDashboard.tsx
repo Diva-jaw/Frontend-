@@ -149,11 +149,11 @@ const ProfileDashboard = () => {
 
   const getStatusColor = (status: string | undefined) => {
     switch (status) {
-      case 'Under Review': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'Interview Scheduled': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'Accepted': return 'bg-green-100 text-green-800 border-green-200';
-      case 'Rejected': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'Under Review': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-800';
+      case 'Interview Scheduled': return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-800';
+      case 'Accepted': return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-200 dark:border-green-800';
+      case 'Rejected': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-200 dark:border-red-800';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700';
     }
   };
 
@@ -198,9 +198,9 @@ console.log("normalizedApplications",normalizedApplications);
   if (!profile) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-100 to-purple-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
       {/* Header */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
+      <header className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           {/* Logo/Brand */}
           <motion.div
@@ -209,20 +209,20 @@ console.log("normalizedApplications",normalizedApplications);
             transition={{ duration: 0.5 }}
             className="flex items-center space-x-3"
           >
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-900 rounded-lg flex items-center justify-center">
               <User className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">SkillSync</h1>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">SkillSync</h1>
           </motion.div>
 
           {/* Navigation & Time */}
           <div className="flex items-center space-x-6">
           <nav className="hidden lg:flex space-x-6">
-            <a href="#overview" className="text-gray-600 hover:text-blue-600 font-medium">Overview</a>
-            <a href="#applications" className="text-gray-600 hover:text-blue-600 font-medium">Applications</a>
-            <a href="#courses" className="text-gray-600 hover:text-blue-600 font-medium">Courses</a>
+            <a href="#overview" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Overview</a>
+            <a href="#applications" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Applications</a>
+            <a href="#courses" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium">Courses</a>
           </nav>
-            <div className="text-sm text-gray-600 hidden md:block">
+            <div className="text-sm text-gray-600 dark:text-gray-300 hidden md:block">
               {new Date().toLocaleString('en-US', {
                 weekday: 'long',
                 hour: '2-digit',
@@ -237,18 +237,18 @@ console.log("normalizedApplications",normalizedApplications);
           <div className="relative">
             <motion.button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center space-x-3 bg-gray-100 p-2 rounded-full hover:bg-gray-200 transition-colors"
+              className="flex items-center space-x-3 bg-gray-100 dark:bg-gray-800 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
               <div className="relative">
                 {/* Avatar fallback logic can be improved if you store avatar URLs */}
-                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+                <div className="w-8 h-8 rounded-full bg-blue-500 dark:bg-blue-700 flex items-center justify-center text-white font-bold">
                   {profile.name.charAt(0)}
                 </div>
               </div>
-              <span className="text-sm font-medium text-gray-700 hidden md:inline">{profile.name.split(' ')[0]}</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-200 hidden md:inline">{profile.name.split(' ')[0]}</span>
             </motion.button>
 
             {showUserMenu && (
@@ -256,13 +256,13 @@ console.log("normalizedApplications",normalizedApplications);
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 ring-1 ring-gray-200"
+                className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg py-2 ring-1 ring-gray-200 dark:ring-gray-800"
               >
-                <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2">
+                <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center space-x-2">
                   <Settings className="w-4 h-4" />
                   <span>Settings</span>
                 </button>
-                <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center space-x-2">
+                <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center space-x-2">
                   <LogOut className="w-4 h-4" />
                   <span>Logout</span>
                 </button>
@@ -281,33 +281,33 @@ console.log("normalizedApplications",normalizedApplications);
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="bg-white rounded-xl shadow-lg p-4 sm:p-6"
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-800"
             >
               <div className="text-center mb-4 sm:mb-6">
                 <div className="relative inline-block">
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-3xl sm:text-4xl">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-blue-500 dark:bg-blue-700 flex items-center justify-center text-white font-bold text-3xl sm:text-4xl">
                     {profile.name.charAt(0)}
                   </div>
-                  <div className="absolute -bottom-1 -right-1 w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full border-4 border-white dark:border-gray-900 flex items-center justify-center">
                     <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   </div>
                 </div>
-                <h2 className="text-lg sm:text-xl font-bold text-gray-900 mt-2 sm:mt-4">{profile.name}</h2>
-                <p className="text-gray-600 text-sm sm:text-base">Active Member</p>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mt-2 sm:mt-4">{profile.name}</h2>
+                <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Active Member</p>
               </div>
 
               <div className="space-y-3 sm:space-y-4">
-                <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-                  <span className="text-gray-700 text-sm sm:text-base">{profile.email}</span>
+                  <span className="text-gray-700 dark:text-gray-200 text-sm sm:text-base">{profile.email}</span>
                 </div>
-                <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-                  <span className="text-gray-700 text-sm sm:text-base">{profile.phone_no || 'Add your phone number'}</span>
+                  <span className="text-gray-700 dark:text-gray-200 text-sm sm:text-base">{profile.phone_no || 'Add your phone number'}</span>
                 </div>
-                <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-                  <span className="text-gray-700 text-sm sm:text-base">Member since {profile.created_at ? new Date(profile.created_at).toLocaleDateString() : 'N/A'}</span>
+                  <span className="text-gray-700 dark:text-gray-200 text-sm sm:text-base">Member since {profile.created_at ? new Date(profile.created_at).toLocaleDateString() : 'N/A'}</span>
                 </div>
                 {/* <div className="flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg">
                   <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
@@ -326,8 +326,8 @@ console.log("normalizedApplications",normalizedApplications);
                 <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="text-sm sm:text-base">Edit Profile</span>
               </button>
-              {editSuccess && <div className="text-green-600 text-sm mt-2">{editSuccess}</div>}
-              {editError && <div className="text-red-600 text-sm mt-2">{editError}</div>}
+              {editSuccess && <div className="text-green-600 text-sm mt-2">Edit Success: {editSuccess}</div>}
+              {editError && <div className="text-red-600 text-sm mt-2">Edit Error: {editError}</div>}
             </motion.div>
 
             {/* Quick Stats */}
@@ -335,46 +335,43 @@ console.log("normalizedApplications",normalizedApplications);
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white rounded-xl shadow-lg p-4 sm:p-6"
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-800"
             >
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Quick Stats</h3>
-
-              <div className="flex items-center justify-between p-2 sm:p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">Quick Stats</h3>
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex items-center justify-between p-3 sm:p-4 rounded-lg shadow border border-purple-200 dark:border-purple-700 bg-purple-100 dark:bg-gray-800">
                   <div className="flex items-center space-x-2 sm:space-x-3">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500 rounded-lg flex items-center justify-center">
                       <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-xs sm:text-sm text-gray-600">Track Applications</p>
-                      <p className="text-lg sm:text-xl font-bold text-gray-900">{totalApplications}</p>
+                      <p className="text-xs sm:text-sm font-semibold text-purple-800 dark:text-purple-200">Track Applications</p>
+                      <p className="text-lg sm:text-xl font-bold text-purple-900 dark:text-white">{totalApplications}</p>
                     </div>
                   </div>
                 </div>
-              <div className="space-y-3 sm:space-y-4">
-                <div className="flex items-center justify-between p-2 sm:p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg">
+                <div className="flex items-center justify-between p-3 sm:p-4 rounded-lg shadow border border-blue-200 dark:border-blue-700 bg-blue-100 dark:bg-gray-800">
                   <div className="flex items-center space-x-2 sm:space-x-3">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                       <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-xs sm:text-sm text-gray-600">Courses Applied</p>
-                      <p className="text-lg sm:text-xl font-bold text-gray-900">{totalCourses}</p>
+                      <p className="text-xs sm:text-sm font-semibold text-blue-800 dark:text-blue-200">Courses Applied</p>
+                      <p className="text-lg sm:text-xl font-bold text-blue-900 dark:text-white">{totalCourses}</p>
                     </div>
                   </div>
                 </div>
-
-                <div className="flex items-center justify-between p-2 sm:p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg">
+                <div className="flex items-center justify-between p-3 sm:p-4 rounded-lg shadow border border-green-200 dark:border-green-700 bg-green-100 dark:bg-gray-800">
                   <div className="flex items-center space-x-2 sm:space-x-3">
                     <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-500 rounded-lg flex items-center justify-center">
                       <Award className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-xs sm:text-sm text-gray-600">Certificates</p>
-                      <p className="text-lg sm:text-xl font-bold text-gray-900">{totalCertificates}</p>
+                      <p className="text-xs sm:text-sm font-semibold text-green-800 dark:text-green-200">Certificates</p>
+                      <p className="text-lg sm:text-xl font-bold text-green-900 dark:text-white">{totalCertificates}</p>
                     </div>
                   </div>
                 </div>
-
               </div>
             </motion.div>
           </div>
@@ -386,9 +383,9 @@ console.log("normalizedApplications",normalizedApplications);
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white rounded-xl shadow-lg p-4 sm:p-6"
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-4 sm:p-6"
             >
-              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-1 bg-gray-100 rounded-lg p-1">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
                 {[
                   { id: 'overview', label: 'Overview', icon: Eye },
                   { id: 'applications', label: ' Track Applications', icon: BookOpen },
@@ -399,8 +396,8 @@ console.log("normalizedApplications",normalizedApplications);
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex-1 flex items-center justify-center space-x-1 sm:space-x-2 py-2 sm:py-3 px-2 sm:px-4 rounded-md font-medium transition-all duration-200 ${
                       activeTab === tab.id
-                        ? 'bg-white text-blue-600 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
+                        ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-700'
                     }`}
                   >
                     <tab.icon className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -416,25 +413,25 @@ console.log("normalizedApplications",normalizedApplications);
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-xl shadow-lg p-4 sm:p-6"
+              className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-800"
             >
               {activeTab === 'overview' && (
                 <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">Dashboard Overview</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">Dashboard Overview</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     {/* Application Tracking */}
-                    <div className="p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
-                      <h4 className="text-base sm:text-lg font-semibold text-blue-900 mb-2 sm:mb-4">Application Tracking</h4>
+                    <div className="p-4 sm:p-6 rounded-xl shadow-lg border border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900">
+                      <h4 className="text-base sm:text-lg font-bold text-blue-900 dark:text-blue-200 mb-2 sm:mb-4 tracking-wide">Application Tracking</h4>
                       <button
                         onClick={() => setShowAppChartModal(true)}
-                        className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base mb-2"
+                        className="text-blue-600 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-400 font-semibold text-sm sm:text-base mb-2 underline underline-offset-2"
                       >
                         View Chart
                       </button>
                                              {showAppChartModal && (
                          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-all">
                            <div ref={appChartModalRef} className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 animate-fade-in">
-                             <h4 className="text-xl font-bold mb-4 text-center text-blue-900 bg-blue-50 py-2 px-4 rounded-lg border-b-2 border-blue-200">Application Status Chart</h4>
+                             <h4 className="text-xl font-bold mb-4 text-center text-blue-900 dark:text-blue-100 bg-blue-50 py-2 px-4 rounded-lg border-b-2 border-blue-200">Application Status Chart</h4>
                             <div className="flex items-end h-48 space-x-4 justify-center">
                               {Object.entries(applicationStats).map(([status, count], i) => (
                                 <div key={status} className="flex flex-col items-center">
@@ -448,7 +445,7 @@ console.log("normalizedApplications",normalizedApplications);
                                     }}
                                     title={`${status}: ${count}`}
                                   ></div>
-                                  <span className="mt-2 text-xs font-medium text-gray-700 text-center">{status}</span>
+                                  <span className="mt-2 text-xs font-medium text-gray-700 dark:text-gray-300 text-center">{status}</span>
                                   <span className="text-xs text-gray-500">{count}</span>
                                 </div>
                               ))}
@@ -462,7 +459,7 @@ console.log("normalizedApplications",normalizedApplications);
                           </div>
                         </div>
                       )}
-                      <div className="text-sm sm:text-base text-blue-800">
+                      <div className="text-sm sm:text-base text-blue-900 dark:text-blue-100 font-medium space-y-1 mt-2">
                         {Object.entries(applicationStats).map(([status, count]) => (
                           <div key={status} className="flex justify-between">
                             <span>{status}</span>
@@ -473,18 +470,18 @@ console.log("normalizedApplications",normalizedApplications);
                     </div>
 
                     {/* Course Application Tracking */}
-                    <div className="p-4 sm:p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
-                      <h4 className="text-base sm:text-lg font-semibold text-green-900 mb-2 sm:mb-4">Course Applications</h4>
+                    <div className="p-4 sm:p-6 rounded-xl shadow-lg border border-green-200 dark:border-green-800 bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-800 dark:to-gray-900">
+                      <h4 className="text-base sm:text-lg font-bold text-green-900 dark:text-green-200 mb-2 sm:mb-4 tracking-wide">Course Applications</h4>
                       <button
                         onClick={() => setShowCourseChartModal(true)}
-                        className="text-green-600 hover:text-green-700 font-medium text-sm sm:text-base mb-2"
+                        className="text-green-600 hover:text-green-700 dark:text-green-300 dark:hover:text-green-400 font-semibold text-sm sm:text-base mb-2 underline underline-offset-2"
                       >
                         View Chart
                       </button>
                                              {showCourseChartModal && (
                          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-all">
                            <div ref={courseChartModalRef} className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-xs mx-4 animate-fade-in">
-                             <h4 className="text-xl font-bold mb-4 text-center text-green-900 bg-green-50 py-2 px-4 rounded-lg border-b-2 border-green-200">Course Applications Chart</h4>
+                             <h4 className="text-xl font-bold mb-4 text-center text-green-900 dark:text-green-100 bg-green-50 py-2 px-4 rounded-lg border-b-2 border-green-200">Course Applications Chart</h4>
                             <div className="flex items-end h-48 space-x-4 justify-center">
                               {Object.entries(courseApplicationStats).map(([label, count], i) => (
                                 <div key={label} className="flex flex-col items-center">
@@ -498,7 +495,7 @@ console.log("normalizedApplications",normalizedApplications);
                                     }}
                                     title={`${label}: ${count}`}
                                   ></div>
-                                  <span className="mt-2 text-xs font-medium text-gray-700 text-center">{label}</span>
+                                  <span className="mt-2 text-xs font-medium text-gray-700 dark:text-gray-300 text-center">{label}</span>
                                   <span className="text-xs text-gray-500">{count}</span>
                                 </div>
                               ))}
@@ -512,11 +509,13 @@ console.log("normalizedApplications",normalizedApplications);
                           </div>
                         </div>
                       )}
-                      <div className="text-sm sm:text-base text-green-800">
-                        <div className="flex justify-between">
-                          <span>Applied Courses</span>
-                          <span>{appliedCourses.length}</span>
-                        </div>
+                      <div className="text-sm sm:text-base text-green-900 dark:text-green-100 font-medium space-y-1 mt-2">
+                        {Object.entries(courseApplicationStats).map(([label, count]) => (
+                          <div key={label} className="flex justify-between">
+                            <span>{label}</span>
+                            <span>{count}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -526,23 +525,22 @@ console.log("normalizedApplications",normalizedApplications);
               {activeTab === 'applications' && (
                 <div>
                   <div className="flex items-center justify-between mb-4 sm:mb-6">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900">Job Applications</h3>
-                    <button className="text-blue-600 hover:text-blue-700 font-medium text-sm sm:text-base">View All</button>
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Job Applications</h3>
                   </div>
-                  <div className="space-y-3 sm:space-y-4">
+                  <div className="space-y-3 sm:space-y-4 max-h-72 overflow-y-auto pr-2">
                     {normalizedApplications.map((app, index) => (
                       <motion.div
                         key={app.applicant_id || index}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className="border border-gray-200 rounded-xl p-3 sm:p-4 hover:shadow-md transition-shadow"
+                        className="border border-gray-200 dark:border-gray-800 rounded-xl p-3 sm:p-4 hover:shadow-md transition-shadow"
                       >
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
                           <div className="flex-1 mb-2 sm:mb-0">
-                            <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{app.job_title || 'N/A'}</h4>
-                            <p className="text-gray-600 text-xs sm:text-sm">{app.department || 'N/A'}</p>
-                            <p className="text-gray-500 text-xs sm:text-sm">Applied on {app.application_date ? new Date(app.application_date).toLocaleDateString() : 'N/A'}</p>
+                            <h4 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base">{app.job_title || 'N/A'}</h4>
+                            <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm">{app.department || 'N/A'}</p>
+                            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">Applied on {app.application_date ? new Date(app.application_date).toLocaleDateString() : 'N/A'}</p>
                           </div>
                           <div className="flex items-center space-x-2 sm:space-x-3">
                             <span className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium border ${getStatusColor(app.current_stage)}`}>
@@ -561,8 +559,11 @@ console.log("normalizedApplications",normalizedApplications);
                   </div>
                   
                   {/* Minimal email note */}
-                  <div className="mt-2 text-xs text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                    📧 Check email for updates
+                  <div className="mt-4 flex items-center justify-center">
+                    <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-blue-300 dark:from-blue-900 dark:to-blue-700 text-blue-800 dark:text-blue-200 font-semibold shadow-sm border border-blue-200 dark:border-blue-800 text-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-500 dark:text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12H8m8 0a4 4 0 11-8 0 4 4 0 018 0zm0 0v4m0-4V8" /></svg>
+                      <span>Catch up updates via email</span>
+                    </span>
                   </div>
                 </div>
               )}
@@ -571,8 +572,8 @@ console.log("normalizedApplications",normalizedApplications);
                 <div>
                   <div className="flex items-center justify-between mb-6 sm:mb-8">
                     <div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">My Courses</h3>
-                      <p className="text-gray-600 text-sm sm:text-base">Manage your course enrollments and track your progress</p>
+                      <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">My Courses</h3>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Manage your course enrollments and track your progress</p>
                     </div>
                     <button
                       className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
@@ -600,7 +601,7 @@ console.log("normalizedApplications",normalizedApplications);
                     </div>
                   )}
                   
-                  <div className="space-y-4 sm:space-y-6">
+                  <div className="space-y-4 sm:space-y-6 max-h-72 overflow-y-auto pr-2">
                     {loading ? (
                       <div className="text-center py-12">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
@@ -615,10 +616,10 @@ console.log("normalizedApplications",normalizedApplications);
                       </div>
                     ) : appliedCourses.length === 0 ? (
                       <div className="text-center py-12">
-                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-8">
+                        <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8">
                           <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                          <h4 className="text-lg font-semibold text-gray-700 mb-2">No Courses Yet</h4>
-                          <p className="text-gray-600 mb-4">You haven't enrolled in any courses yet. Start your learning journey today!</p>
+                          <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">No Courses Yet</h4>
+                          <p className="text-gray-600 dark:text-gray-300 mb-4">You haven't enrolled in any courses yet. Start your learning journey today!</p>
                           <button
                             onClick={() => navigate('/all-courses')}
                             className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
@@ -635,10 +636,10 @@ console.log("normalizedApplications",normalizedApplications);
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.3, delay: index * 0.1 }}
-                            className="group relative bg-white border border-gray-200 rounded-xl p-6 hover:shadow-xl transition-all duration-300 hover:border-blue-300 overflow-hidden"
+                            className="group relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:shadow-xl transition-all duration-300 hover:border-blue-300 dark:hover:border-blue-500 overflow-hidden"
                           >
                             {/* Gradient overlay on hover */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 to-purple-50/0 group-hover:from-blue-50/30 group-hover:to-purple-50/30 transition-all duration-300"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-50/0 to-purple-50/0 group-hover:from-blue-50/30 group-hover:to-purple-50/30 dark:group-hover:from-blue-900/10 dark:group-hover:to-purple-900/10 transition-all duration-300"></div>
                             
                             <div className="relative">
                               {/* Course header */}
@@ -649,38 +650,25 @@ console.log("normalizedApplications",normalizedApplications);
                                       <BookOpen className="w-5 h-5 text-white" />
                                     </div>
                                     <div>
-                                      <h4 className="font-bold text-gray-900 text-lg">{course.name || 'N/A'}</h4>
-                                      <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                      <h4 className="font-bold text-gray-900 dark:text-white text-lg">{course.name || 'N/A'}</h4>
+                                      <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium rounded-full">
                                         {course.level_range || 'N/A'}
                                       </span>
                                     </div>
                                   </div>
                                 </div>
-                                {/* <div className="flex items-center space-x-1">
-                                  <span className="text-xs text-gray-500">ID: {course.id || 'N/A'}</span>
-                                </div> */}
                               </div>
                               
                               {/* Course description */}
-                              <p className="text-gray-600 text-sm mb-4 line-clamp-3">{course.description || 'N/A'}</p>
+                              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">{course.description || 'N/A'}</p>
                               
                               {/* Course details */}
-                              <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-4">
                                 <span className="flex items-center space-x-1">
                                   <Calendar className="w-3 h-3" />
                                   <span>Enrolled: {course.updated_at ? new Date(course.updated_at).toLocaleDateString() : 'N/A'}</span>
                                 </span>
                               </div>
-                              
-                              {/* Action buttons */}
-                              {/* <div className="flex space-x-2">
-                                <button className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2 px-3 rounded-lg font-medium hover:from-green-600 hover:to-emerald-700 transition-all duration-200 text-sm shadow-sm hover:shadow-md">
-                                  Continue Learning
-                                </button>
-                                <button className="flex-1 text-blue-600 hover:text-blue-700 font-medium text-sm border border-blue-200 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors">
-                                  View Progress
-                                </button>
-                              </div> */}
                             </div>
                           </motion.div>
                         ))}
@@ -747,16 +735,17 @@ console.log("normalizedApplications",normalizedApplications);
               }}
             >
               <div>
-                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1 sm:mb-2">Full Name</label>
+                <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">Full Name</label>
                 <input
                   type="text"
                   value={editProfileData.name}
                   onChange={e => setEditProfileData(d => ({ ...d, name: e.target.value }))}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder-gray-500 dark:placeholder-gray-400"
+                  placeholder="Enter your full name"
                 />
               </div>
               <div>
-                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1 sm:mb-2">
+                <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 mb-1 sm:mb-2">
                   Phone Number 
                 </label>
                 <input
@@ -764,8 +753,8 @@ console.log("normalizedApplications",normalizedApplications);
                   value={editProfileData.phone_no}
                   onChange={e => handlePhoneChange(e.target.value)}
                   placeholder="Enter 10-digit mobile number"
-                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 ${
-                    phoneError ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 placeholder-gray-500 dark:placeholder-gray-400 ${
+                    phoneError ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600'
                   }`}
                 />
                 {phoneError && <p className="text-red-500 text-xs mt-1 flex items-center">
@@ -795,7 +784,7 @@ console.log("normalizedApplications",normalizedApplications);
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="flex-1 py-2 sm:py-3 px-3 sm:px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors text-sm sm:text-base"
+                  className="flex-1 py-2 sm:py-3 px-3 sm:px-4 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm sm:text-base"
                   disabled={editLoading}
                 >
                   Cancel
