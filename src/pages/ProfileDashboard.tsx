@@ -74,6 +74,26 @@ const ProfileDashboard = () => {
   const [editLoading, setEditLoading] = useState(false);
   const [editError, setEditError] = useState('');
   const [editSuccess, setEditSuccess] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+
+  // Mobile number validation function
+  const validateMobileNumber = (phone: string): boolean => {
+    if (!phone.trim()) return true; // Allow empty phone number
+    const phoneRegex = /^[0-9]{10,10}$/;
+    return phoneRegex.test(phone.trim());
+  };
+
+  // Handle phone number change with validation
+  const handlePhoneChange = (value: string) => {
+    setEditProfileData(d => ({ ...d, phone_no: value }));
+    
+    // Clear error if field is empty or valid
+    if (!value.trim() || validateMobileNumber(value)) {
+      setPhoneError('');
+    } else {
+      setPhoneError('Please enter a valid 10-digit mobile number');
+    }
+  };
 
   // Modal close on ESC and click outside
   useEffect(() => {
@@ -692,9 +712,18 @@ const ProfileDashboard = () => {
               onSubmit={async (e) => {
                 e.preventDefault();
                 if (!authUser) return;
+                
+                // Validate phone number before submission
+                if (editProfileData.phone_no && !validateMobileNumber(editProfileData.phone_no)) {
+                  setPhoneError('Please enter a valid 10-digit mobile number');
+                  return;
+                }
+                
                 setEditLoading(true);
                 setEditError('');
                 setEditSuccess('');
+                setPhoneError('');
+                
                 try {
                   await apiService.updateUserProfile(authUser.id, editProfileData);
                   setEditSuccess('Profile updated successfully!');
@@ -720,13 +749,22 @@ const ProfileDashboard = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1 sm:mb-2">Phone</label>
+                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1 sm:mb-2">
+                  Phone Number 
+                </label>
                 <input
-                  type="text"
+                  type="tel"
                   value={editProfileData.phone_no}
-                  onChange={e => setEditProfileData(d => ({ ...d, phone_no: e.target.value }))}
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900"
+                  onChange={e => handlePhoneChange(e.target.value)}
+                  placeholder="Enter 10-digit mobile number"
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-900 ${
+                    phoneError ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'
+                  }`}
                 />
+                {phoneError && <p className="text-red-500 text-xs mt-1 flex items-center">
+                  <AlertCircle className="w-3 h-3 mr-1" />
+                  {phoneError}
+                </p>}
               </div>
               {/* <div>
                 <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1 sm:mb-2">University</label>
