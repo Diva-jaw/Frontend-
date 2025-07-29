@@ -234,10 +234,10 @@ const AllCoursesMegaPage: React.FC = () => {
           {/* Table Header */}
           <div className="bg-gradient-to-r from-slate-900 to-slate-800 px-2 py-2 z-10 border-b border-slate-300 rounded-t-xl">
             <div className="grid grid-cols-12 gap-2 text-white font-bold text-xs">
-              <div className="col-span-1 text-center bg-slate-700 py-1 rounded border border-slate-600">#</div>
-              <div className="col-span-6 text-center bg-slate-700 py-1 px-2 rounded border border-slate-600">Course Name</div>
-              <div className="col-span-3"></div>
-              <div className="col-span-2 text-center bg-slate-700 py-1 rounded border border-slate-600">Duration</div>
+              <div className="col-span-1 text-center bg-gradient-to-r from-blue-600 to-blue-700 py-2 rounded border border-blue-500 shadow-sm">#</div>
+              <div className="col-span-4 text-center bg-gradient-to-r from-blue-600 to-blue-700 py-2 px-2 rounded border border-blue-500 shadow-sm">Course Name</div>
+              <div className="col-span-5"></div>
+              <div className="col-span-2 text-center bg-gradient-to-r from-blue-600 to-blue-700 py-2 rounded border border-blue-500 shadow-sm">Duration</div>
             </div>
           </div>
 
@@ -250,19 +250,19 @@ const AllCoursesMegaPage: React.FC = () => {
                 ref={el => rowRefs.current[course.id] = el}
               >
                 {/* FORMAL TABLE ROW */}
-                <div className="px-2 py-2">
-                  <div className="grid grid-cols-12 gap-2 items-center">
+                <div className="px-3 py-3">
+                  <div className="grid grid-cols-12 gap-3 items-center">
                     {/* Row Number */}
                     <div className="col-span-1 text-center">
-                      <span className="bg-gray-200 text-gray-800 font-bold text-xs px-1 py-0.5 rounded border border-gray-300">
-                        {index + 1}
+                      <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold text-xs px-2 py-1 rounded border border-blue-300 shadow-sm">
+                        #{index + 1}
                       </span>
                     </div>
 
                     {/* Course Name */}
-                    <div className="col-span-6 relative" ref={el => courseNameRefs.current[course.id] = el}>
+                    <div className="col-span-4 relative" ref={el => courseNameRefs.current[course.id] = el}>
                       <div 
-                        className="flex items-center space-x-2 bg-gray-50 p-2 rounded border border-gray-200 shadow-sm hover:shadow transition-all duration-300 cursor-pointer max-w-2xl"
+                        className="flex items-center space-x-2 bg-gradient-to-r from-gray-50 to-gray-100 p-2 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer w-full h-full"
                         onMouseEnter={() => {
                           setHoveredCourseId(course.id);
                           // Close any open modules from other courses
@@ -278,22 +278,22 @@ const AllCoursesMegaPage: React.FC = () => {
                         }}
                         onMouseLeave={() => setHoveredCourseId(null)}
                       >
-                        <div className={`p-1 rounded ${getCourseIconColor(course.name)} text-white shadow border border-white flex-shrink-0`}>
-                          {getCourseIcon(course.name, 36)}
+                        <div className={`p-1.5 rounded-lg ${getCourseIconColor(course.name)} text-white shadow-md border border-white flex-shrink-0`}>
+                          {getCourseIcon(course.name, 32)}
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="text-sm font-bold text-gray-900 mb-0.5">{course.name}</h3>
-                          <p className="text-xs text-gray-600 leading-tight truncate whitespace-nowrap overflow-ellipsis">{course.description}</p>
+                          <p className="text-xs text-gray-600 leading-tight line-clamp-1">{course.description}</p>
                         </div>
                       </div>
                     </div>
 
                     {/* Gap/Empty Space */}
-                    <div className="col-span-3"></div>
+                    <div className="col-span-5"></div>
 
                     {/* Duration */}
                     <div className="col-span-2 text-center">
-                      <div className="bg-orange-100 text-orange-800 font-bold text-xs px-2 py-1 rounded border border-orange-300">
+                      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-sm px-3 py-2 rounded-lg border border-orange-400 shadow-sm">
                         {Math.ceil(course.modules.reduce((total, module) => {
                           const weeks = parseInt(module.duration.split(' ')[0]);
                           return total + weeks;
