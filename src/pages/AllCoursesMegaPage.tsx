@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCourseContext } from '../contexts/CourseContext';
 import { CourseWithModulesAndLevels, CourseModule, ModuleLevel, ModuleTopic } from '../services/courseService';
+import { useAuth } from '../components/AuthContext';
 import { 
   Database, 
   Code, 
@@ -40,6 +41,7 @@ const courseIcons = {
 const AllCoursesMegaPage: React.FC = () => {
   const navigate = useNavigate();
   const { getAllCoursesWithModulesAndLevels } = useCourseContext();
+  const { isLoggedIn } = useAuth();
   const [courses, setCourses] = useState<CourseWithModulesAndLevels[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -103,6 +105,12 @@ const AllCoursesMegaPage: React.FC = () => {
       'Mechanical CAD': 'bg-gradient-to-r from-gray-500 to-gray-700',
     };
     return colors[courseName as keyof typeof colors] || 'bg-gradient-to-r from-blue-500 to-blue-700';
+  };
+
+  const handleEnrollClick = () => {
+    // This button should work without authentication - no redirect to login
+    // Navigate to specific course enrollment
+    navigate('/course/6/module/11/level/31');
   };
 
   if (loading) {
@@ -178,7 +186,7 @@ const AllCoursesMegaPage: React.FC = () => {
           <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100 text-base font-semibold">
             <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-green-100 dark:bg-green-900">
               <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-users text-green-600"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx={9} cy={7} r={4}></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            </span>15,000+ Students
+            </span>Satisfied Students
           </div>
           <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100 text-base font-semibold">
             <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-yellow-100 dark:bg-yellow-900">
@@ -201,7 +209,11 @@ const AllCoursesMegaPage: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-4 z-10">
-          <button className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-700 to-purple-700 text-white px-10 py-4 rounded-xl text-lg font-bold hover:from-blue-800 hover:to-purple-800 transition-all duration-300 shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-400 border-2 border-blue-200 dark:border-blue-800" tabIndex={0}>
+          <button 
+            onClick={handleEnrollClick}
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-700 to-purple-700 text-white px-10 py-4 rounded-xl text-lg font-bold hover:from-blue-800 hover:to-purple-800 transition-all duration-300 shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-400 border-2 border-blue-200 dark:border-blue-800" 
+            tabIndex={0}
+          >
             <span>Enroll Now</span>
             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right "><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
           </button>

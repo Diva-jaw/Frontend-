@@ -1,25 +1,47 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { 
-  Brain, 
   Clock, 
   Star, 
   CheckCircle, 
-  Users, 
-  TrendingUp, 
-  Target, 
-  BarChart3,
-  BookOpen,
-  Award,
-  Zap,
-  ArrowRight,
   Code,
-  Code2
+  Rocket,
+  ArrowRight,
+  Users,
+  BookOpen,
+  Play,
+  Target,
+  Award,
+  Monitor,
+  Palette,
+  DollarSign,
+  Settings,
+  Database,
+  BarChart3,
+  PenTool,
+  Briefcase
 } from 'lucide-react';
+import { useAuth } from '../components/AuthContext';
+import { handleEnrollmentClick } from '../utils/enrollmentUtils';
 import EnrollmentModal from '../components/ui/EnrollmentModal';
+import SuccessPopup from '../components/ui/SuccessPopup';
 
 const AIMLLevel1 = () => {
   const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
+  const [enrollmentData, setEnrollmentData] = useState<any>(null);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const { isLoggedIn, setRedirectPath } = useAuth();
+  const navigate = useNavigate();
+
+  const handleEnrollClick = () => {
+    handleEnrollmentClick(isLoggedIn, navigate, setShowEnrollmentModal, setRedirectPath);
+  };
+
+  const handleEnrollmentSuccess = (data: any) => {
+    setEnrollmentData(data);
+    setShowSuccessPopup(true);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
@@ -35,7 +57,7 @@ const AIMLLevel1 = () => {
             >
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-12 h-12 bg-blue-600 dark:bg-blue-500 rounded-xl flex items-center justify-center">
-                  <Brain className="w-6 h-6 text-white" />
+                  <Rocket className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-blue-600 dark:text-blue-400 font-semibold">AI/ML</span>
               </div>
@@ -61,7 +83,7 @@ const AIMLLevel1 = () => {
               </div>
 
               <motion.button
-                onClick={() => setShowEnrollmentModal(true)}
+                onClick={handleEnrollClick}
                 className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -79,7 +101,7 @@ const AIMLLevel1 = () => {
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl dark:shadow-gray-900/50 p-8 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
                 <div className="text-center">
                   <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Brain className="w-12 h-12 text-white" />
+                    <Rocket className="w-12 h-12 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Course Overview</h3>
                   <div className="space-y-4">
@@ -133,7 +155,7 @@ const AIMLLevel1 = () => {
                   "Feature engineering basics",
                   "Model evaluation metrics"
                 ],
-                icon: Brain,
+                icon: Rocket,
                 color: "blue"
               },
               {
@@ -169,7 +191,7 @@ const AIMLLevel1 = () => {
                   "Overfitting and underfitting",
                   "Hyperparameter tuning"
                 ],
-                icon: TrendingUp,
+                icon: Play,
                 color: "green"
               },
               {
@@ -247,7 +269,7 @@ const AIMLLevel1 = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: Brain,
+                icon: Rocket,
                 title: "ML Fundamentals",
                 description: "Understand core machine learning concepts and algorithms."
               },
@@ -262,7 +284,7 @@ const AIMLLevel1 = () => {
                 description: "Learn to prepare data for machine learning models."
               },
               {
-                icon: TrendingUp,
+                icon: Play,
                 title: "Model Evaluation",
                 description: "Evaluate and optimize model performance effectively."
               },
@@ -419,7 +441,7 @@ const AIMLLevel1 = () => {
               Join thousands of successful AI professionals who have transformed their careers with our comprehensive training program.
             </p>
             <motion.button
-              onClick={() => setShowEnrollmentModal(true)}
+              onClick={handleEnrollClick}
               className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -434,8 +456,22 @@ const AIMLLevel1 = () => {
       <EnrollmentModal
         isOpen={showEnrollmentModal}
         onClose={() => setShowEnrollmentModal(false)}
+        onEnrollmentSuccess={handleEnrollmentSuccess}
         courseName="AI and Machine Learning"
         levelName="Level 1"
+        courseId={1}
+        moduleId={1}
+        levelId={1}
+      />
+
+      {/* Success Popup */}
+      <SuccessPopup
+        isOpen={showSuccessPopup}
+        onClose={() => setShowSuccessPopup(false)}
+        courseName="AI and Machine Learning"
+        moduleName="AI/ML Fundamentals"
+        levelName="Level 1"
+        userName={enrollmentData?.userName || "Student"}
       />
     </div>
   );
