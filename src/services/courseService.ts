@@ -15,7 +15,9 @@ export interface Course {
   name: string;
   description: string;
   level_range: string;
+  status?: 'draft' | 'published';
   created_at: string;
+  updated_at?: string;
 }
 
 export interface CourseModule {

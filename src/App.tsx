@@ -57,6 +57,17 @@ import UserProfilePopup from "./components/auth/UserProfilePopup";
 import HRCourseManagement from "./pages/hrDashboard/HRCourseManagement";
 import ProfileDashboard from "./pages/ProfileDashboard";
 
+// Course Management imports
+import CourseManagementDashboard from "./pages/hrDashboard/courseManagement/CourseManagementDashboard";
+import CreateCourse from "./pages/hrDashboard/courseManagement/CreateCourse";
+import AddModule from "./pages/hrDashboard/courseManagement/AddModule";
+import AddLevel from "./pages/hrDashboard/courseManagement/AddLevel";
+import AddTopic from "./pages/hrDashboard/courseManagement/AddTopic";
+import AddSubpoint from "./pages/hrDashboard/courseManagement/AddSubpoint";
+import DraftCourses from "./pages/hrDashboard/courseManagement/DraftCourses";
+import CourseBuilder from "./pages/hrDashboard/courseManagement/CourseBuilder";
+import CourseDetailsView from "./pages/hrDashboard/courseManagement/CourseDetails";
+
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showChat, setShowChat] = useState(false);
@@ -157,7 +168,19 @@ function App() {
                     <Route path="applied-courses/:courseName/:moduleName" element={<ModuleCategories />} />
                     <Route path="applied-courses/:courseName/:moduleName/:category" element={<CourseApplications />} />
                     <Route path="applied-courses/:courseName/:categoryName/:level" element={<CourseApplications />} />
-                  </Route>
+                    
+                    {/* Course Management Routes */}
+                    <Route path="course-management" element={<CourseManagementDashboard />} />
+                    <Route path="course-management/create" element={<CreateCourse />} />
+                    <Route path="course-management/:courseId" element={<CourseDetailsView />} />
+                    <Route path="course-management/:courseId/add-module" element={<AddModule />} />
+                    <Route path="course-management/:courseId/:moduleId/add-level" element={<AddLevel />} />
+                    <Route path="course-management/:courseId/:moduleId/add-topic" element={<AddTopic />} />
+                                  <Route path="course-management/:courseId/:moduleId/:levelId/:topicId/add-subpoint" element={<AddSubpoint />} />
+              <Route path="course-management/drafts" element={<DraftCourses />} />
+              <Route path="course-management/builder" element={<CourseBuilder />} />
+              <Route path="course-management/builder/:courseId" element={<CourseBuilder />} />
+            </Route>
                   <Route path="/apply-job" element={<ApplyJobPage />} />
                 </Routes>
               </main>
