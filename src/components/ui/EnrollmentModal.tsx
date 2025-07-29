@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Loader2, User, Mail, Phone, GraduationCap, Building, Calendar, CheckCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { courseService } from '../../services/courseService';
 import { useAuth } from '../../components/AuthContext';
 
@@ -34,7 +35,8 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
   moduleId,
   levelId
 }) => {
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, setRedirectPath } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<EnrollmentFormData>({
@@ -45,6 +47,17 @@ const EnrollmentModal: React.FC<EnrollmentModalProps> = ({
     department: '',
     year: ''
   });
+
+  // Check authentication when modal opens
+  useEffect(() => {
+    if (isOpen && !isLoggedIn) {
+      // Store the current path before redirecting to login
+      setRedirectPath(window.location.pathname);
+      onClose();
+      navigate('/signin');
+      return;
+    }
+  }, [isOpen, isLoggedIn, onClose, navigate, setRedirectPath]);
 
   // Load user data when modal opens
   useEffect(() => {

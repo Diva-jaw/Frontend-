@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../components/AuthContext';
 import { 
   Clock, 
   Star, 
@@ -13,7 +15,12 @@ import {
   Zap,
   TrendingUp,
   Target,
-  Award
+  Award,
+  Monitor,
+  Palette,
+  DollarSign,
+  Settings,
+  BookOpen
 } from 'lucide-react';
 import { ModuleLevel } from '../../services/courseService';
 
@@ -59,6 +66,18 @@ const getLevelColor = (levelName: string) => {
 const LevelCard: React.FC<LevelCardProps> = ({ level, onClick, index, topics = [] }) => {
   const IconComponent = getLevelIcon(level.level_name);
   const color = getLevelColor(level.level_name);
+  const { isLoggedIn, setRedirectPath } = useAuth();
+  const navigate = useNavigate();
+
+  const handleEnrollClick = () => {
+    if (!isLoggedIn) {
+      // Store the current path before redirecting to login
+      setRedirectPath(window.location.pathname);
+      navigate('/signin');
+      return;
+    }
+    onClick(level);
+  };
 
   return (
     <motion.div
@@ -149,7 +168,7 @@ const LevelCard: React.FC<LevelCardProps> = ({ level, onClick, index, topics = [
 
         
         <motion.button
-          onClick={() => onClick(level)}
+          onClick={handleEnrollClick}
           className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 dark:from-blue-500 dark:via-purple-500 dark:to-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-base hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:via-purple-600 dark:hover:to-blue-700 transition-all duration-150 transform shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group-hover:gap-3 cursor-pointer"
           whileHover={{ 
             scale: 1.05,
@@ -157,7 +176,7 @@ const LevelCard: React.FC<LevelCardProps> = ({ level, onClick, index, topics = [
           }}
           whileTap={{ scale: 0.98 }}
         >
-          <span>Enroll Now</span>
+          <span>{isLoggedIn ? 'Enroll Now' : 'Login to Enroll'}</span>
           <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-150" />
         </motion.button>
       </div>

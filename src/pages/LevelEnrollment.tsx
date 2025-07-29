@@ -21,7 +21,7 @@ const LevelEnrollment = () => {
   const { courseId, moduleId, levelId } = useParams<{ courseId: string; moduleId: string; levelId: string }>();
   const navigate = useNavigate();
   const { getCourseDetails, getModuleLevels } = useCourseContext();
-  const { isLoggedIn, user } = useAuth();
+  const { isLoggedIn, user, setRedirectPath } = useAuth();
   
   const [courseDetails, setCourseDetails] = useState<any>(null);
   const [moduleDetails, setModuleDetails] = useState<any>(null);
@@ -122,7 +122,9 @@ const LevelEnrollment = () => {
     console.log('LevelEnrollment: Enroll button clicked');
     
     if (!isLoggedIn) {
-      alert('Please log in to enroll in courses.');
+      // Store the current path before redirecting to login
+      setRedirectPath(window.location.pathname);
+      navigate('/signin');
       return;
     }
     

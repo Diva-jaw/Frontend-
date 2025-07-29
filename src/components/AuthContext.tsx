@@ -15,6 +15,9 @@ interface AuthContextType {
   logout: () => void;
   updateUser: (userData: User) => void;
   loading: boolean;
+  setRedirectPath: (path: string) => void;
+  getRedirectPath: () => string | null;
+  clearRedirectPath: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -68,6 +71,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, []);
 
+  const setRedirectPath = (path: string) => {
+    console.log('[AuthContext] Setting redirect path:', path);
+    localStorage.setItem('redirectPath', path);
+  };
+
+  const getRedirectPath = (): string | null => {
+    const path = localStorage.getItem('redirectPath');
+    console.log('[AuthContext] Getting redirect path:', path);
+    return path;
+  };
+
+  const clearRedirectPath = () => {
+    console.log('[AuthContext] Clearing redirect path');
+    localStorage.removeItem('redirectPath');
+  };
+
   const login = (token: string, userData: User) => {
     localStorage.setItem('authToken', token);
     localStorage.setItem('user', JSON.stringify(userData));
@@ -114,6 +133,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     updateUser,
     loading,
+    setRedirectPath,
+    getRedirectPath,
+    clearRedirectPath,
   };
 
   return (

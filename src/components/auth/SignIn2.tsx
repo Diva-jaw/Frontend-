@@ -8,15 +8,20 @@ const SignIn: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [hasLoggedIn, setHasLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const { login, isLoggedIn } = useAuth();
+  const { login, isLoggedIn, getRedirectPath, clearRedirectPath } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/', { replace: true });
+    if (isLoggedIn && !hasLoggedIn) {
+      // Only redirect if we haven't just logged in (prevents automatic redirect)
+      const redirectPath = getRedirectPath();
+      if (!redirectPath) {
+        navigate('/', { replace: true });
+      }
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, hasLoggedIn, getRedirectPath]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -40,11 +45,26 @@ const SignIn: React.FC = () => {
       // Use AuthContext login function to update global state
       if (response.token && response.user) {
         login(response.token, response.user);
-        if (response.user.role === 'hr') {
-          navigate('/hr');
-        } else {
-          navigate('/');
-        }
+        setHasLoggedIn(true); // Mark that we just logged in
+        
+        // Add a small delay to ensure login state is updated
+        setTimeout(() => {
+          // Check for stored redirect path
+          const redirectPath = getRedirectPath();
+          console.log('Redirect path found:', redirectPath); // Debug log
+          if (redirectPath) {
+            clearRedirectPath(); // Clear the stored path
+            console.log('Navigating to:', redirectPath); // Debug log
+            navigate(redirectPath);
+          } else {
+            // Default navigation based on user role
+            if (response.user && response.user.role === 'hr') {
+              navigate('/hr');
+            } else {
+              navigate('/');
+            }
+          }
+        }, 100);
       }
       
       setIsLoading(false);

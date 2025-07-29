@@ -10,7 +10,7 @@ const EmployersLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, getRedirectPath, clearRedirectPath } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,11 +28,25 @@ const EmployersLogin = () => {
       // Use AuthContext login function to update global state
       if (response.token && response.user) {
         login(response.token, response.user);
-        if (response.user.role === 'hr') {
-          navigate('/hr');
-        } else {
-          navigate('/');
-        }
+        
+        // Add a small delay to ensure login state is updated
+        setTimeout(() => {
+          // Check for stored redirect path
+          const redirectPath = getRedirectPath();
+          console.log('HR Login - Redirect path found:', redirectPath); // Debug log
+          if (redirectPath) {
+            clearRedirectPath(); // Clear the stored path
+            console.log('HR Login - Navigating to:', redirectPath); // Debug log
+            navigate(redirectPath);
+          } else {
+            // Default navigation based on user role
+            if (response.user && response.user.role === 'hr') {
+              navigate('/hr');
+            } else {
+              navigate('/');
+            }
+          }
+        }, 100);
         setIsLoading(false);
         return;
       }
