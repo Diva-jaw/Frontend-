@@ -107,10 +107,10 @@ const AllCoursesMegaPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-20 w-20 border-b-4 border-blue-600 mx-auto mb-6"></div>
-          <p className="text-2xl text-gray-700 font-medium">Loading courses...</p>
+          <p className="text-2xl text-gray-700 dark:text-gray-200 font-medium">Loading courses...</p>
         </div>
       </div>
     );
@@ -118,9 +118,9 @@ const AllCoursesMegaPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900 dark:to-pink-900 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-2xl text-red-600 mb-6 font-medium">Error: {error}</p>
+          <p className="text-2xl text-red-600 dark:text-red-400 mb-6 font-medium">Error: {error}</p>
           <button 
             onClick={() => window.location.reload()}
             className="bg-red-600 text-white px-8 py-4 rounded-lg hover:bg-red-700 transition-colors text-lg font-medium"
@@ -214,13 +214,13 @@ const AllCoursesMegaPage: React.FC = () => {
       {/* End AI Masterclass Hero Section */}
 
       {/* Hero Section */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-4">
           <div className="text-center">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-3">
               Explore Our Other Courses Below:
             </h1>
-            <p className="text-base text-blue-700 font-semibold max-w-2xl mx-auto leading-snug">
+            <p className="text-base text-blue-700 dark:text-blue-300 font-semibold max-w-2xl mx-auto leading-snug">
               Hover over any course to discover its detailed modules and levels.
             </p>
           </div>
@@ -230,21 +230,21 @@ const AllCoursesMegaPage: React.FC = () => {
       {/* FORMAL COURSES TABLE */}
       <div className="w-full px-1 py-2">
         {/* FORMAL TABLE CONTAINER */}
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200 z-30">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden border border-slate-200 dark:border-gray-700 z-30">
           {/* Table Header */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-100 px-2 py-2 z-10 border-b border-blue-200 rounded-t-xl">
-            <div className="grid grid-cols-12 gap-2 text-gray-800 font-bold text-xs">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-700 px-2 py-2 z-10 border-b border-blue-200 dark:border-gray-600 rounded-t-xl">
+            <div className="grid grid-cols-12 gap-2 text-gray-800 dark:text-gray-200 font-bold text-xs">
               <div className="col-span-1 text-center bg-gradient-to-r from-blue-400 to-blue-500 py-2 rounded border border-blue-300 shadow-sm text-white">#</div>
               <div className="col-span-11 text-center bg-gradient-to-r from-indigo-400 to-purple-500 py-2 px-2 rounded border border-indigo-300 shadow-sm text-white">Course Name</div>
             </div>
           </div>
 
           {/* Table Body */}
-          <div className="divide-y divide-slate-200 pb-32">
+          <div className="divide-y divide-slate-200 dark:divide-gray-700 pb-32">
             {courses.map((course, index) => (
               <div
                 key={course.id}
-                className="relative group border-b border-slate-200 bg-white hover:bg-blue-100/60 hover:shadow-xl transition-all duration-200 rounded-xl mb-2"
+                className="relative group border-b border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-blue-100/60 dark:hover:bg-blue-900/20 hover:shadow-xl transition-all duration-200 rounded-xl mb-2"
                 ref={el => rowRefs.current[course.id] = el}
               >
                 {/* FORMAL TABLE ROW */}
@@ -260,7 +260,7 @@ const AllCoursesMegaPage: React.FC = () => {
                     {/* Course Name */}
                     <div className="col-span-11 relative" ref={el => courseNameRefs.current[course.id] = el}>
                       <div 
-                        className="flex items-center space-x-3 bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer w-full h-full"
+                        className="flex items-center space-x-3 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 p-3 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer w-full h-full"
                         onMouseEnter={() => {
                           setHoveredCourseId(course.id);
                           // Close any open modules from other courses
@@ -280,8 +280,8 @@ const AllCoursesMegaPage: React.FC = () => {
                           {getCourseIcon(course.name, 36)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-base font-bold text-gray-900 mb-1">{course.name}</h3>
-                          <p className="text-sm text-gray-600 leading-tight line-clamp-2">{course.description}</p>
+                          <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">{course.name}</h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 leading-tight line-clamp-2">{course.description}</p>
                         </div>
                       </div>
                     </div>
@@ -297,7 +297,7 @@ const AllCoursesMegaPage: React.FC = () => {
       {hoveredCourseId !== null && dropdownPosition &&
         createPortal(
           <div
-            className="z-50 bg-blue-50 border border-blue-200 shadow-lg rounded-b p-2"
+            className="z-50 bg-blue-50 dark:bg-gray-800 border border-blue-200 dark:border-gray-600 shadow-lg rounded-b p-2"
             style={{
               position: 'absolute',
               top: dropdownPosition.top,
@@ -310,13 +310,13 @@ const AllCoursesMegaPage: React.FC = () => {
             onMouseLeave={() => setHoveredCourseId(null)}
           >
             <div className="p-2">
-              <h4 className="text-xs font-bold text-blue-900 mb-1 flex items-center border-b border-blue-200 pb-1">
+              <h4 className="text-xs font-bold text-blue-900 dark:text-blue-300 mb-1 flex items-center border-b border-blue-200 dark:border-gray-600 pb-1">
                 <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-1"></div>
                 {courses.find(c => c.id === hoveredCourseId)?.name} - Module Details
               </h4>
               <div className="space-y-1">
                 {courses.find(c => c.id === hoveredCourseId)?.modules.map((module) => (
-                  <div key={module.id} className="bg-white rounded p-2 hover:bg-blue-100 transition-colors border border-blue-200 relative shadow-sm">
+                  <div key={module.id} className="bg-white dark:bg-gray-700 rounded p-2 hover:bg-blue-100 dark:hover:bg-gray-600 transition-colors border border-blue-200 dark:border-gray-600 relative shadow-sm">
                     <div
                       className="w-full text-left flex items-center justify-between cursor-pointer"
                       onMouseEnter={() => setClickedModuleId(prev => ({ ...prev, [hoveredCourseId]: module.id }))}
@@ -330,17 +330,17 @@ const AllCoursesMegaPage: React.FC = () => {
                           </svg>
                         </div>
                         <div>
-                          <h5 className="text-sm font-bold text-blue-900 mb-1">{module.name}</h5>
-                          <p className="text-xs text-blue-600 font-medium">{module.duration}</p>
+                          <h5 className="text-sm font-bold text-blue-900 dark:text-blue-300 mb-1">{module.name}</h5>
+                          <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">{module.duration}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded-full border border-blue-200">
+                        <div className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs font-bold px-2 py-1 rounded-full border border-blue-200 dark:border-blue-700">
                           {module.levels?.length || 0} Levels
                         </div>
                         <ChevronRight 
                           size={12} 
-                          className={`transition-transform duration-300 text-blue-600 ${clickedModuleId[hoveredCourseId] === module.id ? 'rotate-90' : ''}`}
+                          className={`transition-transform duration-300 text-blue-600 dark:text-blue-400 ${clickedModuleId[hoveredCourseId] === module.id ? 'rotate-90' : ''}`}
                         />
                       </div>
                     </div>
@@ -348,12 +348,12 @@ const AllCoursesMegaPage: React.FC = () => {
                     {/* Levels Dropdown - Separate box on right */}
                     {clickedModuleId[hoveredCourseId] === module.id && (
                       <div 
-                        className="absolute left-full top-0 ml-3 bg-green-50 border border-green-200 shadow-lg rounded-lg p-3" 
+                        className="absolute left-full top-0 ml-3 bg-green-50 dark:bg-gray-700 border border-green-200 dark:border-gray-600 shadow-lg rounded-lg p-3" 
                         style={{ width: '250px', transform: 'translateX(-50%)', zIndex: 9999 }}
                         onMouseEnter={() => setClickedModuleId(prev => ({ ...prev, [hoveredCourseId]: module.id }))}
                         onMouseLeave={() => setClickedModuleId(prev => ({ ...prev, [hoveredCourseId]: null }))}
                       >
-                        <h5 className="text-sm font-bold text-green-900 mb-2 flex items-center border-b border-green-200 pb-2">
+                        <h5 className="text-sm font-bold text-green-900 dark:text-green-300 mb-2 flex items-center border-b border-green-200 dark:border-gray-600 pb-2">
                           <div className="p-1.5 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white shadow-sm mr-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M9 11H1l8-8 8 8h-8v8z"></path>
@@ -365,7 +365,7 @@ const AllCoursesMegaPage: React.FC = () => {
                           {module.levels.map((level) => (
                             <div
                               key={level.id}
-                              className="bg-white rounded-lg p-2 hover:bg-green-100 transition-all duration-200 cursor-pointer border border-green-200 hover:border-green-300 shadow-sm"
+                              className="bg-white dark:bg-gray-600 rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-500 transition-all duration-200 cursor-pointer border border-green-200 dark:border-gray-500 hover:border-green-300 dark:hover:border-gray-400 shadow-sm"
                               onClick={() => handleLevelClick(hoveredCourseId, module.id, level.id)}
                             >
                               <div className="flex items-center justify-between">
@@ -377,19 +377,19 @@ const AllCoursesMegaPage: React.FC = () => {
                                     </svg>
                                   </div>
                                   <div>
-                                    <h6 className="text-xs font-bold text-green-900">{level.level_name}</h6>
-                                    <p className="text-xs text-green-700">{level.duration} • {level.level_range}</p>
+                                    <h6 className="text-xs font-bold text-green-900 dark:text-green-300">{level.level_name}</h6>
+                                    <p className="text-xs text-green-700 dark:text-green-400">{level.duration} • {level.level_range}</p>
                                   </div>
                                 </div>
                                 <div className="flex items-center space-x-1">
-                                  <div className="flex items-center text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-200">
+                                  <div className="flex items-center text-xs text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900 px-2 py-1 rounded-full border border-green-200 dark:border-green-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
                                       <circle cx="12" cy="12" r="3"></circle>
                                       <path d="M12 1v6m0 6v6"></path>
                                     </svg>
                                     <span className="font-medium">{level.topics?.length || 0}</span>
                                   </div>
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 dark:text-green-400">
                                     <path d="M5 12h14"></path>
                                     <path d="m12 5 7 7-7 7"></path>
                                   </svg>

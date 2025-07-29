@@ -17,7 +17,7 @@ import EmployeeTestimonials from "./pages/EmployeeTestimonials";
 import LifeAtRFTSection from "./components/sections/LifeAtRFTSection";
 import MDUPage from "./pages/MDU";
 import CRDPage from "./pages/CRD";
-import AllCourses from "./pages/AllCourses";
+
 import CourseDetails from "./pages/CourseDetails";
 import ModuleDetails from "./pages/ModuleDetails";
 import LevelEnrollment from "./pages/LevelEnrollment";
@@ -107,8 +107,8 @@ function App() {
                   <Route path="/signup" element={<NewUser />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/profile-dashboard" element={<ProfileDashboard />} />
-                  <Route path="/all-courses" element={<AllCourses />} />
-                  <Route path="/courses" element={<AllCourses />} />
+                  <Route path="/all-courses" element={<AllCoursesMegaPage />} />
+                  <Route path="/courses" element={<AllCoursesMegaPage />} />
                   <Route path="/all-courses-mega" element={<AllCoursesMegaPage />} />
                   
                   {/* Dynamic Course Routes */}
