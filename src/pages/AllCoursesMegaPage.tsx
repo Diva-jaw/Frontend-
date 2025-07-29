@@ -73,7 +73,7 @@ const AllCoursesMegaPage: React.FC = () => {
       const rect = courseNameRefs.current[hoveredCourseId]!.getBoundingClientRect();
       setDropdownPosition({
         top: rect.top + window.scrollY,
-        left: rect.left + rect.width * 0.5 + window.scrollX, // 50% inside the course row
+        left: rect.left + 350 + window.scrollX, // position a little more to the right
         width: 340 // fixed wider dropdown
       });
     } else {
@@ -232,12 +232,10 @@ const AllCoursesMegaPage: React.FC = () => {
         {/* FORMAL TABLE CONTAINER */}
         <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-200 z-30">
           {/* Table Header */}
-          <div className="bg-gradient-to-r from-slate-900 to-slate-800 px-2 py-2 z-10 border-b border-slate-300 rounded-t-xl">
-            <div className="grid grid-cols-12 gap-2 text-white font-bold text-xs">
-              <div className="col-span-1 text-center bg-gradient-to-r from-blue-600 to-blue-700 py-2 rounded border border-blue-500 shadow-sm">#</div>
-              <div className="col-span-4 text-center bg-gradient-to-r from-blue-600 to-blue-700 py-2 px-2 rounded border border-blue-500 shadow-sm">Course Name</div>
-              <div className="col-span-5"></div>
-              <div className="col-span-2 text-center bg-gradient-to-r from-blue-600 to-blue-700 py-2 rounded border border-blue-500 shadow-sm">Duration</div>
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-100 px-2 py-2 z-10 border-b border-blue-200 rounded-t-xl">
+            <div className="grid grid-cols-12 gap-2 text-gray-800 font-bold text-xs">
+              <div className="col-span-1 text-center bg-gradient-to-r from-blue-400 to-blue-500 py-2 rounded border border-blue-300 shadow-sm text-white">#</div>
+              <div className="col-span-11 text-center bg-gradient-to-r from-indigo-400 to-purple-500 py-2 px-2 rounded border border-indigo-300 shadow-sm text-white">Course Name</div>
             </div>
           </div>
 
@@ -260,9 +258,9 @@ const AllCoursesMegaPage: React.FC = () => {
                     </div>
 
                     {/* Course Name */}
-                    <div className="col-span-4 relative" ref={el => courseNameRefs.current[course.id] = el}>
+                    <div className="col-span-11 relative" ref={el => courseNameRefs.current[course.id] = el}>
                       <div 
-                        className="flex items-center space-x-2 bg-gradient-to-r from-gray-50 to-gray-100 p-2 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer w-full h-full"
+                        className="flex items-center space-x-3 bg-gradient-to-r from-gray-50 to-gray-100 p-3 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer w-full h-full"
                         onMouseEnter={() => {
                           setHoveredCourseId(course.id);
                           // Close any open modules from other courses
@@ -278,28 +276,17 @@ const AllCoursesMegaPage: React.FC = () => {
                         }}
                         onMouseLeave={() => setHoveredCourseId(null)}
                       >
-                        <div className={`p-1.5 rounded-lg ${getCourseIconColor(course.name)} text-white shadow-md border border-white flex-shrink-0`}>
-                          {getCourseIcon(course.name, 32)}
+                        <div className={`p-2 rounded-lg ${getCourseIconColor(course.name)} text-white shadow-md border border-white flex-shrink-0`}>
+                          {getCourseIcon(course.name, 36)}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-bold text-gray-900 mb-0.5">{course.name}</h3>
-                          <p className="text-xs text-gray-600 leading-tight line-clamp-1">{course.description}</p>
+                          <h3 className="text-base font-bold text-gray-900 mb-1">{course.name}</h3>
+                          <p className="text-sm text-gray-600 leading-tight line-clamp-2">{course.description}</p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Gap/Empty Space */}
-                    <div className="col-span-5"></div>
 
-                    {/* Duration */}
-                    <div className="col-span-2 text-center">
-                      <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-sm px-3 py-2 rounded-lg border border-orange-400 shadow-sm">
-                        {Math.ceil(course.modules.reduce((total, module) => {
-                          const weeks = parseInt(module.duration.split(' ')[0]);
-                          return total + weeks;
-                        }, 0) / 4)} months
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -316,8 +303,8 @@ const AllCoursesMegaPage: React.FC = () => {
               top: dropdownPosition.top,
               left: dropdownPosition.left,
               width: dropdownPosition.width,
-              minWidth: 300,
-              maxWidth: 400,
+              minWidth: 400,
+              maxWidth: 500,
             }}
             onMouseEnter={() => setHoveredCourseId(hoveredCourseId)}
             onMouseLeave={() => setHoveredCourseId(null)}
@@ -362,7 +349,7 @@ const AllCoursesMegaPage: React.FC = () => {
                     {clickedModuleId[hoveredCourseId] === module.id && (
                       <div 
                         className="absolute left-full top-0 ml-3 bg-green-50 border border-green-200 shadow-lg rounded-lg p-3" 
-                        style={{ width: '220px', transform: 'translateX(-50%)', zIndex: 9999 }}
+                        style={{ width: '250px', transform: 'translateX(-50%)', zIndex: 9999 }}
                         onMouseEnter={() => setClickedModuleId(prev => ({ ...prev, [hoveredCourseId]: module.id }))}
                         onMouseLeave={() => setClickedModuleId(prev => ({ ...prev, [hoveredCourseId]: null }))}
                       >
