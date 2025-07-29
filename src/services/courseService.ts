@@ -27,6 +27,7 @@ export interface CourseModule {
   duration: string;
   has_levels: boolean;
   course_id: number;
+  levels?: ModuleLevel[];
 }
 
 export interface ModuleLevel {
@@ -35,6 +36,7 @@ export interface ModuleLevel {
   duration: string;
   level_range: string;
   module_id: number;
+  topics?: ModuleTopic[];
 }
 
 export interface ModuleTopic {
@@ -42,6 +44,7 @@ export interface ModuleTopic {
   topic_title: string;
   description?: string;
   level_id: number;
+  subpoints?: TopicSubpoint[];
 }
 
 export interface TopicSubpoint {
@@ -69,6 +72,10 @@ export interface Enrollment {
   notes?: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface CourseWithModulesAndLevels extends Course {
+  modules: (CourseModule & { levels: ModuleLevel[] })[];
 }
 
 class CourseService {
@@ -382,6 +389,12 @@ class CourseService {
       console.error(`Error updating enrollment ID ${enrollmentId} status to ${status}:`, error);
       throw error;
     }
+  }
+
+  // Fetch all courses with modules and levels (nested)
+  async getAllCoursesWithModulesAndLevels(): Promise<CourseWithModulesAndLevels[]> {
+    const url = getCourseUrl('/all-details');
+    return this.makeRequest<CourseWithModulesAndLevels[]>(url);
   }
 }
 

@@ -66,7 +66,7 @@ const Header = ({ isScrolled }: HeaderProps) => {
                   <>
                     <a href="/signin" className="px-4 py-2 font-bold text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-full shadow hover:from-blue-600 hover:to-blue-800 transition-colors duration-200 text-center">Login</a>
                     <a href="/signup" className="px-4 py-2 font-bold text-white bg-gradient-to-r from-green-500 to-green-700 rounded-full shadow hover:from-green-600 hover:to-green-800 transition-colors duration-200 text-center">Register</a>
-                    <a href="/employers-login" className="w-full px-4 py-2 font-bold text-white bg-gradient-to-r from-purple-500 to-purple-700 rounded-full shadow hover:from-purple-600 hover:to-purple-800 transition-colors duration-200 text-center block">Employer Login</a>
+                    {/* <a href="/employers-login" className="w-full px-4 py-2 font-bold text-white bg-gradient-to-r from-purple-500 to-purple-700 rounded-full shadow hover:from-purple-600 hover:to-purple-800 transition-colors duration-200 text-center block">Employer Login</a> */}
                   </>
                 )}
               </div>

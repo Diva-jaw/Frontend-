@@ -23,6 +23,9 @@ const Navbar = () => {
   const [profilePopupOpen, setProfilePopupOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
+  // Check if we're on HR route
+  const isHRRoute = location.pathname.startsWith('/hr');
+
   // Get first character of user's name for avatar
   const getUserInitial = (name: string) => {
     return name ? name.charAt(0).toUpperCase() : "U";
@@ -158,230 +161,195 @@ const Navbar = () => {
               alt="Logo"
               className="h-16 w-16 rounded-full border-4 border-blue-400 dark:border-blue-500 mr-4"
             />
-            {/* Hamburger for mobile */}
-            <button
-              className="lg:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              onClick={() => setMobileMenuOpen(true)}
-              aria-label="Open menu"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="black"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-menu w-7 h-7"
-                style={{ stroke: 'black' }}
+            {/* Hamburger for mobile - only show if not on HR route */}
+            {!isHRRoute && (
+              <button
+                className="lg:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
               >
-                <line x1="4" x2="20" y1="12" y2="12"></line>
-                <line x1="4" x2="20" y1="6" y2="6"></line>
-                <line x1="4" x2="20" y1="18" y2="18"></line>
-              </svg>
-            </button>
-            {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center space-x-4">
-              <a href="/" onClick={handleHomeClick} className={linkClass}>
-                Home
-              </a>
-              <a
-                href="/#services"
-                onClick={(e) => handleNavClick(e, "services")}
-                className={linkClass}
-              >
-                Services
-              </a>
-              <a
-                href="/#about"
-                onClick={(e) => handleNavClick(e, "about")}
-                className={linkClass}
-              >
-                About
-              </a>
-              <a
-                href="/#what-we-do"
-                onClick={e => handleNavClick(e, "what-we-do")}
-                className={linkClass + " whitespace-nowrap min-w-[140px] text-center"}
-              >
-                What We Do
-              </a>
-              {/* Courses Link */}
-              <Link
-                to="/courses"
-                className={linkClass}
-              >
-                Courses
-              </Link>
-              {/* Learn Dropdown */}
-              <div className="relative" ref={learnDropdownRef}>
-                <button
-                  onClick={() => {
-                    setLearnDropdownOpen(!learnDropdownOpen);
-                    setCareersDropdownOpen(false);
-                  }}
-                  className={linkClass}
-                  style={{ textTransform: 'uppercase' }}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-menu w-7 h-7"
+                  style={{ stroke: 'black' }}
                 >
-                  Learn
-                </button>
-                <AnimatePresence>
-                  {learnDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.18 }}
-                      className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[300px] z-50 p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
-                    >
-                      <ul className="grid grid-cols-1 gap-2">
-                        <li>
-                          <Link
-                            to="/mdu"
-                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                            onClick={() => {
-                              setLearnDropdownOpen(false);
-                            }}
-                          >
-                            MDU
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="/crd"
-                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                            onClick={() => {
-                              setLearnDropdownOpen(false);
-                            }}
-                          >
-                            CRD
-                          </Link>
-                        </li>
-                      </ul>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-              {/* Careers Dropdown */}
-              <div className="relative" ref={careersDropdownRef}>
-                <button
-                  onClick={() => {
-                    setCareersDropdownOpen(!careersDropdownOpen);
-                    setMainDropdownOpen(false);
-                    setSubDropdown(null);
-                  }}
+                  <line x1="4" x2="20" y1="12" y2="12"></line>
+                  <line x1="4" x2="20" y1="6" y2="6"></line>
+                  <line x1="4" x2="20" y1="18" y2="18"></line>
+                </svg>
+              </button>
+            )}
+            {/* Desktop Nav - only show if not on HR route */}
+            {!isHRRoute && (
+              <div className="hidden lg:flex items-center space-x-4">
+                <a href="/" onClick={handleHomeClick} className={linkClass}>
+                  Home
+                </a>
+                <a
+                  href="/#services"
+                  onClick={(e) => handleNavClick(e, "services")}
                   className={linkClass}
-                  style={{ textTransform: 'uppercase' }}
                 >
-                  Careers
-                </button>
-                <AnimatePresence>
-                  {careersDropdownOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.18 }}
-                      className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[300px] z-50 p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
-                    >
-                      <ul className="grid grid-cols-1 gap-2">
-                        <li>
-                          <Link
-                            to="/life-at-rft"
-                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                            onClick={() => {
-                              setCareersDropdownOpen(false);
-                            }}
-                          >
-                            Life at RFT
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="/employee-says"
-                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                            onClick={() => {
-                              setCareersDropdownOpen(false);
-                            }}
-                          >
-                            What Our Employees Say
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="/apply"
-                            className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
-                            onClick={() => {
-                              setCareersDropdownOpen(false);
-                            }}
-                          >
-                            Apply
-                          </Link>
-                        </li>
-                      </ul>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                  Services
+                </a>
+                <a
+                  href="/#about"
+                  onClick={(e) => handleNavClick(e, "about")}
+                  className={linkClass}
+                >
+                  About
+                </a>
+                <a
+                  href="/#what-we-do"
+                  onClick={e => handleNavClick(e, "what-we-do")}
+                  className={linkClass + " whitespace-nowrap min-w-[140px] text-center"}
+                >
+                  What We Do
+                </a>
+                {/* Courses Link */}
+                <Link
+                  to="/courses"
+                  className={linkClass}
+                >
+                  Courses
+                </Link>
+                {/* Learn Dropdown */}
+                <div className="relative" ref={learnDropdownRef}>
+                  <button
+                    onClick={() => {
+                      setLearnDropdownOpen(!learnDropdownOpen);
+                      setCareersDropdownOpen(false);
+                    }}
+                    className={linkClass}
+                    style={{ textTransform: 'uppercase' }}
+                  >
+                    Learn
+                  </button>
+                  <AnimatePresence>
+                    {learnDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[300px] z-50 p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
+                      >
+                        <ul className="grid grid-cols-1 gap-2">
+                          <li>
+                            <Link
+                              to="/mdu"
+                              className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                              onClick={() => {
+                                setLearnDropdownOpen(false);
+                              }}
+                            >
+                              MDU
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              to="/crd"
+                              className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                              onClick={() => {
+                                setLearnDropdownOpen(false);
+                              }}
+                            >
+                              CRD
+                            </Link>
+                          </li>
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                {/* Careers Dropdown */}
+                <div className="relative" ref={careersDropdownRef}>
+                  <button
+                    onClick={() => {
+                      setCareersDropdownOpen(!careersDropdownOpen);
+                      setMainDropdownOpen(false);
+                      setSubDropdown(null);
+                    }}
+                    className={linkClass}
+                    style={{ textTransform: 'uppercase' }}
+                  >
+                    Careers
+                  </button>
+                  <AnimatePresence>
+                    {careersDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute top-full left-0 mt-3 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[300px] z-50 p-4 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
+                      >
+                        <ul className="grid grid-cols-1 gap-2">
+                          <li>
+                            <Link
+                              to="/life-at-rft"
+                              className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                              onClick={() => {
+                                setCareersDropdownOpen(false);
+                              }}
+                            >
+                              Life at RFT
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              to="/employee-says"
+                              className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                              onClick={() => {
+                                setCareersDropdownOpen(false);
+                              }}
+                            >
+                              What Our Employees Say
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              to="/apply"
+                              className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300"
+                              onClick={() => {
+                                setCareersDropdownOpen(false);
+                              }}
+                            >
+                              Apply
+                            </Link>
+                          </li>
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                <a
+                  href="/#contact"
+                  onClick={e => handleNavClick(e, "contact")}
+                  className={linkClass + " uppercase"}
+                >
+                  CONTACT US
+                </a>
               </div>
-              <a
-                href="/#contact"
-                onClick={e => handleNavClick(e, "contact")}
-                className={linkClass + " uppercase"}
-              >
-                CONTACT US
-              </a>
-            </div>
+            )}
           </div>
           {/* Spacer for gap */}
           <div className="flex-1" />
           {/* Right: Login/Register/For Employer's and Theme Toggle */}
           <div className="hidden lg:flex items-center space-x-4">
-            {isLoggedIn && user && user.role !== 'hr' && (
-              <>
-
-                {/* User Avatar with First Character - now a button */}
-                <div className="relative" ref={profileRef}>
-                  <button
-                    className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
-                    onClick={() => setProfilePopupOpen((v) => !v)}
-                    aria-haspopup="true"
-                    aria-expanded={profilePopupOpen}
-                    type="button"
-                  >
-                    {/* Online Status Indicator */}
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
-                      {getUserInitial(user?.name || "User")}
-                    </div>
-                    <span className="text-sm font-medium text-green-700 dark:text-green-300">
-                      {user?.name || "User"}
-                    </span>
-                  </button>
-                  {profilePopupOpen && (
-                    <div className="absolute right-0 mt-3 z-50" style={{ minWidth: 320 }}>
-                      <UserProfilePopup
-                        name={user?.name || "User"}
-                        email={user?.email || "user@email.com"}
-                        onViewProfile={() => {
-                          navigate("/profile-dashboard");
-                          setProfilePopupOpen(false);
-                        }}
-                        onLogout={() => {
-                          logout();
-                          setProfilePopupOpen(false);
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-            {isLoggedIn && user && user.role === 'hr' && (
+            {/* Show profile icon and theme toggle for HR routes */}
+            {isHRRoute && isLoggedIn && user && (
               <div className="relative" ref={profileRef}>
                 <button
-                  className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
+                  className="flex justify-center items-center w-12 h-12 aspect-square bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
                   onClick={() => setProfilePopupOpen((v) => !v)}
                   aria-haspopup="true"
                   aria-expanded={profilePopupOpen}
@@ -391,13 +359,13 @@ const Navbar = () => {
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
                     {getUserInitial(user?.name || 'User')}
                   </div>
-                  <span className="text-sm font-medium text-green-700 dark:text-green-300">{user?.name || 'User'}</span>
                 </button>
                 {profilePopupOpen && (
                   <div className="absolute right-0 mt-3 z-50" style={{ minWidth: 320 }}>
                     <UserProfilePopup
                       name={user?.name || "User"}
                       email={user?.email || "user@email.com"}
+                      userRole={user?.role}
                       onViewProfile={() => {
                         navigate("/profile-dashboard");
                         setProfilePopupOpen(false);
@@ -411,29 +379,105 @@ const Navbar = () => {
                 )}
               </div>
             )}
-            {!isLoggedIn && (
+            {/* Show regular navbar items for non-HR routes */}
+            {!isHRRoute && (
               <>
-                <button
-                  onClick={handleSignInClick}
-                  className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200"
-                >
-                  Login
-                </button>
-                <button
-                  onClick={handleNewUserClick}
-                  className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200"
-                >
-                  Register
-                </button>
-                <span className="h-6 w-px bg-gray-400 dark:bg-gray-600 mx-2 rounded-full" />
-                <Link
-                  to="/employers-login"
-                  className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 flex items-center gap-2"
-                >
-                  Employer Login
-                </Link>
+                {isLoggedIn && user && user.role !== 'hr' && (
+                  <>
+                    {/* User Avatar with First Character - now a button */}
+                    <div className="relative" ref={profileRef}>
+                      <button
+                        className="flex justify-center items-center w-12 h-12 aspect-square bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
+                        onClick={() => setProfilePopupOpen((v) => !v)}
+                        aria-haspopup="true"
+                        aria-expanded={profilePopupOpen}
+                        type="button"
+                      >
+                        {/* Online Status Indicator */}
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
+                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                          {getUserInitial(user?.name || "User")}
+                        </div>
+                      </button>
+                      {profilePopupOpen && (
+                        <div className="absolute right-0 mt-3 z-50" style={{ minWidth: 320 }}>
+                          <UserProfilePopup
+                            name={user?.name || "User"}
+                            email={user?.email || "user@email.com"}
+                            userRole={user?.role}
+                            onViewProfile={() => {
+                              navigate("/profile-dashboard");
+                              setProfilePopupOpen(false);
+                            }}
+                            onLogout={() => {
+                              logout();
+                              setProfilePopupOpen(false);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+                {isLoggedIn && user && user.role === 'hr' && (
+                  <div className="relative" ref={profileRef}>
+                    <button
+                      className="flex justify-center items-center w-12 h-12 aspect-square bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
+                      onClick={() => setProfilePopupOpen((v) => !v)}
+                      aria-haspopup="true"
+                      aria-expanded={profilePopupOpen}
+                      type="button"
+                    >
+                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                        {getUserInitial(user?.name || 'User')}
+                      </div>
+                    </button>
+                    {profilePopupOpen && (
+                      <div className="absolute right-0 mt-3 z-50" style={{ minWidth: 320 }}>
+                        <UserProfilePopup
+                          name={user?.name || "User"}
+                          email={user?.email || "user@email.com"}
+                          userRole={user?.role}
+                          onViewProfile={() => {
+                            navigate("/profile-dashboard");
+                            setProfilePopupOpen(false);
+                          }}
+                          onLogout={() => {
+                            logout();
+                            setProfilePopupOpen(false);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+                {!isLoggedIn && (
+                  <>
+                    <button
+                      onClick={handleSignInClick}
+                      className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={handleNewUserClick}
+                      className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200"
+                    >
+                      Register
+                    </button>
+                    <span className="h-6 w-px bg-gray-400 dark:bg-gray-600 mx-2 rounded-full" />
+                    {/* <Link
+                      to="/employers-login"
+                      className="px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 flex items-center gap-2"
+                    >
+                      Employer Login
+                    </Link> */}
+                  </>
+                )}
               </>
             )}
+            {/* Theme toggle - always visible */}
             <button
               onClick={toggleTheme}
               className="ml-2 p-2 rounded-full bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-200 flex items-center justify-center"
@@ -448,9 +492,9 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - only show if not on HR route */}
       <AnimatePresence>
-        {mobileMenuOpen && (
+        {mobileMenuOpen && !isHRRoute && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -475,9 +519,6 @@ const Navbar = () => {
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md min-w-0" style={{minWidth:'2rem'}}>
                         {getUserInitial(user?.name || "User")}
                       </div>
-                      <span className="text-sm font-medium text-green-700 dark:text-green-300 truncate min-w-0" style={{maxWidth:'60vw',overflow:'hidden',textOverflow:'ellipsis'}}>
-                        {user?.name || "User"}
-                      </span>
                     </div>
                     <button
                       onClick={() => {
@@ -507,13 +548,13 @@ const Navbar = () => {
                     >
                       <span className="truncate min-w-0">Register</span>
                     </button>
-                    <Link
+                    {/* <Link
                       to="/employers-login"
                       className="w-full px-4 py-2 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-sm shadow-lg transition-colors duration-200 flex items-center gap-2 mb-2 min-w-0"
                       style={{maxWidth:'100vw',overflowX:'auto',textOverflow:'ellipsis'}}
                     >
                       <span className="truncate min-w-0">Employer Login</span>
-                    </Link>
+                    </Link> */}
                   </>
                 )}
               </div>
@@ -535,7 +576,7 @@ const Navbar = () => {
                 <a href="/#about" onClick={e => handleNavClick(e, "about") } className={linkClass + " w-full text-left"}>About</a>
                 <a href="/#what-we-do" onClick={e => handleNavClick(e, "what-we-do") } className={linkClass + " w-full text-left"}>What We Do</a>
                 {/* Courses Link */}
-                <Link to="/courses" className={linkClass + " w-full text-left"}>Courses</Link>
+                <Link to="/all-courses-mega" className={linkClass + " w-full text-left"}>Courses</Link>
                 {/* Learn Dropdown (collapsible) */}
                 <details className="group">
                   <summary className={linkClass + " w-full text-left cursor-pointer flex items-center justify-between"}>Learn <span className="ml-2">▼</span></summary>
@@ -559,7 +600,7 @@ const Navbar = () => {
                   <>
                     <a href="/signin" className={linkClass + " w-full text-left"}>Login</a>
                     <a href="/signup" className={linkClass + " w-full text-left"}>Register</a>
-                    <Link to="/employers-login" className={linkClass + " w-full text-left"}>Employer Login</Link>
+                    {/* <Link to="/employers-login" className={linkClass + " w-full text-left"}>Employer Login</Link> */}
                   </>
                 )}
               </nav>

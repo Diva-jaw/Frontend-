@@ -115,7 +115,7 @@ const LevelEnrollment = () => {
   }, [courseId, moduleId, levelId]);
 
   const handleBackClick = () => {
-    navigate(`/course/${courseId}/module/${moduleId}`);
+    navigate('/all-courses-mega');
   };
 
   const handleEnrollClick = () => {
