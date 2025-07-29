@@ -257,7 +257,7 @@ const AllCoursesMegaPage: React.FC = () => {
 
           {/* Table Body */}
           <div className="divide-y divide-slate-200 dark:divide-gray-700 pb-32">
-            {courses.map((course, index) => (
+            {courses.filter(course => course.name !== 'AI Masterclass: For Future AI Leaders').map((course, index) => (
               <div
                 key={course.id}
                 className="relative group border-b border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-blue-100/60 dark:hover:bg-blue-900/20 hover:shadow-xl transition-all duration-200 rounded-xl mb-2"
