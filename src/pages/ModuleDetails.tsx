@@ -80,7 +80,7 @@ const ModuleDetails = () => {
   };
 
   const handleBackClick = () => {
-    navigate(`/course/${courseId}`);
+    navigate('/all-courses-mega');
   };
 
   if (loading) {
