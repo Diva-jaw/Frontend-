@@ -1,28 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const slides = [
   {
     title: 'Modern Open Office',
     desc: 'Collaborative spaces designed for creativity and innovation with state-of-the-art technology',
-    bg: 'bg-gradient-to-br from-blue-400 to-indigo-700',
+    bg: 'bg-gradient-to-br from-blue-500 to-indigo-800',
     emoji: '🏢',
   },
   {
     title: 'Recreation Zone',
     desc: 'Game rooms, relaxation areas, and wellness spaces for work-life balance',
-    bg: 'bg-gradient-to-br from-purple-500 to-pink-400',
+    bg: 'bg-gradient-to-br from-purple-600 to-pink-500',
     emoji: '🎮',
   },
   {
     title: 'Innovation Labs',
     desc: 'Cutting-edge facilities for research, development, and prototype testing',
-    bg: 'bg-gradient-to-br from-pink-400 to-blue-300',
+    bg: 'bg-gradient-to-br from-pink-500 to-blue-400',
     emoji: '💡',
   },
   {
     title: 'Cafeteria & Lounge',
     desc: 'Gourmet dining experiences and comfortable social spaces for team bonding',
-    bg: 'bg-gradient-to-br from-cyan-400 to-blue-400',
+    bg: 'bg-gradient-to-br from-cyan-500 to-blue-500',
     emoji: '☕',
   },
 ];
@@ -103,14 +105,19 @@ const stats = [
 const LifeAtRFTSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [counters, setCounters] = useState(stats.map(() => 0));
+  const [isHovered, setIsHovered] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    if (!isHovered) {
+      intervalRef.current = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 5000);
+    }
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [isHovered]);
 
   useEffect(() => {
     let raf: number;
@@ -131,119 +138,275 @@ const LifeAtRFTSection: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full" style={{ scrollBehavior: 'smooth' }}>
+    <div className="w-full font-sans" style={{ scrollBehavior: 'smooth' }}>
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-[#0f0f23] via-[#1a1a2e] to-[#0f3460] overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute left-1/5 bottom-0 w-1/3 h-1/3 bg-blue-400/20 rounded-full blur-3xl" />
-          <div className="absolute right-1/4 top-0 w-1/4 h-1/4 bg-pink-400/10 rounded-full blur-2xl" />
-        </div>
-        <div className="relative z-10 text-center text-white py-24 px-4">
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-6 animate-fadeInUp">Life At Ruhil Future Technologies (RFT)</h1>
-          <p className="text-2xl md:text-3xl mb-8 animate-fadeInUp delay-200">Where Innovation Meets Exceptional Culture</p>
-          <a href="#offices" className="inline-block px-8 py-4 bg-white/20 border-2 border-white/30 rounded-full text-white font-semibold text-lg shadow-lg hover:bg-white/30 transition-all duration-300 backdrop-blur-md animate-fadeInUp delay-400">Explore Our World</a>
-        </div>
-      
-      </section>
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-indigo-900 to-blue-900 overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_70%)] opacity-50"></div>
+        <motion.div
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.8 }}
+          className="relative z-10 text-center text-white px-4 py-24"
+        >
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight drop-shadow-2xl">
+            Life at <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">RFT</span>
+          </h1>
+          <p className="text-xl md:text-3xl mb-8 font-light tracking-wide animate-pulse">Where Innovation Fuels Your Future</p>
+          <motion.div
+            whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(255,255,255,0.3)' }}
+            className="inline-block"
+          >
+            <Link
+              to="/insights"
+              className="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white font-semibold text-lg shadow-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+              style={{
+                boxShadow:
+                  "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.1) 0px 8px 10px -6px",
+                transform: "none"
+              }}
+            >
+              Discover Our World
+            </Link>
+          </motion.div>
+        </motion.div>
+      </motion.section>
 
       {/* Offices Slider Section */}
-      <section className="section py-20 max-w-7xl mx-auto" id="offices">
-        <h2 className="text-4xl font-bold text-center mb-12">Our Inspiring Workspaces</h2>
-        <div className="relative h-96 rounded-2xl shadow-2xl overflow-hidden mb-10">
-          {slides.map((slide, idx) => (
-            <div
-              key={slide.title}
-              className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-1000 ${idx === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'} ${slide.bg}`}
-              style={{ backgroundBlendMode: 'multiply' }}
-            >
-              <div className="text-7xl mb-4 drop-shadow-lg">{slide.emoji}</div>
-              <h3 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">{slide.title}</h3>
-              <p className="text-lg text-white/90 max-w-xl mx-auto drop-shadow">{slide.desc}</p>
-            </div>
-          ))}
+      <section className="py-24 max-w-7xl mx-auto px-4" id="offices">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-800"
+        >
+          Inspiring Workspaces
+        </motion.h2>
+        <motion.div
+          className="relative h-[500px] rounded-3xl shadow-2xl overflow-hidden mb-12"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <AnimatePresence>
+            {slides.map((slide, idx) => (
+              idx === currentSlide && (
+                <motion.div
+                  key={slide.title}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 1 }}
+                  className={`absolute inset-0 flex flex-col items-center justify-center ${slide.bg} bg-blend-multiply`}
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.2, type: 'spring', stiffness: 100 }}
+                    className="text-8xl mb-6 drop-shadow-2xl"
+                  >
+                    {slide.emoji}
+                  </motion.div>
+                  <motion.h3
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4, duration: 0.6 }}
+                    className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg"
+                  >
+                    {slide.title}
+                  </motion.h3>
+                  <motion.p
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.6, duration: 0.6 }}
+                    className="text-lg text-white/90 max-w-md mx-auto px-4"
+                  >
+                    {slide.desc}
+                  </motion.p>
+                </motion.div>
+              )
+            ))}
+          </AnimatePresence>
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-20">
             {slides.map((_, idx) => (
-              <button
+              <motion.button
                 key={idx}
-                className={`w-4 h-4 rounded-full border-2 border-white transition-all duration-300 ${idx === currentSlide ? 'bg-white scale-125 shadow-lg' : 'bg-white/40 hover:bg-white/60'}`}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+                className={`w-4 h-4 rounded-full border-2 border-white transition-all duration-300 ${
+                  idx === currentSlide ? 'bg-white scale-125 shadow-lg' : 'bg-white/40 hover:bg-white/60'
+                }`}
                 onClick={() => setCurrentSlide(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
               />
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ staggerChildren: 0.2 }}
+        >
           {features.map((feature) => (
-            <div key={feature.title} className="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100 hover:shadow-2xl transition-all duration-300">
-              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center text-3xl rounded-xl bg-gradient-to-br from-blue-400 to-purple-400 text-white">{feature.icon}</div>
-              <h3 className="text-xl font-bold mb-2 text-blue-900">{feature.title}</h3>
+            <motion.div
+              key={feature.title}
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -10, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+              className="bg-white rounded-2xl shadow-lg p-8 text-center border-2 border-gray-200 hover:border-blue-300 transition-colors duration-300"
+            >
+              <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center text-3xl rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 text-white">
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-gray-800">{feature.title}</h3>
               <p className="text-gray-600">{feature.desc}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Culture Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-blue-100 to-blue-50">
-        <h2 className="text-4xl font-bold text-center mb-12 text-blue-900">Our Culture & Values</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <section className="py-24 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-800"
+        >
+          Our Culture & Values
+        </motion.h2>
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ staggerChildren: 0.2 }}
+        >
           {culture.map((item) => (
-            <div key={item.title} className="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100 hover:shadow-2xl transition-all duration-300">
-              <div className="text-4xl mb-3">{item.emoji}</div>
-              <h3 className="text-xl font-bold mb-2 text-blue-900">{item.title}</h3>
+            <motion.div
+              key={item.title}
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -10, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+              className="bg-white rounded-2xl shadow-lg p-8 text-center border-2 border-gray-200 hover:border-purple-300 transition-colors duration-300"
+            >
+              <div className="text-5xl mb-4">{item.emoji}</div>
+              <h3 className="text-xl font-bold mb-2 text-gray-800">{item.title}</h3>
               <p className="text-gray-600">{item.desc}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Projects Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-400 via-purple-300 to-pink-200 relative overflow-hidden">
-        <h2 className="text-4xl font-bold text-center mb-12 text-white drop-shadow-lg">Projects We're Building</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      <section className="py-24 bg-gradient-to-br from-blue-600 via-purple-500 to-pink-500 relative overflow-hidden">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-5xl font-bold text-center mb-16 text-white drop-shadow-lg"
+        >
+          Projects We're Building
+        </motion.h2>
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ staggerChildren: 0.2 }}
+        >
           {projects.map((project) => (
-            <div key={project.title} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
-              <div className="h-40 flex items-center justify-center text-5xl bg-gradient-to-br from-blue-500 to-purple-500 text-white">{project.icon}</div>
+            <motion.div
+              key={project.title}
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -10, boxShadow: '0 10px 20px rgba(0,0,0,0.2)' }}
+              className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-gray-200 hover:border-blue-400 transition-colors duration-300"
+            >
+              <div className="h-40 flex items-center justify-center text-6xl bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+                {project.icon}
+              </div>
               <div className="p-8">
-                <h3 className="text-xl font-bold mb-2 text-blue-900">{project.title}</h3>
-                <p className="text-gray-600 mb-3">{project.desc}</p>
-                <div className="flex flex-wrap gap-2 mt-2">
+                <h3 className="text-xl font-bold mb-2 text-gray-800">{project.title}</h3>
+                <p className="text-gray-600 mb-4">{project.desc}</p>
+                <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
-                    <span key={tag} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">{tag}</span>
+                    <span key={tag} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-br from-[#0f0f23] via-[#1a1a2e] to-[#0f3460] text-white text-center relative overflow-hidden">
-        <h2 className="text-4xl font-bold mb-12">RFT by the Numbers</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+      <section className="py-24 bg-gradient-to-br from-gray-900 via-indigo-900 to-blue-900 text-white text-center relative overflow-hidden">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-5xl font-bold mb-16"
+        >
+          RFT by the Numbers
+        </motion.h2>
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ staggerChildren: 0.2 }}
+        >
           {stats.map((stat, i) => (
-            <div key={stat.label} className="p-8">
+            <motion.div
+              key={stat.label}
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="p-8"
+            >
               <span className="text-5xl font-extrabold block mb-2">{counters[i]}</span>
               <span className="text-lg opacity-90">{stat.label}</span>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Careers CTA */}
-      <section className="py-20 section max-w-4xl mx-auto" id="careers">
-        <h2 className="text-4xl font-bold text-center mb-8">Join Our Journey</h2>
-        <div className="text-center max-w-2xl mx-auto">
-          <p className="text-lg mb-8 text-gray-700 dark:text-white">
-            Ready to be part of something extraordinary? We're always looking for passionate individuals who want to shape the future of technology.
+      <section className="py-24 max-w-4xl mx-auto px-4" id="careers">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-800"
+        >
+          Join Our Journey
+        </motion.h2>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-center max-w-2xl mx-auto"
+        >
+          <p className="text-lg mb-8 text-gray-600">
+            Ready to shape the future of technology? Join our passionate team and make an impact.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/apply" className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full font-semibold shadow-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300">View Open Positions</a>
-          </div>
-        </div>
+          <motion.a
+            href="/apply"
+            whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(0,0,0,0.2)' }}
+            className="inline-block px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold shadow-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+          >
+            View Open Positions
+          </motion.a>
+        </motion.div>
       </section>
     </div>
   );

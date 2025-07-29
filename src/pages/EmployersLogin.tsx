@@ -69,7 +69,7 @@ const EmployersLogin = () => {
           <p className="text-white/80 text-xs">HR access to user details and information</p>
         </div>
 
-        <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Input */}
           <div className="group">
             <label htmlFor="email" className="block text-white/90 font-medium mb-1 transition-colors group-focus-within:text-white text-sm">
@@ -84,6 +84,7 @@ const EmployersLogin = () => {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 autoComplete="username"
+                required
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                 <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,6 +108,7 @@ const EmployersLogin = () => {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 autoComplete="current-password"
+                required
               />
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onClick={() => setShowPassword(v => !v)}>
                 {showPassword ? (
@@ -127,7 +129,7 @@ const EmployersLogin = () => {
 
           {/* Submit Button */}
           <button
-            onClick={handleSubmit}
+            type="submit"
             disabled={isLoading}
             className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden text-sm"
           >
@@ -143,7 +145,7 @@ const EmployersLogin = () => {
               'Login to Dashboard'
             )}
           </button>
-        </div>
+        </form>
 
         {/* Footer Links */}
         <div className="mt-4 text-center">
