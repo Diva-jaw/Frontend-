@@ -23,7 +23,7 @@ const ProductManagementCourses = () => {
       bgColor: "bg-indigo-50 dark:bg-indigo-900/20",
       description: "Master product strategy, user research, and product development from concept to launch",
       duration: "16 weeks",
-      level: "Beginner to Advanced",
+      level: "Beginner to Expert",
       path: "/product-management-level-1",
       topics: ["Product Strategy", "User Research", "Product Development", "Go-to-Market", "Data Analytics"]
     },

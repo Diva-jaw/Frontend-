@@ -71,7 +71,7 @@ const designCategories = [
   { 
     name: 'Web & UI/UX Design', 
     icon: <PenTool size={28} className="text-blue-500" />, 
-    desc: '14 weeks • Beginner to Advanced',
+    desc: '14 weeks • Beginner to Expert',
     color: 'from-blue-100 to-blue-50',
     borderColor: 'border-blue-200',
     textColor: 'text-blue-800'

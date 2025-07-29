@@ -57,7 +57,7 @@ const ReactJSDetails = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Star className="w-5 h-5 text-yellow-500" />
-                  <span className="text-gray-700 font-medium">Beginner to Advanced</span>
+                  <span className="text-gray-700 font-medium">Beginner to Expert</span>
                 </div>
               </div>
 
@@ -90,7 +90,7 @@ const ReactJSDetails = () => {
                     </div>
                     <div className="flex items-center justify-between p-4 bg-indigo-100 rounded-lg">
                       <span className="text-gray-700 font-medium">Level</span>
-                      <span className="text-indigo-600 font-semibold">Beginner to Advanced</span>
+                      <span className="text-indigo-600 font-semibold">Beginner to Expert</span>
                     </div>
                   </div>
                 </div>

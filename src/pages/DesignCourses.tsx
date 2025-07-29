@@ -23,7 +23,7 @@ const DesignCourses = () => {
       bgColor: "bg-purple-50 dark:bg-purple-900/20",
       description: "Master user interface design principles, wireframing, and prototyping for web applications",
       duration: "10 weeks",
-      level: "Beginner to Intermediate",
+      level: "Beginner to Expert",
       path: "/web-ui-design-level-1",
       topics: ["UI/UX Principles", "Wireframing", "Prototyping", "Design Systems", "User Research"]
     },
@@ -34,7 +34,7 @@ const DesignCourses = () => {
       bgColor: "bg-pink-50 dark:bg-pink-900/20",
       description: "Advanced UI/UX design with advanced prototyping and user testing",
       duration: "12 weeks",
-      level: "Intermediate to Advanced",
+      level: "Beginner to Expert",
       path: "/web-ui-design-level-2",
       topics: ["Advanced Prototyping", "User Testing", "Design Systems", "Accessibility", "Design Leadership"]
     },
@@ -45,7 +45,7 @@ const DesignCourses = () => {
       bgColor: "bg-indigo-50 dark:bg-indigo-900/20",
       description: "Expert-level UI/UX design and design strategy",
       duration: "14 weeks",
-      level: "Advanced to Expert",
+      level: "Beginner to Expert",
       path: "/web-ui-design-level-3",
       topics: ["Design Strategy", "Team Leadership", "Design Operations", "Innovation", "Industry Trends"]
     },
@@ -56,7 +56,7 @@ const DesignCourses = () => {
       bgColor: "bg-orange-50 dark:bg-orange-900/20",
       description: "Create stunning graphics and video content using Adobe Creative Suite and modern design tools",
       duration: "12 weeks",
-      level: "Beginner to Advanced",
+      level: "Beginner to Expert",
       path: "/graphic-video-design-level-1",
       topics: ["Adobe Creative Suite", "Digital Illustration", "Video Editing", "Motion Graphics", "Brand Design"]
     },
@@ -67,7 +67,7 @@ const DesignCourses = () => {
       bgColor: "bg-red-50 dark:bg-red-900/20",
       description: "Advanced graphic design and video production techniques",
       duration: "14 weeks",
-      level: "Intermediate to Advanced",
+      level: "Beginner to Expert",
       path: "/graphic-video-design-level-2",
       topics: ["Advanced Photoshop", "After Effects", "3D Design", "Animation", "Visual Effects"]
     },
@@ -78,7 +78,7 @@ const DesignCourses = () => {
       bgColor: "bg-pink-50 dark:bg-pink-900/20",
       description: "Expert-level creative direction and production management",
       duration: "16 weeks",
-      level: "Advanced to Expert",
+      level: "Beginner to Expert",
       path: "/graphic-video-design-level-3",
       topics: ["Creative Direction", "Production Management", "Team Leadership", "Industry Standards", "Innovation"]
     },
@@ -89,7 +89,7 @@ const DesignCourses = () => {
       bgColor: "bg-blue-50 dark:bg-blue-900/20",
       description: "Master Computer-Aided Design for mechanical engineering and product development",
       duration: "14 weeks",
-      level: "Beginner to Advanced",
+      level: "Beginner to Expert",
       path: "/mechanical-cad-level-1",
       topics: ["AutoCAD", "SolidWorks", "3D Modeling", "Engineering Drawing", "Product Design"]
     },
@@ -100,7 +100,7 @@ const DesignCourses = () => {
       bgColor: "bg-cyan-50 dark:bg-cyan-900/20",
       description: "Advanced CAD techniques and engineering simulation",
       duration: "16 weeks",
-      level: "Intermediate to Advanced",
+      level: "Beginner to Expert",
       path: "/mechanical-cad-level-2",
       topics: ["Advanced Modeling", "Simulation", "Manufacturing Prep", "Assembly Design", "Engineering Analysis"]
     },
@@ -111,7 +111,7 @@ const DesignCourses = () => {
       bgColor: "bg-indigo-50 dark:bg-indigo-900/20",
       description: "Expert-level CAD engineering and project management",
       duration: "18 weeks",
-      level: "Advanced to Expert",
+      level: "Beginner to Expert",
       path: "/mechanical-cad-level-3",
       topics: ["Project Management", "Team Leadership", "Industry Standards", "Innovation", "Technical Leadership"]
     }

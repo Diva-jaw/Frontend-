@@ -168,12 +168,12 @@ const AllCoursesMegaPage: React.FC = () => {
           <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100 text-base font-semibold">
             <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900">
               <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clock text-blue-600"><circle cx={12} cy={12} r={10}></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            </span>6 Months
+            </span>9 Months
           </div>
           <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100 text-base font-semibold">
             <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-900">
               <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-code text-purple-600"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            </span>Beginner to Advanced
+            </span>Beginner to Expert
           </div>
           <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100 text-base font-semibold">
             <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-green-100 dark:bg-green-900">
@@ -205,7 +205,11 @@ const AllCoursesMegaPage: React.FC = () => {
             <span>Enroll Now</span>
             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right "><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
           </button>
-          <button className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white border-2 border-gray-300 dark:border-gray-600 px-10 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-xl" tabIndex={0}>
+          <button
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white border-2 border-gray-300 dark:border-gray-600 px-10 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-xl"
+            tabIndex={0}
+            onClick={() => window.open("http://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf", "_blank")}
+          >
             <span>View Curriculum</span>
             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right "><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
           </button>

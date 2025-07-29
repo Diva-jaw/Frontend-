@@ -80,7 +80,7 @@ const coursesData = {
         name: "Digital Marketing",
         icon: BarChart3,
         duration: "10 weeks",
-        difficulty: "Beginner to Advanced",
+        difficulty: "Beginner to Expert",
         levels: [
           { title: "Level 1", desc: "Story to Strategy: A Modern Marketing Playbook", duration: "3 weeks", projects: 2 },
           { title: "Level 2", desc: "Digital Strategy Mastery: Campaign Execution & Performance", duration: "4 weeks", projects: 3 },
