@@ -201,7 +201,11 @@ const AllCoursesMegaPage: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-4 z-10">
-          <button className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-700 to-purple-700 text-white px-10 py-4 rounded-xl text-lg font-bold hover:from-blue-800 hover:to-purple-800 transition-all duration-300 shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-400 border-2 border-blue-200 dark:border-blue-800" tabIndex={0}>
+          <button 
+            onClick={() => navigate('/course/6/module/11/level/31')}
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-700 to-purple-700 text-white px-10 py-4 rounded-xl text-lg font-bold hover:from-blue-800 hover:to-purple-800 transition-all duration-300 shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-400 border-2 border-blue-200 dark:border-blue-800" 
+            tabIndex={0}
+          >
             <span>Enroll Now</span>
             <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right "><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
           </button>
@@ -245,7 +249,7 @@ const AllCoursesMegaPage: React.FC = () => {
 
           {/* Table Body */}
           <div className="divide-y divide-slate-200 dark:divide-gray-700 pb-32">
-            {courses.map((course, index) => (
+            {courses.filter(course => course.name !== 'AI Masterclass: For Future AI Leaders').map((course, index) => (
               <div
                 key={course.id}
                 className="relative group border-b border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-blue-100/60 dark:hover:bg-blue-900/20 hover:shadow-xl transition-all duration-200 rounded-xl mb-2"
