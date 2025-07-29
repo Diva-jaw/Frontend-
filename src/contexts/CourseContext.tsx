@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { courseService, Course, CourseDetails, CourseModule, ModuleLevel } from '../services/courseService';
+import { courseService, Course, CourseDetails, CourseModule, ModuleLevel, CourseWithModulesAndLevels } from '../services/courseService';
 
 interface CourseContextType {
   courses: Course[];
@@ -9,6 +9,7 @@ interface CourseContextType {
   getCourseDetails: (courseId: number) => Promise<CourseDetails | null>;
   getCourseModules: (courseId: number) => Promise<CourseModule[] | null>;
   getModuleLevels: (courseId: number, moduleId: number) => Promise<ModuleLevel[] | null>;
+  getAllCoursesWithModulesAndLevels: () => Promise<CourseWithModulesAndLevels[]>;
 }
 
 const CourseContext = createContext<CourseContextType | undefined>(undefined);
@@ -95,6 +96,11 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({ children }) => {
     }
   }, []);
 
+  // Add this function to context
+  const getAllCoursesWithModulesAndLevels = useCallback(async (): Promise<CourseWithModulesAndLevels[]> => {
+    return courseService.getAllCoursesWithModulesAndLevels();
+  }, []);
+
   useEffect(() => {
     try {
       console.log('CourseContext: Initializing and fetching courses...');
@@ -133,10 +139,22 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({ children }) => {
     getCourseDetails,
     getCourseModules,
     getModuleLevels,
+    getAllCoursesWithModulesAndLevels,
   };
 
   return (
-    <CourseContext.Provider value={value}>
+    <CourseContext.Provider
+      value={{
+        courses,
+        loading,
+        error,
+        fetchCourses,
+        getCourseDetails,
+        getCourseModules,
+        getModuleLevels,
+        getAllCoursesWithModulesAndLevels,
+      }}
+    >
       {children}
     </CourseContext.Provider>
   );
