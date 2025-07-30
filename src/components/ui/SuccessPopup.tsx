@@ -9,6 +9,9 @@ interface SuccessPopupProps {
   moduleName: string;
   levelName: string;
   userName: string;
+  courseId?: string;
+  moduleId?: string;
+  levelId?: string;
 }
 
 const SuccessPopup: React.FC<SuccessPopupProps> = ({
@@ -18,6 +21,9 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
   moduleName,
   levelName,
   userName,
+  courseId,
+  moduleId,
+  levelId,
 }) => {
   return (
     <AnimatePresence>
@@ -57,20 +63,20 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
             {/* Header with Gradient */}
             <div className="relative overflow-hidden flex-shrink-0">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600" />
-              <div className="relative p-8 text-center text-white">
+              <div className="relative p-4 text-center text-white">
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: "spring", damping: 15 }}
-                  className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4"
+                  className="inline-flex items-center justify-center w-10 h-10 bg-white/20 rounded-full mb-2"
                 >
-                  <CheckCircle className="w-8 h-8 text-white" />
+                  <CheckCircle className="w-5 h-5 text-white" />
                 </motion.div>
                 <motion.h2
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="text-3xl font-bold mb-2"
+                  className="text-xl font-bold mb-1"
                 >
                   ✅ Enrollment Confirmed
                 </motion.h2>
@@ -78,9 +84,9 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4 }}
-                  className="text-lg opacity-90"
+                  className="text-sm opacity-90"
                 >
-                  Your enrollment has been successfully processed
+                  Successfully processed
                 </motion.p>
               </div>
             </div>
@@ -127,18 +133,22 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                       {courseName}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-blue-100">
-                    <span className="font-medium text-gray-700">Module:</span>
-                    <span className="font-semibold text-gray-800">
-                      {moduleName}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="font-medium text-gray-700">Level:</span>
-                    <span className="font-semibold text-gray-800">
-                      {levelName}
-                    </span>
-                  </div>
+                  {!(courseId === '6' && moduleId === '11' && levelId === '31') && (
+                    <>
+                      <div className="flex justify-between items-center py-2 border-b border-blue-100">
+                        <span className="font-medium text-gray-700">Module:</span>
+                        <span className="font-semibold text-gray-800">
+                          {moduleName}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center py-2">
+                        <span className="font-medium text-gray-700">Level:</span>
+                        <span className="font-semibold text-gray-800">
+                          {levelName}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </motion.div>
 
@@ -225,11 +235,11 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                     <p className="font-medium text-gray-700">
                       Academic Affairs:
                     </p>
-                    <p className="text-blue-600">academic@rftsystems.com</p>
+                    <p className="text-blue-600">info@rftsystems.com</p>
                   </div>
                   <div>
                     <p className="font-medium text-gray-700">Phone Support:</p>
-                    <p className="text-blue-600">+1 (555) 123-4567</p>
+                    <p className="text-blue-600">+91 7082101534</p>
                   </div>
                 </div>
               </motion.div>

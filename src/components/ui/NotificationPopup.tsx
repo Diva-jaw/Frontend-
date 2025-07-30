@@ -21,7 +21,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
     if (type === 'success') {
       return <CheckCircle className="w-6 h-6 text-green-600" />;
     }
-    return <XCircle className="w-6 h-6 text-red-600" />;
+    return <XCircle className="w-6 h-6 text-blue-600" />;
   };
 
   const getColors = () => {
@@ -34,10 +34,10 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
       };
     }
     return {
-      bg: 'bg-red-50 border-red-200',
-      iconBg: 'bg-red-100',
-      text: 'text-red-800',
-      title: 'text-red-900'
+      bg: 'bg-blue-50 border-blue-200',
+      iconBg: 'bg-blue-100',
+      text: 'text-blue-800',
+      title: 'text-blue-900'
     };
   };
 
@@ -102,7 +102,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
                 className={`w-full px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   type === 'success'
                     ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-red-600 text-white hover:bg-red-700'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
               >
                 OK

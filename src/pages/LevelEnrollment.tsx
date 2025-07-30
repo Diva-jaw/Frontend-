@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { useCourseContext } from '../contexts/CourseContext';
 import { courseService } from '../services/courseService';
-import EnrollmentModal from '../components/ui/EnrollmentModal';
 import SuccessPopup from '../components/ui/SuccessPopup';
 import { ModuleLevel, ModuleTopic } from '../services/courseService';
 import { useAuth } from '../components/AuthContext';
@@ -30,7 +29,6 @@ const LevelEnrollment = () => {
   const [topicSubpoints, setTopicSubpoints] = useState<{ [key: number]: string[] }>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
 
@@ -123,12 +121,12 @@ const LevelEnrollment = () => {
     
     if (!isLoggedIn) {
       // Store the current path before redirecting to login
-      setRedirectPath(window.location.pathname);
+      setRedirectPath(`/course/${courseId}/module/${moduleId}/level/${levelId}/enroll`);
       navigate('/signin');
       return;
     }
     
-    setShowEnrollmentModal(true);
+    navigate(`/course/${courseId}/module/${moduleId}/level/${levelId}/enroll`);
   };
 
   const handleEnrollmentSuccess = (data: any) => {
@@ -208,301 +206,212 @@ const LevelEnrollment = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-center mb-8"
           >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-block mb-4"
-            >
-              <div className="p-3 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl shadow-2xl">
-                <Code2 className="w-6 h-6 text-white" />
+            <div className="flex flex-col items-center gap-6 mb-4">
+              <div className="text-center">
+                <motion.h1 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
+                >
+                  {levelDetails.level_name}
+                </motion.h1>
+                
+                <motion.p 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+                >
+                  {courseDetails?.name} - {moduleDetails?.name}
+                </motion.p>
               </div>
-            </motion.div>
-
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
-            >
-              {levelDetails.level_name}
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
-            >
-              {courseDetails?.name} - {moduleDetails?.name}
-            </motion.p>
+              <div className="flex gap-4">
+                <motion.button
+                  onClick={handleEnrollClick}
+                  className="group relative bg-gradient-to-r from-blue-800 to-blue-900 text-white px-6 py-3 rounded-2xl font-bold text-base hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/25 hover:scale-105"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="relative z-10">{isLoggedIn ? 'Apply' : 'Login to Apply'}</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </motion.button>
+                
+                <motion.button
+                  onClick={() => {
+                    // View curriculum functionality - Open AI Course PDF
+                    const link = document.createElement('a');
+                    link.href = 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf';
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                  className="group relative bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-2xl font-bold text-base hover:from-green-500 hover:to-green-600 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-green-500/25 hover:scale-105"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="relative z-10">View Curriculum</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </motion.button>
+              </div>
+            </div>
           </motion.div>
 
-          {/* Level Content */}
+          {/* Professional Course Sales Page - Modern Design */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"
+            className="w-full max-w-7xl mx-auto"
           >
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="space-y-6"
-            >
-              <div className="group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 p-6 border border-gray-200/50 dark:border-gray-700/50 relative overflow-hidden">
-                {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                <div className="relative">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                    Level Overview
-                  </h2>
-
+            {/* Unified Card - All Sections Combined */}
+            <div className="w-full">
+              <div className="max-w-7xl mx-auto">
+                <div className="bg-gradient-to-br from-white/98 to-gray-50/98 dark:from-gray-800/98 dark:to-gray-700/98 backdrop-blur-sm rounded-3xl shadow-2xl border border-gray-200/60 dark:border-gray-600/40 overflow-hidden">
                   
-                  <div className="space-y-4 mb-6">
-                    <motion.div 
-                      className="flex items-center space-x-3 bg-blue-50 dark:bg-blue-900/20 px-4 py-3 rounded-xl"
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      <Clock className="w-5 h-5 text-blue-500" />
-                      <span className="text-gray-700 dark:text-gray-300 font-medium">{levelDetails.duration}</span>
-                    </motion.div>
-                    <motion.div 
-                      className="flex items-center space-x-3 bg-purple-50 dark:bg-purple-900/20 px-4 py-3 rounded-xl"
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      <Star className="w-5 h-5 text-purple-500" />
-                      <span className="text-gray-700 dark:text-gray-300 font-medium">{levelDetails.level_range}</span>
-                    </motion.div>
+                  {/* Course Details Section */}
+                  <div className="p-8 border-b border-gradient-to-r from-blue-200/40 to-purple-200/40 dark:from-blue-600/20 dark:to-purple-600/20">
+                    <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-10 text-center">
+                      Course Details
+                    </h3>
+                    
+                    <div className="max-w-5xl mx-auto">
+                      <div className="space-y-2">
+                        {courseId === '6' && moduleId === '11' && levelId === '31' ? (
+                          <>
+                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Duration:</span>
+                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">9 Months (Phase 1 + Phase 2 + Phase 3)</span>
+                            </div>
+                            
+                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Schedule:</span>
+                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">5 Days a Week (Full-Time Commitment)</span>
+                            </div>
+                            
+                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Structure:</span>
+                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">3 Trainings + 3 Live Projects + 3 Internships</span>
+                            </div>
+                            
+                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Approach:</span>
+                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">Real-work, Industry Mentorship, and Team-based delivery</span>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Course Name:</span>
+                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">{courseDetails?.name}</span>
+                            </div>
+                            
+                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Duration:</span>
+                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">{levelDetails.duration}</span>
+                            </div>
+                            
+                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Skill Level:</span>
+                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">{levelDetails.level_range}</span>
+                            </div>
+                            
+                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Modules:</span>
+                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">{topics.length}</span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
-                  <motion.button
-                    onClick={handleEnrollClick}
-                    className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 dark:from-blue-500 dark:via-purple-500 dark:to-blue-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:via-purple-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:via-purple-600 dark:hover:to-blue-700 transition-all duration-300 transform shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
-                    whileHover={{ 
-                      scale: 1.05,
-                      transition: { duration: 0.2 }
-                    }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <span>{isLoggedIn ? 'Enroll Now' : 'Login to Enroll'}</span>
-                    <Code2 size={20} />
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
+                  {/* Learning Objectives Section */}
+                  {topics.length > 0 && (
+                    <div className="p-8 border-b border-gray-200/60 dark:border-gray-600/40">
+                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+                        What You'll Learn
+                      </h3>
+                      
+                      <div className="space-y-6">
+                        {topics.map((topic, index) => (
+                          <motion.div
+                            key={topic.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
+                            className={`${index !== topics.length - 1 ? 'pb-6 border-b border-gray-200/60 dark:border-gray-600/40' : ''}`}
+                          >
+                            <div className="flex items-start gap-4">
+                              <div className="relative">
+                                <div className="w-12 h-12 bg-gradient-to-br from-blue-800 to-blue-900 text-white rounded-2xl flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                  {index + 1}
+                                </div>
+                                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center shadow-sm">
+                                  <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
+                                  </svg>
+                                </div>
+                              </div>
+                              
+                              <div className="flex-1">
+                                <h4 className="font-bold text-xl text-gray-900 dark:text-white mb-2 leading-tight">
+                                  {topic.topic_title}
+                                </h4>
+                                
+                                {topic.description && (
+                                  <p className="text-gray-600 dark:text-gray-400 mb-3 text-base leading-relaxed">
+                                    {topic.description}
+                                  </p>
+                                )}
+                                
+                                {topicSubpoints[topic.id] && topicSubpoints[topic.id].length > 0 && (
+                                  <div className="mt-4">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                                      {topicSubpoints[topic.id].map((subpoint, idx) => (
+                                        <div
+                                          key={idx}
+                                          className="flex items-start gap-2 text-gray-700 dark:text-gray-300 p-3 bg-gradient-to-r from-gray-50/80 to-gray-100/80 dark:from-gray-700/50 dark:to-gray-600/50 rounded-lg border border-gray-200/40 dark:border-gray-600/30 shadow-sm hover:shadow-md transition-all duration-200 hover:bg-gray-50/90 dark:hover:bg-gray-600/40"
+                                        >
+                                          <div className="w-2 h-2 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full mt-2 flex-shrink-0 shadow-sm"></div>
+                                          <span className="leading-relaxed text-sm font-medium">{subpoint}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="relative"
-            >
-              <div className="group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 p-6 border border-gray-200/50 dark:border-gray-700/50 relative overflow-hidden">
-                {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                <div className="relative text-center">
-                  <motion.div 
-                    className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-600 dark:from-green-400 dark:to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl"
-                    whileHover={{ rotate: 5, scale: 1.1 }}
-                  >
-                    <Code2 className="w-10 h-10 text-white" />
-                  </motion.div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Level Details</h3>
-                  <div className="space-y-4">
-                    <motion.div 
-                      className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl"
-                      whileHover={{ scale: 1.02 }}
+                  {/* Bottom Action Button */}
+                  <div className="p-8 text-center">
+                    <motion.button
+                      onClick={handleEnrollClick}
+                      className="group relative bg-gradient-to-r from-blue-800 to-blue-900 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/25 hover:scale-105"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      <span className="text-gray-700 dark:text-gray-300 font-medium">Duration</span>
-                      <span className="text-blue-600 dark:text-blue-400 font-semibold">{levelDetails.duration}</span>
-                    </motion.div>
-                    <motion.div 
-                      className="flex items-center justify-between p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl"
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      <span className="text-gray-700 dark:text-gray-300 font-medium">Level</span>
-                      <span className="text-purple-600 dark:text-purple-400 font-semibold">{levelDetails.level_range}</span>
-                    </motion.div>
-                    <motion.div 
-                      className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-xl"
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      <span className="text-gray-700 dark:text-gray-300 font-medium">Topics</span>
-                      <span className="text-green-600 dark:text-green-400 font-semibold">{topics.length} Topics</span>
-                    </motion.div>
+                      <span className="relative z-10">{isLoggedIn ? 'Apply Now' : 'Login to Apply'}</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </motion.button>
                   </div>
+
+
                 </div>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
 
-          {topics.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="mt-12"
-            >
-              <motion.h2 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.9 }}
-                className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center"
-              >
-                Learning Objectives
-              </motion.h2>
-              <div className="space-y-6">
-                {(() => {
-                  const groupedTopics: Array<{
-                    mainTopic: any;
-                    projectTopics: any[];
-                  }> = [];
-                  
-                  for (let i = 0; i < topics.length; i++) {
-                    const currentTopic = topics[i];
-                    const isProjectOrInternship = 
-                      currentTopic.topic_title.toLowerCase().includes('live project') || 
-                      currentTopic.topic_title.toLowerCase().includes('internship') ||
-                      currentTopic.topic_title.toLowerCase().includes('project');
-                    
-                    if (isProjectOrInternship) {
-                      // If this is a project topic, add it to the previous group or create new group
-                      if (groupedTopics.length > 0) {
-                        groupedTopics[groupedTopics.length - 1].projectTopics.push(currentTopic);
-                      } else {
-                        // If no previous group exists, create a new one with this as main topic
-                        groupedTopics.push({
-                          mainTopic: currentTopic,
-                          projectTopics: []
-                        });
-                      }
-                    } else {
-                      // This is a regular topic, create a new group
-                      groupedTopics.push({
-                        mainTopic: currentTopic,
-                        projectTopics: []
-                      });
-                    }
-                  }
-                  
-                  return groupedTopics.map((group, index) => (
-                    <motion.div
-                      key={group.mainTopic.id}
-                      initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.6, delay: 1.0 + index * 0.1 }}
-                      whileHover={{ scale: 1.02, y: -2 }}
-                      className="group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
-                    >
-                      {/* Glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      
-                      <div className="relative">
-                        <div className="flex items-center gap-3 mb-4">
-                          <motion.div
-                            whileHover={{ rotate: 5, scale: 1.1 }}
-                            className="p-3 bg-green-100 dark:bg-green-900/20 rounded-xl"
-                          >
-                            <CheckCircle className="w-6 h-6 text-green-500" />
-                          </motion.div>
-                          <div>
-                            <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">
-                              {group.mainTopic.topic_title}
-                            </h3>
-                            {group.mainTopic.description && (
-                              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                {group.mainTopic.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-4">
-                          {/* Main topic subpoints */}
-                          {topicSubpoints[group.mainTopic.id] && topicSubpoints[group.mainTopic.id].length > 0 && (
-                            <div className="ml-12 space-y-3">
-                              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                Learning Objectives:
-                              </h4>
-                              <div className="space-y-2">
-                                {topicSubpoints[group.mainTopic.id].map((subpoint, idx) => (
-                                  <motion.div
-                                    key={idx}
-                                    className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300"
-                                    whileHover={{ x: 2 }}
-                                  >
-                                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                                    <span className="leading-relaxed">{subpoint}</span>
-                                  </motion.div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                          
-                          {/* Project topics */}
-                          {group.projectTopics.length > 0 && (
-                            <div className="ml-12 pt-4 border-t border-gray-200 dark:border-gray-700">
-                              <h4 className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center gap-2">
-                                <span className="text-lg">🚀</span>
-                                Live Projects & Internships
-                              </h4>
-                              <div className="space-y-4">
-                                {group.projectTopics.map((projectTopic, projectIndex) => (
-                                  <div key={projectTopic.id}>
-                                    <h5 className="font-medium text-gray-900 dark:text-white mb-2">
-                                      {projectTopic.topic_title}
-                                    </h5>
-                                    {projectTopic.description && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 leading-relaxed">
-                                        {projectTopic.description}
-                                      </p>
-                                    )}
-                                    {topicSubpoints[projectTopic.id] && topicSubpoints[projectTopic.id].length > 0 && (
-                                      <div className="space-y-2">
-                                        {topicSubpoints[projectTopic.id].map((subpoint, idx) => (
-                                          <motion.div
-                                            key={idx}
-                                            className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300"
-                                            whileHover={{ x: 2 }}
-                                          >
-                                            <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                                            <span className="leading-relaxed">{subpoint}</span>
-                                          </motion.div>
-                                        ))}
-                                      </div>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  ));
-                })()}
-              </div>
-            </motion.div>
-          )}
         </div>
       </section>
 
-      {showEnrollmentModal && courseId && moduleId && levelId && (
-        <EnrollmentModal
-          isOpen={showEnrollmentModal}
-          onClose={() => setShowEnrollmentModal(false)}
-          onEnrollmentSuccess={handleEnrollmentSuccess}
-          courseName={courseDetails?.name || 'Course'}
-          levelName={levelDetails?.level_name}
-          courseId={parseInt(courseId)}
-          moduleId={parseInt(moduleId)}
-          levelId={parseInt(levelId)}
-        />
-      )}
+
 
       {/* Success Popup */}
       {showSuccessPopup && enrollmentData && (
