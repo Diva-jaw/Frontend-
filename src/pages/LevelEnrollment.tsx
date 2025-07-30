@@ -175,6 +175,8 @@ const LevelEnrollment = () => {
     courseDetails: courseDetails ? { id: courseDetails.id, name: courseDetails.name } : null
   });
 
+  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500">
       {/* Animated Background Elements */}
@@ -354,59 +356,135 @@ const LevelEnrollment = () => {
                 Learning Objectives
               </motion.h2>
               <div className="space-y-6">
-                {topics.map((topic, index) => (
-                  <motion.div
-                    key={topic.id}
-                    initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.6, delay: 1.0 + index * 0.1 }}
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    className="group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
-                  >
-                    {/* Glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                {(() => {
+                  const groupedTopics: Array<{
+                    mainTopic: any;
+                    projectTopics: any[];
+                  }> = [];
+                  
+                  for (let i = 0; i < topics.length; i++) {
+                    const currentTopic = topics[i];
+                    const isProjectOrInternship = 
+                      currentTopic.topic_title.toLowerCase().includes('live project') || 
+                      currentTopic.topic_title.toLowerCase().includes('internship') ||
+                      currentTopic.topic_title.toLowerCase().includes('project');
                     
-                    <div className="relative">
-                      <div className="flex items-center gap-3 mb-4">
-                        <motion.div
-                          whileHover={{ rotate: 5, scale: 1.1 }}
-                          className="p-3 bg-green-100 dark:bg-green-900/20 rounded-xl"
-                        >
-                          <CheckCircle className="w-6 h-6 text-green-500" />
-                        </motion.div>
-                        <div>
-                          <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">
-                            {topic.topic_title}
-                          </h3>
-                          {topic.description && (
-                            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                              {topic.description}
-                            </p>
+                    if (isProjectOrInternship) {
+                      // If this is a project topic, add it to the previous group or create new group
+                      if (groupedTopics.length > 0) {
+                        groupedTopics[groupedTopics.length - 1].projectTopics.push(currentTopic);
+                      } else {
+                        // If no previous group exists, create a new one with this as main topic
+                        groupedTopics.push({
+                          mainTopic: currentTopic,
+                          projectTopics: []
+                        });
+                      }
+                    } else {
+                      // This is a regular topic, create a new group
+                      groupedTopics.push({
+                        mainTopic: currentTopic,
+                        projectTopics: []
+                      });
+                    }
+                  }
+                  
+                  return groupedTopics.map((group, index) => (
+                    <motion.div
+                      key={group.mainTopic.id}
+                      initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ duration: 0.6, delay: 1.0 + index * 0.1 }}
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      className="group bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+                    >
+                      {/* Glow effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      
+                      <div className="relative">
+                        <div className="flex items-center gap-3 mb-4">
+                          <motion.div
+                            whileHover={{ rotate: 5, scale: 1.1 }}
+                            className="p-3 bg-green-100 dark:bg-green-900/20 rounded-xl"
+                          >
+                            <CheckCircle className="w-6 h-6 text-green-500" />
+                          </motion.div>
+                          <div>
+                            <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1">
+                              {group.mainTopic.topic_title}
+                            </h3>
+                            {group.mainTopic.description && (
+                              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                {group.mainTopic.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-4">
+                          {/* Main topic subpoints */}
+                          {topicSubpoints[group.mainTopic.id] && topicSubpoints[group.mainTopic.id].length > 0 && (
+                            <div className="ml-12 space-y-3">
+                              <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                Learning Objectives:
+                              </h4>
+                              <div className="space-y-2">
+                                {topicSubpoints[group.mainTopic.id].map((subpoint, idx) => (
+                                  <motion.div
+                                    key={idx}
+                                    className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300"
+                                    whileHover={{ x: 2 }}
+                                  >
+                                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                    <span className="leading-relaxed">{subpoint}</span>
+                                  </motion.div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Project topics */}
+                          {group.projectTopics.length > 0 && (
+                            <div className="ml-12 pt-4 border-t border-gray-200 dark:border-gray-700">
+                              <h4 className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-3 flex items-center gap-2">
+                                <span className="text-lg">🚀</span>
+                                Live Projects & Internships
+                              </h4>
+                              <div className="space-y-4">
+                                {group.projectTopics.map((projectTopic, projectIndex) => (
+                                  <div key={projectTopic.id}>
+                                    <h5 className="font-medium text-gray-900 dark:text-white mb-2">
+                                      {projectTopic.topic_title}
+                                    </h5>
+                                    {projectTopic.description && (
+                                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 leading-relaxed">
+                                        {projectTopic.description}
+                                      </p>
+                                    )}
+                                    {topicSubpoints[projectTopic.id] && topicSubpoints[projectTopic.id].length > 0 && (
+                                      <div className="space-y-2">
+                                        {topicSubpoints[projectTopic.id].map((subpoint, idx) => (
+                                          <motion.div
+                                            key={idx}
+                                            className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300"
+                                            whileHover={{ x: 2 }}
+                                          >
+                                            <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                                            <span className="leading-relaxed">{subpoint}</span>
+                                          </motion.div>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
                           )}
                         </div>
                       </div>
-                      {topicSubpoints[topic.id] && topicSubpoints[topic.id].length > 0 && (
-                        <div className="ml-12 space-y-3">
-                          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            Learning Objectives:
-                          </h4>
-                          <div className="space-y-2">
-                            {topicSubpoints[topic.id].map((subpoint, idx) => (
-                              <motion.div
-                                key={idx}
-                                className="flex items-start gap-3 text-sm text-gray-600 dark:text-gray-300"
-                                whileHover={{ x: 2 }}
-                              >
-                                <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                                <span className="leading-relaxed">{subpoint}</span>
-                              </motion.div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  ));
+                })()}
               </div>
             </motion.div>
           )}
