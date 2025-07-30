@@ -41,7 +41,7 @@ const courseIcons = {
 const AllCoursesMegaPage: React.FC = () => {
   const navigate = useNavigate();
   const { getAllCoursesWithModulesAndLevels } = useCourseContext();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, setRedirectPath } = useAuth();
   const [courses, setCourses] = useState<CourseWithModulesAndLevels[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -110,8 +110,7 @@ const AllCoursesMegaPage: React.FC = () => {
   };
 
   const handleEnrollClick = () => {
-    // This button should work without authentication - no redirect to login
-    // Navigate to specific course enrollment
+    // Navigate to the course level page instead of directly to enrollment
     navigate('/course/6/module/11/level/31');
   };
 
