@@ -20,7 +20,7 @@ import NotificationPopup from '../components/ui/NotificationPopup';
 const EnrollmentPage = () => {
   const { courseId, moduleId, levelId } = useParams<{ courseId: string; moduleId: string; levelId: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, setRedirectPath } = useAuth();
   const { getCourseDetails, getModuleLevels } = useCourseContext();
   
   const [courseDetails, setCourseDetails] = useState<any>(null);
@@ -43,6 +43,17 @@ const EnrollmentPage = () => {
     department: '',
     year: ''
   });
+
+  // Load phone number from localStorage if available
+  useEffect(() => {
+    const savedPhone = localStorage.getItem('userPhone');
+    if (savedPhone) {
+      setFormData(prev => ({
+        ...prev,
+        phone_no: savedPhone
+      }));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,6 +103,8 @@ const EnrollmentPage = () => {
         ...prev,
         [name]: numericValue
       }));
+      // Save phone number to localStorage
+      localStorage.setItem('userPhone', numericValue);
     } else {
       setFormData(prev => ({
         ...prev,
@@ -104,12 +117,9 @@ const EnrollmentPage = () => {
     e.preventDefault();
     
     if (!user) {
-      setNotification({
-        isOpen: true,
-        type: 'error',
-        title: 'Authentication Required',
-        message: 'Please log in to enroll in courses.'
-      });
+      // Store the current path before redirecting to login
+      setRedirectPath(`/course/${courseId}/module/${moduleId}/level/${levelId}/enroll`);
+      navigate('/signin');
       return;
     }
 
