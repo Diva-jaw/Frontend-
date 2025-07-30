@@ -237,9 +237,9 @@ const LevelEnrollment = () => {
                 
                 <motion.button
                   onClick={() => {
-                    // View curriculum functionality
+                    // View curriculum functionality - Open AI Course PDF
                     const link = document.createElement('a');
-                    link.href = `/api/courses/${courseId}/curriculum`;
+                    link.href = 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf';
                     link.target = '_blank';
                     document.body.appendChild(link);
                     link.click();
