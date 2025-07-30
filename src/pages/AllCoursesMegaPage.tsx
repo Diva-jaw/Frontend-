@@ -269,7 +269,7 @@ const AllCoursesMegaPage: React.FC = () => {
                         <path d="M16 16l4 4"></path>
                       </svg>
                     </span>
-                    <span className="text-black text-base font-semibold">Real Industry Mentorship</span>
+                    <span className="text-gray-800 dark:text-gray-100 text-base font-semibold">Real Industry Mentorship</span>
                   </div>
                   
                   {/* 3 Internships - with briefcase icon */}
@@ -280,7 +280,7 @@ const AllCoursesMegaPage: React.FC = () => {
                         <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
                       </svg>
                     </span>
-                    <span className="text-black text-base font-semibold">3 Internships</span>
+                    <span className="text-gray-800 dark:text-gray-100 text-base font-semibold">3 Internships</span>
                   </div>
                   
                   {/* Global AI Product and Leadership experience - with globe/leadership icon */}
@@ -292,7 +292,7 @@ const AllCoursesMegaPage: React.FC = () => {
                         <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                       </svg>
                     </span>
-                                         <span className="text-black text-lg font-semibold">Full global AI Product and Leadership experience</span>
+                    <span className="text-gray-800 dark:text-gray-100 text-lg font-semibold">Full global AI Product and Leadership experience</span>
                   </div>
                </div>
             </div>

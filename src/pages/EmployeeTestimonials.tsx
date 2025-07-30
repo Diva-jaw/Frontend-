@@ -7,6 +7,14 @@ const EmployeeTestimonials: React.FC = () => {
   const testimonials = [
     {
       id: 1,
+      name: "Nikhil",
+      role: "Senior Manager",
+      photo: "/nikhilrft.jpg",
+      text: '"Leading such a dynamic and driven team is a privilege. The culture here encourages innovation, accountability, and continuous growth."',
+      rating: 5,
+    },
+    {
+      id: 2,
       name: "Sandhya",
       role: "HR Manager",
       photo: "/sandhya.jpg",
@@ -14,23 +22,7 @@ const EmployeeTestimonials: React.FC = () => {
       rating: 4,
     },
     {
-      id: 2,
-      name: "Nikhil",
-      role: "General Manager",
-      photo: "/sudhanshu.jpg",
-      text: '"Leading such a dynamic and driven team is a privilege. The culture here encourages innovation, accountability, and continuous growth."',
-      rating: 5,
-    },
-    {
       id: 3,
-      name: "Anshika",
-      role: "Assistant Developer",
-      photo: "/anshika.jpg",
-      text: '"As an Assistant Developer, I\'ve been given real opportunities to grow my skills and contribute meaningfully. The mentorship and team support make it a great place to learn and thrive."',
-      rating: 4,
-    },
-    {
-      id: 4,
       name: "Riya Girotra",
       role: "QA & CRM Specialist",
       photo: "/Riya Girotra.jpg",
@@ -38,7 +30,7 @@ const EmployeeTestimonials: React.FC = () => {
       rating: 4,
     },
     {
-      id: 5,
+      id: 4,
       name: "Divya",
       role: "SDE & Product Lead",
       photo: "/divya.jpg",
@@ -46,36 +38,68 @@ const EmployeeTestimonials: React.FC = () => {
       rating: 5,
     },
     {
-      id: 6,
-      name: "Riya Singh",
-      role: "Junior Developer",
-      photo: "/Riya Singh.jpg",
-      text: '"As a Junior Developer, I\'ve had the chance to work on real projects from day one. The guidance from senior team members and the collaborative culture make it the perfect environment to grow."',
+      id: 5,
+      name: "Anirudh",
+      role: "Software Developer",
+      photo: "/anirudhh.jpg",
+      text: '"As a Software Developer, I\'ve been exposed to a wide range of technologies and real-world coding practices. It\'s a great place to build a strong foundation and grow with the team."',
       rating: 5,
     },
     {
-      id: 7,
+      id: 6,
       name: "Sadaf",
-      role: "Assistant Developer",
+      role: "Software Developer",
       photo: "/sadaf.jpg",
-      text: '"Joining as an Assistant Developer has been an amazing experience. The team\'s support and the hands-on learning environment have helped me build confidence and sharpen my skills every day."',
+      text: '"Joining as a Software Developer has been an amazing experience. The team\'s support and the hands-on learning environment have helped me build confidence and sharpen my skills every day."',
+      rating: 4,
+    },
+    {
+      id: 7,
+      name: "Anshika",
+      role: "Software Developer",
+      photo: "/anshika.jpg",
+      text: '"As a Software Developer, I\'ve been given real opportunities to grow my skills and contribute meaningfully. The mentorship and team support make it a great place to learn and thrive."',
       rating: 4,
     },
     {
       id: 8,
-      name: "Anirudh",
-      role: "Assistant Developer",
-      photo: "/anirudhh.jpg",
-      text: '"As an Assistant Developer, I\'ve been exposed to a wide range of technologies and real-world coding practices. It\'s a great place to build a strong foundation and grow with the team."',
-      rating: 5,
-    },
-    {
-      id: 9,
       name: "Ronit",
       role: "AI Engineer",
       photo: "/ronit.jpg",
       text: '"Working on AI-driven solutions here has been an exciting journey. The access to advanced tools, real-world datasets, and a collaborative environment keeps me inspired to push the boundaries of what\'s possible."',
       rating: 4,
+    },
+    {
+      id: 9,
+      name: "Shyam",
+      role: "AI Developer",
+      photo: "/shyam.jpg",
+      text: '"Working as an AI Developer here has been incredibly rewarding. The cutting-edge projects and collaborative environment allow me to push the boundaries of artificial intelligence and machine learning."',
+      rating: 5,
+    },
+    {
+      id: 10,
+      name: "Riya Singh",
+      role: "Frontend Developer",
+      photo: "/Riya Singh.jpg",
+      text: '"As a Frontend Developer, I\'ve had the chance to work on real projects from day one. The guidance from senior team members and the collaborative culture make it the perfect environment to grow."',
+      rating: 5,
+    },
+    {
+      id: 11,
+      name: "Divyansh Gautam",
+      role: "Software Developer",
+      photo: "/divyanshrft2.jpg",
+      text: '"As a Software Developer, I\'ve found the perfect environment to grow my technical skills. The hands-on projects and supportive team culture have accelerated my learning journey significantly."',
+      rating: 4,
+    },
+    {
+      id: 12,
+      name: "Abhishek Singh",
+      role: "Software Developer",
+      photo: "/abhishekrft.jpg",
+      text: '"Joining as a Software Developer has been transformative. The mentorship, real-world projects, and collaborative environment have helped me develop both technical skills and professional confidence."',
+      rating: 5,
     },
   ];
 
@@ -179,6 +203,7 @@ const EmployeeTestimonials: React.FC = () => {
                       src={testimonial.photo}
                       alt={testimonial.name}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      style={{ objectPosition: '25% 50%' }}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.style.display = "none";
