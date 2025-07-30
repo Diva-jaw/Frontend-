@@ -113,7 +113,7 @@ const LevelEnrollment = () => {
   }, [courseId, moduleId, levelId]);
 
   const handleBackClick = () => {
-    navigate('/all-courses-mega');
+    navigate('/courses');
   };
 
   const handleEnrollClick = () => {
@@ -172,6 +172,8 @@ const LevelEnrollment = () => {
     topicsCount: topics.length,
     courseDetails: courseDetails ? { id: courseDetails.id, name: courseDetails.name } : null
   });
+
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500">
@@ -405,6 +407,7 @@ const LevelEnrollment = () => {
               </div>
             </div>
           </motion.div>
+
         </div>
       </section>
 

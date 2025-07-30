@@ -57,7 +57,7 @@ const CourseDetails = () => {
   };
 
   const handleBackClick = () => {
-    navigate('/all-courses-mega');
+    navigate('/courses');
   };
 
   if (loading) {

@@ -576,7 +576,7 @@ const Navbar = () => {
                 <a href="/#about" onClick={e => handleNavClick(e, "about") } className={linkClass + " w-full text-left"}>About</a>
                 <a href="/#what-we-do" onClick={e => handleNavClick(e, "what-we-do") } className={linkClass + " w-full text-left"}>What We Do</a>
                 {/* Courses Link */}
-                <Link to="/all-courses-mega" className={linkClass + " w-full text-left"}>Courses</Link>
+                <Link to="/courses" className={linkClass + " w-full text-left"}>Courses</Link>
                 {/* Learn Dropdown (collapsible) */}
                 <details className="group">
                   <summary className={linkClass + " w-full text-left cursor-pointer flex items-center justify-between"}>Learn <span className="ml-2">▼</span></summary>
