@@ -577,7 +577,7 @@ console.log("normalizedApplications",normalizedApplications);
                     </div>
                     <button
                       className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-                      onClick={() => navigate('/all-courses-mega')}
+                      onClick={() => navigate('/courses')}
                     >
                       <span className="flex items-center space-x-2">
                         <BookOpen className="w-4 h-4" />
@@ -621,7 +621,7 @@ console.log("normalizedApplications",normalizedApplications);
                           <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">No Courses Yet</h4>
                           <p className="text-gray-600 dark:text-gray-300 mb-4">You haven't enrolled in any courses yet. Start your learning journey today!</p>
                           <button
-                            onClick={() => navigate('/all-courses-mega')}
+                            onClick={() => navigate('/courses')}
                             className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                           >
                             Browse Courses

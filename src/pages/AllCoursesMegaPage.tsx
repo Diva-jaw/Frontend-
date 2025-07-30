@@ -143,88 +143,164 @@ const AllCoursesMegaPage: React.FC = () => {
   return (
     <>
       {/* AI Masterclass Hero Section */}
-      <div className="relative bg-gradient-to-br from-blue-50 via-purple-100 to-blue-200 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 border border-blue-200 dark:border-blue-900 rounded-3xl shadow-2xl overflow-hidden mb-4 px-2 sm:px-8 py-2 sm:py-3 lg:py-4 mt-20" style={{ minHeight: 'auto', opacity: 1, transform: 'none' }}>
+      <div className="relative bg-gradient-to-br from-blue-50 via-purple-100 to-blue-200 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 border border-blue-200 dark:border-blue-900 rounded-3xl shadow-2xl overflow-hidden mb-8 px-4 sm:px-8 py-6 sm:py-8 lg:py-10 mt-20 animate-scaleIn" style={{ minHeight: 'auto', opacity: 1, transform: 'none' }}>
+        {/* Enhanced Background Effects */}
         <div className="absolute inset-0 pointer-events-none rounded-3xl border-2 border-white/40 dark:border-blue-900/30" style={{ zIndex: 1 }} />
-        <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-2 z-10">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="p-2 bg-gradient-to-br from-purple-700 via-blue-600 to-blue-400 rounded-2xl shadow-2xl flex-shrink-0 border-4 border-white/60 dark:border-blue-900/60 scale-105" style={{ transform: 'translateY(-0.0496224px)' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width={38} height={38} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-database text-white drop-shadow-xl"><ellipse cx={12} cy={5} rx={9} ry={3}></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg>
+        <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-purple-400/20 to-transparent rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl from-blue-400/20 to-transparent rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+        
+        {/* Main Content Container */}
+        <div className="relative z-10">
+          {/* Header Section with Enhanced Layout */}
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+            <div className="flex items-center justify-between gap-4 min-w-0 flex-1 animate-slideInFromLeft">
+              {/* Enhanced Text Content */}
+                             <div className="min-w-0 flex-1">
+                                   <div className="flex items-center justify-center gap-4 mb-6">
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight drop-shadow-lg leading-tight text-center bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
+                      Global AI Masterclass: For Future AI Leaders
+                    </h1>
+                    
+                    {/* Enhanced Best Seller Badge */}
+                    <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-3 rounded-full text-sm font-bold shadow-2xl tracking-wide border-4 border-white/40 dark:border-green-900/40 flex items-center gap-3 animate-pulse-slow hover:scale-105 transition-transform duration-300 animate-slideInFromRight">
+                      <span className="inline-block w-3 h-3 bg-white rounded-full animate-pulse"></span>
+                      <span className="text-base">Best Seller</span>
+                    </div>
+                  </div>
+                 
+                                   <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 font-medium mb-6 opacity-95 leading-relaxed text-center max-w-4xl mx-auto">
+                    Exceptional opportunity to get trained by global AI Technologist combined with Hands-on Working<br />
+                    on <strong className="text-blue-600 dark:text-blue-400 font-bold">International Award Winning AI Products</strong> to make you Industry ready
+                  </p>
+               </div>
             </div>
-            <div className="min-w-0">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-purple-800 via-blue-700 to-blue-400 bg-clip-text text-transparent mb-1 truncate tracking-tight drop-shadow-lg">
-                AI Masterclass: For Future AI Leaders
-              </h1>
-              <div className="text-base sm:text-lg text-gray-800 dark:text-gray-200 font-medium mb-1 opacity-95">
-                Become an AI/ML expert with hands-on projects, mentorship, and industry certification.
+          </div>
+          
+          {/* Enhanced Divider */}
+          <div className="w-full h-1 bg-gradient-to-r from-blue-200 via-purple-200 to-blue-100 dark:from-blue-900 dark:via-purple-900 dark:to-blue-900 opacity-70 mb-6 rounded-full animate-shimmer"></div>
+          
+          {/* Two Column Grid Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                                      {/* Left Column - Company Description */}
+                          <div className="space-y-6 animate-slideInFromLeft">
+                <div className="space-y-3 text-lg text-gray-700 dark:text-gray-300 leading-relaxed flex flex-col justify-center">
+                                       <p className="text-lg sm:text-xl lg:text-2xl text-black mb-3 leading-tight">
+                      Ruhil Future Technologies presents <strong>Silicon Valley</strong> based<br />
+                      global AI Masterclass for Future AI Leaders
+                    </p>
+                   <div className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+                     <p className="text-lg leading-relaxed">Ruhil Future Technologies is a <strong>Canada based</strong> global AI Organization<br />with the aligned focus to make India an AI Powerhouse.</p>
+                   </div>
+                 </div>
+                 
+                                                     {/* CTA Buttons moved here */}
+                   <div className="flex flex-col sm:flex-row gap-4 items-center justify-start mt-6">
+                    <button 
+                      onClick={handleEnrollClick}
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-700 to-purple-700 text-white px-12 py-5 rounded-2xl text-xl font-bold hover:from-blue-800 hover:to-purple-800 transition-all duration-300 shadow-2xl hover:shadow-3xl focus:outline-none focus:ring-4 focus:ring-blue-400/50 border-2 border-blue-200 dark:border-blue-800 hover:scale-105 transform animate-glow" 
+                      tabIndex={0}
+                    >
+                      <span>Enroll Now</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width={26} height={26} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right animate-pulse">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                      </svg>
+                    </button>
+                    <button
+                      className="flex-1 sm:flex-none inline-flex items-center justify-center gap-3 bg-white/95 dark:bg-gray-800/95 text-gray-800 dark:text-white border-2 border-gray-300 dark:border-gray-600 px-12 py-5 rounded-2xl text-xl font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-400/50 shadow-2xl hover:shadow-3xl hover:scale-105 transform"
+                      tabIndex={0}
+                      onClick={() => window.open("http://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf", "_blank")}
+                    >
+                      <span>View Curriculum</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width={26} height={26} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  {/* Internship Guarantee moved here */}
+                  <div className="flex items-center gap-4 px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-800 shadow-2xl border-4 border-white/40 dark:border-blue-900/40 hover:scale-105 transition-transform duration-300 group animate-pulse-slow mt-6 w-fit ml-9">
+                    <svg xmlns="http://www.w3.org/2000/svg" width={28} height={28} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-graduation-cap text-white drop-shadow group-hover:scale-110 transition-transform duration-300">
+                      <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
+                      <path d="M22 10v6"></path>
+                      <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+                    </svg>
+                    <div className="text-center">
+                      <span className="font-bold text-white text-xl sm:text-2xl block">100% Guarantee of Internship</span>
+                      <span className="text-blue-100 dark:text-blue-200 font-medium text-base">with Ruhil Future Technologies</span>
+                    </div>
+                  </div>
+             </div>
+            
+            {/* Right Column - Feature Cards */}
+            <div className="space-y-6 animate-slideInFromRight">
+              {/* Enhanced Features Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                 {[
+                   { icon: 'clock', text: '9 Months', color: 'blue' },
+                                       { icon: 'code', text: '3 Training Modules', color: 'purple' },
+                   { icon: 'users', text: '5 Days a Week', color: 'green' },
+                   { icon: 'network', text: '3 Live Projects', color: 'yellow' }
+                 ].map((feature, idx) => (
+                  <div key={feature.text} className="flex items-center gap-3 p-4 bg-white/80 dark:bg-gray-700/80 rounded-2xl shadow-lg border border-blue-100 dark:border-blue-900 backdrop-blur-md hover:scale-105 transition-all duration-300 group animate-scaleIn" style={{ animationDelay: `${idx * 0.1}s` }}>
+                    <span className={`inline-flex items-center justify-center w-12 h-12 rounded-full bg-${feature.color}-100 dark:bg-${feature.color}-900 shadow-md group-hover:shadow-lg transition-shadow duration-300`}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`text-${feature.color}-600 dark:text-${feature.color}-400`}>
+                        {feature.icon === 'clock' && <><circle cx={12} cy={12} r={10}></circle><polyline points="12 6 12 12 16 14"></polyline></>}
+                                                 {feature.icon === 'code' && <><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></>}
+                                                 {feature.icon === 'users' && <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></>}
+                                                 {feature.icon === 'network' && <><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/><path d="M3 21l9-9"/></>}
+                      </svg>
+                    </span>
+                    <span className="text-gray-800 dark:text-gray-100 text-base font-semibold">{feature.text}</span>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center gap-2 text-sm sm:text-base text-blue-800 dark:text-blue-200 font-semibold">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-star text-yellow-400 drop-shadow-[0_0_4px_rgba(255,215,0,0.7)]"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                  ))}
-                </div>
-                <span className="ml-1">5.0 <span className="font-normal text-gray-500 dark:text-gray-300">(2,847 reviews)</span></span>
-              </div>
+              
+                                            {/* Enhanced Benefits Section */}
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                   {/* Real Industry Mentorship - with users/mentorship icon */}
+                  <div className="flex items-center gap-3 p-4 bg-white/90 dark:bg-gray-700/90 rounded-2xl shadow-lg border border-green-100 dark:border-green-900 backdrop-blur-md hover:scale-105 transition-all duration-300 group animate-scaleIn" style={{ animationDelay: '0.4s' }}>
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/30 shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-600 dark:text-yellow-400">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="m22 21-2-2"></path>
+                        <path d="M16 16l4 4"></path>
+                      </svg>
+                    </span>
+                    <span className="text-gray-800 dark:text-gray-100 text-base font-semibold">Real Industry Mentorship</span>
+                  </div>
+                  
+                  {/* 3 Internships - with briefcase icon */}
+                  <div className="flex items-center gap-3 p-4 bg-white/90 dark:bg-gray-700/90 rounded-2xl shadow-lg border border-green-100 dark:border-green-900 backdrop-blur-md hover:scale-105 transition-all duration-300 group animate-scaleIn" style={{ animationDelay: '0.5s' }}>
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/30 shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-600 dark:text-yellow-400">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                      </svg>
+                    </span>
+                    <span className="text-gray-800 dark:text-gray-100 text-base font-semibold">3 Internships</span>
+                  </div>
+                  
+                  {/* Global AI Product and Leadership experience - with globe/leadership icon */}
+                  <div className="sm:col-span-2 flex items-center gap-3 p-4 bg-white/90 dark:bg-gray-700/90 rounded-2xl shadow-lg border border-green-100 dark:border-green-900 backdrop-blur-md hover:scale-105 transition-all duration-300 group animate-scaleIn" style={{ animationDelay: '0.6s' }}>
+                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/30 shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-600 dark:text-yellow-400">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M2 12h20"></path>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                      </svg>
+                    </span>
+                    <span className="text-gray-800 dark:text-gray-100 text-lg font-semibold">Full global AI Product and Leadership experience</span>
+                  </div>
+               </div>
             </div>
           </div>
-          <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-5 py-1.5 rounded-full text-sm font-bold shadow-xl self-start md:self-center tracking-wide border-4 border-white/40 dark:border-green-900/40 flex items-center gap-2 animate-pulse-slow">
-            <span className="inline-block w-2 h-2 bg-white rounded-full animate-pulse"></span>Best Seller
-          </div>
-        </div>
-        <div className="w-full h-1 bg-gradient-to-r from-blue-200 via-purple-200 to-blue-100 dark:from-blue-900 dark:via-purple-900 dark:to-blue-900 opacity-70 my-2 rounded-full"></div>
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 my-1 px-2 py-2 bg-white/70 dark:bg-gray-700/70 rounded-2xl shadow border border-blue-100 dark:border-blue-900 backdrop-blur-md mx-auto max-w-5xl z-10">
-          <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100 text-base font-semibold">
-            <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900">
-              <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-clock text-blue-600"><circle cx={12} cy={12} r={10}></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            </span>9 Months
-          </div>
-          <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100 text-base font-semibold">
-            <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-purple-100 dark:bg-purple-900">
-              <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-code text-purple-600"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-            </span>Beginner to Expert
-          </div>
-          <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100 text-base font-semibold">
-            <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-green-100 dark:bg-green-900">
-              <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-users text-green-600"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx={9} cy={7} r={4}></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            </span>Satisfied Students
-          </div>
-          <div className="flex items-center gap-2 text-gray-800 dark:text-gray-100 text-base font-semibold">
-            <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-yellow-100 dark:bg-yellow-900">
-              <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trophy text-yellow-600"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
-            </span>Industry Ready Certificate
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 my-1 px-2 py-2 bg-white/80 dark:bg-gray-700/80 rounded-2xl shadow border border-blue-100 dark:border-blue-900 backdrop-blur-md mx-auto max-w-5xl z-10">
-          {['Live Projects', '1-on-1 Mentorship', 'Expert Instructors', 'Lifetime Access'].map((item, idx) => (
-            <div key={item} className="flex items-center gap-2 text-green-700 dark:text-green-300 text-base font-semibold">
-              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-50 dark:bg-green-900/30"><div className="w-2 h-2 bg-green-500 rounded-full"></div></span>{item}
-            </div>
-          ))}
-        </div>
-        <div className="w-full flex justify-center">
-          <div className="flex items-center gap-4 px-8 py-3 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-800 shadow-xl border-4 border-white/40 dark:border-blue-900/40 mt-3 mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width={26} height={26} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-graduation-cap text-white drop-shadow"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path><path d="M22 10v6"></path><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg>
-            <span className="font-bold text-white text-lg sm:text-xl">100% Guarantee of Internship</span>
-            <span className="text-blue-100 dark:text-blue-200 font-medium text-base">with Ruhil Future Technologies</span>
-          </div>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-4 z-10">
-          <button 
-            onClick={handleEnrollClick}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-700 to-purple-700 text-white px-10 py-4 rounded-xl text-lg font-bold hover:from-blue-800 hover:to-purple-800 transition-all duration-300 shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-400 border-2 border-blue-200 dark:border-blue-800" 
-            tabIndex={0}
-          >
-            <span>Enroll Now</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right "><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-          </button>
-          <button
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-white/90 dark:bg-gray-800/90 text-gray-800 dark:text-white border-2 border-gray-300 dark:border-gray-600 px-10 py-4 rounded-xl text-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-xl"
-            tabIndex={0}
-            onClick={() => window.open("http://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf", "_blank")}
-          >
-            <span>View Curriculum</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right "><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-          </button>
+          
+          
+          
+          
         </div>
       </div>
       {/* End AI Masterclass Hero Section */}

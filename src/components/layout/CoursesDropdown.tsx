@@ -267,7 +267,7 @@ const CoursesDropdown = () => {
                   className="text-center"
                 >
                   <motion.button
-                    onClick={() => navigate('/all-courses-mega')}
+                    onClick={() => navigate('/courses')}
                     className="w-full bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-600 dark:hover:to-blue-700 transition-all duration-300 transform shadow-lg flex items-center justify-center gap-3"
                     whileTap={{ scale: 0.95 }}
                   >
