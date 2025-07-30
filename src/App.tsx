@@ -21,6 +21,7 @@ import CRDPage from "./pages/CRD";
 import CourseDetails from "./pages/CourseDetails";
 import ModuleDetails from "./pages/ModuleDetails";
 import LevelEnrollment from "./pages/LevelEnrollment";
+import EnrollmentPage from "./pages/EnrollmentPage";
 import ScrollToTop from "./components/ScrollToTop";
 import AllCoursesMegaPage from "./pages/AllCoursesMegaPage";
 
@@ -126,6 +127,7 @@ function App() {
                   <Route path="/course/:courseId" element={<CourseDetails />} />
                   <Route path="/course/:courseId/module/:moduleId" element={<ModuleDetails />} />
                   <Route path="/course/:courseId/module/:moduleId/level/:levelId" element={<LevelEnrollment />} />
+                  <Route path="/course/:courseId/module/:moduleId/level/:levelId/enroll" element={<EnrollmentPage />} />
 
                   <Route path="/employers-login" element={<EmployersLogin />} />
                   <Route path="/employers-dashboard" element={<EmployersDashboard />} />
