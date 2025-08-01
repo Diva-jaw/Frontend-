@@ -263,15 +263,15 @@ const AllCoursesMegaPage: React.FC = () => {
               </div>
               
               {/* Internship Guarantee - Mobile Optimized */}
-              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 px-3 sm:px-4 lg:px-6 xl:px-8 py-2.5 sm:py-3 lg:py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-800 shadow-xl sm:shadow-2xl border-2 sm:border-4 border-white/40 dark:border-blue-900/40 hover:scale-105 transition-transform duration-300 group sm:animate-pulse-slow mt-4 sm:mt-4 lg:mt-6 w-fit mx-auto md:mx-auto sm:ml-9">
-                <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-graduation-cap text-white drop-shadow group-hover:scale-110 transition-transform duration-300 sm:w-6 sm:h-6 lg:w-7 lg:h-7">
+              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 px-3 sm:px-4 lg:px-6 xl:px-8 py-2.5 sm:py-3 lg:py-4 rounded-full bg-blue-100 dark:bg-blue-200 shadow-md border border-blue-200 dark:border-blue-300 hover:scale-105 transition-transform duration-300 group mt-4 sm:mt-4 lg:mt-6 w-fit mx-auto md:mx-auto sm:ml-9">
+                <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-graduation-cap text-blue-600 dark:text-blue-700 group-hover:scale-110 transition-transform duration-300 sm:w-6 sm:h-6 lg:w-7 lg:h-7">
                   <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
                   <path d="M22 10v6"></path>
                   <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
                 </svg>
                 <div className="text-center">
-                  <span className="font-bold text-white text-xs sm:text-sm lg:text-xl xl:text-2xl block">100% Guarantee of Internship</span>
-                  <span className="text-blue-100 dark:text-blue-200 font-medium text-xs sm:text-sm lg:text-base">with Ruhil Future Technologies</span>
+                  <span className="font-bold text-blue-800 dark:text-blue-900 text-xs sm:text-sm lg:text-xl xl:text-2xl block">100% Guarantee of Internship</span>
+                  <span className="text-blue-600 dark:text-blue-700 font-medium text-xs sm:text-sm lg:text-base">with Ruhil Future Technologies</span>
                 </div>
               </div>
             </div>
