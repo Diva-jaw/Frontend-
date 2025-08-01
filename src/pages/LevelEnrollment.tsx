@@ -8,7 +8,9 @@ import {
   Star,
   CheckCircle,
   Code,
-  Code2
+  Code2,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useCourseContext } from '../contexts/CourseContext';
 import { courseService } from '../services/courseService';
@@ -31,6 +33,7 @@ const LevelEnrollment = () => {
   const [error, setError] = useState<string | null>(null);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   console.log('LevelEnrollment: Component rendered with:', {
     courseId,
@@ -136,6 +139,25 @@ const LevelEnrollment = () => {
     console.log('LevelEnrollment: Success popup should now be visible');
   };
 
+  // Dark mode toggle functionality
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains('dark');
+    setIsDarkMode(isDark);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('darkMode', 'true');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('darkMode', 'false');
+    }
+  };
+
   if (loading) {
     console.log('LevelEnrollment: Showing loading state');
     return (
@@ -177,6 +199,21 @@ const LevelEnrollment = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500">
+      {/* Dark Mode Toggle - Mobile and Tablet */}
+      <div className="fixed top-10 right-1 z-50 xl:hidden">
+        <button
+          onClick={toggleDarkMode}
+          className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-200 hover:scale-105"
+          aria-label="Toggle dark mode"
+        >
+          {isDarkMode ? (
+            <Sun size={16} className="text-yellow-500" />
+          ) : (
+            <Moon size={16} className="text-gray-700" />
+          )}
+        </button>
+      </div>
+
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
@@ -184,8 +221,8 @@ const LevelEnrollment = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
       </div>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden mt-4 sm:mt-6 lg:mt-8">
+             {/* Hero Section */}
+       <section className="relative overflow-hidden mt-0 sm:mt-6 lg:mt-8">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-300/10 to-purple-300/10 dark:from-blue-600/5 dark:to-purple-600/5"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
           {/* Back Button */}
@@ -195,8 +232,8 @@ const LevelEnrollment = () => {
             whileHover={{ x: -5, scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
           >
-            <ArrowLeft size={20} className="transition-transform duration-150 group-hover:-translate-x-1" />
-            <span className="font-semibold">Back to Module</span>
+                         <ArrowLeft size={20} className="transition-transform duration-150 group-hover:-translate-x-1" />
+             <span className="font-semibold">Back</span>
           </motion.button>
 
           {/* Level Header */}
@@ -237,23 +274,23 @@ const LevelEnrollment = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </motion.button>
                 
-                <motion.button
-                  onClick={() => {
-                    // View curriculum functionality - Open AI Course PDF
-                    const link = document.createElement('a');
-                    link.href = 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf';
-                    link.target = '_blank';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                  }}
-                  className="group relative bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-2xl font-bold text-base hover:from-green-500 hover:to-green-600 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-green-500/25 hover:scale-105"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="relative z-10">View Curriculum</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </motion.button>
+                                 <motion.button
+                   onClick={() => {
+                     // View curriculum functionality - Open AI Course PDF
+                     const link = document.createElement('a');
+                     link.href = 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf';
+                     link.target = '_blank';
+                     document.body.appendChild(link);
+                     link.click();
+                     document.body.removeChild(link);
+                   }}
+                   className="group relative bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-2xl font-bold text-base hover:from-green-500 hover:to-green-600 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-green-500/25 hover:scale-105"
+                   whileHover={{ scale: 1.05 }}
+                   whileTap={{ scale: 0.98 }}
+                 >
+                   <span className="relative z-10">View Curriculum</span>
+                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                 </motion.button>
               </div>
             </div>
           </motion.div>
@@ -272,7 +309,7 @@ const LevelEnrollment = () => {
                   
                   {/* Course Details Section */}
                   <div className="p-8 border-b border-gradient-to-r from-blue-200/40 to-purple-200/40 dark:from-blue-600/20 dark:to-purple-600/20">
-                    <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-10 text-center">
+                    <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 sm:mb-8 md:mb-10 text-center">
                       Course Details
                     </h3>
                     
@@ -280,47 +317,47 @@ const LevelEnrollment = () => {
                       <div className="space-y-2">
                         {courseId === '6' && moduleId === '11' && levelId === '31' ? (
                           <>
-                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
-                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Duration:</span>
-                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">9 Months (Phase 1 + Phase 2 + Phase 3)</span>
-                            </div>
-                            
-                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
-                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Schedule:</span>
-                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">5 Days a Week (Full-Time Commitment)</span>
-                            </div>
-                            
-                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
-                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Structure:</span>
-                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">3 Trainings + 3 Live Projects + 3 Internships</span>
-                            </div>
-                            
-                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
-                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Approach:</span>
-                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">Real-work, Industry Mentorship, and Team-based delivery</span>
-                            </div>
+                                                         <div className="flex items-start gap-0 sm:gap-1 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                               <span className="text-sm sm:text-xl md:text-2xl font-bold text-blue-700 dark:text-blue-300 min-w-[120px] sm:min-w-[140px]">Duration :</span>
+                               <span className="text-sm sm:text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-semibold">9 Months (Phase 1 + Phase 2 + Phase 3)</span>
+                             </div>
+                             
+                             <div className="flex items-start gap-0 sm:gap-1 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                               <span className="text-sm sm:text-xl md:text-2xl font-bold text-blue-700 dark:text-blue-300 min-w-[120px] sm:min-w-[140px]">Schedule :</span>
+                               <span className="text-sm sm:text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-semibold">5 Days a Week (Full-Time Commitment)</span>
+                             </div>
+                             
+                             <div className="flex items-start gap-0 sm:gap-1 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                               <span className="text-sm sm:text-xl md:text-2xl font-bold text-blue-700 dark:text-blue-300 min-w-[120px] sm:min-w-[140px]">Structure :</span>
+                               <span className="text-sm sm:text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-semibold">3 Trainings + 3 Live Projects + 3 Internships</span>
+                             </div>
+                             
+                             <div className="flex items-start gap-0 sm:gap-1 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                               <span className="text-sm sm:text-xl md:text-2xl font-bold text-blue-700 dark:text-blue-300 min-w-[120px] sm:min-w-[140px]">Approach :</span>
+                               <span className="text-sm sm:text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-semibold">Real-work, Industry Mentorship, and Team-based delivery</span>
+                             </div>
                           </>
                         ) : (
                           <>
-                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
-                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Course Name:</span>
-                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">{courseDetails?.name}</span>
-                            </div>
-                            
-                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
-                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Duration:</span>
-                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">{levelDetails.duration}</span>
-                            </div>
-                            
-                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
-                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Skill Level:</span>
-                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">{levelDetails.level_range}</span>
-                            </div>
-                            
-                            <div className="flex items-center gap-3 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
-                              <span className="text-2xl font-bold text-blue-700 dark:text-blue-300">Modules:</span>
-                              <span className="text-2xl text-gray-800 dark:text-gray-200 font-semibold">{topics.length}</span>
-                            </div>
+                                                         <div className="flex items-start gap-0 sm:gap-1 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                               <span className="text-sm sm:text-xl md:text-2xl font-bold text-blue-700 dark:text-blue-300 min-w-[120px] sm:min-w-[140px]">Course Name :</span>
+                               <span className="text-sm sm:text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-semibold">{courseDetails?.name}</span>
+                             </div>
+                             
+                             <div className="flex items-start gap-0 sm:gap-1 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                               <span className="text-sm sm:text-xl md:text-2xl font-bold text-blue-700 dark:text-blue-300 min-w-[120px] sm:min-w-[140px]">Duration :</span>
+                               <span className="text-sm sm:text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-semibold">{levelDetails.duration}</span>
+                             </div>
+                             
+                             <div className="flex items-start gap-0 sm:gap-1 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                               <span className="text-sm sm:text-xl md:text-2xl font-bold text-blue-700 dark:text-blue-300 min-w-[120px] sm:min-w-[140px]">Skill Level :</span>
+                               <span className="text-sm sm:text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-semibold">{levelDetails.level_range}</span>
+                             </div>
+                             
+                             <div className="flex items-start gap-0 sm:gap-1 p-1 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 transition-all duration-300 rounded-md">
+                               <span className="text-sm sm:text-xl md:text-2xl font-bold text-blue-700 dark:text-blue-300 min-w-[120px] sm:min-w-[140px]">Modules :</span>
+                               <span className="text-sm sm:text-xl md:text-2xl text-gray-800 dark:text-gray-200 font-semibold">{topics.length}</span>
+                             </div>
                           </>
                         )}
                       </div>

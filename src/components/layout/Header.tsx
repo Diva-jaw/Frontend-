@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import Navbar from './Navbar';
 import { useAuth } from '../AuthContext';
@@ -9,11 +9,44 @@ interface HeaderProps {
 
 const Header = ({ isScrolled }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [learnDropdownOpen, setLearnDropdownOpen] = useState(false);
+  const [careersDropdownOpen, setCareersDropdownOpen] = useState(false);
   const { isLoggedIn, user, logout } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const toggleLearnDropdown = () => {
+    console.log('Toggle Learn Dropdown:', !learnDropdownOpen);
+    setLearnDropdownOpen(!learnDropdownOpen);
+  };
+
+  const toggleCareersDropdown = () => {
+    console.log('Toggle Careers Dropdown:', !careersDropdownOpen);
+    setCareersDropdownOpen(!careersDropdownOpen);
+  };
+
+  // Reset dropdown states when menu closes
+  useEffect(() => {
+    if (!isMenuOpen) {
+      setLearnDropdownOpen(false);
+      setCareersDropdownOpen(false);
+    }
+  }, [isMenuOpen]);
+
+  // Ensure menu is scrollable by default when opened
+  useEffect(() => {
+    if (isMenuOpen) {
+      // Small delay to ensure DOM is updated
+      setTimeout(() => {
+        const menuContainer = document.querySelector('.mobile-menu-scroll');
+        if (menuContainer) {
+          menuContainer.scrollTop = 0;
+        }
+      }, 100);
+    }
+  }, [isMenuOpen]);
 
   return (
     <header
@@ -41,8 +74,8 @@ const Header = ({ isScrolled }: HeaderProps) => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-[1200] bg-black/60 backdrop-blur-sm flex justify-end items-start pt-16" onClick={() => setIsMenuOpen(false)}>
-          <div className="md:hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 py-4 px-2 mr-4 max-h-[60vh] overflow-y-scroll scrollbar transition-colors duration-300" onClick={e => e.stopPropagation()}>
-            <nav className="flex flex-col space-y-4 overflow-y-auto max-h-full">
+          <div className="md:hidden bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900/50 py-4 px-2 mr-4 max-h-[60vh] min-h-[200px] overflow-y-auto mobile-menu-scroll transition-colors duration-300" onClick={e => e.stopPropagation()}>
+            <nav className="flex flex-col space-y-4">
               {/* Auth/User Info at top */}
               <div className="flex flex-col gap-2 mb-2">
                 {isLoggedIn ? (
@@ -77,26 +110,41 @@ const Header = ({ isScrolled }: HeaderProps) => {
               <a href="/#about" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>About</a>
               <a href="/#team" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Team</a>
               <a href="/#what-we-do" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between" onClick={() => setIsMenuOpen(false)}>What We Do</a>
+              <a href="/courses" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Courses</a>
               {/* Learn Dropdown */}
-              <details className="group">
-                <summary className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between">Learn <span className="ml-2">▼</span></summary>
-                <div className="pl-4 flex flex-col gap-1 mt-1">
-                  <a href="/mdu" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">MDU</a>
-                  <a href="/crd" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">CRD</a>
-                </div>
-              </details>
+              <div className="group">
+                <button 
+                  onClick={toggleLearnDropdown}
+                  className="w-full px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between"
+                >
+                  Learn <span className="ml-2">{learnDropdownOpen ? '▲' : '▼'}</span>
+                </button>
+                {learnDropdownOpen && (
+                  <div className="pl-4 flex flex-col gap-1 mt-1">
+                    <a href="/mdu" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => setIsMenuOpen(false)}>MDU</a>
+                    <a href="/crd" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => setIsMenuOpen(false)}>CRD</a>
+                  </div>
+                )}
+              </div>
               {/* Careers Dropdown */}
-              <details className="group">
-                <summary className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between">Careers <span className="ml-2">▼</span></summary>
-                <div className="pl-4 flex flex-col gap-1 mt-1">
-                  <a href="/life-at-rft" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">Life at RFT</a>
-                  <a href="/employee-says" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">What Our Employees Say</a>
-                  <a href="/apply" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300">Apply</a>
-                </div>
-              </details>
-              <a href="/#contact" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between">
-              Contact Us
-            </a>
+              <div className="group">
+                <button 
+                  onClick={toggleCareersDropdown}
+                  className="w-full px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between"
+                >
+                  Careers <span className="ml-2">{careersDropdownOpen ? '▲' : '▼'}</span>
+                </button>
+                {careersDropdownOpen && (
+                  <div className="pl-4 flex flex-col gap-1 mt-1">
+                    <a href="/life-at-rft" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => setIsMenuOpen(false)}>Life at RFT</a>
+                    <a href="/employee-says" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => setIsMenuOpen(false)}>What Our Employees Say</a>
+                    <a href="/apply" className="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300" onClick={() => setIsMenuOpen(false)}>Apply</a>
+                  </div>
+                )}
+              </div>
+              <a href="/#contact" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between" onClick={() => setIsMenuOpen(false)}>
+                Contact Us
+              </a>
             </nav>
           </div>
         </div>

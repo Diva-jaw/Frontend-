@@ -32,6 +32,8 @@ const NewUser: React.FC = () => {
     if (success) setSuccess(null);
   };
 
+
+
   const handleSendOTP = async () => {
     if (!formData.email) {
       setError('Please enter your email address first.');
@@ -137,11 +139,59 @@ const NewUser: React.FC = () => {
       setIsLoading(false);
       setShowSuccessPopup(true);
       
-      // Auto close popup after 3 seconds and redirect to login
-      setTimeout(() => {
-        setShowSuccessPopup(false);
-        navigate('/signin');
-      }, 3000);
+      // Check if there's pending enrollment data for auto-login ONLY if coming from enrollment
+      const pendingEnrollmentData = localStorage.getItem('pendingEnrollmentData');
+      const isFromEnrollment = pendingEnrollmentData && JSON.parse(pendingEnrollmentData).courseId;
+      
+      if (pendingEnrollmentData && isFromEnrollment) {
+        try {
+          const storedData = JSON.parse(pendingEnrollmentData);
+          const currentTime = Date.now();
+          const timeDiff = currentTime - storedData.timestamp;
+          
+          // If data is less than 1 hour old and coming from enrollment, auto-login and redirect
+          if (timeDiff < 3600000) {
+            // Auto-login with the new credentials
+            setTimeout(async () => {
+              try {
+                const loginResponse = await apiService.login(formData.email, formData.password, 'user');
+                if (loginResponse.token && loginResponse.user) {
+                  login(loginResponse.token, loginResponse.user);
+                  
+                  // Redirect to the enrollment page
+                  const redirectPath = `/course/${storedData.courseId}/module/${storedData.moduleId}/level/${storedData.levelId}/enroll`;
+                  navigate(redirectPath);
+                }
+              } catch (loginErr) {
+                console.error('Auto-login failed:', loginErr);
+                // Fallback to normal flow
+                setShowSuccessPopup(false);
+                navigate('/signin');
+              }
+            }, 2000);
+          } else {
+            // Clear old data and redirect to login
+            localStorage.removeItem('pendingEnrollmentData');
+            setTimeout(() => {
+              setShowSuccessPopup(false);
+              navigate('/signin');
+            }, 3000);
+          }
+        } catch (error) {
+          console.error('Error parsing stored enrollment data:', error);
+          localStorage.removeItem('pendingEnrollmentData');
+          setTimeout(() => {
+            setShowSuccessPopup(false);
+            navigate('/signin');
+          }, 3000);
+        }
+      } else {
+        // Normal flow - redirect to login
+        setTimeout(() => {
+          setShowSuccessPopup(false);
+          navigate('/signin');
+        }, 3000);
+      }
     } catch (err) {
       setIsLoading(false);
       const errorMessage = err instanceof Error ? err.message : 'Registration failed';
@@ -388,7 +438,12 @@ const NewUser: React.FC = () => {
                 <div className="text-white text-2xl">✓</div>
               </div>
               <h2 className="text-2xl font-bold text-white mb-2">Success!</h2>
-              <p className="text-white/80 mb-4">Your account has been created successfully.</p>
+              <p className="text-white/80 mb-4">
+                {localStorage.getItem('pendingEnrollmentData') && JSON.parse(localStorage.getItem('pendingEnrollmentData') || '{}').courseId
+                  ? "Your account has been created successfully. You'll be automatically logged in and redirected to complete your enrollment."
+                  : "Your account has been created successfully."
+                }
+              </p>
               <button
                 onClick={() => setShowSuccessPopup(false)}
                 className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
@@ -397,7 +452,7 @@ const NewUser: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+                </div>
       )}
     </div>
   );

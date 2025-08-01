@@ -164,7 +164,7 @@ const Navbar = () => {
             {/* Hamburger for mobile - only show if not on HR route */}
             {!isHRRoute && (
               <button
-                className="lg:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label="Open menu"
               >
@@ -341,10 +341,239 @@ const Navbar = () => {
               </div>
             )}
           </div>
-          {/* Spacer for gap */}
-          <div className="flex-1" />
+          
+                     
+          
+                     {/* Sliding Navigation Bar - only show on tablet (md to lg) */}
+           {!isHRRoute && (
+             <div className="hidden md:flex lg:hidden items-center space-x-6 overflow-x-auto scrollbar-hide flex-1 px-8 min-w-0 relative group w-full">
+               {/* Navigation Links */}
+               <div className="flex items-center space-x-6 flex-shrink-0">
+                <a href="/" onClick={handleHomeClick} className={linkClass + " text-xs whitespace-nowrap"}>
+                  Home
+                </a>
+                <a
+                  href="/#services"
+                  onClick={(e) => handleNavClick(e, "services")}
+                  className={linkClass + " text-xs whitespace-nowrap"}
+                >
+                  Services
+                </a>
+                <a
+                  href="/#about"
+                  onClick={(e) => handleNavClick(e, "about")}
+                  className={linkClass + " text-xs whitespace-nowrap"}
+                >
+                  About
+                </a>
+                <a
+                  href="/#what-we-do"
+                  onClick={e => handleNavClick(e, "what-we-do")}
+                  className={linkClass + " text-xs whitespace-nowrap"}
+                >
+                  What We Do
+                </a>
+                <Link
+                  to="/courses"
+                  className={linkClass + " text-xs whitespace-nowrap"}
+                >
+                  Courses
+                </Link>
+                {/* Learn Dropdown for tablet */}
+                <div className="relative flex-shrink-0" ref={learnDropdownRef}>
+                  <button
+                    onClick={() => {
+                      setLearnDropdownOpen(!learnDropdownOpen);
+                      setCareersDropdownOpen(false);
+                    }}
+                    className={linkClass + " text-xs whitespace-nowrap"}
+                    style={{ textTransform: 'uppercase' }}
+                  >
+                    Learn
+                  </button>
+                  <AnimatePresence>
+                    {learnDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[200px] z-50 p-3 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
+                      >
+                        <ul className="grid grid-cols-1 gap-1">
+                          <li>
+                            <Link
+                              to="/mdu"
+                              className="block px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300 text-xs"
+                              onClick={() => {
+                                setLearnDropdownOpen(false);
+                              }}
+                            >
+                              MDU
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              to="/crd"
+                              className="block px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300 text-xs"
+                              onClick={() => {
+                                setLearnDropdownOpen(false);
+                              }}
+                            >
+                              CRD
+                            </Link>
+                          </li>
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                {/* Careers Dropdown for tablet */}
+                <div className="relative flex-shrink-0" ref={careersDropdownRef}>
+                  <button
+                    onClick={() => {
+                      setCareersDropdownOpen(!careersDropdownOpen);
+                      setLearnDropdownOpen(false);
+                    }}
+                    className={linkClass + " text-xs whitespace-nowrap"}
+                    style={{ textTransform: 'uppercase' }}
+                  >
+                    Careers
+                  </button>
+                  <AnimatePresence>
+                    {careersDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:shadow-gray-900/50 w-[200px] z-50 p-3 border border-gray-100 dark:border-gray-700 transition-colors duration-300"
+                      >
+                        <ul className="grid grid-cols-1 gap-1">
+                          <li>
+                            <Link
+                              to="/life-at-rft"
+                              className="block px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300 text-xs"
+                              onClick={() => {
+                                setCareersDropdownOpen(false);
+                              }}
+                            >
+                              Life at RFT
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              to="/employee-says"
+                              className="block px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300 text-xs"
+                              onClick={() => {
+                                setCareersDropdownOpen(false);
+                              }}
+                            >
+                              What Our Employees Say
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              to="/apply"
+                              className="block px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium text-gray-700 dark:text-gray-300 text-xs"
+                              onClick={() => {
+                                setCareersDropdownOpen(false);
+                              }}
+                            >
+                              Apply
+                            </Link>
+                          </li>
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                                 <a
+                   href="/#contact"
+                   onClick={e => handleNavClick(e, "contact")}
+                   className={linkClass + " text-xs uppercase whitespace-nowrap"}
+                 >
+                   Contact
+                 </a>
+               </div>
+               
+               {/* Right Side Elements - Login, Register, Dark Mode */}
+               <div className="flex items-center space-x-4 flex-shrink-0 ml-8">
+                {isLoggedIn && user && (
+                  <>
+                    {/* User Avatar for tablet */}
+                    <div className="relative" ref={profileRef}>
+                      <button
+                        className="flex justify-center items-center w-10 h-10 aspect-square bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative focus:outline-none"
+                        onClick={() => setProfilePopupOpen((v) => !v)}
+                        aria-haspopup="true"
+                        aria-expanded={profilePopupOpen}
+                        type="button"
+                      >
+                        <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
+                        <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md">
+                          {getUserInitial(user?.name || "User")}
+                        </div>
+                      </button>
+                      {profilePopupOpen && (
+                        <div className="absolute right-0 mt-2 z-50" style={{ minWidth: 280 }}>
+                          <UserProfilePopup
+                            name={user?.name || "User"}
+                            email={user?.email || "user@email.com"}
+                            userRole={user?.role}
+                            onViewProfile={() => {
+                              navigate("/profile-dashboard");
+                              setProfilePopupOpen(false);
+                            }}
+                            onLogout={() => {
+                              logout();
+                              setProfilePopupOpen(false);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+                {!isLoggedIn && (
+                  <>
+                    <button
+                      onClick={handleSignInClick}
+                      className="px-3 py-1.5 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-xs shadow-lg transition-colors duration-200 whitespace-nowrap"
+                    >
+                      Login
+                    </button>
+                    <button
+                      onClick={handleNewUserClick}
+                      className="px-3 py-1.5 bg-gradient-to-b from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 rounded-full hover:from-blue-300 hover:to-blue-500 dark:hover:from-blue-700 dark:hover:to-blue-900 font-semibold text-xs shadow-lg transition-colors duration-200 whitespace-nowrap"
+                    >
+                      Register
+                    </button>
+                  </>
+                )}
+                {/* Theme toggle for tablet */}
+                <button
+                  onClick={toggleTheme}
+                  className="p-1.5 rounded-full bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-200 flex items-center justify-center whitespace-nowrap"
+                  aria-label="Toggle dark mode"
+                >
+                  {theme === "dark" ? (
+                    <Sun size={16} className="text-yellow-500" />
+                  ) : (
+                    <Moon size={16} className="text-blue-700 dark:text-blue-300" />
+                  )}
+                </button>
+              </div>
+            </div>
+                                 )}
+            
+            {/* Spacer for gap - only for desktop */}
+            <div className="hidden lg:block flex-1" />
+                       
+   
           {/* Right: Login/Register/For Employer's and Theme Toggle */}
           <div className="hidden lg:flex items-center space-x-4">
+            {/* Desktop Right Side Elements */}
             {/* Show profile icon and theme toggle for HR routes */}
             {isHRRoute && isLoggedIn && user && (
               <div className="relative" ref={profileRef}>
@@ -570,7 +799,7 @@ const Navbar = () => {
                 </button>
               </div>
               {/* Scrollable nav links below */}
-              <nav className="flex flex-col gap-2 flex-1 overflow-y-auto pt-2 min-w-0 px-6">
+              <nav className="flex flex-col gap-2 flex-1 overflow-y-auto mobile-menu-scroll pt-2 min-w-0 px-6">
                 <a href="/" onClick={handleHomeClick} className={linkClass + " w-full text-left"}>Home</a>
                 <a href="/#services" onClick={e => handleNavClick(e, "services") } className={linkClass + " w-full text-left"}>Services</a>
                 <a href="/#about" onClick={e => handleNavClick(e, "about") } className={linkClass + " w-full text-left"}>About</a>
