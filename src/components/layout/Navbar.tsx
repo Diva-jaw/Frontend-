@@ -156,11 +156,13 @@ const Navbar = () => {
         <div className="flex items-center h-20 w-full">
           {/* Left: Logo and Nav */}
           <div className="flex items-center flex-shrink-0">
-            <img
-              src="/RFT logo.png"
-              alt="Logo"
-              className="h-16 w-16 rounded-full border-4 border-blue-400 dark:border-blue-500 mr-4"
-            />
+            <div className="h-12 w-12 rounded-full border-2 border-blue-400 dark:border-blue-500 mr-4 bg-white flex items-center justify-center overflow-hidden">
+              <img
+                src="/RFT logo.png"
+                alt="Logo"
+                className="h-8 w-8 object-contain"
+              />
+            </div>
             {/* Hamburger for mobile - only show if not on HR route */}
             {!isHRRoute && (
               <button
@@ -787,6 +789,7 @@ const Navbar = () => {
                   </>
                 )}
               </div>
+
               {/* Close button (below sticky auth bar) */}
               <div className="flex items-center justify-end mb-8 px-6 pt-2">
                 <button
@@ -796,6 +799,7 @@ const Navbar = () => {
                 >
                   <X className="w-7 h-7 text-blue-700 dark:text-blue-200" />
                 </button>
+
               </div>
               {/* Scrollable nav links below */}
               <nav className="flex flex-col gap-2 flex-1 overflow-y-auto mobile-menu-scroll pt-2 min-w-0 px-6">
