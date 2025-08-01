@@ -10,7 +10,6 @@ import {
   GraduationCap,
   Calendar,
   CheckCircle,
-  Moon,
   Sun
 } from 'lucide-react';
 import { useAuth } from '../components/AuthContext';
@@ -47,33 +46,7 @@ const EnrollmentPage = () => {
     year: ''
   });
 
-  // Dark mode state
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Dark mode toggle function
-  const toggleDarkMode = () => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
-
-  // Initialize dark mode from localStorage
-  useEffect(() => {
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-    setIsDarkMode(savedDarkMode);
-    if (savedDarkMode) {
-      document.documentElement.classList.add('dark');
-    }
-  }, []);
-
-  // Save dark mode preference
-  useEffect(() => {
-    localStorage.setItem('darkMode', isDarkMode.toString());
-  }, [isDarkMode]);
 
   // Load form data from localStorage if available (for returning users)
   useEffect(() => {
@@ -440,20 +413,7 @@ const EnrollmentPage = () => {
           <span className="font-semibold">Back to Course</span>
         </motion.button>
 
-        {/* Dark Mode Toggle */}
-        <div className="fixed top-10 right-1 z-50 xl:hidden">
-          <button
-            onClick={toggleDarkMode}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-gray-200 dark:border-gray-600 rounded-full p-1.5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-            aria-label="Toggle dark mode"
-          >
-            {isDarkMode ? (
-              <Sun className="w-4 h-4 text-yellow-500" />
-            ) : (
-              <Moon className="w-4 h-4 text-gray-700 dark:text-gray-300" />
-            )}
-          </button>
-        </div>
+
 
         {/* Main Content */}
         <div className="max-w-4xl mx-auto">
@@ -493,7 +453,7 @@ const EnrollmentPage = () => {
                 {/* Course Information */}
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 sm:p-6 lg:p-8 rounded-xl border border-blue-200 dark:border-blue-800">
                   <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="p-2 sm:p-3 bg-blue-600 rounded-lg">
+                    <div className="p-2 sm:p-3 bg-blue-600 rounded-full">
                       <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                     </div>
                     <h4 className="font-bold text-blue-900 dark:text-blue-100 text-lg sm:text-xl">Course Information</h4>

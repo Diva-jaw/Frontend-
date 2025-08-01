@@ -212,7 +212,7 @@ console.log("normalizedApplications",normalizedApplications);
             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-900 rounded-lg flex items-center justify-center">
               <User className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">SkillSync</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">SkillSync</h1>
           </motion.div>
 
           {/* Navigation & Time */}

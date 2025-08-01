@@ -46,32 +46,6 @@ const AllCoursesMegaPage: React.FC = () => {
   const [dropdownPosition, setDropdownPosition] = useState<{top: number, left: number, width: number} | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const courseNameRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Dark mode toggle function
-  const toggleDarkMode = () => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
-
-  // Initialize dark mode from localStorage
-  useEffect(() => {
-    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-    setIsDarkMode(savedDarkMode);
-    if (savedDarkMode) {
-      document.documentElement.classList.add('dark');
-    }
-  }, []);
-
-  // Save dark mode preference
-  useEffect(() => {
-    localStorage.setItem('darkMode', isDarkMode.toString());
-  }, [isDarkMode]);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -162,23 +136,8 @@ const AllCoursesMegaPage: React.FC = () => {
   }
 
   return (
-          <>
-        {/* Dark Mode Toggle - Mobile and Tablet */}
-        <div className="fixed top-10 right-1 z-50 xl:hidden">
-          <button
-            onClick={toggleDarkMode}
-            className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-gray-200 dark:border-gray-600 rounded-full p-1.5 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
-            aria-label="Toggle dark mode"
-          >
-            {isDarkMode ? (
-              <Sun className="w-4 h-4 text-yellow-500" />
-            ) : (
-              <Moon className="w-4 h-4 text-gray-700 dark:text-gray-300" />
-            )}
-          </button>
-        </div>
-
-        {/* AI Masterclass Hero Section - Mobile First */}
+    <>
+      {/* AI Masterclass Hero Section - Mobile First */}
         <div className="relative bg-gradient-to-br from-blue-50 via-purple-100 to-blue-200 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 border border-blue-200 dark:border-blue-900 rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl overflow-hidden mb-4 sm:mb-6 lg:mb-8 px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-10 mt-0 sm:mt-20 animate-scaleIn">
         {/* Enhanced Background Effects */}
         <div className="absolute inset-0 pointer-events-none rounded-2xl sm:rounded-3xl border-2 border-white/40 dark:border-blue-900/30" style={{ zIndex: 1 }} />

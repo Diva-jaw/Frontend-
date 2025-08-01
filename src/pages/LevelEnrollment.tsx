@@ -33,7 +33,7 @@ const LevelEnrollment = () => {
   const [error, setError] = useState<string | null>(null);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+
 
   console.log('LevelEnrollment: Component rendered with:', {
     courseId,
@@ -139,24 +139,7 @@ const LevelEnrollment = () => {
     console.log('LevelEnrollment: Success popup should now be visible');
   };
 
-  // Dark mode toggle functionality
-  useEffect(() => {
-    const isDark = document.documentElement.classList.contains('dark');
-    setIsDarkMode(isDark);
-  }, []);
 
-  const toggleDarkMode = () => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    
-    if (newDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('darkMode', 'true');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('darkMode', 'false');
-    }
-  };
 
   if (loading) {
     console.log('LevelEnrollment: Showing loading state');
@@ -199,20 +182,7 @@ const LevelEnrollment = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-500">
-      {/* Dark Mode Toggle - Mobile and Tablet */}
-      <div className="fixed top-10 right-1 z-50 xl:hidden">
-        <button
-          onClick={toggleDarkMode}
-          className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-200 hover:scale-105"
-          aria-label="Toggle dark mode"
-        >
-          {isDarkMode ? (
-            <Sun size={16} className="text-yellow-500" />
-          ) : (
-            <Moon size={16} className="text-gray-700" />
-          )}
-        </button>
-      </div>
+
 
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
