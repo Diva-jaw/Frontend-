@@ -156,11 +156,13 @@ const Navbar = () => {
         <div className="flex items-center h-20 w-full">
           {/* Left: Logo and Nav */}
           <div className="flex items-center flex-shrink-0">
-            <img
-              src="/RFT logo.png"
-              alt="Logo"
-              className="h-16 w-16 rounded-full border-4 border-blue-400 dark:border-blue-500 mr-4"
-            />
+            <div className="h-12 w-12 rounded-full border-2 border-blue-400 dark:border-blue-500 mr-4 bg-white flex items-center justify-center overflow-hidden">
+              <img
+                src="/RFT logo.png"
+                alt="Logo"
+                className="h-8 w-8 object-contain"
+              />
+            </div>
             {/* Hamburger for mobile - only show if not on HR route */}
             {!isHRRoute && (
               <button
@@ -787,16 +789,36 @@ const Navbar = () => {
                   </>
                 )}
               </div>
-              {/* Logo and close button (below sticky auth bar) */}
+              {/* Logo, theme toggle, and close button (below sticky auth bar) */}
               <div className="flex items-center justify-between mb-8 px-6 pt-2">
-                <img src="/RFT logo.png" alt="Logo" className="h-12 w-12 rounded-full border-2 border-blue-400 dark:border-blue-500" />
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  aria-label="Close menu"
-                >
-                  <X className="w-7 h-7 text-blue-700 dark:text-blue-200" />
-                </button>
+                                 <div className="h-12 w-12 rounded-full border-2 border-blue-400 dark:border-blue-500 bg-white flex items-center justify-center overflow-hidden">
+                   <img
+                     src="/RFT logo.png"
+                     alt="Logo"
+                     className="h-8 w-8 object-contain"
+                   />
+                 </div>
+                <div className="flex items-center gap-2">
+                  {/* Theme toggle for mobile */}
+                  <button
+                    onClick={toggleTheme}
+                    className="p-2 rounded-full bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors duration-200 flex items-center justify-center"
+                    aria-label="Toggle dark mode"
+                  >
+                    {theme === "dark" ? (
+                      <Sun size={18} className="text-yellow-500" />
+                    ) : (
+                      <Moon size={18} className="text-blue-700 dark:text-blue-300" />
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    aria-label="Close menu"
+                  >
+                    <X className="w-7 h-7 text-blue-700 dark:text-blue-200" />
+                  </button>
+                </div>
               </div>
               {/* Scrollable nav links below */}
               <nav className="flex flex-col gap-2 flex-1 overflow-y-auto mobile-menu-scroll pt-2 min-w-0 px-6">
