@@ -9,6 +9,7 @@ const SignIn: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [hasLoggedIn, setHasLoggedIn] = useState(false);
+  const [showEnrollmentPopup, setShowEnrollmentPopup] = useState(false);
   const navigate = useNavigate();
   const { login, isLoggedIn, getRedirectPath, clearRedirectPath } = useAuth();
   const location = useLocation();
@@ -22,6 +23,30 @@ const SignIn: React.FC = () => {
       }
     }
   }, [isLoggedIn, navigate, hasLoggedIn, getRedirectPath]);
+
+  // Check for pending enrollment data and show popup ONLY if coming from enrollment form
+  useEffect(() => {
+    const pendingEnrollmentData = localStorage.getItem('pendingEnrollmentData');
+    
+    if (pendingEnrollmentData) {
+      try {
+        const storedData = JSON.parse(pendingEnrollmentData);
+        const currentTime = Date.now();
+        const timeDiff = currentTime - storedData.timestamp;
+        
+        // Only show popup if data is less than 1 hour old AND has courseId (coming from enrollment)
+        if (timeDiff < 3600000 && storedData.courseId) {
+          setShowEnrollmentPopup(true);
+        } else {
+          // Clear old data
+          localStorage.removeItem('pendingEnrollmentData');
+        }
+      } catch (error) {
+        console.error('Error parsing stored enrollment data:', error);
+        localStorage.removeItem('pendingEnrollmentData');
+      }
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -201,6 +226,33 @@ const SignIn: React.FC = () => {
           </p>
         </div>
       </div>
+
+      {/* Enrollment Popup */}
+      {showEnrollmentPopup && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-green-500 to-blue-600 rounded-full mb-4">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+                             <h3 className="text-lg font-bold text-gray-900 mb-2">Complete Your Enrollment</h3>
+                               <p className="text-gray-600 text-sm mb-6">
+                  Before enrollment, first login or Register
+                </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowEnrollmentPopup(false)}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+                >
+                  Got it
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

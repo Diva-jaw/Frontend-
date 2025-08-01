@@ -32,7 +32,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-hidden"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
           {/* Backdrop */}
@@ -50,7 +50,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
+            className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] sm:max-h-[90vh] flex flex-col mx-4 sm:mx-0 z-50 min-h-0 border-2 border-red-500"
           >
             {/* Close Button */}
             <button
@@ -63,20 +63,20 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
             {/* Header with Gradient */}
             <div className="relative overflow-hidden flex-shrink-0">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600" />
-              <div className="relative p-4 text-center text-white">
+              <div className="relative p-3 sm:p-4 text-center text-white">
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: "spring", damping: 15 }}
-                  className="inline-flex items-center justify-center w-10 h-10 bg-white/20 rounded-full mb-2"
+                  className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-full mb-2"
                 >
-                  <CheckCircle className="w-5 h-5 text-white" />
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </motion.div>
                 <motion.h2
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="text-xl font-bold mb-1"
+                  className="text-lg sm:text-xl font-bold mb-1"
                 >
                   ✅ Enrollment Confirmed
                 </motion.h2>
@@ -84,7 +84,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4 }}
-                  className="text-sm opacity-90"
+                  className="text-xs sm:text-sm opacity-90"
                 >
                   Successfully processed
                 </motion.p>
@@ -92,7 +92,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
             </div>
 
             {/* Content */}
-            <div className="p-8 overflow-y-auto flex-1 pb-8">
+            <div className="p-4 sm:p-6 md:p-8 overflow-y-auto flex-1 pb-4 sm:pb-6 md:pb-8 relative mobile-menu-scroll min-h-0">
               {/* Welcome Message */}
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -100,10 +100,10 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                 transition={{ delay: 0.5 }}
                 className="text-center mb-8"
               >
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">
                   Dear {userName},
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   We are pleased to confirm your enrollment with{" "}
                   <span className="font-semibold text-blue-600">
                   Ruhil Future Technologies
@@ -118,32 +118,32 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 mb-6 border border-blue-100"
+                className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6 border border-blue-100"
               >
                 <div className="flex items-center mb-4">
                   <BookOpen className="w-6 h-6 text-blue-600 mr-3" />
-                  <h4 className="text-lg font-semibold text-gray-800">
+                  <h4 className="text-base sm:text-lg font-semibold text-gray-800">
                     Enrollment Details
                   </h4>
                 </div>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center py-2 border-b border-blue-100">
-                    <span className="font-medium text-gray-700">Course:</span>
-                    <span className="font-semibold text-gray-800">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-blue-100">
+                    <span className="font-medium text-gray-700 text-sm sm:text-base">Course:</span>
+                    <span className="font-semibold text-gray-800 text-sm sm:text-base mt-1 sm:mt-0">
                       {courseName}
                     </span>
                   </div>
                   {!(courseId === '6' && moduleId === '11' && levelId === '31') && (
                     <>
-                      <div className="flex justify-between items-center py-2 border-b border-blue-100">
-                        <span className="font-medium text-gray-700">Module:</span>
-                        <span className="font-semibold text-gray-800">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-blue-100">
+                        <span className="font-medium text-gray-700 text-sm sm:text-base">Module:</span>
+                        <span className="font-semibold text-gray-800 text-sm sm:text-base mt-1 sm:mt-0">
                           {moduleName}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center py-2">
-                        <span className="font-medium text-gray-700">Level:</span>
-                        <span className="font-semibold text-gray-800">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2">
+                        <span className="font-medium text-gray-700 text-sm sm:text-base">Level:</span>
+                        <span className="font-semibold text-gray-800 text-sm sm:text-base mt-1 sm:mt-0">
                           {levelName}
                         </span>
                       </div>
@@ -157,45 +157,25 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.7 }}
-                className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 mb-6 border border-green-100"
+                className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6 border border-green-100"
               >
                 <div className="flex items-center mb-4">
                   <Clock className="w-6 h-6 text-green-600 mr-3" />
-                  <h4 className="text-lg font-semibold text-gray-800">
+                  <h4 className="text-base sm:text-lg font-semibold text-gray-800">
                     Next Steps
                   </h4>
                 </div>
-                <ul className="space-y-3">
-                  <li className="flex items-start">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">
-                      Our academic team will review your application within{" "}
-                      <span className="font-semibold">
-                        24-48 business hours
-                      </span>
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">
-                      You will receive login credentials for your student portal
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">
-                      An orientation session will be scheduled for your
-                      convenience
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                    <span className="text-gray-700">
-                      Course materials and schedule will be provided upon
-                      approval
-                    </span>
-                  </li>
-                </ul>
+                                 <ul className="space-y-3">
+                   <li className="flex items-start">
+                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
+                     <span className="text-sm sm:text-base text-gray-700">
+                       Our academic team will review your application within{" "}
+                       <span className="font-semibold">
+                         24-48 business hours
+                       </span>
+                     </span>
+                   </li>
+                 </ul>
               </motion.div>
 
               {/* Email Notification */}
@@ -203,18 +183,18 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 mb-6 border border-purple-100"
+                className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4 sm:p-6 mb-4 sm:mb-6 border border-purple-100"
               >
                 <div className="flex items-center mb-3">
                   <Mail className="w-6 h-6 text-purple-600 mr-3" />
-                  <h4 className="text-lg font-semibold text-gray-800">
+                  <h4 className="text-base sm:text-lg font-semibold text-gray-800">
                     Email Confirmation
                   </h4>
                 </div>
-                <p className="text-gray-700">
-                  We've sent a beautiful confirmation email to your registered
-                  email address with all the details and next steps.
-                </p>
+                                 <p className="text-sm sm:text-base text-gray-700">
+                   We've sent a confirmation email to your registered
+                   email address with all the details and next steps.
+                 </p>
               </motion.div>
 
               {/* Contact Info */}
@@ -222,24 +202,24 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.9 }}
-                className="bg-gray-50 rounded-2xl p-6 border border-gray-200"
+                className="bg-gray-50 rounded-2xl p-4 sm:p-6 border border-gray-200"
               >
                 <div className="flex items-center mb-4">
                   <Users className="w-6 h-6 text-gray-600 mr-3" />
-                  <h4 className="text-lg font-semibold text-gray-800">
+                  <h4 className="text-base sm:text-lg font-semibold text-gray-800">
                     Need Help?
                   </h4>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
                   <div>
                     <p className="font-medium text-gray-700">
                       Academic Affairs:
                     </p>
-                    <p className="text-blue-600">info@rftsystems.com</p>
+                    <p className="text-blue-600 text-xs sm:text-sm">info@rftsystems.com</p>
                   </div>
                   <div>
                     <p className="font-medium text-gray-700">Phone Support:</p>
-                    <p className="text-blue-600">+91 7082101534</p>
+                                         <p className="text-blue-600 text-xs sm:text-sm">+91 7082101537</p>
                   </div>
                 </div>
               </motion.div>
@@ -250,10 +230,10 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1.0 }}
-              className="bg-gray-900 text-white p-6 text-center  flex-shrink-0 border-t border-gray-700"
+              className="bg-gray-900 text-white p-4 sm:p-6 text-center flex-shrink-0 border-t border-gray-700"
             >
-              <h5 className="text-lg font-semibold mb-2">Ruhil Future Technologies</h5>
-              <p className="text-gray-300 text-sm">
+              <h5 className="text-base sm:text-lg font-semibold mb-2">Ruhil Future Technologies</h5>
+              <p className="text-gray-300 text-xs sm:text-sm">
                 Empowering minds, transforming futures
               </p>
             </motion.div>
