@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, X, Mail, Clock, Users, BookOpen } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface SuccessPopupProps {
   isOpen: boolean;
@@ -25,6 +26,13 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
   moduleId,
   levelId,
 }) => {
+  const navigate = useNavigate();
+
+  const handleCoursesRedirect = () => {
+    navigate('/courses');
+    onClose();
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -50,18 +58,19 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] sm:max-h-[90vh] flex flex-col mx-4 sm:mx-0 z-50 min-h-0 border-2 border-red-500"
+            className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl mx-4 sm:mx-0 z-50"
+            style={{ height: '85vh', maxHeight: '85vh', overflow: 'hidden' }}
           >
             {/* Close Button */}
             <button
-              onClick={onClose}
+              onClick={handleCoursesRedirect}
               className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-200 group"
             >
               <X className="w-5 h-5 text-gray-600 group-hover:text-gray-800 transition-colors" />
             </button>
 
             {/* Header with Gradient */}
-            <div className="relative overflow-hidden flex-shrink-0">
+            <div className="relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600" />
               <div className="relative p-3 sm:p-4 text-center text-white">
                 <motion.div
@@ -92,7 +101,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
             </div>
 
             {/* Content */}
-            <div className="p-4 sm:p-6 md:p-8 overflow-y-auto flex-1 pb-4 sm:pb-6 md:pb-8 relative mobile-menu-scroll min-h-0">
+            <div className="p-4 sm:p-6 md:p-8 overflow-y-auto relative mobile-menu-scroll" style={{ height: 'calc(85vh - 200px)', maxHeight: 'calc(85vh - 200px)' }}>
               {/* Welcome Message */}
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -230,7 +239,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1.0 }}
-              className="bg-gray-900 text-white p-4 sm:p-6 text-center flex-shrink-0 border-t border-gray-700"
+              className="bg-gray-900 text-white p-4 sm:p-6 text-center border-t border-gray-700"
             >
               <h5 className="text-base sm:text-lg font-semibold mb-2">Ruhil Future Technologies</h5>
               <p className="text-gray-300 text-xs sm:text-sm">
