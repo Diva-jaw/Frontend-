@@ -331,7 +331,7 @@ const ApplyJobPage: React.FC = () => {
       case 0:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><User className="mr-2" />Personal Details</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><User className="mr-2" />Personal Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block mb-1 font-medium text-black">Full Name *</label>
@@ -374,7 +374,7 @@ const ApplyJobPage: React.FC = () => {
       case 1:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><MapPin className="mr-2" />Location Details</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><MapPin className="mr-2" />Location Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block mb-1 font-medium text-black">Current City *</label>
@@ -401,7 +401,7 @@ const ApplyJobPage: React.FC = () => {
       case 2:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><GraduationCap className="mr-2" />Educational Background</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><GraduationCap className="mr-2" />Educational Background</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block mb-1 font-medium text-black">Highest Qualification *</label>
@@ -449,7 +449,7 @@ const ApplyJobPage: React.FC = () => {
       case 3:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><Layers className="mr-2" />Technical / Domain Skills</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><Layers className="mr-2" />Technical / Domain Skills</h2>
             <div className="mb-4">
               <label className="block mb-1 font-medium text-black">Which technical skills do you possess? *</label>
               <div className="flex flex-wrap gap-3">
@@ -477,7 +477,7 @@ const ApplyJobPage: React.FC = () => {
       case 4:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><Briefcase className="mr-2" />Internship or Project Experience</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><Briefcase className="mr-2" />Internship or Project Experience</h2>
             <div className="mb-4">
               <label className="block mb-1 font-medium text-black">Have you done any internship or major project? *</label>
               <select value={formData.hasInternship} onChange={e => handleInputChange('hasInternship', e.target.value)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
@@ -508,7 +508,7 @@ const ApplyJobPage: React.FC = () => {
       case 5:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><ClipboardCheck className="mr-2" />Job Preferences</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><ClipboardCheck className="mr-2" />Job Preferences</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block mb-1 font-medium text-black">Preferred Role / Function Area *</label>
@@ -542,7 +542,7 @@ const ApplyJobPage: React.FC = () => {
       case 6:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><ListChecks className="mr-2" />General Questions</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><ListChecks className="mr-2" />General Questions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block mb-1 font-medium text-black">How did you hear about this opportunity? *</label>
@@ -597,7 +597,7 @@ const ApplyJobPage: React.FC = () => {
       case 7:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><FilePlus className="mr-2" />Resume & Documents</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><FilePlus className="mr-2" />Resume & Documents</h2>
             <div className="mb-4">
               <label className="block mb-1 font-medium text-black">Upload Resume (PDF) *</label>
               <input type="file" accept="application/pdf" onChange={e => handleFileChange('resume', e.target.files ? e.target.files[0] : null)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
@@ -612,7 +612,7 @@ const ApplyJobPage: React.FC = () => {
       case 8:
         return (
           <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><CheckCircle className="mr-2" />Declaration</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><CheckCircle className="mr-2" />Declaration</h2>
             <div className="mb-4">
               <p className="mb-2 text-black">"I hereby declare that the information provided above is true and correct to the best of my knowledge. I understand that any misrepresentation may lead to disqualification."</p>
               <label className="flex items-center space-x-2">
@@ -634,7 +634,7 @@ const ApplyJobPage: React.FC = () => {
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <Send className="text-green-600" size={32} />
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">Form Submitted Successfully!</h3>
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Form Submitted Successfully!</h3>
         <p className="text-gray-600 mb-6">
           Thank you for your application. We will get back to you soon.
         </p>
@@ -654,7 +654,7 @@ const ApplyJobPage: React.FC = () => {
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <h2 className="text-2xl font-bold mb-4">Please log in to apply for a job.</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-4">Please log in to apply for a job.</h2>
         <button
           className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
           onClick={() => navigate('/signin')}
@@ -675,7 +675,7 @@ const ApplyJobPage: React.FC = () => {
       <div className="w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-2 sm:p-4 md:p-8 mt-20">
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black">Job Application Form</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black">Job Application Form</h2>
           </div>
           {jobTitle && (
             <div className="mb-4 text-blue-700 font-semibold text-xl">Applying for: <span className="font-bold">{jobTitle}</span></div>

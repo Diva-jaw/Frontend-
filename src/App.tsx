@@ -108,7 +108,7 @@ function App() {
               <Router>
                 <ScrollToTop />
                 <Header isScrolled={isScrolled} />
-                <main>
+                <main className="pt-8 md:pt-0">
                   <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/insights" element={<Insights />} />

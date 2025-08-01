@@ -347,7 +347,7 @@ const JobBoard: React.FC = () => {
               {/* Job Header */}
               <div className="flex justify-between items-start border-b border-gray-200 dark:border-gray-700 pb-4">
                 <div>
-                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-1">
                     {selectedJob.job_title}
                   </h1>
                   <p className="text-gray-600 dark:text-gray-300 text-lg">
@@ -476,7 +476,7 @@ const JobBoard: React.FC = () => {
               className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-800/20 p-6 w-11/12 md:w-1/2 max-h-[80vh] overflow-y-auto border border-gray-200 dark:border-gray-700 transition-colors duration-300"
             >
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Liked Jobs</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-indigo-600 dark:text-indigo-400">Liked Jobs</h2>
                 <button
                   onClick={() => setShowLikedJobs(false)}
                   className="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 text-xl transition-colors duration-300"

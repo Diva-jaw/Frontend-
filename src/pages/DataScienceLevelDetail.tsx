@@ -15,7 +15,7 @@ const DataScienceLevelDetail = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-8 bg-white rounded-lg shadow">
-      <h1 className="text-2xl font-bold mb-4">Level {levelId?.replace('level-', '')}</h1>
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">Level {levelId?.replace('level-', '')}</h1>
       <p className="text-gray-700 mb-6">Details for this level are not specified.</p>
       <div className="text-gray-500">(Add more detailed curriculum, outcomes, and project info here.)</div>
     </div>

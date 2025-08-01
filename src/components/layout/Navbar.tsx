@@ -787,9 +787,8 @@ const Navbar = () => {
                   </>
                 )}
               </div>
-              {/* Logo and close button (below sticky auth bar) */}
-              <div className="flex items-center justify-between mb-8 px-6 pt-2">
-                <img src="/RFT logo.png" alt="Logo" className="h-12 w-12 rounded-full border-2 border-blue-400 dark:border-blue-500" />
+              {/* Close button (below sticky auth bar) */}
+              <div className="flex items-center justify-end mb-8 px-6 pt-2">
                 <button
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
