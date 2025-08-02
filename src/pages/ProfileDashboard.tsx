@@ -250,23 +250,7 @@ console.log("normalizedApplications",normalizedApplications);
               <span className="text-sm font-medium text-gray-700 dark:text-gray-200 hidden md:inline">{profile.name.split(' ')[0]}</span>
             </motion.button>
 
-            {showUserMenu && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg py-2 ring-1 ring-gray-200 dark:ring-gray-800"
-              >
-                <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center space-x-2">
-                  <Settings className="w-4 h-4" />
-                  <span>Settings</span>
-                </button>
-                <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center space-x-2">
-                  <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
-                </button>
-              </motion.div>
-            )}
+
           </div>
         </div>
       </header>
