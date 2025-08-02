@@ -150,6 +150,16 @@ const ApplyJobPage: React.FC = () => {
     localStorage.setItem('applyJobFormStep', String(step));
   }, [step]);
 
+  // Scroll to top when step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Reset resume state when entering step 7 to ensure consistency
+    if (step === 7) {
+      setFormData(prev => ({ ...prev, resume: null }));
+    }
+  }, [step]);
+
   // Redirect to login if not logged in
   useEffect(() => {
     if (!loading && !user) {
@@ -600,7 +610,13 @@ const ApplyJobPage: React.FC = () => {
             <h2 className="text-2xl font-bold mb-4 flex items-center text-black"><FilePlus className="mr-2" />Resume & Documents</h2>
             <div className="mb-4">
               <label className="block mb-1 font-medium text-black">Upload Resume (PDF) *</label>
-              <input type="file" accept="application/pdf" onChange={e => handleFileChange('resume', e.target.files ? e.target.files[0] : null)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+              <input 
+                key={`resume-${step}`}
+                type="file" 
+                accept="application/pdf" 
+                onChange={e => handleFileChange('resume', e.target.files ? e.target.files[0] : null)} 
+                className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+              />
               {errors.resume && <p className="text-red-500 text-sm">{errors.resume}</p>}
             </div>
             <div className="mb-4">
@@ -707,7 +723,7 @@ const ApplyJobPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                disabled={isSubmitting}
+                disabled={isSubmitting || (step === 7 && !formData.resume)}
                 className="flex items-center w-full sm:w-auto block px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors ml-auto disabled:opacity-50 justify-center"
               >
                 Next <ChevronRight className="ml-2" />
