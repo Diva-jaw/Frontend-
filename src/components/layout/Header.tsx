@@ -102,7 +102,13 @@ const Header = ({ isScrolled }: HeaderProps) => {
               <div className="flex flex-col gap-2 mb-2">
                 {isLoggedIn ? (
                   <>
-                    <div className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative mb-2">
+                    <div 
+                      className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative mb-2 cursor-pointer hover:from-green-200 hover:to-blue-200 dark:hover:from-green-800 dark:hover:to-blue-800 transition-all duration-200"
+                      onClick={() => {
+                        window.location.href = '/profile-dashboard';
+                        setIsMenuOpen(false);
+                      }}
+                    >
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
                         {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
                       </div>

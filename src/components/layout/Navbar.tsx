@@ -745,11 +745,21 @@ const Navbar = () => {
               <div className="sticky top-0 left-0 w-full bg-white dark:bg-gray-900 z-[200] pb-2 pt-2 flex flex-col gap-2 border-b border-gray-200 dark:border-gray-700 px-6" style={{maxWidth:'100vw',overflowX:'auto'}}>
                 {isLoggedIn ? (
                   <>
-                    <div className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative mb-2 min-w-0" style={{maxWidth:'100vw',overflowX:'auto'}}>
+                    <div 
+                      className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative mb-2 min-w-0 cursor-pointer hover:from-green-200 hover:to-blue-200 dark:hover:from-green-800 dark:hover:to-blue-800 transition-all duration-200" 
+                      style={{maxWidth:'100vw',overflowX:'auto'}}
+                      onClick={() => {
+                        window.location.href = '/profile-dashboard';
+                        setMobileMenuOpen(false);
+                      }}
+                    >
                       <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900 animate-pulse"></div>
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md min-w-0" style={{minWidth:'2rem'}}>
                         {getUserInitial(user?.name || "User")}
                       </div>
+                      <span className="text-sm font-semibold text-green-700 dark:text-green-300 truncate">
+                        {user?.name || 'User'}
+                      </span>
                     </div>
                     <button
                       onClick={() => {
