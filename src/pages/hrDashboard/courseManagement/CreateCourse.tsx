@@ -168,8 +168,9 @@ const CreateCourse: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          ...formData,
-          status: 'draft'
+          name: formData.name,
+          description: formData.description,
+          level_range: formData.level_range
         }),
       });
 
@@ -223,8 +224,9 @@ const CreateCourse: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          ...formData,
-          status: 'published'
+          name: formData.name,
+          description: formData.description,
+          level_range: formData.level_range
         }),
       });
 
