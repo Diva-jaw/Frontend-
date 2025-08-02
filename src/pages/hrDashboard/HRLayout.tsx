@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Users, Briefcase, FileText, UserCircle2, Sun, Moon, LogOut, User } from 'lucide-react';
+import { Users, Briefcase, FileText, UserCircle2, Sun, Moon, LogOut, User, Settings } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../components/AuthContext';
 import { useTheme } from '../../components/ThemeContext';
@@ -24,6 +24,11 @@ const navItems = [
     name: 'See Applied Job',
     path: '/hr/applied-jobs',
     icon: <FileText size={20} />,
+  },
+  {
+    name: 'Course Management',
+    path: '/hr/course-management',
+    icon: <Settings size={20} />,
   },
 ];
 

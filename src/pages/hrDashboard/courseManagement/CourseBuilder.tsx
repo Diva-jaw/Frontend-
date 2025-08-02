@@ -350,12 +350,48 @@ const CourseBuilder: React.FC = () => {
         if (result.data && result.data.length > 0 && !selectedTopicId) {
           setSelectedTopicId(result.data[0].id);
         }
+        
+        // Fetch subpoints for each topic
+        if (result.data && result.data.length > 0) {
+          for (const topic of result.data) {
+            await fetchSubpoints(topic.id);
+          }
+        }
       }
     } catch (error) {
       console.error("Error fetching topics:", error);
       setTopicsByModule(prev => ({
         ...prev,
         [moduleId]: []
+      }));
+    }
+  };
+
+  const fetchSubpoints = async (topicId: number) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}/subpoints`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        setSubpointsByTopic(prev => ({
+          ...prev,
+          [topicId]: result.data || []
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching subpoints:", error);
+      setSubpointsByTopic(prev => ({
+        ...prev,
+        [topicId]: []
       }));
     }
   };
@@ -401,7 +437,7 @@ const CourseBuilder: React.FC = () => {
           showNotification("success", "Success", "Course published successfully!");
           navigate('/hr/course-management');
         } else {
-          showNotification("success", "Success", "Course saved as draft! You can now add modules.");
+          showNotification("success", "Success", "Course saved as draft! You can now move to next step.");
         }
       } else {
         const errorData = await response.json();
@@ -610,15 +646,14 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/subpoints`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}/subpoints`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
         },
         body: JSON.stringify({
-          subpoint: currentSubpoint.subpoint,
-          topic_id: topicId
+          subpoint: currentSubpoint.subpoint
         })
       });
 
@@ -626,7 +661,8 @@ const CourseBuilder: React.FC = () => {
         const result = await response.json();
         showNotification("success", "Success", "Subpoint added successfully");
         setCurrentSubpoint({ subpoint: '' });
-        fetchTopics(selectedModuleId!);
+        // Refresh subpoints for the specific topic
+        await fetchSubpoints(topicId);
       } else {
         const error = await response.json();
         showNotification("error", "Error", error.message || "Failed to add subpoint");
@@ -812,7 +848,7 @@ const CourseBuilder: React.FC = () => {
                         placeholder="e.g., 4 weeks"
                       />
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center" style={{ display: 'none' }}>
                       <input
                         type="checkbox"
                         checked={currentModule.has_levels}
@@ -855,7 +891,7 @@ const CourseBuilder: React.FC = () => {
                                 className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                                 placeholder="Duration"
                               />
-                              <div className="flex items-center">
+                              <div className="flex items-center" style={{ display: 'none' }}>
                                 <input
                                   type="checkbox"
                                   checked={tempModule.has_levels}
