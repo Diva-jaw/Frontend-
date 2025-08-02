@@ -58,7 +58,7 @@ const InsightsSection = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 via-white to-blue-50 text-gray-800 min-h-screen flex flex-col">
+    <div className="bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col">
       <Header isScrolled={false} />
 
       <motion.main
@@ -71,7 +71,7 @@ const InsightsSection = () => {
           {/* Title */}
           <motion.div className="text-center max-w-4xl mx-auto mb-16" variants={itemVariants}>
             <motion.h1
-              className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent leading-normal"
+              className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 dark:from-blue-400 dark:via-purple-400 dark:to-indigo-400 bg-clip-text text-transparent leading-normal"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -79,7 +79,7 @@ const InsightsSection = () => {
               Insights & Gallery
             </motion.h1>
             <motion.p
-              className="text-xl text-gray-600 mb-8 leading-relaxed"
+              className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -96,7 +96,7 @@ const InsightsSection = () => {
             {GalleryImages.map((src, i) => (
               <motion.div
                 key={i}
-                className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer bg-white"
+                className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer bg-white dark:bg-gray-800"
                 variants={cardVariants}
                 whileHover="hover"
                 onClick={() => openModal(src)}
@@ -112,22 +112,22 @@ const InsightsSection = () => {
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
                   <button
-                    className="p-3 bg-white rounded-full hover:bg-gray-100 transition"
+                    className="p-3 bg-white dark:bg-gray-700 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition"
                     onClick={(e) => {
                       e.stopPropagation();
                       openModal(src);
                     }}
                   >
-                    <Eye className="w-5 h-5 text-gray-800" />
+                    <Eye className="w-5 h-5 text-gray-800 dark:text-gray-200" />
                   </button>
                   <button
-                    className="p-3 bg-white rounded-full hover:bg-gray-100 transition"
+                    className="p-3 bg-white dark:bg-gray-700 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition"
                     onClick={(e) => {
                       e.stopPropagation();
                       downloadImg(src);
                     }}
                   >
-                    <Download className="w-5 h-5 text-gray-800" />
+                    <Download className="w-5 h-5 text-gray-800 dark:text-gray-200" />
                   </button>
                 </div>
               </motion.div>

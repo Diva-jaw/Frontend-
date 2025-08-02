@@ -77,24 +77,7 @@ import CourseDetailsView from "./pages/hrDashboard/courseManagement/CourseDetail
 import { Sun, Moon } from "lucide-react";
 
 // Global Dark Mode Button Component
-const GlobalDarkModeButton = () => {
-  const { theme, toggleTheme } = useTheme();
-  
-  return (
-    <button
-      onClick={toggleTheme}
-      className="fixed bottom-4 right-4 z-[9999] p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg border border-gray-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-200 hover:scale-105 md:hidden"
-      aria-label="Toggle dark mode"
-      style={{ position: 'fixed', bottom: '1rem', right: '1rem' }}
-    >
-      {theme === "dark" ? (
-        <Sun size={20} className="text-yellow-500" />
-      ) : (
-        <Moon size={20} className="text-gray-700" />
-      )}
-    </button>
-  );
-};
+
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -219,8 +202,7 @@ function App() {
               </main>
               <Footer />
             </Router>
-            {/* Global Dark Mode Button - Only visible on mobile */}
-            <GlobalDarkModeButton />
+
           </ToastProvider>
         </div>
         </CourseProvider>
