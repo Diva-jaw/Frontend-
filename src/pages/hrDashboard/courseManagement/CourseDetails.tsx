@@ -299,11 +299,11 @@ const CourseDetails: React.FC = () => {
                     <div className="border-t border-gray-200 bg-gray-50">
                       {module.levels.map((level) => (
                         <div key={level.id} className="border-b border-gray-200 last:border-b-0">
-                          <div
-                            className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-100"
-                            onClick={() => toggleLevel(level.id)}
-                          >
-                            <div className="flex items-center">
+                          <div className="flex items-center justify-between p-4">
+                            <div 
+                              className="flex items-center flex-1 cursor-pointer hover:bg-gray-100 p-2 rounded"
+                              onClick={() => toggleLevel(level.id)}
+                            >
                               <TrendingUp className="w-4 h-4 text-green-600 mr-3" />
                               <div>
                                 <h4 className="font-medium text-gray-900">{level.level_name}</h4>
@@ -326,11 +326,11 @@ const CourseDetails: React.FC = () => {
                             <div className="border-t border-gray-200 bg-white">
                               {level.topics.map((topic) => (
                                 <div key={topic.id} className="border-b border-gray-200 last:border-b-0">
-                                  <div
-                                    className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50"
-                                    onClick={() => toggleTopic(topic.id)}
-                                  >
-                                    <div className="flex items-center">
+                                  <div className="flex items-center justify-between p-4">
+                                    <div 
+                                      className="flex items-center flex-1 cursor-pointer hover:bg-gray-50 p-2 rounded"
+                                      onClick={() => toggleTopic(topic.id)}
+                                    >
                                       <FileText className="w-4 h-4 text-purple-600 mr-3" />
                                       <div>
                                         <h5 className="font-medium text-gray-900">{topic.topic_title}</h5>

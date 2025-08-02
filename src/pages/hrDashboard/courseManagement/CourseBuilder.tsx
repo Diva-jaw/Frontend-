@@ -14,9 +14,12 @@ import {
   AlertCircle,
   ArrowLeft,
   ArrowRight,
+  Check,
+  X,
 } from 'lucide-react';
 import { useAuth } from '../../../components/AuthContext';
 import NotificationPopup from '../../../components/ui/NotificationPopup';
+import { useTheme } from '../../../components/ThemeContext';
 
 interface CourseData {
   id?: number;
@@ -63,6 +66,7 @@ const CourseBuilder: React.FC = () => {
   const navigate = useNavigate();
   const { courseId } = useParams();
   const { user, isLoggedIn } = useAuth();
+  const { theme } = useTheme();
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -105,6 +109,18 @@ const CourseBuilder: React.FC = () => {
   const [currentSubpoint, setCurrentSubpoint] = useState<SubpointData>({
     subpoint: ''
   });
+
+  // Edit states
+  const [editingModule, setEditingModule] = useState<ModuleData | null>(null);
+  const [editingLevel, setEditingLevel] = useState<LevelData | null>(null);
+  const [editingTopic, setEditingTopic] = useState<TopicData | null>(null);
+  const [editingSubpoint, setEditingSubpoint] = useState<SubpointData | null>(null);
+
+  // Temporary edit data
+  const [tempModule, setTempModule] = useState<ModuleData>({ name: '', duration: '', has_levels: false });
+  const [tempLevel, setTempLevel] = useState<LevelData>({ level_name: '', duration: '', level_range: '' });
+  const [tempTopic, setTempTopic] = useState<TopicData>({ topic_title: '', description: '' });
+  const [tempSubpoint, setTempSubpoint] = useState<SubpointData>({ subpoint: '' });
 
   // Selection states
   const [selectedModuleId, setSelectedModuleId] = useState<number | null>(null);
@@ -334,12 +350,48 @@ const CourseBuilder: React.FC = () => {
         if (result.data && result.data.length > 0 && !selectedTopicId) {
           setSelectedTopicId(result.data[0].id);
         }
+        
+        // Fetch subpoints for each topic
+        if (result.data && result.data.length > 0) {
+          for (const topic of result.data) {
+            await fetchSubpoints(topic.id);
+          }
+        }
       }
     } catch (error) {
       console.error("Error fetching topics:", error);
       setTopicsByModule(prev => ({
         ...prev,
         [moduleId]: []
+      }));
+    }
+  };
+
+  const fetchSubpoints = async (topicId: number) => {
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}/subpoints`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        setSubpointsByTopic(prev => ({
+          ...prev,
+          [topicId]: result.data || []
+        }));
+      }
+    } catch (error) {
+      console.error("Error fetching subpoints:", error);
+      setSubpointsByTopic(prev => ({
+        ...prev,
+        [topicId]: []
       }));
     }
   };
@@ -385,7 +437,7 @@ const CourseBuilder: React.FC = () => {
           showNotification("success", "Success", "Course published successfully!");
           navigate('/hr/course-management');
         } else {
-          showNotification("success", "Success", "Course saved as draft! You can now add modules.");
+          showNotification("success", "Success", "Course saved as draft! You can now move to next step.");
         }
       } else {
         const errorData = await response.json();
@@ -589,46 +641,56 @@ const CourseBuilder: React.FC = () => {
 
   const addSubpoint = async (topicId: number) => {
     if (!currentSubpoint.subpoint.trim()) {
-      showNotification("error", "Error", "Subpoint content is required");
-      return;
-    }
-
-    if (!topicId) {
-      showNotification("error", "Error", "Please add a topic first");
+      showNotification("error", "Error", "Please enter subpoint content");
       return;
     }
 
     try {
-      const token = localStorage.getItem("authToken");
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}/subpoints`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(currentSubpoint),
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}/subpoints`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({
+          subpoint: currentSubpoint.subpoint
+        })
+      });
 
       if (response.ok) {
         const result = await response.json();
-        const newSubpoint = { ...currentSubpoint, id: result.data.id };
-        setSubpointsByTopic(prev => ({
-          ...prev,
-          [topicId]: [...(prev[topicId] || []), newSubpoint]
-        }));
-        setCurrentSubpoint({ subpoint: '' });
         showNotification("success", "Success", "Subpoint added successfully");
+        setCurrentSubpoint({ subpoint: '' });
+        // Refresh subpoints for the specific topic
+        await fetchSubpoints(topicId);
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to add subpoint");
+        const error = await response.json();
+        showNotification("error", "Error", error.message || "Failed to add subpoint");
       }
     } catch (error) {
-      console.error("Error adding subpoint:", error);
       showNotification("error", "Error", "Failed to add subpoint");
     }
+  };
+
+  // Edit start functions
+  const startEditModule = (module: ModuleData) => {
+    setEditingModule(module);
+    setTempModule({ ...module });
+  };
+
+  const startEditLevel = (level: LevelData) => {
+    setEditingLevel(level);
+    setTempLevel({ ...level });
+  };
+
+  const startEditTopic = (topic: TopicData) => {
+    setEditingTopic(topic);
+    setTempTopic({ ...topic });
+  };
+
+  const startEditSubpoint = (subpoint: SubpointData) => {
+    setEditingSubpoint(subpoint);
+    setTempSubpoint({ ...subpoint });
   };
 
   const handleNext = async () => {
@@ -659,37 +721,37 @@ const CourseBuilder: React.FC = () => {
             className="space-y-6"
           >
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                 Course Name *
               </label>
               <input
                 type="text"
                 value={courseData.name}
                 onChange={(e) => setCourseData(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                 placeholder="Enter course name"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                 Course Description *
               </label>
               <textarea
                 value={courseData.description}
                 onChange={(e) => setCourseData(prev => ({ ...prev, description: e.target.value }))}
                 rows={6}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                 placeholder="Enter detailed course description"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                 Level Range *
               </label>
               <select
                 value={courseData.level_range}
                 onChange={(e) => setCourseData(prev => ({ ...prev, level_range: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
               >
                 <option value="">Select level range</option>
                 <option value="Beginner">Beginner</option>
@@ -711,12 +773,12 @@ const CourseBuilder: React.FC = () => {
             className="space-y-6"
           >
             {!courseData.id ? (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className={`${theme === 'dark' ? 'bg-yellow-900 border-yellow-700' : 'bg-yellow-50 border-yellow-200'} border rounded-lg p-4`}>
                 <div className="flex items-center">
                   <AlertCircle className="w-5 h-5 text-yellow-600 mr-2" />
-                  <h3 className="text-lg font-semibold text-yellow-800">Course Not Saved</h3>
+                  <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-yellow-200' : 'text-yellow-800'}`}>Course Not Saved</h3>
                 </div>
-                <p className="text-yellow-700 mt-2">
+                <p className={`${theme === 'dark' ? 'text-yellow-300' : 'text-yellow-700'} mt-2`}>
                   Please save the course first before adding modules. Click "Save Draft" to continue.
                 </p>
                 <button
@@ -730,15 +792,15 @@ const CourseBuilder: React.FC = () => {
             ) : (
               <>
                 {/* Course Context */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                  <h3 className="text-lg font-semibold text-blue-800 mb-2">Course Context</h3>
+                <div className={`${theme === 'dark' ? 'bg-blue-900 border-blue-700' : 'bg-blue-50 border-blue-200'} border rounded-lg p-4 mb-4`}>
+                  <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-blue-200' : 'text-blue-800'} mb-2`}>Course Context</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="font-medium text-blue-700">Course:</span>
-                      <p className="text-blue-900">{courseData.name}</p>
+                      <span className={`font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}`}>Course:</span>
+                      <p className={`${theme === 'dark' ? 'text-blue-100' : 'text-blue-900'}`}>{courseData.name}</p>
                     </div>
                     <div>
-                      <span className="font-medium text-blue-700">Status:</span>
+                      <span className={`font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}`}>Status:</span>
                       <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                         courseData.status === 'published' 
                           ? 'bg-green-100 text-green-800' 
@@ -750,50 +812,50 @@ const CourseBuilder: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                <div className={`${theme === 'dark' ? 'bg-green-900 border-green-700' : 'bg-green-50 border-green-200'} border rounded-lg p-4 mb-4`}>
                   <div className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-                    <h3 className="text-lg font-semibold text-green-800">Course Saved!</h3>
+                    <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-green-200' : 'text-green-800'}`}>Course Saved!</h3>
                   </div>
-                  <p className="text-green-700 mt-1">
+                  <p className={`${theme === 'dark' ? 'text-green-300' : 'text-green-700'} mt-1`}>
                     Your course has been saved. You can now add modules to this course.
                   </p>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-4">Add Module to Course</h3>
+                <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-gray-50'} p-4 rounded-lg`}>
+                  <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>Add Module to Course</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                         Module Name *
                       </label>
                       <input
                         type="text"
                         value={currentModule.name}
                         onChange={(e) => setCurrentModule(prev => ({ ...prev, name: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                         placeholder="Enter module name"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                         Duration
                       </label>
                       <input
                         type="text"
                         value={currentModule.duration}
                         onChange={(e) => setCurrentModule(prev => ({ ...prev, duration: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                         placeholder="e.g., 4 weeks"
                       />
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex items-center" style={{ display: 'none' }}>
                       <input
                         type="checkbox"
                         checked={currentModule.has_levels}
                         onChange={(e) => setCurrentModule(prev => ({ ...prev, has_levels: e.target.checked }))}
                         className="mr-2"
                       />
-                      <label className="text-sm font-medium text-gray-700">
+                      <label className={`text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
                         Has Levels
                       </label>
                     </div>
@@ -809,24 +871,79 @@ const CourseBuilder: React.FC = () => {
 
                 {modules.length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Modules in Course</h3>
+                    <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>Modules in Course</h3>
                     <div className="space-y-2">
                       {modules.map((module, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-white border rounded-lg">
-                          <div>
-                            <h4 className="font-medium">{module.name}</h4>
-                            <p className="text-sm text-gray-600">{module.duration}</p>
-                            <p className="text-xs text-blue-600 mt-1">
-                              Course: {courseData.name}
-                            </p>
-                          </div>
+                        <div key={index} className={`flex items-center justify-between p-3 ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border'} border rounded-lg`}>
+                          {editingModule?.id === module.id ? (
+                            <div className="flex-1 space-y-2">
+                              <input
+                                type="text"
+                                value={tempModule.name}
+                                onChange={(e) => setTempModule(prev => ({ ...prev, name: e.target.value }))}
+                                className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                                placeholder="Module name"
+                              />
+                              <input
+                                type="text"
+                                value={tempModule.duration}
+                                onChange={(e) => setTempModule(prev => ({ ...prev, duration: e.target.value }))}
+                                className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                                placeholder="Duration"
+                              />
+                              <div className="flex items-center" style={{ display: 'none' }}>
+                                <input
+                                  type="checkbox"
+                                  checked={tempModule.has_levels}
+                                  onChange={(e) => setTempModule(prev => ({ ...prev, has_levels: e.target.checked }))}
+                                  className="mr-2"
+                                />
+                                <label className={`text-sm ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'}`}>
+                                  Has Levels
+                                </label>
+                              </div>
+                            </div>
+                          ) : (
+                            <div>
+                              <h4 className={`font-medium ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>{module.name}</h4>
+                              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{module.duration}</p>
+                              <p className={`text-xs text-blue-600 mt-1 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>
+                                Course: {courseData.name}
+                              </p>
+                            </div>
+                          )}
                           <div className="flex space-x-2">
-                            <button className="text-blue-600 hover:text-blue-700">
-                              <Edit className="w-4 h-4" />
-                            </button>
-                            <button className="text-red-600 hover:text-red-700">
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+                            {editingModule?.id === module.id ? (
+                              <>
+                                <button 
+                                  onClick={saveEditModule}
+                                  className={`${theme === 'dark' ? 'text-green-400 hover:text-green-300' : 'text-green-600 hover:text-green-700'}`}
+                                >
+                                  <Check className="w-4 h-4" />
+                                </button>
+                                <button 
+                                  onClick={cancelEdit}
+                                  className={`${theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-700'}`}
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button 
+                                  onClick={() => startEditModule(module)}
+                                  className={`${theme === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'}`}
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </button>
+                                <button 
+                                  onClick={() => deleteModule(module.id!)}
+                                  className={`${theme === 'dark' ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-700'}`}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -846,26 +963,26 @@ const CourseBuilder: React.FC = () => {
             className="space-y-6"
           >
             {/* Course and Module Context */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-green-800 mb-2">Course Context</h3>
+            <div className={`${theme === 'dark' ? 'bg-green-900 border-green-700' : 'bg-green-50 border-green-200'} border rounded-lg p-4`}>
+              <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-green-200' : 'text-green-800'} mb-2`}>Course Context</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="font-medium text-green-700">Course:</span>
-                  <p className="text-green-900">{courseData.name}</p>
+                  <span className={`font-medium ${theme === 'dark' ? 'text-green-300' : 'text-green-700'}`}>Course:</span>
+                  <p className={`${theme === 'dark' ? 'text-green-100' : 'text-green-900'}`}>{courseData.name}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-green-700">Selected Module:</span>
-                  <p className="text-green-900">{modules.find(m => m.id === selectedModuleId)?.name || 'No module selected'}</p>
+                  <span className={`font-medium ${theme === 'dark' ? 'text-green-300' : 'text-green-700'}`}>Selected Module:</span>
+                  <p className={`${theme === 'dark' ? 'text-green-100' : 'text-green-900'}`}>{modules.find(m => m.id === selectedModuleId)?.name || 'No module selected'}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">Add Level to Module</h3>
+            <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-gray-50'} p-4 rounded-lg`}>
+              <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>Add Level to Module</h3>
               
               {/* Module Selection */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                   Select Module *
                 </label>
                 <select
@@ -877,7 +994,7 @@ const CourseBuilder: React.FC = () => {
                       fetchLevels(moduleId);
                     }
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
                   <option value="">Select a module</option>
                   {modules.map((module) => (
@@ -890,38 +1007,38 @@ const CourseBuilder: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                     Level Name *
                   </label>
                   <input
                     type="text"
                     value={currentLevel.level_name}
                     onChange={(e) => setCurrentLevel(prev => ({ ...prev, level_name: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                     placeholder="e.g., Beginner Level"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                     Duration
                   </label>
                   <input
                     type="text"
                     value={currentLevel.duration}
                     onChange={(e) => setCurrentLevel(prev => ({ ...prev, duration: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                     placeholder="e.g., 4 weeks"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                     Level Range
                   </label>
                   <input
                     type="text"
                     value={currentLevel.level_range}
                     onChange={(e) => setCurrentLevel(prev => ({ ...prev, level_range: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                     placeholder="e.g., Beginner to Intermediate"
                   />
                 </div>
@@ -938,24 +1055,75 @@ const CourseBuilder: React.FC = () => {
 
             {getCurrentLevels().length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold mb-4">Levels in Selected Module</h3>
+                <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>Levels in Selected Module</h3>
                 <div className="space-y-2">
                   {getCurrentLevels().map((level, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-white border rounded-lg">
-                      <div>
-                        <h4 className="font-medium">{level.level_name}</h4>
-                        <p className="text-sm text-gray-600">{level.duration} • {level.level_range}</p>
-                        <p className="text-xs text-green-600 mt-1">
-                          Module: {modules.find(m => m.id === selectedModuleId)?.name}
-                        </p>
-                      </div>
+                    <div key={index} className={`flex items-center justify-between p-3 ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border'} border rounded-lg`}>
+                      {editingLevel?.id === level.id ? (
+                        <div className="flex-1 space-y-2">
+                          <input
+                            type="text"
+                            value={tempLevel.level_name}
+                            onChange={(e) => setTempLevel(prev => ({ ...prev, level_name: e.target.value }))}
+                            className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            placeholder="Level name"
+                          />
+                          <input
+                            type="text"
+                            value={tempLevel.duration}
+                            onChange={(e) => setTempLevel(prev => ({ ...prev, duration: e.target.value }))}
+                            className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            placeholder="Duration"
+                          />
+                          <input
+                            type="text"
+                            value={tempLevel.level_range}
+                            onChange={(e) => setTempLevel(prev => ({ ...prev, level_range: e.target.value }))}
+                            className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            placeholder="Level range"
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          <h4 className={`font-medium ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>{level.level_name}</h4>
+                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{level.duration} • {level.level_range}</p>
+                          <p className={`text-xs text-green-600 mt-1 ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
+                            Module: {modules.find(m => m.id === selectedModuleId)?.name}
+                          </p>
+                        </div>
+                      )}
                       <div className="flex space-x-2">
-                        <button className="text-blue-600 hover:text-blue-700">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="text-red-600 hover:text-red-700">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {editingLevel?.id === level.id ? (
+                          <>
+                            <button 
+                              onClick={saveEditLevel}
+                              className={`${theme === 'dark' ? 'text-green-400 hover:text-green-300' : 'text-green-600 hover:text-green-700'}`}
+                            >
+                              <Check className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={cancelEdit}
+                              className={`${theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-700'}`}
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button 
+                              onClick={() => startEditLevel(level)}
+                              className={`${theme === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'}`}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => deleteLevel(level.id!)}
+                              className={`${theme === 'dark' ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-700'}`}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -973,30 +1141,30 @@ const CourseBuilder: React.FC = () => {
             className="space-y-6"
           >
             {/* Course and Module Context */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-blue-800 mb-2">Course Context</h3>
+            <div className={`${theme === 'dark' ? 'bg-blue-900 border-blue-700' : 'bg-blue-50 border-blue-200'} border rounded-lg p-4`}>
+              <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-blue-200' : 'text-blue-800'} mb-2`}>Course Context</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div>
-                  <span className="font-medium text-blue-700">Course:</span>
-                  <p className="text-blue-900">{courseData.name}</p>
+                  <span className={`font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}`}>Course:</span>
+                  <p className={`${theme === 'dark' ? 'text-blue-100' : 'text-blue-900'}`}>{courseData.name}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-blue-700">Selected Module:</span>
-                  <p className="text-blue-900">{modules.find(m => m.id === selectedModuleId)?.name || 'No module selected'}</p>
+                  <span className={`font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}`}>Selected Module:</span>
+                  <p className={`${theme === 'dark' ? 'text-blue-100' : 'text-blue-900'}`}>{modules.find(m => m.id === selectedModuleId)?.name || 'No module selected'}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-blue-700">Selected Level:</span>
-                  <p className="text-blue-900">{getCurrentLevels().find(l => l.id === selectedLevelId)?.level_name || 'No level selected'}</p>
+                  <span className={`font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}`}>Selected Level:</span>
+                  <p className={`${theme === 'dark' ? 'text-blue-100' : 'text-blue-900'}`}>{getCurrentLevels().find(l => l.id === selectedLevelId)?.level_name || 'No level selected'}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">Add Topic to Module</h3>
+            <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-gray-50'} p-4 rounded-lg`}>
+              <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>Add Topic to Module</h3>
               
               {/* Module Selection */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                   Select Module *
                 </label>
                 <select
@@ -1009,7 +1177,7 @@ const CourseBuilder: React.FC = () => {
                       fetchTopics(moduleId);
                     }
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
                   <option value="">Select a module</option>
                   {modules.map((module) => (
@@ -1022,13 +1190,13 @@ const CourseBuilder: React.FC = () => {
 
               {/* Level Selection */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                   Select Level (Optional)
                 </label>
                 <select
                   value={selectedLevelId || ''}
                   onChange={(e) => setSelectedLevelId(parseInt(e.target.value) || null)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
                   <option value="">No level (topic for entire module)</option>
                   {getCurrentLevels().map((level) => (
@@ -1041,26 +1209,26 @@ const CourseBuilder: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                     Topic Title *
                   </label>
                   <input
                     type="text"
                     value={currentTopic.topic_title}
                     onChange={(e) => setCurrentTopic(prev => ({ ...prev, topic_title: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                     placeholder="Enter topic title"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                     Description
                   </label>
                   <textarea
                     value={currentTopic.description}
                     onChange={(e) => setCurrentTopic(prev => ({ ...prev, description: e.target.value }))}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                     placeholder="Enter topic description"
                   />
                 </div>
@@ -1077,25 +1245,69 @@ const CourseBuilder: React.FC = () => {
 
             {getCurrentTopics().length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold mb-4">Topics in Selected Module</h3>
+                <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>Topics in Selected Module</h3>
                 <div className="space-y-2">
                   {getCurrentTopics().map((topic, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-white border rounded-lg">
-                      <div>
-                        <h4 className="font-medium">{topic.topic_title}</h4>
-                        <p className="text-sm text-gray-600">{topic.description}</p>
-                        <p className="text-xs text-blue-600 mt-1">
-                          Module: {modules.find(m => m.id === selectedModuleId)?.name} • 
-                          Level: {topic.level_id ? getCurrentLevels().find(l => l.id === topic.level_id)?.level_name : 'Module Level'}
-                        </p>
-                      </div>
+                    <div key={index} className={`flex items-center justify-between p-3 ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border'} border rounded-lg`}>
+                      {editingTopic?.id === topic.id ? (
+                        <div className="flex-1 space-y-2">
+                          <input
+                            type="text"
+                            value={tempTopic.topic_title}
+                            onChange={(e) => setTempTopic(prev => ({ ...prev, topic_title: e.target.value }))}
+                            className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            placeholder="Topic title"
+                          />
+                          <textarea
+                            value={tempTopic.description}
+                            onChange={(e) => setTempTopic(prev => ({ ...prev, description: e.target.value }))}
+                            rows={3}
+                            className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            placeholder="Topic description"
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          <h4 className={`font-medium ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>{topic.topic_title}</h4>
+                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{topic.description}</p>
+                          <p className={`text-xs text-blue-600 mt-1 ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>
+                            Module: {modules.find(m => m.id === selectedModuleId)?.name} • 
+                            Level: {topic.level_id ? getCurrentLevels().find(l => l.id === topic.level_id)?.level_name : 'Module Level'}
+                          </p>
+                        </div>
+                      )}
                       <div className="flex space-x-2">
-                        <button className="text-blue-600 hover:text-blue-700">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="text-red-600 hover:text-red-700">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {editingTopic?.id === topic.id ? (
+                          <>
+                            <button 
+                              onClick={saveEditTopic}
+                              className={`${theme === 'dark' ? 'text-green-400 hover:text-green-300' : 'text-green-600 hover:text-green-700'}`}
+                            >
+                              <Check className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={cancelEdit}
+                              className={`${theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-700'}`}
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button 
+                              onClick={() => startEditTopic(topic)}
+                              className={`${theme === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'}`}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => deleteTopic(topic.id!)}
+                              className={`${theme === 'dark' ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-700'}`}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -1113,34 +1325,34 @@ const CourseBuilder: React.FC = () => {
             className="space-y-6"
           >
             {/* Course, Module, Level, and Topic Context */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-green-800 mb-2">Course Context</h3>
+            <div className={`${theme === 'dark' ? 'bg-green-900 border-green-700' : 'bg-green-50 border-green-200'} border rounded-lg p-4`}>
+              <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-green-200' : 'text-green-800'} mb-2`}>Course Context</h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <span className="font-medium text-green-700">Course:</span>
-                  <p className="text-green-900">{courseData.name}</p>
+                  <span className={`font-medium ${theme === 'dark' ? 'text-green-300' : 'text-green-700'}`}>Course:</span>
+                  <p className={`${theme === 'dark' ? 'text-green-100' : 'text-green-900'}`}>{courseData.name}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-green-700">Selected Module:</span>
-                  <p className="text-green-900">{modules.find(m => m.id === selectedModuleId)?.name || 'No module selected'}</p>
+                  <span className={`font-medium ${theme === 'dark' ? 'text-green-300' : 'text-green-700'}`}>Selected Module:</span>
+                  <p className={`${theme === 'dark' ? 'text-green-100' : 'text-green-900'}`}>{modules.find(m => m.id === selectedModuleId)?.name || 'No module selected'}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-green-700">Selected Level:</span>
-                  <p className="text-green-900">{getCurrentLevels().find(l => l.id === selectedLevelId)?.level_name || 'No level selected'}</p>
+                  <span className={`font-medium ${theme === 'dark' ? 'text-green-300' : 'text-green-700'}`}>Selected Level:</span>
+                  <p className={`${theme === 'dark' ? 'text-green-100' : 'text-green-900'}`}>{getCurrentLevels().find(l => l.id === selectedLevelId)?.level_name || 'No level selected'}</p>
                 </div>
                 <div>
-                  <span className="font-medium text-green-700">Selected Topic:</span>
-                  <p className="text-green-900">{getCurrentTopics().find(t => t.id === selectedTopicId)?.topic_title || 'No topic selected'}</p>
+                  <span className={`font-medium ${theme === 'dark' ? 'text-green-300' : 'text-green-700'}`}>Selected Topic:</span>
+                  <p className={`${theme === 'dark' ? 'text-green-100' : 'text-green-900'}`}>{getCurrentTopics().find(t => t.id === selectedTopicId)?.topic_title || 'No topic selected'}</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">Add Subpoint to Topic</h3>
+            <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-gray-50'} p-4 rounded-lg`}>
+              <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>Add Subpoint to Topic</h3>
               
               {/* Module Selection */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                   Select Module *
                 </label>
                 <select
@@ -1153,7 +1365,7 @@ const CourseBuilder: React.FC = () => {
                       fetchTopics(moduleId);
                     }
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
                   <option value="">Select a module</option>
                   {modules.map((module) => (
@@ -1166,16 +1378,16 @@ const CourseBuilder: React.FC = () => {
 
               {/* Topic Selection */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                   Select Topic *
                 </label>
                 <select
                   value={selectedTopicId || ''}
                   onChange={(e) => setSelectedTopicId(parseInt(e.target.value) || null)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 >
                   <option value="">Select a topic</option>
-                                    {getCurrentTopics().map((topic) => (
+                  {getCurrentTopics().map((topic) => (
                     <option key={topic.id} value={topic.id}>
                       {topic.topic_title} {topic.level_id ? `(${getCurrentLevels().find(l => l.id === topic.level_id)?.level_name})` : '(Module Level)'}
                     </option>
@@ -1184,14 +1396,14 @@ const CourseBuilder: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-gray-200' : 'text-gray-700'} mb-2`}>
                   Subpoint Content *
                 </label>
                 <textarea
                   value={currentSubpoint.subpoint}
                   onChange={(e) => setCurrentSubpoint(prev => ({ ...prev, subpoint: e.target.value }))}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${theme === 'dark' ? 'placeholder-gray-400' : 'placeholder-gray-500'}`}
                   placeholder="Enter subpoint content"
                 />
               </div>
@@ -1207,26 +1419,63 @@ const CourseBuilder: React.FC = () => {
 
             {getCurrentSubpoints().length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold mb-4">Subpoints in Selected Topic</h3>
+                <h3 className={`text-lg font-semibold mb-4 ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>Subpoints in Selected Topic</h3>
                 <div className="space-y-2">
                   {getCurrentSubpoints().map((subpoint, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-white border rounded-lg">
-                      <div className="flex-1">
-                        <p className="text-sm">{subpoint.subpoint}</p>
-                        <p className="text-xs text-green-600 mt-1">
-                          Topic: {getCurrentTopics().find(t => t.id === selectedTopicId)?.topic_title} • 
-                          Module: {modules.find(m => m.id === selectedModuleId)?.name} • 
-                          Level: {getCurrentTopics().find(t => t.id === selectedTopicId)?.level_id ? 
-                            getCurrentLevels().find(l => l.id === getCurrentTopics().find(t => t.id === selectedTopicId)?.level_id)?.level_name : 'Module Level'}
-                        </p>
-                      </div>
+                    <div key={index} className={`flex items-center justify-between p-3 ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border'} border rounded-lg`}>
+                      {editingSubpoint?.id === subpoint.id ? (
+                        <div className="flex-1">
+                          <textarea
+                            value={tempSubpoint.subpoint}
+                            onChange={(e) => setTempSubpoint(prev => ({ ...prev, subpoint: e.target.value }))}
+                            rows={3}
+                            className={`w-full px-3 py-2 border ${theme === 'dark' ? 'border-gray-600 bg-gray-700 text-white' : 'border-gray-300 bg-white text-black'} rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                            placeholder="Subpoint content"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex-1">
+                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>{subpoint.subpoint}</p>
+                          <p className={`text-xs text-green-600 mt-1 ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
+                            Topic: {getCurrentTopics().find(t => t.id === selectedTopicId)?.topic_title} • 
+                            Module: {modules.find(m => m.id === selectedModuleId)?.name} • 
+                            Level: {getCurrentTopics().find(t => t.id === selectedTopicId)?.level_id ? 
+                              getCurrentLevels().find(l => l.id === getCurrentTopics().find(t => t.id === selectedTopicId)?.level_id)?.level_name : 'Module Level'}
+                          </p>
+                        </div>
+                      )}
                       <div className="flex space-x-2 ml-4">
-                        <button className="text-blue-600 hover:text-blue-700">
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button className="text-red-600 hover:text-red-700">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {editingSubpoint?.id === subpoint.id ? (
+                          <>
+                            <button 
+                              onClick={saveEditSubpoint}
+                              className={`${theme === 'dark' ? 'text-green-400 hover:text-green-300' : 'text-green-600 hover:text-green-700'}`}
+                            >
+                              <Check className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={cancelEdit}
+                              className={`${theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-700'}`}
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button 
+                              onClick={() => startEditSubpoint(subpoint)}
+                              className={`${theme === 'dark' ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'}`}
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => deleteSubpoint(subpoint.id!)}
+                              className={`${theme === 'dark' ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-700'}`}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -1244,9 +1493,9 @@ const CourseBuilder: React.FC = () => {
             className="space-y-6"
           >
             {/* Course Overview */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-blue-50 border-blue-200'} border rounded-lg p-6`}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-blue-800">Course Overview</h3>
+                <h3 className={`text-xl font-semibold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-800'}`}>Course Overview</h3>
                 <button
                   onClick={() => setCurrentStep(1)}
                   className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -1257,19 +1506,19 @@ const CourseBuilder: React.FC = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-blue-700">Course Name</label>
-                  <p className="text-blue-900 font-medium">{courseData.name || 'Not set'}</p>
+                  <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}`}>Course Name</label>
+                  <p className={`${theme === 'dark' ? 'text-blue-200' : 'text-blue-900'} font-medium`}>{courseData.name || 'Not set'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-blue-700">Level Range</label>
-                  <p className="text-blue-900">{courseData.level_range || 'Not set'}</p>
+                  <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}`}>Level Range</label>
+                  <p className={`${theme === 'dark' ? 'text-blue-200' : 'text-blue-900'}`}>{courseData.level_range || 'Not set'}</p>
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-blue-700">Description</label>
-                  <p className="text-blue-900">{courseData.description || 'No description provided'}</p>
+                  <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}`}>Description</label>
+                  <p className={`${theme === 'dark' ? 'text-blue-200' : 'text-blue-900'}`}>{courseData.description || 'No description provided'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-blue-700">Status</label>
+                  <label className={`block text-sm font-medium ${theme === 'dark' ? 'text-blue-300' : 'text-blue-700'}`}>Status</label>
                   <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                     courseData.status === 'published' 
                       ? 'bg-green-100 text-green-800' 
@@ -1282,9 +1531,9 @@ const CourseBuilder: React.FC = () => {
             </div>
 
             {/* Modules Review */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+            <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-green-50 border-green-200'} border rounded-lg p-6`}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-green-800">Modules ({modules.length})</h3>
+                <h3 className={`text-xl font-semibold ${theme === 'dark' ? 'text-green-400' : 'text-green-800'}`}>Modules ({modules.length})</h3>
                 <button
                   onClick={() => setCurrentStep(2)}
                   className="px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700"
@@ -1296,18 +1545,18 @@ const CourseBuilder: React.FC = () => {
               {modules.length > 0 ? (
                 <div className="space-y-3">
                   {modules.map((module, index) => (
-                    <div key={module.id} className="bg-white p-4 rounded-lg border">
+                    <div key={module.id} className={`${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} p-4 rounded-lg border ${theme === 'dark' ? 'border-gray-600' : 'border-gray-200'}`}>
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-gray-900">{module.name}</h4>
-                          <p className="text-sm text-gray-600">Duration: {module.duration}</p>
-                          <p className="text-xs text-gray-500">Has Levels: {module.has_levels ? 'Yes' : 'No'}</p>
+                          <h4 className={`font-medium ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>{module.name}</h4>
+                          <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Duration: {module.duration}</p>
+                          <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-500'}`}>Has Levels: {module.has_levels ? 'Yes' : 'No'}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-green-600">
+                          <p className={`text-sm ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
                             {levelsByModule[module.id || 0]?.length || 0} levels
                           </p>
-                          <p className="text-sm text-green-600">
+                          <p className={`text-sm ${theme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
                             {topicsByModule[module.id || 0]?.length || 0} topics
                           </p>
                         </div>
@@ -1316,14 +1565,14 @@ const CourseBuilder: React.FC = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-green-700 italic">No modules added yet</p>
+                <p className={`${theme === 'dark' ? 'text-green-300' : 'text-green-700'} italic`}>No modules added yet</p>
               )}
             </div>
 
             {/* Levels Review */}
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
+            <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-purple-50 border-purple-200'} border rounded-lg p-6`}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-purple-800">Levels ({Object.values(levelsByModule).flat().length})</h3>
+                <h3 className={`text-xl font-semibold ${theme === 'dark' ? 'text-purple-400' : 'text-purple-800'}`}>Levels ({Object.values(levelsByModule).flat().length})</h3>
                 <button
                   onClick={() => setCurrentStep(3)}
                   className="px-3 py-1 text-sm bg-purple-600 text-white rounded-md hover:bg-purple-700"
@@ -1339,13 +1588,13 @@ const CourseBuilder: React.FC = () => {
                     if (moduleLevels.length === 0) return null;
                     
                     return (
-                      <div key={module.id} className="bg-white p-4 rounded-lg border">
-                        <h4 className="font-medium text-gray-900 mb-2">{module.name}</h4>
+                      <div key={module.id} className={`${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} p-4 rounded-lg border ${theme === 'dark' ? 'border-gray-600' : 'border-gray-200'}`}>
+                        <h4 className={`font-medium ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'} mb-2`}>{module.name}</h4>
                         <div className="space-y-2">
                           {moduleLevels.map((level, index) => (
-                            <div key={level.id} className="ml-4 p-2 bg-gray-50 rounded">
-                              <p className="font-medium text-sm">{level.level_name}</p>
-                              <p className="text-xs text-gray-600">Duration: {level.duration} • Range: {level.level_range}</p>
+                            <div key={level.id} className={`ml-4 p-2 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'} rounded`}>
+                              <p className={`font-medium text-sm ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>{level.level_name}</p>
+                              <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Duration: {level.duration} • Range: {level.level_range}</p>
                             </div>
                           ))}
                         </div>
@@ -1354,14 +1603,14 @@ const CourseBuilder: React.FC = () => {
                   })}
                 </div>
               ) : (
-                <p className="text-purple-700 italic">No levels added yet</p>
+                <p className={`${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'} italic`}>No levels added yet</p>
               )}
             </div>
 
             {/* Topics Review */}
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
+            <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-orange-50 border-orange-200'} border rounded-lg p-6`}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-orange-800">Topics ({Object.values(topicsByModule).flat().length})</h3>
+                <h3 className={`text-xl font-semibold ${theme === 'dark' ? 'text-orange-400' : 'text-orange-800'}`}>Topics ({Object.values(topicsByModule).flat().length})</h3>
                 <button
                   onClick={() => setCurrentStep(4)}
                   className="px-3 py-1 text-sm bg-orange-600 text-white rounded-md hover:bg-orange-700"
@@ -1377,18 +1626,18 @@ const CourseBuilder: React.FC = () => {
                     if (moduleTopics.length === 0) return null;
                     
                     return (
-                      <div key={module.id} className="bg-white p-4 rounded-lg border">
-                        <h4 className="font-medium text-gray-900 mb-2">{module.name}</h4>
+                      <div key={module.id} className={`${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} p-4 rounded-lg border ${theme === 'dark' ? 'border-gray-600' : 'border-gray-200'}`}>
+                        <h4 className={`font-medium ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'} mb-2`}>{module.name}</h4>
                         <div className="space-y-2">
                           {moduleTopics.map((topic, index) => {
                             const level = topic.level_id ? 
                               Object.values(levelsByModule).flat().find(l => l.id === topic.level_id) : null;
                             
                             return (
-                              <div key={topic.id} className="ml-4 p-2 bg-gray-50 rounded">
-                                <p className="font-medium text-sm">{topic.topic_title}</p>
-                                <p className="text-xs text-gray-600">{topic.description}</p>
-                                <p className="text-xs text-orange-600">
+                              <div key={topic.id} className={`ml-4 p-2 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'} rounded`}>
+                                <p className={`font-medium text-sm ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>{topic.topic_title}</p>
+                                <p className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{topic.description}</p>
+                                <p className={`text-xs ${theme === 'dark' ? 'text-orange-400' : 'text-orange-600'}`}>
                                   Level: {level ? level.level_name : 'Module Level'}
                                 </p>
                               </div>
@@ -1400,14 +1649,14 @@ const CourseBuilder: React.FC = () => {
                   })}
                 </div>
               ) : (
-                <p className="text-orange-700 italic">No topics added yet</p>
+                <p className={`${theme === 'dark' ? 'text-orange-300' : 'text-orange-700'} italic`}>No topics added yet</p>
               )}
             </div>
 
             {/* Subpoints Review */}
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+            <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-red-50 border-red-200'} border rounded-lg p-6`}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-red-800">Subpoints ({Object.values(subpointsByTopic).flat().length})</h3>
+                <h3 className={`text-xl font-semibold ${theme === 'dark' ? 'text-red-400' : 'text-red-800'}`}>Subpoints ({Object.values(subpointsByTopic).flat().length})</h3>
                 <button
                   onClick={() => setCurrentStep(5)}
                   className="px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700"
@@ -1423,19 +1672,19 @@ const CourseBuilder: React.FC = () => {
                     if (moduleTopics.length === 0) return null;
                     
                     return (
-                      <div key={module.id} className="bg-white p-4 rounded-lg border">
-                        <h4 className="font-medium text-gray-900 mb-2">{module.name}</h4>
+                      <div key={module.id} className={`${theme === 'dark' ? 'bg-gray-700' : 'bg-white'} p-4 rounded-lg border ${theme === 'dark' ? 'border-gray-600' : 'border-gray-200'}`}>
+                        <h4 className={`font-medium ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'} mb-2`}>{module.name}</h4>
                         <div className="space-y-2">
                           {moduleTopics.map((topic) => {
                             const topicSubpoints = subpointsByTopic[topic.id || 0] || [];
                             if (topicSubpoints.length === 0) return null;
                             
                             return (
-                              <div key={topic.id} className="ml-4 p-2 bg-gray-50 rounded">
-                                <p className="font-medium text-sm text-gray-700">{topic.topic_title}</p>
+                              <div key={topic.id} className={`ml-4 p-2 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'} rounded`}>
+                                <p className={`font-medium text-sm ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>{topic.topic_title}</p>
                                 <div className="ml-4 mt-1 space-y-1">
                                   {topicSubpoints.map((subpoint, index) => (
-                                    <div key={subpoint.id} className="text-xs text-gray-600">
+                                    <div key={subpoint.id} className={`text-xs ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
                                       • {subpoint.subpoint}
                                     </div>
                                   ))}
@@ -1449,29 +1698,29 @@ const CourseBuilder: React.FC = () => {
                   })}
                 </div>
               ) : (
-                <p className="text-red-700 italic">No subpoints added yet</p>
+                <p className={`${theme === 'dark' ? 'text-red-300' : 'text-red-700'} italic`}>No subpoints added yet</p>
               )}
             </div>
 
             {/* Summary Statistics */}
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Summary Statistics</h3>
+            <div className={`${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-gray-50 border-gray-200'} border rounded-lg p-6`}>
+              <h3 className={`text-lg font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'} mb-4`}>Summary Statistics</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">{modules.length}</div>
-                  <div className="text-sm text-gray-600">Modules</div>
+                  <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-blue-400' : 'text-blue-600'}`}>{modules.length}</div>
+                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Modules</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600">{Object.values(levelsByModule).flat().length}</div>
-                  <div className="text-sm text-gray-600">Levels</div>
+                  <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-purple-400' : 'text-purple-600'}`}>{Object.values(levelsByModule).flat().length}</div>
+                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Levels</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-orange-600">{Object.values(topicsByModule).flat().length}</div>
-                  <div className="text-sm text-gray-600">Topics</div>
+                  <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-orange-400' : 'text-orange-600'}`}>{Object.values(topicsByModule).flat().length}</div>
+                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Topics</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-red-600">{Object.values(subpointsByTopic).flat().length}</div>
-                  <div className="text-sm text-gray-600">Subpoints</div>
+                  <div className={`text-2xl font-bold ${theme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>{Object.values(subpointsByTopic).flat().length}</div>
+                  <div className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Subpoints</div>
                 </div>
               </div>
             </div>
@@ -1503,6 +1752,238 @@ const CourseBuilder: React.FC = () => {
     }
   };
 
+  const saveEditModule = async () => {
+    if (!editingModule || !tempModule.name.trim()) {
+      showNotification("error", "Error", "Please enter module name");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/modules/${editingModule.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify(tempModule)
+      });
+
+      if (response.ok) {
+        showNotification("success", "Success", "Module updated successfully");
+        setEditingModule(null);
+        setTempModule({ name: '', duration: '', has_levels: false });
+        fetchModules();
+      } else {
+        const error = await response.json();
+        showNotification("error", "Error", error.message || "Failed to update module");
+      }
+    } catch (error) {
+      showNotification("error", "Error", "Failed to update module");
+    }
+  };
+
+  const saveEditLevel = async () => {
+    if (!editingLevel || !tempLevel.level_name.trim()) {
+      showNotification("error", "Error", "Please enter level name");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/levels/${editingLevel.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify(tempLevel)
+      });
+
+      if (response.ok) {
+        showNotification("success", "Success", "Level updated successfully");
+        setEditingLevel(null);
+        setTempLevel({ level_name: '', duration: '', level_range: '' });
+        fetchLevels(selectedModuleId!);
+      } else {
+        const error = await response.json();
+        showNotification("error", "Error", error.message || "Failed to update level");
+      }
+    } catch (error) {
+      showNotification("error", "Error", "Failed to update level");
+    }
+  };
+
+  const saveEditTopic = async () => {
+    if (!editingTopic || !tempTopic.topic_title.trim()) {
+      showNotification("error", "Error", "Please enter topic title");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${editingTopic.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify(tempTopic)
+      });
+
+      if (response.ok) {
+        showNotification("success", "Success", "Topic updated successfully");
+        setEditingTopic(null);
+        setTempTopic({ topic_title: '', description: '' });
+        fetchTopics(selectedModuleId!);
+      } else {
+        const error = await response.json();
+        showNotification("error", "Error", error.message || "Failed to update topic");
+      }
+    } catch (error) {
+      showNotification("error", "Error", "Failed to update topic");
+    }
+  };
+
+  const saveEditSubpoint = async () => {
+    if (!editingSubpoint || !tempSubpoint.subpoint.trim()) {
+      showNotification("error", "Error", "Please enter subpoint content");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/subpoints/${editingSubpoint.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify(tempSubpoint)
+      });
+
+      if (response.ok) {
+        showNotification("success", "Success", "Subpoint updated successfully");
+        setEditingSubpoint(null);
+        setTempSubpoint({ subpoint: '' });
+        fetchTopics(selectedModuleId!);
+      } else {
+        const error = await response.json();
+        showNotification("error", "Error", error.message || "Failed to update subpoint");
+      }
+    } catch (error) {
+      showNotification("error", "Error", "Failed to update subpoint");
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingModule(null);
+    setEditingLevel(null);
+    setEditingTopic(null);
+    setEditingSubpoint(null);
+    setTempModule({ name: '', duration: '', has_levels: false });
+    setTempLevel({ level_name: '', duration: '', level_range: '' });
+    setTempTopic({ topic_title: '', description: '' });
+    setTempSubpoint({ subpoint: '' });
+  };
+
+  // Delete functions
+  const deleteModule = async (moduleId: number) => {
+    if (!window.confirm("Are you sure you want to delete this module? This will also delete all associated levels, topics, and subpoints.")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/modules/${moduleId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+
+      if (response.ok) {
+        showNotification("success", "Success", "Module deleted successfully");
+        fetchModules();
+      } else {
+        const error = await response.json();
+        showNotification("error", "Error", error.message || "Failed to delete module");
+      }
+    } catch (error) {
+      showNotification("error", "Error", "Failed to delete module");
+    }
+  };
+
+  const deleteLevel = async (levelId: number) => {
+    if (!window.confirm("Are you sure you want to delete this level? This will also delete all associated topics and subpoints.")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/levels/${levelId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+
+      if (response.ok) {
+        showNotification("success", "Success", "Level deleted successfully");
+        fetchLevels(selectedModuleId!);
+      } else {
+        const error = await response.json();
+        showNotification("error", "Error", error.message || "Failed to delete level");
+      }
+    } catch (error) {
+      showNotification("error", "Error", "Failed to delete level");
+    }
+  };
+
+  const deleteTopic = async (topicId: number) => {
+    if (!window.confirm("Are you sure you want to delete this topic? This will also delete all associated subpoints.")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+
+      if (response.ok) {
+        showNotification("success", "Success", "Topic deleted successfully");
+        fetchTopics(selectedModuleId!);
+      } else {
+        const error = await response.json();
+        showNotification("error", "Error", error.message || "Failed to delete topic");
+      }
+    } catch (error) {
+      showNotification("error", "Error", "Failed to delete topic");
+    }
+  };
+
+  const deleteSubpoint = async (subpointId: number) => {
+    if (!window.confirm("Are you sure you want to delete this subpoint?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/subpoints/${subpointId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+
+      if (response.ok) {
+        showNotification("success", "Success", "Subpoint deleted successfully");
+        fetchTopics(selectedModuleId!);
+      } else {
+        const error = await response.json();
+        showNotification("error", "Error", error.message || "Failed to delete subpoint");
+      }
+    } catch (error) {
+      showNotification("error", "Error", "Failed to delete subpoint");
+    }
+  };
+
   if (!isLoggedIn || user?.role !== "hr") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -1527,134 +2008,147 @@ const CourseBuilder: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'} py-8`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                {isEditMode ? 'Edit Course' : 'Course Builder'}
+              <h1 className={`text-3xl font-bold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>
+                Course Builder
               </h1>
-              <p className="text-gray-600 mt-2">
-                {isEditMode ? 'Update course details' : 'Build your complete course step by step'}
+              <p className={`mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                Build your course step by step
               </p>
-              {autoSaving && (
-                <div className="flex items-center mt-2 text-sm text-blue-600">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                  Auto-saving...
-                </div>
-              )}
             </div>
-            
-            {/* Navigation Buttons */}
-            <div className="flex items-center space-x-3">
+            <div className="flex space-x-3">
               <button
                 onClick={() => navigate('/hr/course-management')}
-                className="flex items-center px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+                className={`px-4 py-2 ${theme === 'dark' ? 'text-gray-300 hover:text-gray-100' : 'text-gray-600 hover:text-gray-900'}`}
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                All Courses
+                ← Back to Course Management
               </button>
-              
-              <button
-                onClick={() => navigate('/hr/course-management/drafts')}
-                className="flex items-center px-3 py-2 text-yellow-600 hover:text-yellow-700 hover:bg-yellow-50 rounded-md transition-colors"
-              >
-                <Edit className="w-4 h-4 mr-2" />
-                Draft Courses
-              </button>
-              
-              {courseData.id && (
-                <button
-                  onClick={() => navigate(`/hr/course-management/${courseData.id}`)}
-                  className="flex items-center px-3 py-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors"
-                >
-                  <BookOpen className="w-4 h-4 mr-2" />
-                  View Course
-                </button>
-              )}
             </div>
           </div>
         </div>
 
         {/* Progress Steps */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            {steps.map((step, index) => (
-              <div key={step.id} className="flex items-center">
-                <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-                  currentStep > step.id 
-                    ? 'bg-green-500 border-green-500 text-white'
-                    : currentStep === step.id
-                    ? 'bg-blue-500 border-blue-500 text-white'
-                    : 'bg-white border-gray-300 text-gray-500'
-                }`}>
-                  {currentStep > step.id ? '✓' : step.id}
-                </div>
-                {index < steps.length - 1 && (
-                  <div className={`w-12 h-0.5 mx-2 ${
-                    currentStep > step.id ? 'bg-green-500' : 'bg-gray-300'
-                  }`} />
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 text-center">
-            <h2 className="text-xl font-semibold text-gray-900">
-              {steps[currentStep - 1].title}
+        <div className={`mb-8 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md`}>
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>
+              Course Building Progress
             </h2>
-            <p className="text-gray-600">{steps[currentStep - 1].description}</p>
+          </div>
+          <div className="p-6">
+            <div className="flex items-center justify-between">
+              {steps.map((step, index) => (
+                <div key={step.id} className="flex items-center">
+                  <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                    currentStep > step.id 
+                      ? 'bg-green-500 text-white' 
+                      : currentStep === step.id 
+                        ? 'bg-blue-500 text-white' 
+                        : theme === 'dark' ? 'bg-gray-600 text-gray-300' : 'bg-gray-200 text-gray-600'
+                  }`}>
+                    {currentStep > step.id ? (
+                      <CheckCircle className="w-5 h-5" />
+                    ) : (
+                      <span className="text-sm font-medium">{step.id}</span>
+                    )}
+                  </div>
+                  <div className={`ml-3 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <p className={`text-sm font-medium ${currentStep === step.id ? (theme === 'dark' ? 'text-blue-400' : 'text-blue-600') : ''}`}>
+                      {step.title}
+                    </p>
+                    <p className="text-xs">{step.description}</p>
+                  </div>
+                  {index < steps.length - 1 && (
+                    <div className={`flex-1 h-px mx-4 ${theme === 'dark' ? 'bg-gray-600' : 'bg-gray-300'}`} />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Form Content */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-          {renderStepContent()}
+        {/* Main Content */}
+        <div className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md`}>
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>
+                Step {currentStep}: {steps[currentStep - 1]?.title}
+              </h2>
+              <div className="flex space-x-2">
+                {autoSaving && (
+                  <div className={`flex items-center text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-2"></div>
+                    Auto-saving...
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="p-6">
+            {renderStepContent()}
+          </div>
+        </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
-            <div className="flex space-x-3">
-              {currentStep > 1 && (
-                <button
-                  onClick={handlePrevious}
-                  className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                >
-                  <ArrowLeft className="w-4 h-4 inline mr-2" />
-                  Previous
-                </button>
-              )}
+        {/* Navigation */}
+        <div className="mt-6 flex justify-between">
+          <button
+            onClick={handlePrevious}
+            disabled={currentStep === 1}
+            className={`flex items-center px-4 py-2 rounded-md ${
+              currentStep === 1
+                ? 'opacity-50 cursor-not-allowed'
+                : theme === 'dark' ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Previous
+          </button>
+          
+          <div className="flex space-x-3">
+            <button
+              onClick={() => saveDraft(false)}
+              disabled={saving}
+              className={`flex items-center px-4 py-2 rounded-md ${
+                saving
+                  ? 'opacity-50 cursor-not-allowed'
+                  : theme === 'dark' ? 'bg-yellow-600 text-white hover:bg-yellow-700' : 'bg-yellow-500 text-white hover:bg-yellow-600'
+              }`}
+            >
+              <Save className="w-4 h-4 mr-2" />
+              {saving ? 'Saving...' : 'Save Draft'}
+            </button>
+            
+            {currentStep < steps.length ? (
               <button
-                onClick={() => saveDraft(false)}
-                disabled={saving || !courseData.id}
-                className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                onClick={handleNext}
+                disabled={!isStepValid()}
+                className={`flex items-center px-4 py-2 rounded-md ${
+                  !isStepValid()
+                    ? 'opacity-50 cursor-not-allowed'
+                    : theme === 'dark' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-500 text-white hover:bg-blue-600'
+                }`}
               >
-                <Save className="w-4 h-4 inline mr-2" />
-                {saving ? 'Saving...' : 'Save Draft'}
+                Next
+                <ArrowRight className="w-4 h-4 ml-2" />
               </button>
-            </div>
-
-            <div className="flex space-x-3">
-              {currentStep < steps.length ? (
-                <button
-                  onClick={handleNext}
-                  disabled={!isStepValid()}
-                  className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Next
-                  <ArrowRight className="w-4 h-4 inline ml-2" />
-                </button>
-              ) : (
-                <button
-                  onClick={handlePublish}
-                  disabled={!isStepValid() || loading}
-                  className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <CheckCircle className="w-4 h-4 inline mr-2" />
-                  {loading ? 'Publishing...' : 'Publish Course'}
-                </button>
-              )}
-            </div>
+            ) : (
+              <button
+                onClick={handlePublish}
+                disabled={saving}
+                className={`flex items-center px-4 py-2 rounded-md ${
+                  saving
+                    ? 'opacity-50 cursor-not-allowed'
+                    : theme === 'dark' ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-green-500 text-white hover:bg-green-600'
+                }`}
+              >
+                <CheckCircle className="w-4 h-4 mr-2" />
+                {saving ? 'Publishing...' : 'Publish Course'}
+              </button>
+            )}
           </div>
         </div>
       </div>

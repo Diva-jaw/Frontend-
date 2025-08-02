@@ -6,6 +6,7 @@ import {
   ChevronRight,
   ClipboardList,
   BookOpen,
+  Settings,
 } from "lucide-react";
 
 const HRDashboard = () => {
@@ -42,13 +43,19 @@ const HRDashboard = () => {
       icon: <BookOpen size={20} />,
       description: "View all users applied in a specific Course",
     },
+    {
+      name: "Course Management",
+      path: "/hr/course-management",
+      icon: <Settings size={20} />,
+      description: "Create and manage course content and structure",
+    },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* HR Hero Section */}
       <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-20">
-        <div className="container mx-auto px-4 sm:px-6 md:px-8">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight">
               HR Management <span className="text-blue-300">Dashboard</span>
@@ -57,21 +64,23 @@ const HRDashboard = () => {
               Streamline your recruitment process with our comprehensive HR tools. 
               Manage candidate enquiries, post job opportunities, and track applications all in one place.
             </p> */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6 gap-4 md:gap-6 mt-12">
               {navItems.map((item, index) => (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40 group"
+                  className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40 group min-h-[200px] flex flex-col justify-between"
                 >
-                  <div className="flex items-center justify-center w-12 h-12 bg-blue-500 rounded-lg mb-4 mx-auto group-hover:scale-110 transition-transform">
-                    {item.icon}
+                  <div className="flex flex-col items-center text-center">
+                    <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-blue-500 rounded-lg mb-3 md:mb-4 mx-auto group-hover:scale-110 transition-transform">
+                      {item.icon}
+                    </div>
+                    <h3 className="text-base md:text-lg font-semibold mb-2">{item.name}</h3>
+                    <p className="text-blue-100 text-xs md:text-sm leading-relaxed">{item.description}</p>
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
-                  <p className="text-blue-100 text-sm">{item.description}</p>
-                  <div className="flex flex-row items-center justify-center mt-4 text-blue-300 group-hover:text-white transition-colors">
-                    <span className="text-sm font-medium">Get Started</span>
-                    <ChevronRight size={16} className="ml-1" />
+                  <div className="flex flex-row items-center justify-center mt-3 md:mt-4 text-blue-300 group-hover:text-white transition-colors">
+                    <span className="text-xs md:text-sm font-medium">Get Started</span>
+                    <ChevronRight size={14} className="ml-1" />
                   </div>
                 </Link>
               ))}
@@ -82,7 +91,7 @@ const HRDashboard = () => {
 
       {/* Quick Stats Section */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 sm:px-6 md:px-8">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             <div className="text-center p-6 bg-blue-50 rounded-xl">
               <div className="text-3xl font-bold text-blue-600 mb-2">150+</div>

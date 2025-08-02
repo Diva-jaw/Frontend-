@@ -64,6 +64,9 @@ import CourseManagementDashboard from "./pages/hrDashboard/courseManagement/Cour
 import CreateCourse from "./pages/hrDashboard/courseManagement/CreateCourse";
 import AddModule from "./pages/hrDashboard/courseManagement/AddModule";
 import AddLevel from "./pages/hrDashboard/courseManagement/AddLevel";
+import EditLevel from "./pages/hrDashboard/courseManagement/EditLevel";
+import EditTopic from "./pages/hrDashboard/courseManagement/EditTopic";
+import EditSubpoint from "./pages/hrDashboard/courseManagement/EditSubpoint";
 import AddTopic from "./pages/hrDashboard/courseManagement/AddTopic";
 import AddSubpoint from "./pages/hrDashboard/courseManagement/AddSubpoint";
 import DraftCourses from "./pages/hrDashboard/courseManagement/DraftCourses";
@@ -202,6 +205,9 @@ function App() {
                     <Route path="course-management/:courseId" element={<CourseDetailsView />} />
                     <Route path="course-management/:courseId/add-module" element={<AddModule />} />
                     <Route path="course-management/:courseId/:moduleId/add-level" element={<AddLevel />} />
+                    <Route path="course-management/:courseId/:moduleId/levels/:levelId/edit" element={<EditLevel />} />
+                    <Route path="course-management/:courseId/:moduleId/topics/:topicId/edit" element={<EditTopic />} />
+                    <Route path="course-management/:courseId/:moduleId/:levelId/:topicId/subpoints/:subpointId/edit" element={<EditSubpoint />} />
                     <Route path="course-management/:courseId/:moduleId/add-topic" element={<AddTopic />} />
                                   <Route path="course-management/:courseId/:moduleId/:levelId/:topicId/add-subpoint" element={<AddSubpoint />} />
               <Route path="course-management/drafts" element={<DraftCourses />} />
