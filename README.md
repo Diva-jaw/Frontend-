@@ -1,2 +1,2 @@
-..It is Ruhil Future Technologies website../// Latest push is of Divyansh Gautam and vats
+..It is Ruhil Future Technologies website../// Latest push is of Divyansh Gautam and vats and singh
 .....
