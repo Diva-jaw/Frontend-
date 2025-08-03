@@ -377,6 +377,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
     }
   }, [formData, user]);
 
+  // Scroll to top when step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [step]);
+
   const validateStep = () => {
     const newErrors: Record<string, string> = {};
     if (step === 0) {
