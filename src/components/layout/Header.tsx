@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import Navbar from './Navbar';
 import { useAuth } from '../AuthContext';
+import { useTheme } from '../ThemeContext';
 
 interface HeaderProps {
   isScrolled: boolean;
@@ -12,6 +13,7 @@ const Header = ({ isScrolled }: HeaderProps) => {
   const [learnDropdownOpen, setLearnDropdownOpen] = useState(false);
   const [careersDropdownOpen, setCareersDropdownOpen] = useState(false);
   const { isLoggedIn, user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -49,27 +51,47 @@ const Header = ({ isScrolled }: HeaderProps) => {
   }, [isMenuOpen]);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-[1100] py-0 shadow-none md:shadow-lg dark:shadow-none md:dark:shadow-gray-900/40 transition-colors duration-300 md:mt-0 mt-16 bg-transparent md:bg-white md:dark:bg-gray-900 ${isMenuOpen ? 'w-full' : 'w-auto'} md:w-full`}
-    >
-      {/* Desktop Navigation - Full width */}
-      <div className="hidden md:block w-full">
-        <Navbar />
+    <>
+      {/* Mobile Top Navigation Bar - Fixed at top */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-[1300] bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 shadow-sm">
+        <div className="flex items-center justify-between px-4 py-2">
+          {/* RFT Logo - Leftmost position */}
+          <img src="/RFT logo.png" alt="Logo" className="h-8 w-8 rounded-full border-2 border-blue-400 dark:border-blue-500 object-cover" />
+          
+          {/* Right side buttons - Menu and Dark Mode */}
+          <div className="flex items-center gap-2">
+            {/* Menu Icon */}
+            <button
+              onClick={toggleMenu}
+              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center justify-center"
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X size={20} className="text-gray-700 dark:text-gray-300" /> : <Menu size={20} className="text-gray-700 dark:text-gray-300" />}
+            </button>
+            
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center justify-center"
+              aria-label="Toggle dark mode"
+            >
+              {theme === "dark" ? (
+                <Sun size={20} className="text-yellow-500" />
+              ) : (
+                <Moon size={20} className="text-gray-700 dark:text-gray-300" />
+              )}
+            </button>
+          </div>
+        </div>
       </div>
-      {/* Mobile Menu Button */}
-      <div
-        className={`md:hidden flex justify-end items-center transition-all duration-300 ${isMenuOpen ? 'w-full static' : 'w-12 h-12 absolute top-0 right-0 z-[1200]'}`}
-        style={!isMenuOpen ? { background: 'transparent', left: 'auto' } : {}}
+
+      <header
+        className={`fixed top-0 left-0 right-0 z-[1100] py-0 shadow-none md:shadow-lg dark:shadow-none md:dark:shadow-gray-900/40 transition-colors duration-300 md:mt-0 mt-16 bg-transparent md:bg-white md:dark:bg-gray-900 ${isMenuOpen ? 'w-full' : 'w-auto'} md:w-full`}
       >
-        <button
-          onClick={toggleMenu}
-          className="p-2 bg-transparent hover:bg-transparent focus:bg-transparent border-none shadow-none text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none transition-colors duration-200"
-          aria-label="Toggle menu"
-          style={{ background: 'transparent', boxShadow: 'none', border: 'none' }}
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
+        {/* Desktop Navigation - Full width */}
+        <div className="hidden md:block w-full">
+          <Navbar />
+        </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
@@ -80,7 +102,13 @@ const Header = ({ isScrolled }: HeaderProps) => {
               <div className="flex flex-col gap-2 mb-2">
                 {isLoggedIn ? (
                   <>
-                    <div className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative mb-2">
+                    <div 
+                      className="flex items-center space-x-3 px-3 py-2 bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900 dark:to-blue-900 rounded-full relative mb-2 cursor-pointer hover:from-green-200 hover:to-blue-200 dark:hover:from-green-800 dark:hover:to-blue-800 transition-all duration-200"
+                      onClick={() => {
+                        window.location.href = '/profile-dashboard';
+                        setIsMenuOpen(false);
+                      }}
+                    >
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
                         {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
                       </div>
@@ -108,7 +136,6 @@ const Header = ({ isScrolled }: HeaderProps) => {
               <a href="/#home" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Home</a>
               <a href="/#services" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Services</a>
               <a href="/#about" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>About</a>
-              <a href="/#team" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Team</a>
               <a href="/#what-we-do" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between" onClick={() => setIsMenuOpen(false)}>What We Do</a>
               <a href="/courses" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Courses</a>
               {/* Learn Dropdown */}
@@ -148,9 +175,10 @@ const Header = ({ isScrolled }: HeaderProps) => {
             </nav>
           </div>
         </div>
-      )}
-    </header>
-  );
-};
+               )}
+       </header>
+     </>
+   );
+ };
 
 export default Header;

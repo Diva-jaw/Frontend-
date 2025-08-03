@@ -203,17 +203,16 @@ console.log("normalizedApplications",normalizedApplications);
       <header className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           {/* Logo/Brand */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center space-x-3"
-          >
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-900 rounded-lg flex items-center justify-center">
-              <User className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">SkillSync</h1>
-          </motion.div>
+                     <motion.div
+             initial={{ opacity: 0, x: -20 }}
+             animate={{ opacity: 1, x: 0 }}
+             transition={{ duration: 0.5 }}
+             className="flex items-center space-x-3"
+           >
+             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-800 dark:to-purple-900 rounded-lg flex items-center justify-center">
+               <User className="w-6 h-6 text-white" />
+             </div>
+           </motion.div>
 
           {/* Navigation & Time */}
           <div className="flex items-center space-x-6">
@@ -251,23 +250,7 @@ console.log("normalizedApplications",normalizedApplications);
               <span className="text-sm font-medium text-gray-700 dark:text-gray-200 hidden md:inline">{profile.name.split(' ')[0]}</span>
             </motion.button>
 
-            {showUserMenu && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg py-2 ring-1 ring-gray-200 dark:ring-gray-800"
-              >
-                <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center space-x-2">
-                  <Settings className="w-4 h-4" />
-                  <span>Settings</span>
-                </button>
-                <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center space-x-2">
-                  <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
-                </button>
-              </motion.div>
-            )}
+
           </div>
         </div>
       </header>

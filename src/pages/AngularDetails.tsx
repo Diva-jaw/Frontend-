@@ -65,7 +65,7 @@ const AngularDetails = () => {
                 <span className="text-blue-600 font-semibold">Angular Development</span>
         </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
                 Master Angular Development
               </h1>
               
@@ -105,7 +105,7 @@ const AngularDetails = () => {
                   <div className="w-24 h-24 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6">
                     <Code className="w-12 h-12 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Course Overview</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Course Overview</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
                       <span className="text-gray-700 font-medium">Duration</span>
@@ -133,7 +133,7 @@ const AngularDetails = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Comprehensive Curriculum
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -209,7 +209,7 @@ const AngularDetails = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Learning Outcomes
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -254,7 +254,7 @@ const AngularDetails = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Career Opportunities
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -272,7 +272,7 @@ const AngularDetails = () => {
             >
               <div className="flex items-center space-x-3 mb-6">
                 <Briefcase className="w-8 h-8 text-blue-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Job Roles</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Job Roles</h3>
               </div>
               <ul className="space-y-3">
                 {[
@@ -300,7 +300,7 @@ const AngularDetails = () => {
             >
               <div className="flex items-center space-x-3 mb-6">
                 <Users className="w-8 h-8 text-indigo-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Industries</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Industries</h3>
               </div>
               <ul className="space-y-3">
                 {[
@@ -332,7 +332,7 @@ const AngularDetails = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Tools & Technologies
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -406,7 +406,7 @@ const AngularDetails = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6">
               Ready to Start Your Angular Development Journey?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">

@@ -82,7 +82,7 @@ const ReactJSDetails = () => {
                   <div className="w-24 h-24 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6">
                     <Code className="w-12 h-12 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Course Overview</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Course Overview</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
                       <span className="text-gray-700 font-medium">Duration</span>
@@ -249,7 +249,7 @@ const ReactJSDetails = () => {
             >
               <div className="flex items-center space-x-3 mb-6">
                 <Briefcase className="w-8 h-8 text-blue-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Job Roles</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Job Roles</h3>
               </div>
               <ul className="space-y-3">
                 {[
@@ -277,7 +277,7 @@ const ReactJSDetails = () => {
             >
               <div className="flex items-center space-x-3 mb-6">
                 <Users className="w-8 h-8 text-indigo-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Industries</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">Industries</h3>
               </div>
               <ul className="space-y-3">
                 {[

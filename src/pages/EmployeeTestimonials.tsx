@@ -163,14 +163,14 @@ const EmployeeTestimonials: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-200 to-blue-400 dark:from-blue-600 dark:to-blue-800 text-blue-900 dark:text-blue-100 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-gray-800 dark:text-gray-200 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-5 py-20">
         {/* Header */}
         <div className="text-center mb-16 opacity-0 animate-[fadeInUp_1s_ease-out_forwards]">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-blue-900 dark:text-blue-100 drop-shadow-lg">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 dark:from-blue-400 dark:via-purple-400 dark:to-indigo-400 bg-clip-text text-transparent drop-shadow-lg">
             What Our Employees Say
           </h1>
-          <p className="text-xl md:text-2xl text-blue-900 dark:text-blue-100 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Discover why our team loves working with us through their authentic
             voices and experiences
         </p>
@@ -181,9 +181,9 @@ const EmployeeTestimonials: React.FC = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
-              className={`bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 transition-all duration-500 cursor-pointer relative overflow-hidden group hover:bg-white/15 hover:-translate-y-4 hover:shadow-2xl hover:scale-[1.02] ${
+              className={`bg-white dark:bg-gray-800 backdrop-blur-lg rounded-3xl p-8 border border-gray-200 dark:border-gray-700 transition-all duration-500 cursor-pointer relative overflow-hidden group hover:bg-gray-50 dark:hover:bg-gray-700 hover:-translate-y-4 hover:shadow-2xl hover:scale-[1.02] ${
                 highlightedCard === testimonial.id
-                  ? "scale-105 shadow-2xl bg-white/20"
+                  ? "scale-105 shadow-2xl bg-gray-50 dark:bg-gray-700"
                   : ""
               }`}
               onClick={() => highlightCard(testimonial.id)}
@@ -224,10 +224,10 @@ const EmployeeTestimonials: React.FC = () => {
 
                 {/* Name and Role */}
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold mb-2 text-blue-900 dark:text-blue-100 drop-shadow-sm">
+                  <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100 drop-shadow-sm">
                     {testimonial.name}
                   </h3>
-                  <p className="text-blue-800 dark:text-blue-100 font-medium text-lg">
+                  <p className="text-gray-700 dark:text-gray-300 font-medium text-lg">
                     {testimonial.role}
                   </p>
         </div>
@@ -248,7 +248,7 @@ const EmployeeTestimonials: React.FC = () => {
 
               {/* Testimonial Text */}
               <div className="text-center">
-                <p className="text-lg leading-relaxed text-blue-900 dark:text-blue-100 italic font-light">
+                <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300 italic font-light">
                   {testimonial.text}
                 </p>
               </div>
@@ -257,8 +257,8 @@ const EmployeeTestimonials: React.FC = () => {
       </div>
 
       {/* One Liners Section */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-10 border border-white/20 mb-10">
-          <h2 className="text-4xl font-bold text-center mb-10 text-blue-900 dark:text-blue-100">
+        <div className="bg-white dark:bg-gray-800 backdrop-blur-lg rounded-3xl p-10 border border-gray-200 dark:border-gray-700 mb-10">
+          <h2 className="text-4xl font-bold text-center mb-10 text-gray-900 dark:text-gray-100">
             Employee One-Liners
           </h2>
 
@@ -270,7 +270,7 @@ const EmployeeTestimonials: React.FC = () => {
                 currentOneLiner === index
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
-                } text-blue-900 dark:text-blue-100`}
+                } text-gray-700 dark:text-gray-300`}
             >
               {oneLiner}
             </div>
@@ -297,12 +297,12 @@ const EmployeeTestimonials: React.FC = () => {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 text-center border border-white/20 transition-all duration-300 hover:scale-105 hover:bg-white/15 hover:shadow-xl"
+              className="bg-white dark:bg-gray-800 backdrop-blur-lg rounded-2xl p-8 text-center border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:scale-105 hover:bg-gray-50 dark:hover:bg-gray-700 hover:shadow-xl"
             >
-              <div className="text-4xl md:text-5xl font-bold mb-3 text-blue-900 dark:text-blue-100">
+              <div className="text-4xl md:text-5xl font-bold mb-3 text-gray-900 dark:text-gray-100">
                 {stat.number}
           </div>
-              <div className="text-blue-800 dark:text-blue-100 font-medium">
+              <div className="text-gray-700 dark:text-gray-300 font-medium">
                 {stat.label}
         </div>
           </div>

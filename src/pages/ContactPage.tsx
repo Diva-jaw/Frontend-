@@ -93,7 +93,7 @@ const AuthModal: React.FC<{
         </button>
         <div className="p-8">
           <div className="text-center mb-8">
-            <h2 className={`text-3xl font-bold text-gray-900 dark:text-white mb-2 ${theme === 'dark' ? 'dark' : ''}`}>
+            <h2 className={`text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2 ${theme === 'dark' ? 'dark' : ''}`}>
               {isLoginMode ? 'Welcome Back' : 'Create Account'}
             </h2>
             <p className={`text-gray-600 dark:text-gray-300 ${theme === 'dark' ? 'dark' : ''}`}>
@@ -561,7 +561,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
         <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-6">
           <Send className="text-green-600 dark:text-green-300" size={32} />
         </div>
-        <h3 className={`text-2xl font-bold text-gray-900 dark:text-white mb-4 ${theme === 'dark' ? 'dark' : ''}`}>Form Submitted Successfully!</h3>
+                    <h3 className={`text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 ${theme === 'dark' ? 'dark' : ''}`}>Form Submitted Successfully!</h3>
         <p className={`text-gray-600 dark:text-gray-300 mb-6 ${theme === 'dark' ? 'dark' : ''}`}>
           Thank you for your enquiry. We will get back to you soon.
         </p>
@@ -583,7 +583,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 0:
         return (
           <div>
-            <h2 className={`text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><User className="mr-2" />Personal Details</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><User className="mr-2" />Personal Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className={`block mb-1 font-medium text-black dark:text-white`}>Full Name *</label>
@@ -683,7 +683,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 1:
         return (
           <div>
-            <h2 className={`text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><MapPin className="mr-2" />Location Details</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><MapPin className="mr-2" />Location Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className={`block mb-1 font-medium text-black dark:text-white`}>Current City *</label>
@@ -724,7 +724,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 2:
         return (
           <div>
-            <h2 className={`text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><GraduationCap className="mr-2" />Educational Background</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><GraduationCap className="mr-2" />Educational Background</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className={`block mb-1 font-medium text-black dark:text-white`}>Highest Qualification *</label>
@@ -821,7 +821,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 3:
         return (
           <div>
-            <h2 className={`text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><Layers className="mr-2" />Technical / Domain Skills</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><Layers className="mr-2" />Technical / Domain Skills</h2>
             <div className="mb-4">
               <label className={`block mb-1 font-medium text-black dark:text-white`}>Which technical skills do you possess? *</label>
               <div className="flex flex-wrap gap-3">
@@ -865,7 +865,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 4:
         return (
           <div>
-            <h2 className={`text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><Briefcase className="mr-2" />Internship or Project Experience</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><Briefcase className="mr-2" />Internship or Project Experience</h2>
             <div className="mb-4">
               <label className={`block mb-1 font-medium text-black dark:text-white`}>Have you done any internship or major project? *</label>
               <select
@@ -917,7 +917,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 5:
         return (
           <div>
-            <h2 className={`text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><ClipboardCheck className="mr-2" />Job Preferences</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><ClipboardCheck className="mr-2" />Job Preferences</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className={`block mb-1 font-medium text-black dark:text-white`}>Preferred Role / Function Area *</label>
@@ -974,7 +974,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 6:
         return (
           <div>
-            <h2 className={`text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><ListChecks className="mr-2" />General Questions</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><ListChecks className="mr-2" />General Questions</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className={`block mb-1 font-medium text-black dark:text-white`}>How did you hear about this opportunity? *</label>
@@ -1068,7 +1068,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 7:
         return (
           <div>
-            <h2 className={`text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><FilePlus className="mr-2" />Resume & Documents</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><FilePlus className="mr-2" />Resume & Documents</h2>
             <div className="mb-4">
               <label className={`block mb-1 font-medium text-black dark:text-white`}>Upload Resume (PDF) * <span className="text-sm text-gray-500">(Max 10MB)</span></label>
               <input
@@ -1093,7 +1093,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       case 8:
         return (
           <div>
-            <h2 className={`text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><CheckCircle className="mr-2" />Declaration</h2>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-4 flex items-center ${theme === 'dark' ? 'dark:text-white' : ''}`}><CheckCircle className="mr-2" />Declaration</h2>
             <div className="mb-4">
               <p className={`mb-2 ${theme === 'dark' ? 'text-gray-300' : ''}`}>"I hereby declare that the information provided above is true and correct to the best of my knowledge. I understand that any misrepresentation may lead to disqualification."</p>
               <label className="flex items-center space-x-2">
@@ -1139,7 +1139,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
       <div className={`w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 sm:p-4 md:p-8`}>
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black dark:text-white transition-colors duration-300">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black dark:text-white transition-colors duration-300">
               Candidate Enquiry Form
             </h2>
             <span className={`text-gray-500 dark:text-gray-400 whitespace-nowrap`}>Step {step + 1} of {steps.length}</span>

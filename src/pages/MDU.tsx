@@ -78,7 +78,7 @@ const MDUPage: React.FC = () => {
             </div>
           </header>
           <section className="bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 md:p-12 mb-8 text-center shadow-xl">
-            <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
               Empowering the Next Generation of AI Professionals
             </h2>
             <p className="max-w-4xl mx-auto text-gray-600 dark:text-gray-300 mb-8">
@@ -106,7 +106,7 @@ const MDUPage: React.FC = () => {
 
           <main className="grid md:grid-cols-2 gap-8 mb-8">
             <div className="card bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
                 <span className="icon w-10 h-10 flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-md">🤖</span>
                 Machine Learning Mastery
               </h2>
@@ -118,7 +118,7 @@ const MDUPage: React.FC = () => {
               </ul>
             </div>
             <div className="card bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
                 <span className="icon w-10 h-10 flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-md">🧠</span>
                 AI Agent Development
               </h2>
@@ -130,7 +130,7 @@ const MDUPage: React.FC = () => {
               </ul>
             </div>
             <div className="card bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
                 <span className="icon w-10 h-10 flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-md">💼</span>
                 Industry-Ready Projects
               </h2>
@@ -142,7 +142,7 @@ const MDUPage: React.FC = () => {
               </ul>
             </div>
             <div className="card bg-white/95 dark:bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-transform hover:-translate-y-2">
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-3">
                 <span className="icon w-10 h-10 flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg shadow-md">🎓</span>
                 Academic Excellence
               </h2>

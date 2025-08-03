@@ -79,7 +79,7 @@ const EmployersLogin = () => {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-3 animate-bounce">
             <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8z" /></svg>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-1">Employer Login</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Employer Login</h2>
           <p className="text-white/80 text-xs">HR access to user details and information</p>
         </div>
 
