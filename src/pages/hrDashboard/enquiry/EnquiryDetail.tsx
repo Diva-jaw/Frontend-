@@ -15,6 +15,7 @@ interface Candidate {
   languages: string[];
   resumePath?: string;
   academicDocsPath?: string;
+  status?: number; // 1: Active, 0: Rejected, 2: Accepted
 }
 
 interface Pagination {
@@ -183,6 +184,8 @@ const EnquiryDashboard: React.FC = () => {
       setRejectionModalOpen(false);
       setCandidateToReject(null);
       setRejectionReason('');
+      // Refresh the candidates list to update the UI
+      await fetchCandidates();
     } catch (err: any) {
       console.error('Rejection email error:', err);
       setRejectionError('Failed to send rejection email.');
@@ -192,9 +195,31 @@ const EnquiryDashboard: React.FC = () => {
     }
   };
 
+  const handleSendAcceptanceEmail = async () => {
+    if (!candidateToAccept) return;
+    setAcceptanceLoading(true);
+    setAcceptanceError(null);
+    try {
+      await axios.post(`${API_CONFIG.BASE_URL}/api/candidates/send-acceptance`, {
+        email: candidateToAccept.email
+      });
+      setAcceptanceSuccess('Acceptance email sent successfully!');
+      setAcceptanceModalOpen(false);
+      setCandidateToAccept(null);
+      // Refresh the candidates list to update the UI
+      await fetchCandidates();
+    } catch (err: any) {
+      console.error('Acceptance email error:', err);
+      setAcceptanceError('Failed to send acceptance email.');
+    } finally {
+      setAcceptanceLoading(false);
+      setTimeout(() => setAcceptanceSuccess(null), 2000);
+    }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -202,9 +227,9 @@ const EnquiryDashboard: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-red-600">{error || 'An error occurred'}</h2>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl font-bold text-red-600 dark:text-red-400">{error || 'An error occurred'}</h2>
           <Link
             to="/hr"
             className="mt-4 flex items-center justify-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -219,9 +244,9 @@ const EnquiryDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
         <div className="container mx-auto px-4 md:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -235,8 +260,8 @@ const EnquiryDashboard: React.FC = () => {
               </Link>
             </div>
             <div className="text-right">
-              <h1 className="text-2xl font-bold text-gray-900">Candidate Enquiries</h1>
-              <p className="text-gray-600">View all candidate enquiries and applications</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Candidate Enquiries</h1>
+              <p className="text-gray-600 dark:text-gray-300">View all candidate enquiries and applications</p>
             </div>
           </div>
         </div>
@@ -245,31 +270,31 @@ const EnquiryDashboard: React.FC = () => {
       <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Total Candidates</p>
-                <p className="text-2xl font-bold text-gray-900">{pagination.totalCandidates}</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Total Candidates</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">{pagination.totalCandidates}</p>
               </div>
               <User className="text-blue-500" size={24} />
             </div>
           </div>
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Current Page</p>
-                <p className="text-2xl font-bold text-green-600">{pagination.currentPage}</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Current Page</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">{pagination.currentPage}</p>
               </div>
               <FileText className="text-green-500" size={24} />
             </div>
           </div>
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm">Total Pages</p>
-                <p className="text-2xl font-bold text-purple-600">{pagination.totalPages}</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">Total Pages</p>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{pagination.totalPages}</p>
               </div>
-              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/20 rounded-lg flex items-center justify-center">
                 <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
               </div>
             </div>
@@ -277,56 +302,56 @@ const EnquiryDashboard: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
-          <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-4">Filter Candidates</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2 sm:mb-4">Filter Candidates</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block mb-1 font-medium text-gray-700">Filter by Email</label>
+              <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">Filter by Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={16} />
                 <input
                   type="text"
                   value={filters.email}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     handleFilterChange('email', e.target.value)
                   }
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   placeholder="Enter email..."
                 />
               </div>
             </div>
             <div>
-              <label className="block mb-1 font-medium text-gray-700">Filter by Full Name</label>
+              <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">Filter by Full Name</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" size={16} />
                 <input
                   type="text"
                   value={filters.fullName}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     handleFilterChange('fullName', e.target.value)
                   }
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   placeholder="Enter name..."
                 />
               </div>
             </div>
             <div>
-              <label className="block mb-1 font-medium text-gray-700">Start Date</label>
+              <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">Start Date</label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => handleDateChange('start', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 max={endDate || undefined}
               />
             </div>
             <div>
-              <label className="block mb-1 font-medium text-gray-700">End Date</label>
+              <label className="block mb-1 font-medium text-gray-700 dark:text-gray-300">End Date</label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => handleDateChange('end', e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black"
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 min={startDate || undefined}
               />
             </div>
@@ -336,25 +361,25 @@ const EnquiryDashboard: React.FC = () => {
         {/* Candidates List */}
         <div className="space-y-4 sm:space-y-6 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto pr-1 sm:pr-2">
           {candidates.length === 0 ? (
-            <div className="bg-white rounded-xl shadow-sm p-12 text-center">
-              <User className="mx-auto text-gray-400 mb-4" size={48} />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No candidates found</h3>
-              <p className="text-gray-600">No candidates match your current filters.</p>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-12 text-center">
+              <User className="mx-auto text-gray-400 dark:text-gray-500 mb-4" size={48} />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No candidates found</h3>
+              <p className="text-gray-600 dark:text-gray-300">No candidates match your current filters.</p>
             </div>
           ) : (
             candidates.map((candidate) => (
               <div
                 key={candidate.id}
-                className="bg-white rounded-xl shadow-sm p-3 hover:shadow-md transition-shadow flex items-center justify-between mb-2"
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-3 hover:shadow-md transition-shadow flex items-center justify-between mb-2"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <User className="text-blue-600" size={18} />
-                    <span className="font-semibold text-gray-900 truncate max-w-[120px]">{candidate.fullName}</span>
-                    <span className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">ID: {candidate.id}</span>
-                    <span className="text-gray-500 text-xs truncate max-w-[120px] ml-2">{candidate.email}</span>
+                    <span className="font-semibold text-gray-900 dark:text-white truncate max-w-[120px]">{candidate.fullName}</span>
+                    <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">ID: {candidate.id}</span>
+                    <span className="text-gray-500 dark:text-gray-400 text-xs truncate max-w-[120px] ml-2">{candidate.email}</span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
                     <span className="flex items-center gap-1"><FileText size={14} />{candidate.preferredRole}</span>
                     {candidate.skills.length > 0 && (
                       <span className="flex items-center gap-1"><strong>Skills:</strong> {candidate.skills.join(', ')}</span>
@@ -402,22 +427,34 @@ const EnquiryDashboard: React.FC = () => {
                   >
                     View
                   </button>
-                  <button
-                    onClick={() => { setCandidateToReject(candidate); setRejectionModalOpen(true); }}
-                    className="px-2 py-1 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-xs flex items-center gap-1"
-                    title="Send Rejection Email"
-                  >
-                    <Mail size={12} />
-                    Reject
-                  </button>
-                  <button
-                    onClick={() => { setCandidateToAccept(candidate); setAcceptanceModalOpen(true); }}
-                    className="px-2 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs flex items-center gap-1"
-                    title="Send Acceptance Email"
-                  >
-                    <Mail size={12} />
-                    Accept
-                  </button>
+                  {candidate.status === 0 ? (
+                    <span className="px-2 py-1 bg-red-100 text-red-800 rounded-lg text-xs font-medium">
+                      ❌ Rejected
+                    </span>
+                  ) : candidate.status === 2 ? (
+                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded-lg text-xs font-medium">
+                      ✅ Accepted
+                    </span>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => { setCandidateToReject(candidate); setRejectionModalOpen(true); }}
+                        className="px-2 py-1 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-xs flex items-center gap-1"
+                        title="Send Rejection Email"
+                      >
+                        <Mail size={12} />
+                        Reject
+                      </button>
+                      <button
+                        onClick={() => { setCandidateToAccept(candidate); setAcceptanceModalOpen(true); }}
+                        className="px-2 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs flex items-center gap-1"
+                        title="Send Acceptance Email"
+                      >
+                        <Mail size={12} />
+                        Accept
+                      </button>
+                    </>
+                  )}
                   <button
                     onClick={() => { setCandidateToDelete(candidate); setDeleteModalOpen(true); }}
                     className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
@@ -649,26 +686,7 @@ const EnquiryDashboard: React.FC = () => {
                 Cancel
               </button>
               <button
-                onClick={async () => {
-                  setAcceptanceLoading(true);
-                  setAcceptanceError(null);
-                  setAcceptanceSuccess(null);
-                  try {
-                    await axios.post(`${API_CONFIG.BASE_URL}/api/candidates/send-acceptance`, {
-                      email: candidateToAccept.email
-                    });
-                    setAcceptanceSuccess('Acceptance email sent successfully!');
-                    setTimeout(() => {
-                      setAcceptanceModalOpen(false);
-                      setCandidateToAccept(null);
-                      setAcceptanceSuccess(null);
-                    }, 2000);
-                  } catch (err: any) {
-                    setAcceptanceError('Failed to send acceptance email.');
-                  } finally {
-                    setAcceptanceLoading(false);
-                  }
-                }}
+                onClick={handleSendAcceptanceEmail}
                 className="px-6 py-2 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition flex items-center justify-center"
                 disabled={acceptanceLoading}
               >

@@ -56,9 +56,9 @@ const MarketingApplications: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center py-8 sm:py-12 px-2 bg-gradient-to-br from-blue-50 via-white to-blue-100">
-      <div className="w-full max-w-full sm:max-w-7xl bg-gradient-to-br from-white via-blue-50 to-blue-100 rounded-3xl shadow-2xl p-4 sm:p-8 md:p-12 flex flex-col items-center border border-blue-100 animate-fadeIn">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-900 mb-6 text-center tracking-tight drop-shadow">Marketing Applications</h1>
+    <div className="min-h-[70vh] flex flex-col items-center justify-center py-8 sm:py-12 px-2 bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="w-full max-w-full sm:max-w-7xl bg-gradient-to-br from-white via-blue-50 to-blue-100 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 rounded-3xl shadow-2xl p-4 sm:p-8 md:p-12 flex flex-col items-center border border-blue-100 dark:border-gray-700 animate-fadeIn">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-900 dark:text-blue-100 mb-6 text-center tracking-tight drop-shadow">Marketing Applications</h1>
         <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center mb-8 w-full p-2 sm:p-4 rounded-xl bg-gradient-to-r from-blue-100 via-white to-blue-50 shadow">
           <div>
             <label className="block text-sm font-bold mb-1 text-blue-900">Job Title</label>

@@ -183,12 +183,12 @@ const EditLevel = () => {
 
   if (!isLoggedIn || user?.role !== "hr") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Access Denied
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             You need to be logged in as HR to access this page.
           </p>
         </div>
@@ -198,10 +198,10 @@ const EditLevel = () => {
 
   if (levelLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Loading level details...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading level details...</p>
         </div>
       </div>
     );
@@ -209,12 +209,12 @@ const EditLevel = () => {
 
   if (!level) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Level Not Found
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             The level you're trying to edit doesn't exist.
           </p>
         </div>
@@ -223,24 +223,24 @@ const EditLevel = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-4xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
           <button
             onClick={handleBackClick}
-            className="flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors"
+            className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 mb-4 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Module
           </button>
           <div className="flex items-center mb-4">
             <Edit className="w-8 h-8 text-blue-600 mr-3" />
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
               Edit Level
             </h1>
           </div>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             Update the level details below.
           </p>
         </div>
@@ -249,14 +249,14 @@ const EditLevel = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg shadow-md p-6"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
         >
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Level Name */}
             <div>
               <label
                 htmlFor="level_name"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
                 Level Name *
               </label>
@@ -267,7 +267,7 @@ const EditLevel = () => {
                 value={formData.level_name}
                 onChange={handleInputChange}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="e.g., Beginner Level, Intermediate Level, Expert Level"
               />
             </div>
@@ -276,7 +276,7 @@ const EditLevel = () => {
             <div>
               <label
                 htmlFor="duration"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
                 Duration
               </label>
@@ -286,7 +286,7 @@ const EditLevel = () => {
                 name="duration"
                 value={formData.duration}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="e.g., 13 weeks"
               />
             </div>
@@ -295,7 +295,7 @@ const EditLevel = () => {
             <div>
               <label
                 htmlFor="level_range"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
                 Level Range
               </label>
@@ -305,7 +305,7 @@ const EditLevel = () => {
                 name="level_range"
                 value={formData.level_range}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="e.g., Beginner to Intermediate, Intermediate to Expert"
               />
             </div>
@@ -315,7 +315,7 @@ const EditLevel = () => {
               <button
                 type="button"
                 onClick={handleBackClick}
-                className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 Cancel
               </button>

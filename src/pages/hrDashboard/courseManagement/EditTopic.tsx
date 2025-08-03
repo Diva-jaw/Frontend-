@@ -178,12 +178,12 @@ const EditTopic = () => {
 
   if (!isLoggedIn || user?.role !== "hr") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Access Denied
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             You need to be logged in as HR to access this page.
           </p>
         </div>
@@ -193,10 +193,10 @@ const EditTopic = () => {
 
   if (topicLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Loading topic details...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading topic details...</p>
         </div>
       </div>
     );
@@ -204,12 +204,12 @@ const EditTopic = () => {
 
   if (!topic) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Topic Not Found
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             The topic you're trying to edit doesn't exist.
           </p>
         </div>
@@ -218,7 +218,7 @@ const EditTopic = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-4xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">

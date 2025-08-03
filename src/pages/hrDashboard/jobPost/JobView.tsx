@@ -55,7 +55,7 @@ const JobView = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -63,9 +63,9 @@ const JobView = () => {
 
   if (error || !job) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md text-center">
-          <h2 className="text-2xl font-bold text-red-600 mb-4">{error || 'Job not found'}</h2>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-md text-center">
+          <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">{error || 'Job not found'}</h2>
           <Link
             to="/hr/posted-job"
             className="flex items-center justify-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -87,7 +87,7 @@ const JobView = () => {
   const preferredSkills = Array.isArray(job?.preferred_skills) ? job.preferred_skills : [];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Header with Gradient */}
       <header className="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg">
         <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-6">

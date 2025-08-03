@@ -14,6 +14,7 @@ interface Candidate {
   email: string;
   round_status: string;
   jobTitle: string;
+  applied_date?: string;
 }
 
 interface CandidateDetails {
@@ -119,6 +120,21 @@ const StepAppliedFormsList: React.FC = () => {
   const userDropdownRef = useRef<HTMLDivElement>(null);
   const [showSuccessPopup, setShowSuccessPopup] = useState<{ name: string; status: string } | null>(null);
   const mailLinkRef = useRef("");
+
+  // Search state
+  const [searchName, setSearchName] = useState<string>('');
+  const [searchEmail, setSearchEmail] = useState<string>('');
+  const [filteredForms, setFilteredForms] = useState<Candidate[]>([]);
+
+  // Filter candidates based on search
+  useEffect(() => {
+    const filtered = appliedForms.filter(form => {
+      const nameMatch = form.name.toLowerCase().includes(searchName.toLowerCase());
+      const emailMatch = form.email.toLowerCase().includes(searchEmail.toLowerCase());
+      return nameMatch && emailMatch;
+    });
+    setFilteredForms(filtered);
+  }, [appliedForms, searchName, searchEmail]);
 
   // Click-away logic
   useEffect(() => {
@@ -237,6 +253,7 @@ const StepAppliedFormsList: React.FC = () => {
             email: app.email || '', // fallback if email is missing
             round_status: app.round_status || 'in_progress', // add round_status
             jobTitle: app.job_title || '—',
+            applied_date: app.applied_at || app.created_at, // include applied date
           }))
         );
         setTotalPages(data.pagination.totalPages);
@@ -363,56 +380,83 @@ const StepAppliedFormsList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-        <p className="text-lg text-gray-600">Loading candidates...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <p className="text-lg text-gray-600 dark:text-gray-300">Loading candidates...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-        <p className="text-lg text-red-600">{error}</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <p className="text-lg text-red-600 dark:text-red-400">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 px-4">
       {/* Main Content */}
       <div className="max-w-screen-2xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-2 capitalize tracking-tight">
+          <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-2 capitalize tracking-tight">
             {department} - {step?.replace(/-/g, ' ') === 'final round' ? 'Round 3' : step?.replace(/-/g, ' ')}
           </h2>
-          <p className="text-lg text-gray-600 font-medium">Applied Forms Management</p>
+          <p className="text-lg text-gray-600 dark:text-gray-300 font-medium">Applied Forms Management</p>
         </div>
 
         {/* Draft Editing UI */}
         {/* REMOVE the global Acceptance Draft and Rejection Draft boxes here */}
 
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        {/* Search Filters */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 mb-6 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Search by Name</label>
+              <input
+                type="text"
+                placeholder="Enter candidate name..."
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Search by Email</label>
+              <input
+                type="text"
+                placeholder="Enter candidate email..."
+                value={searchEmail}
+                onChange={(e) => setSearchEmail(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full table-fixed">
               <thead className="bg-gradient-to-r from-blue-600 to-indigo-600">
                 <tr>
-                  <th className="w-[18%] px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Job Title</th>
-                  <th className="w-[15%] px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Name</th>
-                  <th className="w-[22%] px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Email</th>
-                  <th className="w-[15%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Status</th>
-                  <th className="w-[15%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Move to</th>
-                  <th className="w-[15%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Actions</th>
+                  <th className="w-[15%] px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Job Title</th>
+                  <th className="w-[12%] px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Name</th>
+                  <th className="w-[18%] px-6 py-4 text-left text-white font-bold text-lg tracking-wide">Email</th>
+                  <th className="w-[12%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Date Applied</th>
+                  <th className="w-[12%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Status</th>
+                  <th className="w-[12%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Move to</th>
+                  <th className="w-[12%] px-6 py-4 text-center text-white font-bold text-lg tracking-wide">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {appliedForms.length === 0 ? (
+                {filteredForms.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
-                      No candidates found for this department and step.
+                    <td colSpan={7} className="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                      {appliedForms.length === 0 ? 'No candidates found for this department and step.' : 'No candidates match your search criteria.'}
                     </td>
                   </tr>
                 ) : (
-                  appliedForms.map((form, idx) => {
+                  filteredForms.map((form, idx) => {
                     const status = statusDropdown[form.id];
                     // Use round_status from backend
                     const roundStatus = form.round_status;
@@ -420,19 +464,24 @@ const StepAppliedFormsList: React.FC = () => {
                     return (
                       <tr
                         key={form.id}
-                        className={`hover:bg-gray-50 transition-colors duration-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-25'}`}
+                        className={`hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 ${idx % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-25 dark:bg-gray-750'}`}
                       >
-                        <td className="px-6 py-4 font-semibold text-blue-900 whitespace-nowrap">{jobTitle}</td>
+                        <td className="px-6 py-4 font-semibold text-blue-900 dark:text-blue-300 whitespace-nowrap">{jobTitle}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-lg mr-3">
                               {form.name.charAt(0).toUpperCase()}
                             </div>
-                            <span className="font-semibold text-gray-900 text-lg">{form.name}</span>
+                            <span className="font-semibold text-gray-900 dark:text-white text-lg">{form.name}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="text-gray-700 font-medium">{form.email}</span>
+                          <span className="text-gray-700 dark:text-gray-300 font-medium">{form.email}</span>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <span className="text-gray-700 dark:text-gray-300 font-medium">
+                            {form.applied_date ? new Date(form.applied_date).toLocaleDateString() : '—'}
+                          </span>
                         </td>
                         <td className="px-6 py-4 text-center">
                           {roundStatus === 'cleared' ? (
@@ -538,14 +587,14 @@ const StepAppliedFormsList: React.FC = () => {
 
         {showDetailsId && (
           <div className="fixed inset-0 z-[9999] flex items-start justify-center overflow-y-auto bg-gray-900/60 backdrop-blur-[2px] pt-4 pb-12 px-4">
-  <div className="bg-white rounded-xl shadow-2xl w-full max-w-[1100px] mx-auto relative flex flex-col transform transition-all duration-200">
-    <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm rounded-t-xl px-8 py-6 flex items-center justify-between border-b border-gray-200/80">
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-[1100px] mx-auto relative flex flex-col transform transition-all duration-200">
+    <div className="sticky top-0 z-10 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-t-xl px-8 py-6 flex items-center justify-between border-b border-gray-200/80 dark:border-gray-700/80">
       <div>
-                  <h3 className="text-2xl font-semibold text-gray-900 tracking-tight">Applicant Details</h3>
-                  <p className="text-gray-500 mt-1.5 text-[15px] font-medium">Complete profile information</p>
+                  <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 tracking-tight">Applicant Details</h3>
+                  <p className="text-gray-500 dark:text-gray-400 mt-1.5 text-[15px] font-medium">Complete profile information</p>
                 </div>
                 <button 
-                  className="text-gray-400 hover:text-gray-600 text-2xl p-2 hover:bg-gray-50 active:bg-gray-100 rounded-lg transition-all duration-150 -mr-2 hover:rotate-90" 
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-2xl p-2 hover:bg-gray-50 dark:hover:bg-gray-700 active:bg-gray-100 dark:active:bg-gray-600 rounded-lg transition-all duration-150 -mr-2 hover:rotate-90" 
                   onClick={() => setShowDetailsId(null)}
                   aria-label="Close"
                 >
@@ -553,18 +602,18 @@ const StepAppliedFormsList: React.FC = () => {
                 </button>
               </div>
 
-              <div className="space-y-10 overflow-y-auto px-8 py-7 scrollbar-thin scrollbar-thumb-gray-200 hover:scrollbar-thumb-gray-300 scrollbar-track-transparent">
-                <section className="border-b border-gray-200/80 pb-9">
-                  <h4 className="text-lg font-semibold text-gray-800 mb-6 tracking-tight flex items-center group">
+              <div className="space-y-10 overflow-y-auto px-8 py-7 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-300 dark:hover:scrollbar-thumb-gray-500 scrollbar-track-transparent">
+                <section className="border-b border-gray-200/80 dark:border-gray-700/80 pb-9">
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 tracking-tight flex items-center group">
                     <span className="w-1 h-6 bg-blue-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
-                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Personal Details</span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">Personal Details</span>
                   </h4>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-1.5 group hover:bg-gray-50/50 rounded-lg px-3 transition-all duration-200">
-                      <span className="font-medium text-gray-600 group-hover:text-gray-900 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-1.5 group hover:bg-gray-50/50 dark:hover:bg-gray-700/50 rounded-lg px-3 transition-all duration-200">
+                      <span className="font-medium text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
                         Full Name
                       </span>
-                      <span className="text-gray-900 text-left sm:text-right break-words flex-1">
+                      <span className="text-gray-900 dark:text-gray-100 text-left sm:text-right break-words flex-1">
                         <span className="font-semibold">{candidateDetails[String(showDetailsId)]?.fullName}</span>
                       </span>
                     </div>
@@ -593,10 +642,10 @@ const StepAppliedFormsList: React.FC = () => {
                   </div>
                 </section>
 
-                <section className="border-b border-gray-200/80 pb-9">
-                  <h4 className="text-lg font-semibold text-gray-800 mb-6 tracking-tight flex items-center group">
+                <section className="border-b border-gray-200/80 dark:border-gray-700/80 pb-9">
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 tracking-tight flex items-center group">
                     <span className="w-1 h-6 bg-green-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
-                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Location Details</span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">Location Details</span>
                   </h4>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
                     <Detail label="Current City" value={candidateDetails[String(showDetailsId)]?.currentCity} />
@@ -608,10 +657,10 @@ const StepAppliedFormsList: React.FC = () => {
                   </div>
                 </section>
 
-                <section className="border-b border-gray-200/80 pb-9">
-                  <h4 className="text-lg font-semibold text-gray-800 mb-6 tracking-tight flex items-center group">
+                <section className="border-b border-gray-200/80 dark:border-gray-700/80 pb-9">
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 tracking-tight flex items-center group">
                     <span className="w-1 h-6 bg-purple-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
-                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Educational Background</span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">Educational Background</span>
                   </h4>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
                     <Detail label="Highest Qualification" value={candidateDetails[String(showDetailsId)]?.qualification} />
@@ -667,9 +716,9 @@ const StepAppliedFormsList: React.FC = () => {
 
         {showMailModal && (
           <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md mx-auto p-8 relative">
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-md mx-auto p-8 relative">
               <button
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold p-2 hover:bg-gray-100 rounded-full transition-all duration-200"
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-2xl font-bold p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all duration-200"
                 onClick={() => {
                   setShowMailModal(null);
                   setMailMessage('');
@@ -683,22 +732,22 @@ const StepAppliedFormsList: React.FC = () => {
               <div className="text-center mb-6">
                 <div
                   className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
-                    showMailModal.status === 'Reject' ? 'bg-red-100' : 'bg-green-100'
+                    showMailModal.status === 'Reject' ? 'bg-red-100 dark:bg-red-900/20' : 'bg-green-100 dark:bg-green-900/20'
                   }`}
                 >
                   {showMailModal.status === 'Reject' ? <span className="text-2xl">❌</span> : <span className="text-2xl">✅</span>}
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                   {showMailModal.status === 'Reject' ? 'Send Rejection Mail' : 'Send Acceptance Mail'}
                 </h3>
-                <p className="text-gray-600">Customize your message for {appliedForms.find((f) => f.id === showMailModal.id)?.name}</p>
+                <p className="text-gray-600 dark:text-gray-400">Customize your message for {appliedForms.find((f) => f.id === showMailModal.id)?.name}</p>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">Message:</label>
+                  <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">Message:</label>
                   <textarea
-                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200 text-black"
+                    className="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                     rows={4}
                     value={mailMessage}
                     onChange={(e) => setMailMessage(e.target.value)}
@@ -707,9 +756,9 @@ const StepAppliedFormsList: React.FC = () => {
                 </div>
                 {/* Show Link field for both Accept and Reject, but make it optional */}
                 <div>
-                  <label className="block text-gray-700 text-sm font-semibold mb-2">Link (optional):</label>
+                  <label className="block text-gray-700 dark:text-gray-300 text-sm font-semibold mb-2">Link (optional):</label>
                   <input
-                    className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-black"
+                    className="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                     value={mailLink}
                     onChange={(e) => {
                       setMailLink(e.target.value);
@@ -784,13 +833,13 @@ const Detail = ({ label, value }: { label: string; value: React.ReactNode }) => 
   }
 
   return (
-    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-2 group hover:bg-gradient-to-r hover:from-slate-50 hover:to-transparent rounded-lg px-3 transition-all duration-200">
-      <span className="font-medium text-slate-600 group-hover:text-slate-800 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
+    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-2 group hover:bg-gradient-to-r hover:from-slate-50 dark:hover:from-gray-700 hover:to-transparent rounded-lg px-3 transition-all duration-200">
+      <span className="font-medium text-slate-600 dark:text-gray-400 group-hover:text-slate-800 dark:group-hover:text-gray-200 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
         {label}
       </span>
-      <span className="text-slate-800 text-left sm:text-right break-words flex-1">
+      <span className="text-slate-800 dark:text-gray-100 text-left sm:text-right break-words flex-1">
         {typeof displayValue === 'string' && displayValue.endsWith('.pdf') && (label === 'Resume' || label === 'Academic Documents') ? (
-          <a href={getFullUrl(displayValue)} className="text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1.5 hover:gap-2.5 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-full transition-all duration-150" target="_blank" rel="noopener noreferrer">
+          <a href={getFullUrl(displayValue)} className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium inline-flex items-center gap-1.5 hover:gap-2.5 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 px-3 py-1 rounded-full transition-all duration-150" target="_blank" rel="noopener noreferrer">
             View {label}
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />

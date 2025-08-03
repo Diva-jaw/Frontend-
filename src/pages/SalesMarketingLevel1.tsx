@@ -83,24 +83,24 @@ const SalesMarketingLevel1 = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              <div className="bg-white rounded-2xl shadow-2xl p-8">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
                 <div className="text-center">
                   <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <Target className="w-12 h-12 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Course Overview</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Course Overview</h3>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
-                      <span className="text-gray-700 font-medium">Duration</span>
-                      <span className="text-blue-600 font-semibold">3 Weeks</span>
+                    <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Duration</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-semibold">3 Weeks</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-blue-100 rounded-lg">
-                      <span className="text-gray-700 font-medium">Level</span>
-                      <span className="text-blue-600 font-semibold">Beginner to Intermediate</span>
+                    <div className="flex items-center justify-between p-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Level</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-semibold">Beginner to Intermediate</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-blue-200 rounded-lg">
-                      <span className="text-gray-700 font-medium">Projects</span>
-                      <span className="text-blue-600 font-semibold">2 Projects</span>
+                    <div className="flex items-center justify-between p-4 bg-blue-200 dark:bg-blue-900/40 rounded-lg">
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Projects</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-semibold">2 Projects</span>
                     </div>
                   </div>
                 </div>
@@ -111,7 +111,7 @@ const SalesMarketingLevel1 = () => {
       </section>
 
       {/* Curriculum Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -120,10 +120,10 @@ const SalesMarketingLevel1 = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
               Comprehensive Curriculum
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               Our structured curriculum covers all essential aspects of sales and marketing, 
               from customer psychology to lead generation and conversion optimization.
             </p>
@@ -210,17 +210,17 @@ const SalesMarketingLevel1 = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow"
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow"
               >
-                <div className={`w-12 h-12 bg-${module.color}-100 rounded-lg flex items-center justify-center mb-4`}>
-                  <module.icon className={`w-6 h-6 text-${module.color}-600`} />
+                <div className={`w-12 h-12 bg-${module.color}-100 dark:bg-${module.color}-900/20 rounded-lg flex items-center justify-center mb-4`}>
+                  <module.icon className={`w-6 h-6 text-${module.color}-600 dark:text-${module.color}-400`} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">{module.title}</h3>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{module.title}</h3>
                 <ul className="space-y-2">
                   {module.topics.map((topic, topicIndex) => (
                     <li key={topicIndex} className="flex items-start space-x-2">
                       <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-600 text-sm">{topic}</span>
+                      <span className="text-gray-600 dark:text-gray-400 text-sm">{topic}</span>
                     </li>
                   ))}
                 </ul>
@@ -231,7 +231,7 @@ const SalesMarketingLevel1 = () => {
       </section>
 
       {/* Learning Outcomes */}
-      <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
+      <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -240,10 +240,10 @@ const SalesMarketingLevel1 = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
               What You'll Learn
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               By the end of this course, you'll have mastered the core competencies 
               needed to excel in sales and marketing roles.
             </p>
@@ -288,13 +288,13 @@ const SalesMarketingLevel1 = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl shadow-lg p-6"
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6"
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <outcome.icon className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center mb-4">
+                  <outcome.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{outcome.title}</h3>
-                <p className="text-gray-600">{outcome.description}</p>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">{outcome.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400">{outcome.description}</p>
               </motion.div>
             ))}
           </div>
@@ -349,11 +349,11 @@ const SalesMarketingLevel1 = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100"
+                className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 border border-blue-100 dark:border-blue-900/30"
               >
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{role.title}</h3>
-                <p className="text-blue-600 font-semibold mb-3">{role.salary}</p>
-                <p className="text-gray-600 text-sm">{role.description}</p>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{role.title}</h3>
+                <p className="text-blue-600 dark:text-blue-400 font-semibold mb-3">{role.salary}</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">{role.description}</p>
               </motion.div>
             ))}
           </div>
@@ -361,7 +361,7 @@ const SalesMarketingLevel1 = () => {
       </section>
 
       {/* Tools & Technologies */}
-      <section className="py-16 bg-gradient-to-r from-indigo-50 to-blue-50">
+      <section className="py-16 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -370,10 +370,10 @@ const SalesMarketingLevel1 = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
               Tools & Technologies
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               Master the essential tools and technologies used by sales and marketing 
               professionals in the industry.
             </p>
@@ -391,9 +391,9 @@ const SalesMarketingLevel1 = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg transition-shadow"
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 text-center hover:shadow-lg transition-shadow"
               >
-                <span className="text-gray-700 font-medium text-sm">{tool}</span>
+                <span className="text-gray-700 dark:text-gray-300 font-medium text-sm">{tool}</span>
               </motion.div>
             ))}
           </div>
