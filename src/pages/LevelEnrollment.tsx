@@ -246,9 +246,10 @@ const LevelEnrollment = () => {
                 
                                  <motion.button
                    onClick={() => {
-                     // View curriculum functionality - Open AI Course PDF
+                     // View curriculum functionality - Download Foundations of Data Science PDF done 
                      const link = document.createElement('a');
-                     link.href = 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf';
+                     link.href = 'https://rftsystemsbackend-testing.up.railway.app/uploads/Foundations%20of%20Data%20Science.pdf';
+                     link.download = 'Foundations of Data Science.pdf';
                      link.target = '_blank';
                      document.body.appendChild(link);
                      link.click();
