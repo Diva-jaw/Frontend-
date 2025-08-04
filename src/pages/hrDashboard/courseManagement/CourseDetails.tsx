@@ -160,12 +160,12 @@ const CourseDetails: React.FC = () => {
 
   if (!isLoggedIn || user?.role !== "hr") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Access Denied
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             You need to be logged in as HR to access this page.
           </p>
         </div>
@@ -183,12 +183,12 @@ const CourseDetails: React.FC = () => {
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Course Not Found
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             The course you're looking for doesn't exist.
           </p>
         </div>
@@ -197,7 +197,7 @@ const CourseDetails: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -205,16 +205,16 @@ const CourseDetails: React.FC = () => {
             <div className="flex items-center">
               <button
                 onClick={() => navigate('/hr/course-management')}
-                className="mr-4 p-2 text-gray-600 hover:text-gray-900"
+                className="mr-4 p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <BookOpen className="w-8 h-8 text-blue-600 mr-3" />
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                   {course.name}
                 </h1>
-                <p className="text-gray-600 mt-1">
+                <p className="text-gray-600 dark:text-gray-400 mt-1">
                   Course Details and Structure
                 </p>
               </div>
@@ -235,24 +235,24 @@ const CourseDetails: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8"
         >
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Course Overview</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Course Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-600">Description</label>
-              <p className="text-gray-900 mt-1">{course.description}</p>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">Description</label>
+              <p className="text-gray-900 dark:text-gray-100 mt-1">{course.description}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-600">Level Range</label>
-              <p className="text-gray-900 mt-1">{course.level_range}</p>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">Level Range</label>
+              <p className="text-gray-900 dark:text-gray-100 mt-1">{course.level_range}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-600">Status</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">Status</label>
               <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full mt-1 ${
                 course.status === 'published' 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-yellow-100 text-yellow-800'
+                  ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200' 
+                  : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200'
               }`}>
                 {course.status === 'published' ? 'Published' : 'Draft'}
               </span>
@@ -264,98 +264,98 @@ const CourseDetails: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
         >
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Course Structure</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-6">Course Structure</h2>
           
           {course.modules && course.modules.length > 0 ? (
             <div className="space-y-4">
               {course.modules.map((module) => (
-                <div key={module.id} className="border border-gray-200 rounded-lg">
+                <div key={module.id} className="border border-gray-200 dark:border-gray-700 rounded-lg">
                   <div
-                    className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50"
+                    className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
                     onClick={() => toggleModule(module.id)}
                   >
                     <div className="flex items-center">
                       <Layers className="w-5 h-5 text-blue-600 mr-3" />
                       <div>
-                        <h3 className="font-semibold text-gray-900">{module.name}</h3>
-                        <p className="text-sm text-gray-600">{module.duration}</p>
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100">{module.name}</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{module.duration}</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
                         {module.levels?.length || 0} levels
                       </span>
                       {expandedModules.has(module.id) ? (
-                        <ChevronDown className="w-4 h-4 text-gray-500" />
+                        <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                       ) : (
-                        <ChevronRight className="w-4 h-4 text-gray-500" />
+                        <ChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                       )}
                     </div>
                   </div>
 
                   {expandedModules.has(module.id) && module.levels && (
-                    <div className="border-t border-gray-200 bg-gray-50">
+                    <div className="border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
                       {module.levels.map((level) => (
-                        <div key={level.id} className="border-b border-gray-200 last:border-b-0">
+                        <div key={level.id} className="border-b border-gray-200 dark:border-gray-600 last:border-b-0">
                           <div className="flex items-center justify-between p-4">
                             <div 
-                              className="flex items-center flex-1 cursor-pointer hover:bg-gray-100 p-2 rounded"
+                              className="flex items-center flex-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 p-2 rounded"
                               onClick={() => toggleLevel(level.id)}
                             >
                               <TrendingUp className="w-4 h-4 text-green-600 mr-3" />
                               <div>
-                                <h4 className="font-medium text-gray-900">{level.level_name}</h4>
-                                <p className="text-sm text-gray-600">{level.duration} • {level.level_range}</p>
+                                <h4 className="font-medium text-gray-900 dark:text-gray-100">{level.level_name}</h4>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{level.duration} • {level.level_range}</p>
                               </div>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <span className="text-sm text-gray-500">
+                              <span className="text-sm text-gray-500 dark:text-gray-400">
                                 {level.topics?.length || 0} topics
                               </span>
                               {expandedLevels.has(level.id) ? (
-                                <ChevronDown className="w-4 h-4 text-gray-500" />
+                                <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                               ) : (
-                                <ChevronRight className="w-4 h-4 text-gray-500" />
+                                <ChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                               )}
                             </div>
                           </div>
 
                           {expandedLevels.has(level.id) && level.topics && (
-                            <div className="border-t border-gray-200 bg-white">
+                            <div className="border-t border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800">
                               {level.topics.map((topic) => (
-                                <div key={topic.id} className="border-b border-gray-200 last:border-b-0">
+                                <div key={topic.id} className="border-b border-gray-200 dark:border-gray-600 last:border-b-0">
                                   <div className="flex items-center justify-between p-4">
                                     <div 
-                                      className="flex items-center flex-1 cursor-pointer hover:bg-gray-50 p-2 rounded"
+                                      className="flex items-center flex-1 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded"
                                       onClick={() => toggleTopic(topic.id)}
                                     >
                                       <FileText className="w-4 h-4 text-purple-600 mr-3" />
                                       <div>
-                                        <h5 className="font-medium text-gray-900">{topic.topic_title}</h5>
-                                        <p className="text-sm text-gray-600">{topic.description}</p>
+                                        <h5 className="font-medium text-gray-900 dark:text-gray-100">{topic.topic_title}</h5>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">{topic.description}</p>
                                       </div>
                                     </div>
                                     <div className="flex items-center space-x-2">
-                                      <span className="text-sm text-gray-500">
+                                      <span className="text-sm text-gray-500 dark:text-gray-400">
                                         {topic.subpoints?.length || 0} subpoints
                                       </span>
                                       {expandedTopics.has(topic.id) ? (
-                                        <ChevronDown className="w-4 h-4 text-gray-500" />
+                                        <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                                       ) : (
-                                        <ChevronRight className="w-4 h-4 text-gray-500" />
+                                        <ChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                                       )}
                                     </div>
                                   </div>
 
                                   {expandedTopics.has(topic.id) && topic.subpoints && (
-                                    <div className="border-t border-gray-200 bg-gray-50">
+                                    <div className="border-t border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
                                       {topic.subpoints.map((subpoint) => (
-                                        <div key={subpoint.id} className="p-4 border-b border-gray-200 last:border-b-0">
+                                        <div key={subpoint.id} className="p-4 border-b border-gray-200 dark:border-gray-600 last:border-b-0">
                                           <div className="flex items-center">
                                             <List className="w-4 h-4 text-indigo-600 mr-3" />
-                                            <p className="text-sm text-gray-900">{subpoint.subpoint}</p>
+                                            <p className="text-sm text-gray-900 dark:text-gray-100">{subpoint.subpoint}</p>
                                           </div>
                                         </div>
                                       ))}
@@ -375,8 +375,8 @@ const CourseDetails: React.FC = () => {
           ) : (
             <div className="text-center py-8">
               <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Modules Added</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No Modules Added</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
                 This course doesn't have any modules yet. Add modules to start building the course structure.
               </p>
               <button

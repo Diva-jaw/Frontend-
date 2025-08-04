@@ -255,14 +255,14 @@ const CreateCourse: React.FC = () => {
             className="space-y-6"
           >
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Course Name *
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="Enter course name"
               />
             </div>
@@ -277,14 +277,14 @@ const CreateCourse: React.FC = () => {
             className="space-y-6"
           >
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Course Description *
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 rows={6}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 placeholder="Enter detailed course description"
               />
             </div>
@@ -299,13 +299,13 @@ const CreateCourse: React.FC = () => {
             className="space-y-6"
           >
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Level Range *
               </label>
               <select
                 value={formData.level_range}
                 onChange={(e) => handleInputChange('level_range', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               >
                 <option value="">Select level range</option>
                 <option value="Beginner">Beginner</option>
@@ -326,20 +326,20 @@ const CreateCourse: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             className="space-y-6"
           >
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-lg font-semibold mb-4">Course Review</h3>
+            <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+              <h3 className="text-lg font-semibold mb-4 dark:text-gray-100">Course Review</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-600">Course Name</label>
-                  <p className="text-gray-900">{formData.name}</p>
+                  <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">Course Name</label>
+                  <p className="text-gray-900 dark:text-gray-100">{formData.name}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-600">Description</label>
-                  <p className="text-gray-900">{formData.description}</p>
+                  <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">Description</label>
+                  <p className="text-gray-900 dark:text-gray-100">{formData.description}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-600">Level Range</label>
-                  <p className="text-gray-900">{formData.level_range}</p>
+                  <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">Level Range</label>
+                  <p className="text-gray-900 dark:text-gray-100">{formData.level_range}</p>
                 </div>
               </div>
             </div>
@@ -368,12 +368,12 @@ const CreateCourse: React.FC = () => {
 
   if (!isLoggedIn || user?.role !== "hr") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Access Denied
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             You need to be logged in as HR to access this page.
           </p>
         </div>
@@ -390,22 +390,22 @@ const CreateCourse: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                 {isEditMode ? 'Edit Course' : 'Create New Course'}
               </h1>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
                 {isEditMode ? 'Update course details' : 'Set up your course step by step'}
               </p>
             </div>
             <button
               onClick={() => navigate('/hr/course-management')}
-              className="px-4 py-2 text-gray-600 hover:text-gray-900"
+              className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
             >
               ← Back to Courses
             </button>
@@ -422,37 +422,37 @@ const CreateCourse: React.FC = () => {
                     ? 'bg-green-500 border-green-500 text-white'
                     : currentStep === step.id
                     ? 'bg-blue-500 border-blue-500 text-white'
-                    : 'bg-white border-gray-300 text-gray-500'
+                    : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400'
                 }`}>
                   {currentStep > step.id ? '✓' : step.id}
                 </div>
                 {index < steps.length - 1 && (
                   <div className={`w-16 h-0.5 mx-2 ${
-                    currentStep > step.id ? 'bg-green-500' : 'bg-gray-300'
+                    currentStep > step.id ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
                   }`} />
                 )}
               </div>
             ))}
           </div>
           <div className="mt-4 text-center">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
               {steps[currentStep - 1].title}
             </h2>
-            <p className="text-gray-600">{steps[currentStep - 1].description}</p>
+            <p className="text-gray-600 dark:text-gray-400">{steps[currentStep - 1].description}</p>
           </div>
         </div>
 
         {/* Form Content */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8">
           {renderStepContent()}
 
           {/* Action Buttons */}
-          <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
+          <div className="flex justify-between mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
             <div className="flex space-x-3">
               {currentStep > 1 && (
                 <button
                   onClick={handlePrevious}
-                  className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   Previous
                 </button>
@@ -460,7 +460,7 @@ const CreateCourse: React.FC = () => {
               <button
                 onClick={saveAsDraft}
                 disabled={saving}
-                className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
               >
                 {saving ? 'Saving...' : 'Save Draft'}
               </button>

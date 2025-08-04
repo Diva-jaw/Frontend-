@@ -123,24 +123,24 @@ const WebUIDesignLevel1 = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              <div className="bg-white rounded-2xl shadow-2xl p-8">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
                 <div className="text-center">
                   <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <Code className="w-12 h-12 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Course Overview</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Course Overview</h3>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
-                      <span className="text-gray-700 font-medium">Duration</span>
-                      <span className="text-blue-600 font-semibold">4 Weeks</span>
+                    <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Duration</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-semibold">4 Weeks</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-blue-100 rounded-lg">
-                      <span className="text-gray-700 font-medium">Level</span>
-                      <span className="text-blue-600 font-semibold">Beginner to Intermediate</span>
+                    <div className="flex items-center justify-between p-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Level</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-semibold">Beginner to Intermediate</span>
                     </div>
-                    <div className="flex items-center justify-between p-4 bg-blue-200 rounded-lg">
-                      <span className="text-gray-700 font-medium">Projects</span>
-                      <span className="text-blue-600 font-semibold">3 Projects</span>
+                    <div className="flex items-center justify-between p-4 bg-blue-200 dark:bg-blue-900/40 rounded-lg">
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Projects</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-semibold">3 Projects</span>
                     </div>
                   </div>
                 </div>
@@ -151,17 +151,17 @@ const WebUIDesignLevel1 = () => {
       </section>
 
       {/* Curriculum Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-semibold text-blue-700 mb-8 text-center">What You'll Learn</h2>
+          <h2 className="text-3xl font-semibold text-blue-700 dark:text-blue-400 mb-8 text-center">What You'll Learn</h2>
           <div className="space-y-4">
             {curriculum.map((item, index) => (
-              <div key={index} className="border rounded-lg overflow-hidden">
+              <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                 <button
-                  className="w-full text-left p-5 bg-blue-50 hover:bg-blue-100 transition-colors flex justify-between items-center"
+                  className="w-full text-left p-5 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors flex justify-between items-center"
                   onClick={() => toggleSection(index)}
                 >
-                  <span className="text-xl font-medium text-blue-800">{item.title}</span>
+                  <span className="text-xl font-medium text-blue-800 dark:text-blue-300">{item.title}</span>
                   <svg
                     className={`w-6 h-6 transform transition-transform ${activeSection === index ? 'rotate-180' : ''}`}
                     fill="none"
@@ -172,9 +172,9 @@ const WebUIDesignLevel1 = () => {
                   </svg>
                 </button>
                 {activeSection === index && (
-                  <div className="p-5 bg-white">
-                    <p className="text-blue-700 mb-3">{item.description}</p>
-                    <ul className="list-disc pl-6 text-blue-700">
+                  <div className="p-5 bg-white dark:bg-gray-800">
+                    <p className="text-blue-700 dark:text-blue-300 mb-3">{item.description}</p>
+                    <ul className="list-disc pl-6 text-blue-700 dark:text-blue-300">
                       {item.topics.map((topic, idx) => (
                         <li key={idx} className="mb-1">{topic}</li>
                       ))}
@@ -188,21 +188,21 @@ const WebUIDesignLevel1 = () => {
       </section>
 
       {/* Learning Outcomes Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-blue-50 dark:bg-blue-900/10">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-semibold text-blue-700 mb-8 text-center">Learning Outcomes</h2>
+          <h2 className="text-3xl font-semibold text-blue-700 dark:text-blue-400 mb-8 text-center">Learning Outcomes</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {outcomes.map((outcome, index) => (
               <div key={index} className="flex items-start">
                 <svg
-                  className="w-6 h-6 text-indigo-400 mr-3 flex-shrink-0"
+                  className="w-6 h-6 text-indigo-400 dark:text-indigo-300 mr-3 flex-shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-blue-800 text-lg">{outcome}</span>
+                <span className="text-blue-800 dark:text-blue-300 text-lg">{outcome}</span>
               </div>
             ))}
           </div>
@@ -210,13 +210,13 @@ const WebUIDesignLevel1 = () => {
       </section>
 
       {/* Career Opportunities Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-semibold text-blue-700 mb-8 text-center">Career Opportunities with UI/UX Design</h2>
+          <h2 className="text-3xl font-semibold text-blue-700 dark:text-blue-400 mb-8 text-center">Career Opportunities with UI/UX Design</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-blue-50 rounded-lg shadow p-6 flex flex-col items-center">
-              <h3 className="text-xl font-bold text-blue-800 mb-2">Job Roles</h3>
-              <ul className="text-blue-700 space-y-1 text-center">
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg shadow p-6 flex flex-col items-center">
+              <h3 className="text-xl font-bold text-blue-800 dark:text-blue-300 mb-2">Job Roles</h3>
+              <ul className="text-blue-700 dark:text-blue-300 space-y-1 text-center">
                 <li>UI Designer</li>
                 <li>UX Designer</li>
                 <li>Web Designer</li>
@@ -225,9 +225,9 @@ const WebUIDesignLevel1 = () => {
                 <li>Design Intern</li>
               </ul>
             </div>
-            <div className="bg-indigo-50 rounded-lg shadow p-6 flex flex-col items-center">
-              <h3 className="text-xl font-bold text-indigo-800 mb-2">Industries & Companies</h3>
-              <ul className="text-indigo-700 space-y-1 text-center">
+            <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg shadow p-6 flex flex-col items-center">
+              <h3 className="text-xl font-bold text-indigo-800 dark:text-indigo-300 mb-2">Industries & Companies</h3>
+              <ul className="text-indigo-700 dark:text-indigo-300 space-y-1 text-center">
                 <li>Digital Agencies</li>
                 <li>Tech Startups</li>
                 <li>E-commerce Companies</li>
@@ -241,39 +241,39 @@ const WebUIDesignLevel1 = () => {
       </section>
 
       {/* Design Tools Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-50 via-indigo-50 to-white">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-50 via-indigo-50 to-white dark:from-gray-800 dark:via-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-semibold text-indigo-700 mb-8 text-center">Design Tools & Platforms</h2>
+          <h2 className="text-3xl font-semibold text-indigo-700 dark:text-indigo-400 mb-8 text-center">Design Tools & Platforms</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center">
               <img src="https://www.figma.com/favicon.ico" alt="Figma" className="w-12 h-12 mb-2" />
-              <h3 className="text-lg font-bold text-blue-800 mb-1">Figma</h3>
-              <p className="text-blue-700 text-center text-sm">Professional UI/UX design and prototyping tool.</p>
+              <h3 className="text-lg font-bold text-blue-800 dark:text-blue-300 mb-1">Figma</h3>
+              <p className="text-blue-700 dark:text-blue-300 text-center text-sm">Professional UI/UX design and prototyping tool.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center">
               <img src="https://www.canva.com/favicon.ico" alt="Canva" className="w-12 h-12 mb-2" />
-              <h3 className="text-lg font-bold text-blue-800 mb-1">Canva</h3>
-              <p className="text-blue-700 text-center text-sm">Graphic design platform for marketing materials.</p>
+              <h3 className="text-lg font-bold text-blue-800 dark:text-blue-300 mb-1">Canva</h3>
+              <p className="text-blue-700 dark:text-blue-300 text-center text-sm">Graphic design platform for marketing materials.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center">
               <img src="https://www.adobe.com/favicon.ico" alt="Adobe Creative Suite" className="w-12 h-12 mb-2" />
-              <h3 className="text-lg font-bold text-indigo-800 mb-1">Adobe Creative Suite</h3>
-              <p className="text-indigo-700 text-center text-sm">Professional design software suite.</p>
+              <h3 className="text-lg font-bold text-indigo-800 dark:text-indigo-300 mb-1">Adobe Creative Suite</h3>
+              <p className="text-indigo-700 dark:text-indigo-300 text-center text-sm">Professional design software suite.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center">
               <img src="https://www.sketch.com/favicon.ico" alt="Sketch" className="w-12 h-12 mb-2" />
-              <h3 className="text-lg font-bold text-indigo-800 mb-1">Sketch</h3>
-              <p className="text-indigo-700 text-center text-sm">Digital design tool for Mac users.</p>
+              <h3 className="text-lg font-bold text-indigo-800 dark:text-indigo-300 mb-1">Sketch</h3>
+              <p className="text-indigo-700 dark:text-indigo-300 text-center text-sm">Digital design tool for Mac users.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center">
               <img src="https://www.invisionapp.com/favicon.ico" alt="InVision" className="w-12 h-12 mb-2" />
-              <h3 className="text-lg font-bold text-blue-800 mb-1">InVision</h3>
-              <p className="text-blue-700 text-center text-sm">Prototyping and collaboration platform.</p>
+              <h3 className="text-lg font-bold text-blue-800 dark:text-blue-300 mb-1">InVision</h3>
+              <p className="text-blue-700 dark:text-blue-300 text-center text-sm">Prototyping and collaboration platform.</p>
             </div>
-            <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex flex-col items-center">
               <img src="https://www.zeplin.io/favicon.ico" alt="Zeplin" className="w-12 h-12 mb-2" />
-              <h3 className="text-lg font-bold text-indigo-800 mb-1">Zeplin</h3>
-              <p className="text-indigo-700 text-center text-sm">Design handoff and collaboration tool.</p>
+              <h3 className="text-lg font-bold text-indigo-800 dark:text-indigo-300 mb-1">Zeplin</h3>
+              <p className="text-indigo-700 dark:text-indigo-300 text-center text-sm">Design handoff and collaboration tool.</p>
             </div>
           </div>
         </div>

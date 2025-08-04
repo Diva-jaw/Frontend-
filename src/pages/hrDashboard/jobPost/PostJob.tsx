@@ -104,23 +104,23 @@ const PostJob = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Animated Popup */}
       {showPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm transition-all duration-300">
-          <div className={`bg-white rounded-xl shadow-2xl p-6 max-w-md w-full transform transition-all duration-300 ${showPopup ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
+          <div className={`bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 max-w-md w-full transform transition-all duration-300 ${showPopup ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}>
             <div className="text-center">
-              <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-green-100 flex items-center justify-center animate-bounce">
+              <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center animate-bounce">
                 {popupMessage.includes('successfully') ? (
-                  <Check className="w-8 h-8 text-green-600" />
+                  <Check className="w-8 h-8 text-green-600 dark:text-green-400" />
                 ) : (
-                  <X className="w-8 h-8 text-red-600" />
+                  <X className="w-8 h-8 text-red-600 dark:text-red-400" />
                 )}
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                 {popupMessage.includes('successfully') ? 'Success!' : 'Oops!'}
               </h3>
-              <p className="text-gray-600 mb-6">{popupMessage}</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">{popupMessage}</p>
               <button
                 onClick={closePopup}
                 className={`px-6 py-2 rounded-lg font-medium transition-colors ${popupMessage.includes('successfully') ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-red-600 hover:bg-red-700 text-white'}`}
@@ -155,16 +155,16 @@ const PostJob = () => {
       <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-8">
         <div className="max-w-full sm:max-w-5xl mx-auto">
           {/* Card with Floating Effect */}
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl">
             {/* Card Header */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 sm:p-8 border-b border-gray-200">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 sm:p-8 border-b border-gray-200 dark:border-gray-700">
               <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                 <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center shadow-md">
                   <Briefcase className="text-white" size={28} />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900">Job Details</h2>
-                  <p className="text-blue-600">Fill in the details for your new position</p>
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Job Details</h2>
+                  <p className="text-blue-600 dark:text-blue-400">Fill in the details for your new position</p>
                 </div>
               </div>
             </div>
@@ -175,29 +175,29 @@ const PostJob = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* Job Title */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Job Title *</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Job Title *</label>
                   <input
                     type="text"
                     name="job_title"
                     value={formData.job_title}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                     placeholder="e.g., Senior React Developer"
                   />
                 </div>
 
                 {/* Department */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">
-                    Department <span className="text-gray-700">*</span>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Department <span className="text-gray-700 dark:text-gray-400">*</span>
                   </label>
                   <select
                     name="department"
                     value={formData.department}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] text-black"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] text-black dark:text-white dark:bg-gray-700"
                   >
                     <option value="">Select Department</option>
                     <option value="Engineering">Engineering</option>
@@ -212,10 +212,10 @@ const PostJob = () => {
 
                 {/* Location */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Location *</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Location *</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <MapPin className="text-gray-400" size={20} />
+                      <MapPin className="text-gray-400 dark:text-gray-500" size={20} />
                     </div>
                     <input
                       type="text"
@@ -223,7 +223,7 @@ const PostJob = () => {
                       value={formData.location}
                       onChange={handleChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                       placeholder="e.g., Rohtak, Haryana"
                     />
                   </div>
@@ -231,13 +231,13 @@ const PostJob = () => {
 
                 {/* Job Type */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Job Type *</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Job Type *</label>
                   <select
                     name="job_type"
                     value={formData.job_type}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] text-black"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] text-black dark:text-white dark:bg-gray-700"
                   >
                     <option value="Full-time">Full-time</option>
                     <option value="Part-time">Part-time</option>
@@ -249,17 +249,17 @@ const PostJob = () => {
 
                 {/* Salary Range */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Salary Range</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Salary Range</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <DollarSign className="text-gray-400" size={20} />
+                      <DollarSign className="text-gray-400 dark:text-gray-500" size={20} />
                     </div>
                     <input
                       type="text"
                       name="salary_range"
                       value={formData.salary_range}
                       onChange={handleChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                       placeholder="e.g., ₹5-7 LPA"
                     />
                   </div>
@@ -267,12 +267,12 @@ const PostJob = () => {
 
                 {/* Experience Level */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">
-                    Experience (Years) <span className="text-gray-700">*</span>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Experience (Years) <span className="text-gray-700 dark:text-gray-400">*</span>
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Clock className="text-gray-400" size={20} />
+                      <Clock className="text-gray-400 dark:text-gray-500" size={20} />
                     </div>
                     <input
                       type="number"
@@ -281,7 +281,7 @@ const PostJob = () => {
                       onChange={handleChange}
                       min="0"
                       required
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                       placeholder="e.g., 3"
                     />
                   </div>
@@ -289,8 +289,8 @@ const PostJob = () => {
 
                 {/* Application Deadline */}
                 <div className="space-y-1">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">
-                    Deadline <span className="text-gray-700">*</span>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                    Deadline <span className="text-gray-700 dark:text-gray-400">*</span>
                   </label>
                   <div className="relative">
                     <input
@@ -299,7 +299,7 @@ const PostJob = () => {
                       value={formData.application_deadline}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                     />
                   </div>
                 </div>
@@ -307,14 +307,14 @@ const PostJob = () => {
 
               {/* Job Summary */}
               <div className="space-y-1">
-                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Job Summary *</label>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Job Summary *</label>
                 <textarea
                   name="job_summary"
                   value={formData.job_summary}
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                   placeholder="Describe the role, responsibilities, and what the candidate will be doing..."
                 />
               </div>
@@ -323,7 +323,7 @@ const PostJob = () => {
               <div className="space-y-4 sm:space-y-6">
                 {/* Responsibilities */}
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Responsibilities</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Responsibilities</label>
                   <div className="space-y-3">
                     {formData.responsibilities.map((responsibility, index) => (
                       <div key={index} className="flex items-center space-x-3">
@@ -332,16 +332,16 @@ const PostJob = () => {
                             type="text"
                             value={responsibility}
                             onChange={(e) => handleArrayChange(index, 'responsibilities', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                             placeholder={`Responsibility ${index + 1}`}
                           />
-                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 font-bold">{index + 1}.</span>
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 dark:text-blue-400 font-bold">{index + 1}.</span>
                         </div>
                         {formData.responsibilities.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removeArrayItem('responsibilities', index)}
-                            className="p-2 text-red-500 hover:text-red-700 transition-colors"
+                            className="p-2 text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
                             aria-label="Remove responsibility"
                           >
                             <X size={18} />
@@ -352,7 +352,7 @@ const PostJob = () => {
                     <button
                       type="button"
                       onClick={() => addArrayItem('responsibilities')}
-                      className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 transition-colors mt-2"
+                      className="flex items-center space-x-1 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors mt-2"
                     >
                       <Plus size={16} />
                       <span>Add Responsibility</span>
@@ -362,7 +362,7 @@ const PostJob = () => {
 
                 {/* Required Qualifications */}
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Required Qualifications</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Required Qualifications</label>
                   <div className="space-y-3">
                     {formData.required_qualifications.map((qualification, index) => (
                       <div key={index} className="flex items-center space-x-3">
@@ -371,16 +371,16 @@ const PostJob = () => {
                             type="text"
                             value={qualification}
                             onChange={(e) => handleArrayChange(index, 'required_qualifications', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                             placeholder={`Qualification ${index + 1}`}
                           />
-                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 font-bold">{index + 1}.</span>
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 dark:text-blue-400 font-bold">{index + 1}.</span>
                         </div>
                         {formData.required_qualifications.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removeArrayItem('required_qualifications', index)}
-                            className="p-2 text-red-500 hover:text-red-700 transition-colors"
+                            className="p-2 text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
                             aria-label="Remove qualification"
                           >
                             <X size={18} />
@@ -391,7 +391,7 @@ const PostJob = () => {
                     <button
                       type="button"
                       onClick={() => addArrayItem('required_qualifications')}
-                      className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 transition-colors mt-2"
+                      className="flex items-center space-x-1 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors mt-2"
                     >
                       <Plus size={16} />
                       <span>Add Qualification</span>
@@ -401,7 +401,7 @@ const PostJob = () => {
 
                 {/* Preferred Skills */}
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Preferred Skills</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Preferred Skills</label>
                   <div className="space-y-3">
                     {formData.preferred_skills.map((skill, index) => (
                       <div key={index} className="flex items-center space-x-3">
@@ -410,16 +410,16 @@ const PostJob = () => {
                             type="text"
                             value={skill}
                             onChange={(e) => handleArrayChange(index, 'preferred_skills', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                             placeholder={`Skill ${index + 1}`}
                           />
-                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 font-bold">{index + 1}.</span>
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 dark:text-blue-400 font-bold">{index + 1}.</span>
                         </div>
                         {formData.preferred_skills.length > 1 && (
                           <button
                             type="button"
                             onClick={() => removeArrayItem('preferred_skills', index)}
-                            className="p-2 text-red-500 hover:text-red-700 transition-colors"
+                            className="p-2 text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
                             aria-label="Remove skill"
                           >
                             <X size={18} />
@@ -430,7 +430,7 @@ const PostJob = () => {
                     <button
                       type="button"
                       onClick={() => addArrayItem('preferred_skills')}
-                      className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 transition-colors mt-2"
+                      className="flex items-center space-x-1 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors mt-2"
                     >
                       <Plus size={16} />
                       <span>Add Skill</span>
@@ -441,26 +441,26 @@ const PostJob = () => {
 
               {/* Equal Opportunity */}
               <div className="space-y-1">
-                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">Equal Opportunity Statement</label>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Equal Opportunity Statement</label>
                 <textarea
                   name="equal_opportunity_statement"
                   value={formData.equal_opportunity_statement}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                   placeholder="Our company is an equal opportunity employer..."
                 />
               </div>
 
               {/* How to Apply */}
               <div className="space-y-1">
-                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wider">How to Apply</label>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">How to Apply</label>
                 <textarea
                   name="how_to_apply"
                   value={formData.how_to_apply}
                   onChange={handleChange}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black dark:text-white dark:bg-gray-700"
                   placeholder="Provide application instructions or link..."
                 />
               </div>

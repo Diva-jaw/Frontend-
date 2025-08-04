@@ -52,7 +52,7 @@ const HRDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* HR Hero Section */}
       <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white py-20">
         <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
@@ -90,20 +90,20 @@ const HRDashboard = () => {
       </section>
 
       {/* Quick Stats Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <div className="text-center p-6 bg-blue-50 rounded-xl">
-              <div className="text-3xl font-bold text-blue-600 mb-2">150+</div>
-              <div className="text-gray-600">Total Enquiries</div>
+            <div className="text-center p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">150+</div>
+              <div className="text-gray-600 dark:text-gray-300">Total Enquiries</div>
             </div>
-            <div className="text-center p-6 bg-green-50 rounded-xl">
-              <div className="text-3xl font-bold text-green-600 mb-2">25</div>
-              <div className="text-gray-600">Active Jobs</div>
+            <div className="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-xl">
+              <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">25</div>
+              <div className="text-gray-600 dark:text-gray-300">Active Jobs</div>
             </div>
-            <div className="text-center p-6 bg-purple-50 rounded-xl">
-              <div className="text-3xl font-bold text-purple-600 mb-2">89</div>
-              <div className="text-gray-600">Applications</div>
+            <div className="text-center p-6 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">89</div>
+              <div className="text-gray-600 dark:text-gray-300">Applications</div>
             </div>
           </div>
         </div>

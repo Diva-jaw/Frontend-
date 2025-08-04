@@ -177,12 +177,12 @@ const DraftCourses: React.FC = () => {
 
   if (!isLoggedIn || user?.role !== "hr") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Access Denied
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             You need to be logged in as HR to access this page.
           </p>
         </div>
@@ -191,23 +191,23 @@ const DraftCourses: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
                 Draft Courses
               </h1>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
                 Manage your incomplete courses and continue editing them
               </p>
             </div>
             <div className="flex space-x-3">
               <button
                 onClick={() => navigate('/hr/course-management')}
-                className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
               >
                 ← Back to All Courses
               </button>
@@ -231,7 +231,7 @@ const DraftCourses: React.FC = () => {
               placeholder="Search draft courses..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
           </div>
         </div>
@@ -240,10 +240,10 @@ const DraftCourses: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg shadow-md"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md"
         >
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
               Draft Courses ({filteredDrafts.length})
             </h2>
           </div>
@@ -251,15 +251,15 @@ const DraftCourses: React.FC = () => {
           {loading ? (
             <div className="p-8 text-center">
               <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
-              <p className="text-gray-600">Loading draft courses...</p>
+              <p className="text-gray-600 dark:text-gray-400">Loading draft courses...</p>
             </div>
           ) : filteredDrafts.length === 0 ? (
             <div className="p-8 text-center">
               <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                 {searchTerm ? "No draft courses found" : "No draft courses"}
               </h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
                 {searchTerm 
                   ? "Try adjusting your search terms"
                   : "All your courses are published or you haven't created any yet"
@@ -276,22 +276,22 @@ const DraftCourses: React.FC = () => {
               )}
             </div>
           ) : (
-            <div className="divide-y divide-gray-200">
+            <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {filteredDrafts.map((course) => (
-                <div key={course.id} className="p-6 hover:bg-gray-50 transition-colors">
+                <div key={course.id} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center mb-2">
                         <BookOpen className="w-5 h-5 text-yellow-600 mr-2" />
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                           {course.name}
                         </h3>
-                        <span className="ml-3 px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
+                        <span className="ml-3 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 rounded-full text-xs font-medium">
                           Draft
                         </span>
                       </div>
-                      <p className="text-gray-600 mb-2">{course.description}</p>
-                      <div className="flex items-center text-sm text-gray-500">
+                      <p className="text-gray-600 dark:text-gray-400 mb-2">{course.description}</p>
+                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <span className="mr-4">Level Range: {course.level_range || 'Not set'}</span>
                         <span>Last Updated: {new Date(course.updated_at || course.created_at).toLocaleDateString()}</span>
                       </div>
@@ -342,7 +342,7 @@ const DraftCourses: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4"
           >
             <div className="p-6">
               <div className="flex items-center mb-4">
@@ -350,13 +350,13 @@ const DraftCourses: React.FC = () => {
                   <AlertTriangle className="w-6 h-6 text-red-600" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-lg font-medium text-gray-900">
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                     {deleteConfirmation.step === 1 ? 'Delete Draft Course?' : 'Final Confirmation'}
                   </h3>
                 </div>
                 <button
                   onClick={handleCancelDelete}
-                  className="ml-auto flex-shrink-0 text-gray-400 hover:text-gray-600"
+                  className="ml-auto flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -365,19 +365,19 @@ const DraftCourses: React.FC = () => {
               <div className="mb-6">
                 {deleteConfirmation.step === 1 ? (
                   <div>
-                    <p className="text-sm text-gray-600 mb-4">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                       Are you sure you want to delete the draft course <strong>"{deleteConfirmation.courseName}"</strong>?
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       This action will permanently remove the course and all its associated data (modules, levels, topics, and subpoints).
                     </p>
                   </div>
                 ) : (
                   <div>
-                    <p className="text-sm text-red-600 mb-4">
+                    <p className="text-sm text-red-600 dark:text-red-400 mb-4">
                       <strong>Warning:</strong> This is your final confirmation to delete the draft course <strong>"{deleteConfirmation.courseName}"</strong>.
                     </p>
-                    <p className="text-sm text-red-500">
+                    <p className="text-sm text-red-500 dark:text-red-400">
                       This action cannot be undone. All course data will be permanently deleted.
                     </p>
                   </div>
@@ -387,7 +387,7 @@ const DraftCourses: React.FC = () => {
               <div className="flex justify-end space-x-3">
                 <button
                   onClick={handleCancelDelete}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md"
                 >
                   Cancel
                 </button>

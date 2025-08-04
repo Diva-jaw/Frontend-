@@ -135,13 +135,24 @@ const NewUser: React.FC = () => {
     setIsLoading(true);
     
     try {
-      const response = await apiService.register(formData.fullName, formData.email, formData.password);
+      // Check if there's pending enrollment data for auto-login ONLY if coming from specific enrollment route
+      const pendingEnrollmentData = localStorage.getItem('pendingEnrollmentData');
+      const isFromEnrollment = pendingEnrollmentData && (() => {
+        try {
+          const storedData = JSON.parse(pendingEnrollmentData);
+          // Only generate JWT for the specific route /course/6/module/11/level/31/enroll
+          return storedData.courseId === '6' && 
+                 storedData.moduleId === '11' && 
+                 storedData.levelId === '31';
+        } catch {
+          return false;
+        }
+      })();
+      
+      // Call register with enrollment flag if coming from specific enrollment route
+      const response = await apiService.register(formData.fullName, formData.email, formData.password, isFromEnrollment);
       setIsLoading(false);
       setShowSuccessPopup(true);
-      
-      // Check if there's pending enrollment data for auto-login ONLY if coming from enrollment
-      const pendingEnrollmentData = localStorage.getItem('pendingEnrollmentData');
-      const isFromEnrollment = pendingEnrollmentData && JSON.parse(pendingEnrollmentData).courseId;
       
       if (pendingEnrollmentData && isFromEnrollment) {
         try {
@@ -149,26 +160,35 @@ const NewUser: React.FC = () => {
           const currentTime = Date.now();
           const timeDiff = currentTime - storedData.timestamp;
           
-          // If data is less than 1 hour old and coming from enrollment, auto-login and redirect
+          // If data is less than 1 hour old and coming from specific enrollment route, auto-login and redirect
           if (timeDiff < 3600000) {
-            // Auto-login with the new credentials
-            setTimeout(async () => {
-              try {
-                const loginResponse = await apiService.login(formData.email, formData.password, 'user');
-                if (loginResponse.token && loginResponse.user) {
-                  login(loginResponse.token, loginResponse.user);
-                  
-                  // Redirect to the enrollment page
-                  const redirectPath = `/course/${storedData.courseId}/module/${storedData.moduleId}/level/${storedData.levelId}/enroll`;
-                  navigate(redirectPath);
+            // Use the token from registration response for auto-login
+            if (response.token && response.user) {
+              login(response.token, response.user);
+              
+              // Redirect to the specific enrollment page
+              const redirectPath = `/course/${storedData.courseId}/module/${storedData.moduleId}/level/${storedData.levelId}/enroll`;
+              navigate(redirectPath);
+            } else {
+              // Fallback to manual login if token not in response
+              setTimeout(async () => {
+                try {
+                  const loginResponse = await apiService.login(formData.email, formData.password, 'user');
+                  if (loginResponse.token && loginResponse.user) {
+                    login(loginResponse.token, loginResponse.user);
+                    
+                    // Redirect to the specific enrollment page
+                    const redirectPath = `/course/${storedData.courseId}/module/${storedData.moduleId}/level/${storedData.levelId}/enroll`;
+                    navigate(redirectPath);
+                  }
+                } catch (loginErr) {
+                  console.error('Auto-login failed:', loginErr);
+                  // Fallback to normal flow
+                  setShowSuccessPopup(false);
+                  navigate('/signin');
                 }
-              } catch (loginErr) {
-                console.error('Auto-login failed:', loginErr);
-                // Fallback to normal flow
-                setShowSuccessPopup(false);
-                navigate('/signin');
-              }
-            }, 2000);
+              }, 2000);
+            }
           } else {
             // Clear old data and redirect to login
             localStorage.removeItem('pendingEnrollmentData');

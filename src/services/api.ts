@@ -79,10 +79,19 @@ class ApiService {
   }
 
   // Register user
-  async register(name: string, email: string, password: string): Promise<AuthResponse> {
+  async register(name: string, email: string, password: string, isFromEnrollment: boolean = false): Promise<AuthResponse> {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    
+    if (isFromEnrollment) {
+      headers['x-from-enrollment'] = 'true';
+    }
+    
     return this.makeRequest<AuthResponse>('/register', {
       method: 'POST',
       body: JSON.stringify({ name, email, password }),
+      headers,
     });
   }
 

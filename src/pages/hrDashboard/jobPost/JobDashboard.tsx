@@ -71,14 +71,14 @@ const JobDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Header with Gradient */}
       <header className="bg-gradient-to-r from-blue-600 to-indigo-700 shadow-lg">
         <div className="container mx-auto px-2 sm:px-4 md:px-8 py-4 sm:py-6">
@@ -96,12 +96,12 @@ const JobDashboard = () => {
             <div className="flex-1 max-w-2xl">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="text-gray-400" size={20} />
+                  <Search className="text-gray-400 dark:text-gray-500" size={20} />
                 </div>
                 <input
                   type="text"
                   placeholder="Search jobs by title, department or location..."
-                  className="w-full pl-10 pr-4 py-3 bg-white/90 rounded-lg focus:ring-2 focus:ring-white focus:outline-none text-gray-800 placeholder-gray-500 transition-all duration-200"
+                  className="w-full pl-10 pr-4 py-3 bg-white/90 dark:bg-gray-800/90 rounded-lg focus:ring-2 focus:ring-white dark:focus:ring-gray-600 focus:outline-none text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-200"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -111,7 +111,7 @@ const JobDashboard = () => {
             <div className="flex items-center space-x-4">
               <Link
                 to="/hr/post-job"
-                className="px-5 py-3 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-all flex items-center space-x-2 shadow-md hover:shadow-lg"
+                className="px-5 py-3 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-all flex items-center space-x-2 shadow-md hover:shadow-lg"
               >
                 <Plus size={18} />
                 <span className="font-medium">Post New Job</span>
@@ -126,17 +126,17 @@ const JobDashboard = () => {
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-4 mb-4 sm:mb-6">
             <div className="flex items-center space-x-4">
-              <h2 className="text-xl font-bold text-gray-800">Job Postings</h2>
-              <div className="flex items-center space-x-4 bg-white rounded-lg p-2 shadow-sm">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Job Postings</h2>
+              <div className="flex items-center space-x-4 bg-white dark:bg-gray-800 rounded-lg p-2 shadow-sm">
                 <div className="flex items-center space-x-2">
-                  <Filter size={18} className="text-gray-500" />
-                  <span className="text-sm text-gray-700">Filter:</span>
+                  <Filter size={18} className="text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Filter:</span>
                 </div>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => setActiveFilter('all')}
                     className={`px-3 py-1 text-sm rounded-md transition-colors ${
-                      activeFilter === 'all' ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-100'
+                      activeFilter === 'all' ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                     }`}
                   >
                     All Jobs
@@ -144,7 +144,7 @@ const JobDashboard = () => {
                   <button
                     onClick={() => setActiveFilter('active')}
                     className={`px-3 py-1 text-sm rounded-md transition-colors ${
-                      activeFilter === 'active' ? 'bg-green-100 text-green-700 font-medium' : 'text-gray-600 hover:bg-gray-100'
+                      activeFilter === 'active' ? 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                     }`}
                   >
                     Active Only
@@ -152,7 +152,7 @@ const JobDashboard = () => {
                   <button
                     onClick={() => setActiveFilter('inactive')}
                     className={`px-3 py-1 text-sm rounded-md transition-colors ${
-                      activeFilter === 'inactive' ? 'bg-red-100 text-red-700 font-medium' : 'text-gray-600 hover:bg-gray-100'
+                      activeFilter === 'inactive' ? 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 font-medium' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                     }`}
                   >
                     Inactive Only
@@ -160,7 +160,7 @@ const JobDashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
               Showing {filteredJobs.length}{' '}
               {activeFilter === 'active' ? 'active' : activeFilter === 'inactive' ? 'inactive' : ''} jobs{' '}
               {activeFilter === 'all' && ` (${activeJobsCount} active, ${expiredJobsCount} expired)`}
@@ -169,40 +169,40 @@ const JobDashboard = () => {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium uppercase tracking-wider">Total Jobs</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{jobs.length}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium uppercase tracking-wider">Total Jobs</p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-gray-100 mt-2">{jobs.length}</p>
                 </div>
-                <div className="p-3 bg-blue-100 rounded-full">
-                  <Briefcase className="text-blue-600" size={24} />
+                <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-full">
+                  <Briefcase className="text-blue-600 dark:text-blue-400" size={24} />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium uppercase tracking-wider">Active Jobs</p>
-                  <p className="text-3xl font-bold text-green-600 mt-2">{activeJobsCount}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium uppercase tracking-wider">Active Jobs</p>
+                  <p className="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">{activeJobsCount}</p>
                 </div>
-                <div className="p-3 bg-green-100 rounded-full">
-                  <Clock className="text-green-600" size={24} />
+                <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-full">
+                  <Clock className="text-green-600 dark:text-green-400" size={24} />
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm font-medium uppercase tracking-wider">Departments</p>
-                  <p className="text-3xl font-bold text-purple-600 mt-2">
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium uppercase tracking-wider">Departments</p>
+                  <p className="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-2">
                     {[...new Set(jobs.map((job) => job.department))].length}
                   </p>
                 </div>
-                <div className="p-3 bg-purple-100 rounded-full">
-                  <Users className="text-purple-600" size={24} />
+                <div className="p-3 bg-purple-100 dark:bg-purple-900/20 rounded-full">
+                  <Users className="text-purple-600 dark:text-purple-400" size={24} />
                 </div>
               </div>
             </div>
@@ -212,12 +212,12 @@ const JobDashboard = () => {
         {/* Jobs List */}
         <div className="space-y-4 sm:space-y-6">
           {filteredJobs.length === 0 ? (
-            <div className="bg-white rounded-xl shadow-md p-12 text-center">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-12 text-center">
               <Briefcase className="mx-auto text-gray-400 mb-4" size={48} />
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                 {jobs.length === 0 ? 'No jobs found' : 'No matching jobs'}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
                 {jobs.length === 0
                   ? 'No job postings available. Create your first job posting now.'
                   : activeFilter === 'active'
@@ -240,21 +240,21 @@ const JobDashboard = () => {
               return (
                 <div
                   key={job.id}
-                  className={`bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-l-4 ${
-                    isExpired ? 'border-gray-300' : 'border-blue-500'
+                  className={`bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-l-4 ${
+                    isExpired ? 'border-gray-300 dark:border-gray-600' : 'border-blue-500'
                   }`}
                 >
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-start space-x-3 mb-3">
                         <div className="mt-1">
-                          <Briefcase className={isExpired ? 'text-gray-400' : 'text-blue-500'} size={20} />
+                          <Briefcase className={isExpired ? 'text-gray-400' : 'text-blue-500 dark:text-blue-400'} size={20} />
                         </div>
                         <div>
-                          <h3 className="text-xl font-bold text-gray-900">{job.job_title}</h3>
-                          <p className="text-sm text-gray-500 mt-1">Ruhil Future Technologies</p>
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{job.job_title}</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Ruhil Future Technologies</p>
                           {isExpired && (
-                            <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-md">
+                            <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-md">
                               Expired
                             </span>
                           )}
@@ -262,38 +262,38 @@ const JobDashboard = () => {
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                        <div className="flex items-center space-x-2 text-gray-700">
-                          <MapPin size={16} className={isExpired ? 'text-gray-400' : 'text-blue-500'} />
+                        <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+                          <MapPin size={16} className={isExpired ? 'text-gray-400' : 'text-blue-500 dark:text-blue-400'} />
                           <span>{job.location}</span>
                         </div>
-                        <div className="flex items-center space-x-2 text-gray-700">
-                          <Briefcase size={16} className={isExpired ? 'text-gray-400' : 'text-blue-500'} />
+                        <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+                          <Briefcase size={16} className={isExpired ? 'text-gray-400' : 'text-blue-500 dark:text-blue-400'} />
                           <span>{job.department}</span>
                         </div>
-                        <div className="flex items-center space-x-2 text-gray-700">
-                          <Clock size={16} className={isExpired ? 'text-gray-400' : 'text-blue-500'} />
+                        <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+                          <Clock size={16} className={isExpired ? 'text-gray-400' : 'text-blue-500 dark:text-blue-400'} />
                           <span className="capitalize">{job.job_type.toLowerCase()}</span>
                         </div>
-                        <div className="flex items-center space-x-2 text-gray-700">
-                          <DollarSign size={16} className={isExpired ? 'text-gray-400' : 'text-blue-500'} />
+                        <div className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+                          <DollarSign size={16} className={isExpired ? 'text-gray-400' : 'text-blue-500 dark:text-blue-400'} />
                           <span>{job.salary_range}</span>
                         </div>
                       </div>
 
-                      <p className={`mb-4 line-clamp-2 ${isExpired ? 'text-gray-500' : 'text-gray-600'}`}>
+                      <p className={`mb-4 line-clamp-2 ${isExpired ? 'text-gray-500 dark:text-gray-400' : 'text-gray-600 dark:text-gray-400'}`}>
                         {job.job_summary}
                       </p>
 
                       <div className="flex flex-wrap items-center gap-4 text-sm">
-                        <span className={`flex items-center space-x-1 ${isExpired ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <span className={`flex items-center space-x-1 ${isExpired ? 'text-gray-400' : 'text-gray-500 dark:text-gray-400'}`}>
                           <span>Posted:</span>
                           <span className="font-medium">{new Date(job.created_at).toLocaleDateString()}</span>
                         </span>
-                        <span className={`flex items-center space-x-1 ${isExpired ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <span className={`flex items-center space-x-1 ${isExpired ? 'text-gray-400' : 'text-gray-500 dark:text-gray-400'}`}>
                           <span>Experience:</span>
                           <span className="font-medium">{job.experience_level} years</span>
                         </span>
-                        <span className={`flex items-center space-x-1 ${isExpired ? 'text-red-500' : 'text-green-600'}`}>
+                        <span className={`flex items-center space-x-1 ${isExpired ? 'text-red-500 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
                           <span>Deadline:</span>
                           <span className="font-medium">
                             {new Date(job.application_deadline).toLocaleDateString()}
@@ -306,7 +306,7 @@ const JobDashboard = () => {
                     <div className="flex items-center space-x-2 md:flex-col md:space-x-0 md:space-y-2">
                       <Link
                         to={`/hr/posted-job/${job.id}`}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors flex items-center space-x-1"
+                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors flex items-center space-x-1"
                         title="View Job"
                       >
                         <Eye size={16} />
@@ -314,7 +314,7 @@ const JobDashboard = () => {
                       </Link>
                       <button
                         onClick={() => setDeleteJobId(job.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors flex items-center space-x-1"
+                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex items-center space-x-1"
                         title="Delete Job"
                       >
                         <Trash2 size={16} />
@@ -332,24 +332,24 @@ const JobDashboard = () => {
       {/* Delete Confirmation Modal */}
       {deleteJobId !== null && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-full sm:max-w-md w-full p-4 sm:p-6 transform transition-all duration-300 scale-100">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-full sm:max-w-md w-full p-4 sm:p-6 transform transition-all duration-300 scale-100">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-gray-900">Confirm Delete</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Confirm Delete</h3>
               <button
                 onClick={() => setDeleteJobId(null)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <X size={24} />
               </button>
             </div>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Are you sure you want to delete the job "
               {jobs.find((job) => job.id === deleteJobId)?.job_title}"? This action cannot be undone.
             </p>
             <div className="flex justify-end space-x-4">
               <button
                 onClick={() => setDeleteJobId(null)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
               >
                 Cancel
               </button>

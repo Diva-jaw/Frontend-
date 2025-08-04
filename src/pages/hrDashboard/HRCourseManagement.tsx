@@ -94,27 +94,27 @@ const HRCourseManagement = () => {
       case "requested":
         return {
           text: "Pending",
-          color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+          color: "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800/30",
         };
       case "contacted":
         return {
           text: "Pending",
-          color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+          color: "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800/30",
         };
       case "enrolled":
         return {
           text: "Done",
-          color: "bg-green-100 text-green-800 border-green-200",
+          color: "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-green-200 dark:border-green-800/30",
         };
       case "cancelled":
         return {
           text: "Never",
-          color: "bg-red-100 text-red-800 border-red-200",
+          color: "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200 border-red-200 dark:border-red-800/30",
         };
       default:
         return {
           text: "Unknown",
-          color: "bg-gray-100 text-gray-800 border-gray-200",
+          color: "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-600",
         };
     }
   };
@@ -123,15 +123,15 @@ const HRCourseManagement = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "requested":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+        return "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800/30";
       case "contacted":
-        return "bg-blue-100 text-blue-800 border-blue-200";
+        return "bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800/30";
       case "enrolled":
-        return "bg-green-100 text-green-800 border-green-200";
+        return "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-green-200 dark:border-green-800/30";
       case "cancelled":
-        return "bg-red-100 text-red-800 border-red-200";
+        return "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200 border-red-200 dark:border-red-800/30";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-600";
     }
   };
 
@@ -447,12 +447,12 @@ const HRCourseManagement = () => {
   // Check if user is authenticated and has HR role
   if (!isLoggedIn || user?.role !== "hr") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Access Denied
           </h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             You need to be logged in as an HR user to access this page.
           </p>
           <button
@@ -468,10 +468,10 @@ const HRCourseManagement = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Loading courses...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading courses...</p>
         </div>
       </div>
     );
@@ -479,9 +479,9 @@ const HRCourseManagement = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
+          <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
@@ -494,7 +494,7 @@ const HRCourseManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -514,29 +514,29 @@ const HRCourseManagement = () => {
           </div>
 
           {/* Breadcrumbs */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
+          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
             <div className="flex items-center space-x-2 text-sm">
-              <span className="text-gray-500">Courses</span>
+              <span className="text-gray-500 dark:text-gray-400">Courses</span>
               {selectedCourse && (
                 <>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                  <span className="text-blue-600 font-medium">
+                  <ChevronRight className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                  <span className="text-blue-600 dark:text-blue-400 font-medium">
                     {selectedCourse.name}
                   </span>
                 </>
               )}
               {selectedModule && (
                 <>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                  <span className="text-blue-600 font-medium">
+                  <ChevronRight className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                  <span className="text-blue-600 dark:text-blue-400 font-medium">
                     {selectedModule.name}
                   </span>
                 </>
               )}
               {selectedLevel && (
                 <>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
-                  <span className="text-blue-600 font-medium">
+                  <ChevronRight className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                  <span className="text-blue-600 dark:text-blue-400 font-medium">
                     {selectedLevel.level_name}
                   </span>
                 </>
@@ -557,25 +557,25 @@ const HRCourseManagement = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer border border-blue-100"
+                className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer border border-blue-100 dark:border-blue-900/30"
                 onClick={() => handleCourseClick(course)}
               >
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="p-3 bg-blue-100 rounded-xl">
-                    <BookOpen className="w-6 h-6 text-blue-600" />
+                  <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
+                    <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-800">
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">
                     {course.name}
                   </h3>
                 </div>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                   {course.description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-blue-600 font-medium">
+                  <span className="text-blue-600 dark:text-blue-400 font-medium">
                     View Modules
                   </span>
-                  <ChevronRight className="w-5 h-5 text-blue-600" />
+                  <ChevronRight className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
               </motion.div>
             ))}
@@ -591,25 +591,25 @@ const HRCourseManagement = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer border border-green-100"
+                className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer border border-green-100 dark:border-green-900/30"
                 onClick={() => handleModuleClick(module)}
               >
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="p-3 bg-green-100 rounded-xl">
-                    <Star className="w-6 h-6 text-green-600" />
+                  <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
+                    <Star className="w-6 h-6 text-green-600 dark:text-green-400" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-800">
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">
                     {module.name}
                   </h3>
                 </div>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                   {module.description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-green-600 font-medium">
+                  <span className="text-green-600 dark:text-green-400 font-medium">
                     View Levels
                   </span>
-                  <ChevronRight className="w-5 h-5 text-green-600" />
+                  <ChevronRight className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </div>
               </motion.div>
             ))}
@@ -625,25 +625,25 @@ const HRCourseManagement = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer border border-purple-100"
+                className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer border border-purple-100 dark:border-purple-900/30"
                 onClick={() => handleLevelClick(level)}
               >
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="p-3 bg-purple-100 rounded-xl">
-                    <Users className="w-6 h-6 text-purple-600" />
+                  <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl">
+                    <Users className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-800">
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">
                     {level.level_name}
                   </h3>
                 </div>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                   {level.level_range}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-purple-600 font-medium">
+                  <span className="text-purple-600 dark:text-purple-400 font-medium">
                     View Enrollments
                   </span>
-                  <ChevronRight className="w-5 h-5 text-purple-600" />
+                  <ChevronRight className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 </div>
               </motion.div>
             ))}
@@ -652,41 +652,41 @@ const HRCourseManagement = () => {
           // Show enrolled users
           <div className="space-y-6">
             {/* Search Bar */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
               <div className="flex items-center space-x-4">
                 <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                   <input
                     type="text"
                     placeholder="Search by name or email... (type to search automatically)"
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 backdrop-blur-sm"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-gray-100"
                   />
                 </div>
                 {searchTerm && (
                   <button
                     type="button"
                     onClick={clearSearch}
-                    className="px-4 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors duration-200 font-medium"
+                    className="px-4 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200 font-medium"
                   >
                     Clear
                   </button>
                 )}
               </div>
               {searchTerm && (
-                <div className="mt-2 text-sm text-gray-600">
+                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                   Searching for:{" "}
                   <span className="font-medium">"{searchTerm}"</span>
                 </div>
               )}
             </div>
 
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
                 Enrolled Users - {selectedLevel?.level_name}
                 {searchTerm && (
-                  <span className="text-lg font-normal text-gray-600 ml-2">
+                  <span className="text-lg font-normal text-gray-600 dark:text-gray-400 ml-2">
                     (Searching: "{searchTerm}")
                   </span>
                 )}
@@ -695,7 +695,7 @@ const HRCourseManagement = () => {
               {enrolledUsers.length === 0 ? (
                 <div className="text-center py-12">
                   <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 text-lg">
+                  <p className="text-gray-600 dark:text-gray-400 text-lg">
                     No users enrolled in this level yet.
                   </p>
                 </div>
@@ -703,65 +703,65 @@ const HRCourseManagement = () => {
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[1200px]">
                     <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                      <tr className="border-b border-gray-200 dark:border-gray-700">
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                           Name
                         </th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                           Email
                         </th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                           Phone
                         </th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                           University
                         </th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                           Department
                         </th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                           Status
                         </th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                           Payment
                         </th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                           Enrolled Date
                         </th>
-                        <th className="text-left py-4 px-4 font-semibold text-gray-700 uppercase tracking-wider">
+                        <th className="text-left py-4 px-4 font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
                           Send Mail
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                       {enrolledUsers.map((user, index) => (
                         <motion.tr
                           key={user.id}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.1 }}
-                          className="hover:bg-gray-50 transition-colors"
+                          className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                         >
                           <td className="py-4 px-4">
-                            <div className="font-medium text-gray-900">
+                            <div className="font-medium text-gray-900 dark:text-gray-100">
                               {user.name}
                             </div>
                           </td>
                           <td className="py-4 px-4">
-                            <div className="text-gray-900">{user.email}</div>
+                            <div className="text-gray-900 dark:text-gray-100">{user.email}</div>
                           </td>
                           <td className="py-4 px-4">
-                            <div className="text-gray-900">
+                            <div className="text-gray-900 dark:text-gray-100">
                               {user.phone_no || "N/A"}
                             </div>
                           </td>
                           <td className="py-4 px-4">
-                            <div className="text-gray-900">
+                            <div className="text-gray-900 dark:text-gray-100">
                               {user.university || "N/A"}
                             </div>
                           </td>
                           <td className="py-4 px-4">
-                            <div className="text-gray-900">
+                            <div className="text-gray-900 dark:text-gray-100">
                               {user.department || "N/A"}
                             </div>
                           </td>
@@ -809,7 +809,7 @@ const HRCourseManagement = () => {
                             </span>
                           </td>
                           <td className="py-4 px-4">
-                            <div className="text-gray-900">
+                            <div className="text-gray-900 dark:text-gray-100">
                               {new Date(
                                 user.enrollment_date
                               ).toLocaleDateString()}
@@ -826,8 +826,8 @@ const HRCourseManagement = () => {
                               }
                               className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
                                 canSendEmail(user.enrollment_status)
-                                  ? "bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200"
-                                  : "bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed"
+                                  ? "bg-blue-100 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-800/30 hover:bg-blue-200 dark:hover:bg-blue-900/30"
+                                  : "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 border border-gray-200 dark:border-gray-600 cursor-not-allowed"
                               }`}
                             >
                               <Mail className="w-3 h-3 mr-1" />
@@ -846,7 +846,7 @@ const HRCourseManagement = () => {
               {/* Pagination */}
               {pagination && pagination.totalPages > 1 && (
                 <div className="flex items-center justify-between mt-6">
-                  <div className="text-sm text-gray-700">
+                  <div className="text-sm text-gray-700 dark:text-gray-300">
                     Showing page {pagination.currentPage} of{" "}
                     {pagination.totalPages}({pagination.totalItems} total users)
                   </div>
