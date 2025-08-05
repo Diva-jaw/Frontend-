@@ -125,9 +125,9 @@ const ProfileDashboard = () => {
     window.scrollTo(0, 0);
     setError('');
     Promise.all([
-      apiService.getUserProfile(authUser.id),
-      apiService.getUserApplications(authUser.id),
-      apiService.getUserCourseEnrollments(authUser.id)
+      apiService.getUserProfile(),
+      apiService.getUserApplications(),
+      apiService.getUserCourseEnrollments()
     ])
       .then(([profileData, apps, courses]) => {
         setProfile(profileData);
@@ -150,7 +150,6 @@ const ProfileDashboard = () => {
   const getStatusColor = (status: string | undefined) => {
     switch (status) {
       case 'Under Review': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-800';
-      case 'Interview Scheduled': return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-800';
       case 'Accepted': return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-200 dark:border-green-800';
       case 'Rejected': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-200 dark:border-red-800';
       default: return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700';
@@ -160,7 +159,6 @@ const ProfileDashboard = () => {
   const getStatusIcon = (status: string | undefined) => {
     switch (status) {
       case 'Under Review': return <Clock className="w-4 h-4" />;
-      case 'Interview Scheduled': return <Calendar className="w-4 h-4" />;
       case 'Accepted': return <CheckCircle className="w-4 h-4" />;
       case 'Rejected': return <AlertCircle className="w-4 h-4" />;
       default: return <Clock className="w-4 h-4" />;
@@ -180,7 +178,6 @@ console.log("normalizedApplications",normalizedApplications);
   // Dashboard Overview (dynamic)
   const applicationStats = {
     'Under Review': normalizedApplications.filter(a => a.final_status === 'Pending').length,
-    'Interview Scheduled': normalizedApplications.filter(a => a.current_stage === 'Interview Scheduled').length,
     'Accepted': normalizedApplications.filter(a => a.final_status === 'Selected' || a.current_stage === 'Accepted').length,
     'Rejected': normalizedApplications.filter(a => a.final_status === 'Rejected' || a.current_stage === 'Rejected').length
   };
@@ -720,11 +717,11 @@ console.log("normalizedApplications",normalizedApplications);
                 setPhoneError('');
                 
                 try {
-                  await apiService.updateUserProfile(authUser.id, editProfileData);
+                  await apiService.updateUserProfile(editProfileData);
                   setEditSuccess('Profile updated successfully!');
                   setShowEditModal(false);
                   // Optionally refetch profile
-                  const updated = await apiService.getUserProfile(authUser.id);
+                  const updated = await apiService.getUserProfile();
                   setProfile(updated);
                   updateUser(updated);
                 } catch (err) {

@@ -160,21 +160,29 @@ class ApiService {
   }
 
   // User Profile
-  async getUserProfile(userId: number) {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/user/${userId}`;
+  async getUserProfile() {
+    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/user/profile`;
+    const token = localStorage.getItem('authToken');
     const response = await fetch(url, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      },
     });
     if (!response.ok) throw new Error('Failed to fetch user profile');
     return response.json();
   }
 
-  async updateUserProfile(userId: number, data: { name: string; phone_no?: string; university?: string; department?: string }) {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/user/${userId}`;
+  async updateUserProfile(data: { name: string; phone_no?: string; university?: string; department?: string }) {
+    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/user/profile`;
+    const token = localStorage.getItem('authToken');
     const response = await fetch(url, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      },
       body: JSON.stringify(data),
     });
     if (!response.ok) throw new Error('Failed to update user profile');
@@ -182,21 +190,27 @@ class ApiService {
   }
 
   // User Applications
-  async getUserApplications(userId: number) {
+  async getUserApplications() {
     console.log("reached here");
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/application/user/${userId}`;
+    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/application/my-applications`;
+    const token = localStorage.getItem('authToken');
     const response = await fetch(url, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      },
     });
     if (!response.ok) throw new Error('Failed to fetch user applications');
     console.log("reached here 2");
-    return response.json() ||[];
+    const data = await response.json();
+    console.log("getUserApplications response:", data);
+    return data || [];
   }
 
   // User Course Enrollments
-  async getUserCourseEnrollments(userId: number) {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/courses/user/${userId}`;
+  async getUserCourseEnrollments() {
+    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/courses/enrollments/user`;
     const token = localStorage.getItem('authToken');
     const response = await fetch(url, {
       method: 'GET',
