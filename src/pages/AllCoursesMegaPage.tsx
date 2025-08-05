@@ -16,14 +16,16 @@ import {
   DollarSign,
   Settings,
   Sun,
-  Moon
+  Moon,
+  Smartphone
 } from 'lucide-react';
 import { createPortal } from 'react-dom';
 
 // Course icons mapping
 const courseIcons = {
   'DataScience + AI': Database,
-  'FullStack': Code,
+  'Full Stack Web Development': Code,
+  'Full Stack App Development': Smartphone,
   'Marketing': BarChart3,
   'Design': PenTool,
   'Product Management': Briefcase,
@@ -92,7 +94,8 @@ const AllCoursesMegaPage: React.FC = () => {
   const getCourseIconColor = (courseName: string) => {
     const colors = {
       'DataScience + AI': 'bg-gradient-to-r from-pink-500 to-purple-600',
-      'FullStack': 'bg-gradient-to-r from-blue-500 to-blue-700',
+      'Full Stack Web Development': 'bg-gradient-to-r from-blue-500 to-blue-700',
+      'Full Stack App Development': 'bg-gradient-to-r from-indigo-500 to-purple-600',
       'Marketing': 'bg-gradient-to-r from-green-500 to-green-700',
       'Design': 'bg-gradient-to-r from-orange-500 to-red-600',
       'Product Management': 'bg-gradient-to-r from-purple-500 to-purple-700',
