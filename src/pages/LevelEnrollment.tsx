@@ -336,16 +336,16 @@ const LevelEnrollment = () => {
                           filename: 'Mechanical and CAD Design LEVEL 3.pdf'
                         },
                         '5-10-28': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level%20-%201.pdf',
-                          filename: 'Product Management Level - 1.pdf'
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level1.pdf',
+                          filename: 'Product Management Level1.pdf'
                         },
                         '5-10-29': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level%20-%202.pdf',
-                          filename: 'Product Management Level - 2.pdf'
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level2.pdf',
+                          filename: 'Product Management Level2.pdf'
                         },
                         '5-10-30': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level%20-%203.pdf',
-                          filename: 'Product Management Level - 3.pdf'
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level3.pdf',
+                          filename: 'Product Management Level3.pdf'
                         },
                         '6-11-31': {
                           url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf',
