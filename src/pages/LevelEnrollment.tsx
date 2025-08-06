@@ -404,12 +404,12 @@ const LevelEnrollment = () => {
                           filename: 'Backend Development Java with Spring Boot.pdf'
                         },
                         '2-4-12': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Web%20Dev%20Backend%20Development%20Python%20DjangoFastAPI.pdf',
-                          filename: 'Web Dev Backend Development Python DjangoFastAPI.pdf'
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Dev%20PythonDjangoFastAPI.pdf',
+                          filename: 'Backend Dev PythonDjangoFastAPI.pdf'
                         },
                         '2-4-33': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Development%20Go%20with%20Gin%20or%20Fiber.pdf',
-                          filename: 'Backend Development Go with Gin or Fiber.pdf'
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Dev%20GoGinorFiber.pdf',
+                          filename: 'Backend Dev GoGinorFiber.pdf'
                         }
                         // Add more mappings here as you provide them
                         // Format: 'courseId-moduleId-levelId': { url: 'PDF_URL', filename: 'PDF_FILENAME' }
