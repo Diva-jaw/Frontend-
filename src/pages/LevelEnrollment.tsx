@@ -350,6 +350,66 @@ const LevelEnrollment = () => {
                         '6-11-31': {
                           url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf',
                           filename: 'AI COURSE.pdf'
+                        },
+                        '7-12-34': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mobile%20App%20-%20react%20native.pdf',
+                          filename: 'Mobile App - react native.pdf'
+                        },
+                        '7-12-35': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Web%20Dev%20Flutter.pdf',
+                          filename: 'Web Dev Flutter.pdf'
+                        },
+                        '7-12-36': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Ios%20App%20dev%20Swift.pdf',
+                          filename: 'Ios App dev Swift.pdf'
+                        },
+                        '7-12-37': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Android%20app%20dev%20JAVA.pdf',
+                          filename: 'Android app dev JAVA.pdf'
+                        },
+                        '7-13-38': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Development%20Dart%20with%20Aqueduct%20or%20Shelf.pdf',
+                          filename: 'Backend Development Dart with Aqueduct or Shelf.pdf'
+                        },
+                        '7-13-39': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Python%20Powered%20Mobile%20Backend%20Dev.pdf',
+                          filename: 'Python Powered Mobile Backend Dev.pdf'
+                        },
+                        '7-13-40': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mobile%20Backend%20Development%20with%20Java%20%26%20Kotlin.pdf',
+                          filename: 'Mobile Backend Development with Java & Kotlin.pdf'
+                        },
+                        '2-3-7': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Web%20Dev%20Esss.pdf',
+                          filename: 'Web Dev Esss.pdf'
+                        },
+                        '2-3-8': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Advance%20Angular.pdf',
+                          filename: 'Advance Angular.pdf'
+                        },
+                        '2-3-9': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Java%20Development.pdf',
+                          filename: 'Java Development.pdf'
+                        },
+                        '2-3-32': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Advance%20React.js.pdf',
+                          filename: 'Advance React.js.pdf'
+                        },
+                        '2-4-10': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Development%20%20Node.js%20with%20Express.js.pdf',
+                          filename: 'Backend Development  Node.js with Express.js.pdf'
+                        },
+                        '2-4-11': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Development%20Java%20with%20Spring%20Boot.pdf',
+                          filename: 'Backend Development Java with Spring Boot.pdf'
+                        },
+                        '2-4-12': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Web%20Dev%20Backend%20Development%20Python%20DjangoFastAPI.pdf',
+                          filename: 'Web Dev Backend Development Python DjangoFastAPI.pdf'
+                        },
+                        '2-4-33': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Development%20Go%20with%20Gin%20or%20Fiber.pdf',
+                          filename: 'Backend Development Go with Gin or Fiber.pdf'
                         }
                         // Add more mappings here as you provide them
                         // Format: 'courseId-moduleId-levelId': { url: 'PDF_URL', filename: 'PDF_FILENAME' }
