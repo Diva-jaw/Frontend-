@@ -206,7 +206,7 @@ const Header: React.FC<{
 }> = ({ user, onAuthClick, onLogout }) => {
   const { theme, toggleTheme } = useTheme();
   return (
-    <header className={`bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 ${theme === 'dark' ? 'dark' : ''}`}>
+    <header className={`bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 ${theme === 'dark' ? 'dark' : ''}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
@@ -1141,7 +1141,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ user }) => {
           </div>
         </div>
       )}
-      <div className={`w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-2 sm:p-4 md:p-8`}>
+      <div className={`w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-2xl p-2 sm:p-4 md:p-8 border border-white/20`}>
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
             <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black dark:text-white transition-colors duration-300">
@@ -1228,7 +1228,21 @@ const ContactPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen relative">
+      {/* Background Image */}
+      <div 
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: 'url("/Green Minimalist Photo Collage Instagram Post (1).png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      ></div>
+      
+      {/* Overlay for better readability */}
+      <div className="fixed inset-0 bg-black bg-opacity-20 z-0"></div>
+      
       <Header 
         user={user} 
         onAuthClick={() => setIsAuthModalOpen(true)} 
@@ -1242,12 +1256,12 @@ const ContactPage: React.FC = () => {
         onSignup={handleSignup} 
       />
       
-      <main className="w-full px-2 sm:px-4 md:px-8 py-8 mt-24">
+      <main className="w-full px-2 sm:px-4 md:px-8 py-8 mt-16 relative z-20">
         <div className="text-center mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-black dark:text-white transition-colors duration-300">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-white transition-colors duration-300">
             Candidate Enquiry Form
           </h1>
-          <p className="text-xl max-w-2xl mx-auto text-black dark:text-white transition-colors duration-300">Please fill out the form below to submit your enquiry.</p>
+          <p className="text-xl max-w-2xl mx-auto text-white transition-colors duration-300">Please fill out the form below to submit your enquiry.</p>
         </div>
         <ContactForm user={user} />
       </main>
