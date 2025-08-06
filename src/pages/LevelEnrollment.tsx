@@ -312,8 +312,8 @@ const LevelEnrollment = () => {
                           filename: 'WEB & UIUX DESIGN LEVEL 3.pdf'
                         },
                         '4-8-22': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Graphic%20and%20Video%20Content%20Design%20LEVEL%201.pdf',
-                          filename: 'Graphic and Video Content Design LEVEL 1.pdf'
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Graphic%20and%20Video%20Content%20DesignLEVEL1.pdf',
+                          filename: 'Graphic and Video Content DesignLEVEL1.pdf'
                         },
                         '4-8-23': {
                           url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Graphic%20and%20Video%20Content%20Design%20LEVEL%202.pdf',
@@ -324,16 +324,16 @@ const LevelEnrollment = () => {
                           filename: 'Graphic and Video Content Design LEVEL 3.pdf'
                         },
                         '4-9-25': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20Design%20LEVEL%201.pdf',
-                          filename: 'Mechanical and CAD Design LEVEL 1.pdf'
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20DesignLEVEL1.pdf',
+                          filename: 'Mechanical and CAD DesignLEVEL1.pdf'
                         },
                         '4-9-26': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20Design%20LEVEL%202.pdf',
-                          filename: 'Mechanical and CAD Design LEVEL 2.pdf'
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20DesignLEVEL%202.pdf',
+                          filename: 'Mechanical and CAD DesignLEVEL 2.pdf'
                         },
                         '4-9-27': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20Design%20LEVEL%203.pdf',
-                          filename: 'Mechanical and CAD Design LEVEL 3.pdf'
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20DesignLEVEL3.pdf',
+                          filename: 'Mechanical and CAD DesignLEVEL3.pdf'
                         },
                         '5-10-28': {
                           url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level1.pdf',
