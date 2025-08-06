@@ -246,9 +246,127 @@ const LevelEnrollment = () => {
                 
                                  <motion.button
                    onClick={() => {
-                     // View curriculum functionality - Open AI Course PDF
+                     // View curriculum functionality - Download PDF based on route
                      const link = document.createElement('a');
-                     link.href = 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf';
+                     
+                                           // PDF mapping for different routes
+                      const pdfMapping: { [key: string]: { url: string; filename: string } } = {
+                        '1-1-1': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Foundations%20of%20Data%20Science.pdf',
+                          filename: 'Foundations of Data Science.pdf'
+                        },
+                        '1-1-2': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Foundations%20of%20Data%20Science-second%20level.pdf',
+                          filename: 'Foundations of Data Science-second level.pdf'
+                        },
+                        '1-1-3': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Foundations%20of%20Data%20Science%20level%203.pdf',
+                          filename: 'Foundations of Data Science level 3.pdf'
+                        },
+                        '1-2-4': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20%26%20MACHINE%20LEARNING%20LEVEL%201.pdf',
+                          filename: 'AI & MACHINE LEARNING LEVEL 1.pdf'
+                        },
+                        '1-2-5': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20%26%20MACHINE%20LEARNING%20LEVEL%202.pdf',
+                          filename: 'AI & MACHINE LEARNING LEVEL 2.pdf'
+                        },
+                        '1-2-6': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20%26%20MACHINE%20LEARNING%20LEVEL%203.pdf',
+                          filename: 'AI & MACHINE LEARNING LEVEL 3.pdf'
+                        },
+                        '3-5-13': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/DIGITAL%20MARKETING%20LEVEL%201.pdf',
+                          filename: 'DIGITAL MARKETING LEVEL 1.pdf'
+                        },
+                        '3-5-14': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/DIGITAL%20MARKETING%20LEVEL%202.pdf',
+                          filename: 'DIGITAL MARKETING LEVEL 2.pdf'
+                        },
+                        '3-5-15': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/DIGITAL%20MARKETING%20LEVEL%203.pdf',
+                          filename: 'DIGITAL MARKETING LEVEL 3.pdf'
+                        },
+                        '3-6-16': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/SALES%20AND%20MARKETING%20LEVEL%201.pdf',
+                          filename: 'SALES AND MARKETING LEVEL 1.pdf'
+                        },
+                        '3-6-17': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/SALES%20AND%20MARKETING%20LEVEL%202.pdf',
+                          filename: 'SALES AND MARKETING LEVEL 2.pdf'
+                        },
+                        '3-6-18': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/SALES%20AND%20MARKETING%20LEVEL%203.pdf',
+                          filename: 'SALES AND MARKETING LEVEL 3.pdf'
+                        },
+                        '4-7-19': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/WEB%20%26%20UIUX%20DESIGN%20LEVEL%201.pdf',
+                          filename: 'WEB & UIUX DESIGN LEVEL 1.pdf'
+                        },
+                        '4-7-20': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/WEB%20%26%20UIUX%20DESIGN%20LEVEL%202.pdf',
+                          filename: 'WEB & UIUX DESIGN LEVEL 2.pdf'
+                        },
+                        '4-7-21': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/WEB%20%26%20UIUX%20DESIGN%20LEVEL%203.pdf',
+                          filename: 'WEB & UIUX DESIGN LEVEL 3.pdf'
+                        },
+                        '4-8-22': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Graphic%20and%20Video%20Content%20Design%20LEVEL%201.pdf',
+                          filename: 'Graphic and Video Content Design LEVEL 1.pdf'
+                        },
+                        '4-8-23': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Graphic%20and%20Video%20Content%20Design%20LEVEL%202.pdf',
+                          filename: 'Graphic and Video Content Design LEVEL 2.pdf'
+                        },
+                        '4-8-24': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Graphic%20and%20Video%20Content%20Design%20LEVEL%203.pdf',
+                          filename: 'Graphic and Video Content Design LEVEL 3.pdf'
+                        },
+                        '4-9-25': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20Design%20LEVEL%201.pdf',
+                          filename: 'Mechanical and CAD Design LEVEL 1.pdf'
+                        },
+                        '4-9-26': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20Design%20LEVEL%202.pdf',
+                          filename: 'Mechanical and CAD Design LEVEL 2.pdf'
+                        },
+                        '4-9-27': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20Design%20LEVEL%203.pdf',
+                          filename: 'Mechanical and CAD Design LEVEL 3.pdf'
+                        },
+                        '5-10-28': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level%20-%201.pdf',
+                          filename: 'Product Management Level - 1.pdf'
+                        },
+                        '5-10-29': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level%20-%202.pdf',
+                          filename: 'Product Management Level - 2.pdf'
+                        },
+                        '5-10-30': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level%20-%203.pdf',
+                          filename: 'Product Management Level - 3.pdf'
+                        },
+                        '6-11-31': {
+                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf',
+                          filename: 'AI COURSE.pdf'
+                        }
+                        // Add more mappings here as you provide them
+                        // Format: 'courseId-moduleId-levelId': { url: 'PDF_URL', filename: 'PDF_FILENAME' }
+                      };
+                     
+                     const routeKey = `${courseId}-${moduleId}-${levelId}`;
+                     const pdfConfig = pdfMapping[routeKey];
+                     
+                     if (pdfConfig) {
+                       link.href = pdfConfig.url;
+                       link.download = pdfConfig.filename;
+                     } else {
+                       // Default fallback
+                       link.href = 'https://rftsystemsbackend-testing.up.railway.app/uploads/Foundations%20of%20Data%20Science.pdf';
+                       link.download = 'Foundations of Data Science.pdf';
+                     }
+                     
                      link.target = '_blank';
                      document.body.appendChild(link);
                      link.click();
