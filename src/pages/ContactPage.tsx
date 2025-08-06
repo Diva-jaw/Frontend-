@@ -208,9 +208,10 @@ const Header: React.FC<{
   return (
     <header className={`bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40 ${theme === 'dark' ? 'dark' : ''}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="hidden md:flex justify-between items-center h-16">
           <div className="flex items-center">
             <div className="flex items-center">
+              {/* Only show logo and company name on md+ */}
               <div className="relative w-14 h-14 flex items-center justify-center">
                 <img
                   src="/logo1.jpg"
@@ -224,6 +225,7 @@ const Header: React.FC<{
             </div>
           </div>
           <div className="flex items-center space-x-4">
+            {/* Only show theme toggle on md+ */}
             <button
               onClick={toggleTheme}
               className={`p-2 rounded-full ${theme === 'dark' ? 'bg-gray-700 text-yellow-300' : 'bg-gray-200 text-gray-700'}`}
@@ -233,7 +235,7 @@ const Header: React.FC<{
             </button>
             {user ? (
               <div className="flex items-center space-x-3">
-                <div className="hidden sm:block text-right">
+                <div className="text-right">
                   <p className={`text-sm font-medium text-gray-900 dark:text-white ${theme === 'dark' ? 'dark' : ''}`}>{user.name}</p>
                   <p className={`text-xs text-gray-500 dark:text-gray-400 ${theme === 'dark' ? 'dark' : ''}`}>{user.email}</p>
                 </div>
@@ -249,9 +251,10 @@ const Header: React.FC<{
                 </button>
               </div>
             ) : (
+              // Only show Sign In button on md+
               <button
                 onClick={onAuthClick}
-                className={`hidden md:block bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors ${theme === 'dark' ? 'dark' : ''}`}
+                className={`bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors ${theme === 'dark' ? 'dark' : ''}`}
               >
                 Sign In
               </button>
