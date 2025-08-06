@@ -341,20 +341,20 @@ const ApplyJobPage: React.FC = () => {
       case 0:
         return (
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><User className="mr-2" />Personal Details</h2>
+                         <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-gray-900"><User className="mr-2" />Personal Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-1 font-medium text-black">Full Name *</label>
+                                 <label className="block mb-1 font-medium text-gray-900">Full Name *</label>
                 <input type="text" value={formData.fullName} onChange={e => handleInputChange('fullName', e.target.value)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500" placeholder="As per Aadhaar or ID" />
                 {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-black">Date of Birth *</label>
+                                 <label className="block mb-1 font-medium text-gray-900">Date of Birth *</label>
                 <input type="date" value={formData.dob} onChange={e => handleInputChange('dob', e.target.value)} max="2020-12-31" className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
                 {errors.dob && <p className="text-red-500 text-sm mt-1">{errors.dob}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-black">Gender *</label>
+                                 <label className="block mb-1 font-medium text-gray-900">Gender *</label>
                 <select value={formData.gender} onChange={e => handleInputChange('gender', e.target.value)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
                   <option value="">Select</option>
                   {genderOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
@@ -362,19 +362,19 @@ const ApplyJobPage: React.FC = () => {
                 {errors.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-black">Mobile Number *</label>
+                                 <label className="block mb-1 font-medium text-gray-900">Mobile Number *</label>
                 <input type="tel" value={formData.mobile} onChange={e => { const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10); handleInputChange('mobile', value); }} onKeyDown={e => { if (formData.mobile.length >= 10 && e.key !== 'Backspace' && e.key !== 'Tab') { e.preventDefault(); } }} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500" placeholder="Primary Mobile" maxLength={10} />
                 {formData.mobile.length === 10 && (<p className="text-yellow-500 text-sm mt-1" aria-live="polite">Maximum 10 digits allowed</p>)}
                 {errors.mobile && <p className="text-red-500 text-sm">{errors.mobile}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-black">Alternate Contact Number</label>
+                                 <label className="block mb-1 font-medium text-gray-900">Alternate Contact Number</label>
                 <input type="tel" value={formData.altMobile} onChange={e => { const value = e.target.value.replace(/[^0-9]/g, '').slice(0, 10); handleInputChange('altMobile', value); }} onKeyDown={e => { if (formData.altMobile.length >= 10 && e.key !== 'Backspace' && e.key !== 'Tab') { e.preventDefault(); } }} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500" placeholder="Optional" maxLength={10} />
                 {formData.altMobile.length === 10 && (<p className="text-yellow-500 text-sm mt-1" aria-live="polite">Maximum 10 digits allowed</p>)}
                 {errors.altMobile && <p className="text-red-500 text-sm">{errors.altMobile}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-black">Email Address *</label>
+                                 <label className="block mb-1 font-medium text-gray-900">Email Address *</label>
                 <input type="email" value={formData.email} onChange={e => handleInputChange('email', e.target.value)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500" placeholder="Official / Personal" />
                 {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
               </div>
@@ -384,20 +384,20 @@ const ApplyJobPage: React.FC = () => {
       case 1:
         return (
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><MapPin className="mr-2" />Location Details</h2>
+                         <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-gray-900"><MapPin className="mr-2" />Location Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block mb-1 font-medium text-black">Current City *</label>
+                <label className="block mb-1 font-medium text-gray-900">Current City *</label>
                 <input type="text" value={formData.currentCity} onChange={e => handleInputChange('currentCity', e.target.value)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
                 {errors.currentCity && <p className="text-red-500 text-sm">{errors.currentCity}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-black">Home Town / Permanent Address *</label>
+                <label className="block mb-1 font-medium text-gray-900">Home Town / Permanent Address *</label>
                 <input type="text" value={formData.homeTown} onChange={e => handleInputChange('homeTown', e.target.value)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
                 {errors.homeTown && <p className="text-red-500 text-sm">{errors.homeTown}</p>}
               </div>
               <div>
-                <label className="block mb-1 font-medium text-black">Willing to Relocate? *</label>
+                <label className="block mb-1 font-medium text-gray-900">Willing to Relocate? *</label>
                 <select value={formData.willingToRelocate} onChange={e => handleInputChange('willingToRelocate', e.target.value)} className="w-full p-2 border border-gray-300 bg-white text-black rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
                   <option value="">Select</option>
                   <option value="Yes">Yes</option>
@@ -411,7 +411,7 @@ const ApplyJobPage: React.FC = () => {
       case 2:
         return (
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-black"><GraduationCap className="mr-2" />Educational Background</h2>
+                         <h2 className="text-xl sm:text-2xl font-bold mb-4 flex items-center text-gray-900"><GraduationCap className="mr-2" />Educational Background</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block mb-1 font-medium text-black">Highest Qualification *</label>
@@ -646,23 +646,42 @@ const ApplyJobPage: React.FC = () => {
 
   if (submitted && !showPopup) {
     return (
-      <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-          <Send className="text-green-600" size={32} />
-        </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Form Submitted Successfully!</h3>
-        <p className="text-gray-600 mb-6">
-          Thank you for your application. We will get back to you soon.
-        </p>
-        <button
-          onClick={() => {
-            setSubmitted(false);
-            setStep(0);
+      <div className="min-h-screen relative">
+        {/* Background Image */}
+        <div
+          className="fixed inset-0 z-0"
+          style={{
+            backgroundImage: 'url("/Green Minimalist Photo Collage Instagram Post (1).png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
           }}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-        >
-          Fill Another Form
-        </button>
+        />
+        
+        {/* Overlay */}
+        <div className="fixed inset-0 z-0 bg-black bg-opacity-20" />
+        
+        {/* Content */}
+        <div className="relative z-20 flex items-center justify-center min-h-screen px-4">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 text-center border border-white/20">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Send className="text-green-600" size={32} />
+            </div>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Form Submitted Successfully!</h3>
+            <p className="text-gray-600 mb-6">
+              Thank you for your application. We will get back to you soon.
+            </p>
+            <button
+              onClick={() => {
+                setSubmitted(false);
+                setStep(0);
+              }}
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Fill Another Form
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -682,16 +701,32 @@ const ApplyJobPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-2 md:px-0 flex flex-col items-center">
-      {jobError && (
-        <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4 text-center max-w-lg">
-          {jobError}
-        </div>
-      )}
-      <div className="w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-2 sm:p-4 md:p-8 mt-20">
+    <div className="min-h-screen relative">
+      {/* Background Image */}
+      <div
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: 'url("/Green Minimalist Photo Collage Instagram Post (1).png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
+      {/* Overlay */}
+      <div className="fixed inset-0 z-0 bg-black bg-opacity-20" />
+      
+      {/* Content */}
+      <div className="relative z-20 flex flex-col items-center py-8 px-2 md:px-0">
+        {jobError && (
+          <div className="bg-red-100/95 backdrop-blur-sm text-red-700 px-4 py-2 rounded mb-4 text-center max-w-lg border border-red-200">
+            {jobError}
+          </div>
+        )}
+        <div className="w-full max-w-full sm:max-w-lg md:max-w-3xl mx-auto bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-2 sm:p-4 md:p-8 mt-20 border border-white/20">
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2 gap-2">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-black">Job Application Form</h2>
+                         <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-gray-900">Job Application Form</h2>
           </div>
           {jobTitle && (
             <div className="mb-4 text-blue-700 font-semibold text-xl">Applying for: <span className="font-bold">{jobTitle}</span></div>
@@ -745,6 +780,7 @@ const ApplyJobPage: React.FC = () => {
             )}
           </div>
         </form>
+        </div>
       </div>
       {showPopup && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-100/90 text-blue-900 px-8 py-4 rounded-xl shadow-2xl z-[9999] text-lg font-semibold flex items-center backdrop-blur-md border border-blue-300">
