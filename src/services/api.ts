@@ -50,6 +50,16 @@ class ApiService {
       const data = await response.json();
 
       if (!response.ok) {
+        // Check for session conflict error
+        if (data.error === 'SESSION_CONFLICT') {
+          // Clear local storage and throw session conflict error
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          throw new Error('SESSION_CONFLICT: You are logged in on another device. Please login again.');
+        }
         throw new Error(data.error || 'Something went wrong');
       }
 
@@ -116,6 +126,16 @@ class ApiService {
     return this.makeRequest<{ message: string }>('/reset-password', {
       method: 'POST',
       body: JSON.stringify({ email, otp, newPassword }),
+    });
+  }
+
+  // Logout
+  async logout(): Promise<{ message: string }> {
+    return this.makeRequest<{ message: string }>('/logout', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
+      },
     });
   }
 

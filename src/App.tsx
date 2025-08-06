@@ -17,6 +17,7 @@ import EmployeeTestimonials from "./pages/EmployeeTestimonials";
 import LifeAtRFTSection from "./components/sections/LifeAtRFTSection";
 import MDUPage from "./pages/MDU";
 import CRDPage from "./pages/CRD";
+import { apiInterceptor } from "./utils/apiInterceptor";
 
 import CourseDetails from "./pages/CourseDetails";
 import ModuleDetails from "./pages/ModuleDetails";
@@ -94,6 +95,27 @@ function App() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Initialize API interceptor and session conflict handling
+  useEffect(() => {
+    // Initialize the API interceptor
+    apiInterceptor.init();
+
+    // Listen for session conflict events
+    const handleSessionConflict = (event: CustomEvent) => {
+      console.log('Session conflict detected:', event.detail);
+      // The AuthContext will handle showing the modal
+      // This event is dispatched by the API interceptor
+    };
+
+    window.addEventListener('sessionConflict', handleSessionConflict as EventListener);
+
+    return () => {
+      // Clean up
+      apiInterceptor.restore();
+      window.removeEventListener('sessionConflict', handleSessionConflict as EventListener);
+    };
   }, []);
 
   const handleSend = () => {
