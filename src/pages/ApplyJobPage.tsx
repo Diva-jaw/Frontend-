@@ -281,10 +281,23 @@ const ApplyJobPage: React.FC = () => {
       if (formData.resume) formDataToSend.append('resume', formData.resume);
       if (formData.academics) formDataToSend.append('academics', formData.academics);
       const { resume, academics, ...fieldsToSend } = formData;
-      formDataToSend.append('data', JSON.stringify({ ...fieldsToSend, jobTitle, user_id: user?.id, jobpost_id }));
-      await axios.post(getApiUrl('/application/upload'), formDataToSend, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      formDataToSend.append('data', JSON.stringify({ ...fieldsToSend, jobTitle, jobpost_id }));
+      
+      const response = await fetch(getApiUrl('/application/upload'), {
+        method: 'POST',
+        body: formDataToSend,
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
+        }
       });
+
+      if (!response.ok) {
+        // Let the API interceptor handle session conflicts
+        const errorData = await response.json();
+        throw new Error(`HTTP error! status: ${response.status}, error: ${errorData.error}`);
+      }
+
+      const data = await response.json();
       setToast({
         message: 'Application submitted successfully! We will contact you soon.',
         icon: <CheckCircle className="text-green-500" size={28} />
@@ -305,6 +318,27 @@ const ApplyJobPage: React.FC = () => {
       console.log('Submission error:', error);
       console.log('error.response:', error?.response);
       console.log('error.response.data:', error?.response?.data);
+      
+      // Handle authentication errors - let API interceptor handle session conflicts
+      if (error?.response?.status === 401) {
+        // Check for session conflict error
+        if (error?.response?.data?.error === 'SESSION_CONFLICT') {
+          // Let API interceptor handle session conflict popup completely
+          // No automatic redirect - user must click login button
+        } else {
+          // Show regular login popup for other 401 errors
+          setPopupMessage('Please login to apply for this job.');
+          setShowPopup(true);
+          setTimeout(() => {
+            setShowPopup(false);
+            setPopupMessage('');
+            navigate('/signin');
+          }, 3000);
+        }
+        setIsSubmitting(false);
+        return;
+      }
+      
       // Fallback: check stringified error for duplicate entry
       const errorString = JSON.stringify(error);
       const isDuplicate =
@@ -644,7 +678,7 @@ const ApplyJobPage: React.FC = () => {
     }
   };
 
-  if (submitted && !showPopup) {
+  if (submitted) {
     return (
       <div className="min-h-screen relative">
         {/* Background Image */}
