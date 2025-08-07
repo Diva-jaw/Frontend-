@@ -52,6 +52,7 @@ class ApiService {
       if (!response.ok) {
         // Check for session conflict error
         if (data.error === 'SESSION_CONFLICT') {
+          console.log('[APIService] Session conflict detected');
           // Clear local storage and throw session conflict error
           localStorage.removeItem('authToken');
           localStorage.removeItem('user');
@@ -59,6 +60,14 @@ class ApiService {
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
           throw new Error('SESSION_CONFLICT: You are logged in on another device. Please login again.');
+        } else if (data.error === 'TOKEN_EXPIRED') {
+          console.log('[APIService] Token expired detected');
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          throw new Error('TOKEN_EXPIRED: Your session has expired. Please login again.');
         }
         throw new Error(data.error || 'Something went wrong');
       }
