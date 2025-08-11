@@ -34,11 +34,9 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({ children }) => {
 
   const fetchCourses = useCallback(async () => {
     try {
-      console.log('CourseContext: Starting to fetch courses...');
       setLoading(true);
       setError(null);
       const fetchedCourses = await courseService.getAllCourses();
-      console.log('CourseContext: Successfully fetched courses:', fetchedCourses);
       setCourses(fetchedCourses);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch courses';
@@ -53,10 +51,8 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({ children }) => {
 
   const getCourseDetails = useCallback(async (courseId: number): Promise<CourseDetails | null> => {
     try {
-      console.log(`CourseContext: Getting course details for ID: ${courseId}`);
       setError(null);
       const courseDetails = await courseService.getCourseDetails(courseId);
-      console.log('CourseContext: Successfully fetched course details:', courseDetails);
       return courseDetails;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch course details';
@@ -68,10 +64,8 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({ children }) => {
 
   const getCourseModules = useCallback(async (courseId: number): Promise<CourseModule[] | null> => {
     try {
-      console.log(`CourseContext: Getting modules for course ID: ${courseId}`);
       setError(null);
       const modules = await courseService.getCourseModules(courseId);
-      console.log('CourseContext: Successfully fetched course modules:', modules);
       return modules;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch course modules';
@@ -83,10 +77,8 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({ children }) => {
 
   const getModuleLevels = useCallback(async (courseId: number, moduleId: number): Promise<ModuleLevel[] | null> => {
     try {
-      console.log(`CourseContext: Getting levels for course ID: ${courseId}, module ID: ${moduleId}`);
       setError(null);
       const levels = await courseService.getModuleLevels(courseId, moduleId);
-      console.log('CourseContext: Successfully fetched module levels:', levels);
       return levels;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to fetch module levels';
@@ -103,16 +95,16 @@ export const CourseProvider: React.FC<CourseProviderProps> = ({ children }) => {
 
   useEffect(() => {
     try {
-      console.log('CourseContext: Initializing and fetching courses...');
       fetchCourses();
     } catch (err) {
       console.error('CourseContext: Error in useEffect:', err);
-      setContextError(err instanceof Error ? err.message : 'Context initialization error');
+      // Don't set context error for network issues, just log it
+      // setContextError(err instanceof Error ? err.message : 'Context initialization error');
     }
-  }, []);
+  }, [fetchCourses]);
 
-  // Error boundary for context
-  if (contextError) {
+  // Error boundary for context - only show for critical errors
+  if (contextError && !contextError.includes('Network error') && !contextError.includes('Failed to fetch')) {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">

@@ -52,7 +52,6 @@ class ApiService {
       if (!response.ok) {
         // Check for session conflict error
         if (data.error === 'SESSION_CONFLICT') {
-          console.log('[APIService] Session conflict detected');
           // Clear local storage and throw session conflict error
           localStorage.removeItem('authToken');
           localStorage.removeItem('user');
@@ -61,7 +60,6 @@ class ApiService {
           localStorage.removeItem('refreshToken');
           throw new Error('SESSION_CONFLICT: You are logged in on another device. Please login again.');
         } else if (data.error === 'TOKEN_EXPIRED') {
-          console.log('[APIService] Token expired detected');
           localStorage.removeItem('authToken');
           localStorage.removeItem('user');
           localStorage.removeItem('token');
@@ -220,7 +218,6 @@ class ApiService {
 
   // User Applications
   async getUserApplications() {
-    console.log("reached here");
     const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/application/my-applications`;
     const token = localStorage.getItem('authToken');
     const response = await fetch(url, {
@@ -231,9 +228,7 @@ class ApiService {
       },
     });
     if (!response.ok) throw new Error('Failed to fetch user applications');
-    console.log("reached here 2");
     const data = await response.json();
-    console.log("getUserApplications response:", data);
     return data || [];
   }
 

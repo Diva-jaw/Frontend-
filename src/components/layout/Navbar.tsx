@@ -38,8 +38,11 @@ const Navbar = () => {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setMainDropdownOpen(false);
-        setSubDropdown(null);
+        // Add a longer delay to allow dropdown to render and be clickable
+        setTimeout(() => {
+          setMainDropdownOpen(false);
+          setSubDropdown(null);
+        }, 150);
       }
     };
 
@@ -70,7 +73,10 @@ const Navbar = () => {
         learnDropdownRef.current &&
         !learnDropdownRef.current.contains(event.target as Node)
       ) {
-        setLearnDropdownOpen(false);
+        // Add a longer delay to allow dropdown to render and be clickable
+        setTimeout(() => {
+          setLearnDropdownOpen(false);
+        }, 150);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -85,7 +91,10 @@ const Navbar = () => {
         careersDropdownRef.current &&
         !careersDropdownRef.current.contains(event.target as Node)
       ) {
-        setCareersDropdownOpen(false);
+        // Add a longer delay to allow dropdown to render and be clickable
+        setTimeout(() => {
+          setCareersDropdownOpen(false);
+        }, 150);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -97,7 +106,10 @@ const Navbar = () => {
     if (!profilePopupOpen) return;
     const handleClickOutside = (event: MouseEvent) => {
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
-        setProfilePopupOpen(false);
+        // Add a longer delay to allow dropdown to render and be clickable
+        setTimeout(() => {
+          setProfilePopupOpen(false);
+        }, 150);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);

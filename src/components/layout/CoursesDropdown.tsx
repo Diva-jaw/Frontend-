@@ -174,9 +174,12 @@ const CoursesDropdown = () => {
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-        setSelectedCategory(null);
-        setExpandedModule(null);
+        // Add a longer delay to allow dropdown to render and be clickable
+        setTimeout(() => {
+          setOpen(false);
+          setSelectedCategory(null);
+          setExpandedModule(null);
+        }, 150);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
