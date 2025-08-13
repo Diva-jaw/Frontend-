@@ -214,7 +214,7 @@ const AllCoursesMegaPage: React.FC = () => {
                 <button
                   className="w-full sm:w-auto flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 sm:gap-2 lg:gap-3 bg-white/95 dark:bg-gray-800/95 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 px-4 sm:px-4 lg:px-6 xl:px-8 py-2.5 sm:py-3 lg:py-4 xl:py-5 rounded-lg sm:rounded-lg lg:rounded-xl xl:rounded-2xl text-sm sm:text-sm lg:text-base xl:text-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 focus:outline-none focus:ring-2 sm:focus:ring-4 focus:ring-blue-400/50 shadow-lg sm:shadow-xl lg:shadow-2xl hover:shadow-2xl sm:hover:shadow-3xl hover:scale-105 transform"
                   tabIndex={0}
-                  onClick={() => window.open("http://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf", "_blank")}
+                  onClick={() => window.open("https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf", "_blank")}
                 >
                   <span>View Curriculum</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right sm:w-4 sm:h-4 lg:w-5 lg:h-5 xl:w-6 xl:h-6">

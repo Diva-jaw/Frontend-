@@ -1,5 +1,6 @@
 import { getAuthUrl } from '../config/api';
 import { getApplicantUrl } from '../config/api';
+import { isMobileDevice, logMobileNetworkError } from '../utils/errorHandler';
 
 export interface AuthResponse {
   message: string;
@@ -31,9 +32,10 @@ export interface Applicant {
 }
 
 class ApiService {
-  private async makeRequest<T>(
+  private async makeRequestWithRetry<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    retries: number = 2
   ): Promise<T> {
     const url = getAuthUrl(endpoint);
     
@@ -45,38 +47,75 @@ class ApiService {
       ...options,
     };
 
-    try {
-      const response = await fetch(url, config);
-      const data = await response.json();
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const response = await fetch(url, config);
+        const data = await response.json();
 
-      if (!response.ok) {
-        // Check for session conflict error
-        if (data.error === 'SESSION_CONFLICT') {
-          // Clear local storage and throw session conflict error
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('user');
-          localStorage.removeItem('token');
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          throw new Error('SESSION_CONFLICT: You are logged in on another device. Please login again.');
-        } else if (data.error === 'TOKEN_EXPIRED') {
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('user');
-          localStorage.removeItem('token');
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          throw new Error('TOKEN_EXPIRED: Your session has expired. Please login again.');
+        if (!response.ok) {
+          // Check for session conflict error
+          if (data.error === 'SESSION_CONFLICT') {
+            // Clear local storage and throw session conflict error
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            throw new Error('SESSION_CONFLICT: You are logged in on another device. Please login again.');
+          } else if (data.error === 'TOKEN_EXPIRED') {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            throw new Error('TOKEN_EXPIRED: Your session has expired. Please login again.');
+          }
+          throw new Error(data.error || 'Something went wrong');
         }
-        throw new Error(data.error || 'Something went wrong');
-      }
 
-      return data;
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
+        return data;
+      } catch (error) {
+        // Enhanced mobile error handling with retry logic
+        if (error instanceof TypeError && error.message.includes('fetch')) {
+          // Network error - likely mobile network issue
+          logMobileNetworkError(error, endpoint);
+          
+          if (isMobileDevice() && attempt < retries) {
+            console.log(`Mobile network retry attempt ${attempt + 1}/${retries + 1}`);
+            // Wait before retrying (exponential backoff)
+            await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+            continue;
+          }
+          
+          throw new Error('Network connection failed. Please check your internet connection and try again. If the problem persists, try switching between WiFi and mobile data.');
+        }
+        
+        if (error instanceof Error) {
+          // Check for SSL/CORS issues common on mobile
+          if (error.message.includes('CORS') || error.message.includes('SSL')) {
+            throw new Error('Connection security issue. Please try refreshing the page or switching networks.');
+          }
+          throw error;
+        }
+        
+        throw new Error('Network error - please check your connection and try again.');
       }
-      throw new Error('Network error');
     }
+    
+    throw new Error('All retry attempts failed. Please check your connection and try again.');
+  }
+
+  private async makeRequest<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    // Use retry logic for mobile devices
+    if (isMobileDevice()) {
+      return this.makeRequestWithRetry<T>(endpoint, options, 2);
+    }
+    
+    // Regular request for desktop
+    return this.makeRequestWithRetry<T>(endpoint, options, 0);
   }
 
   // Send OTP for email verification
