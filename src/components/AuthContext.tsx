@@ -49,13 +49,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     const userData = localStorage.getItem('user');
-    console.log('[AuthContext] On mount: authToken =', token, 'userData =', userData);
     if (token && userData) {
       try {
         const parsedUser = JSON.parse(userData);
         setIsLoggedIn(true);
         setUser(parsedUser);
-        console.log('[AuthContext] User restored from localStorage:', parsedUser);
       } catch (error) {
         console.error('[AuthContext] Error parsing user data:', error);
         // Clear invalid data
@@ -63,14 +61,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.removeItem('user');
         setIsLoggedIn(false);
         setUser(null);
-        console.log('[AuthContext] Cleared invalid user data from localStorage');
       } finally {
         setLoading(false);
       }
     } else {
       setIsLoggedIn(false);
       setUser(null);
-      console.log('[AuthContext] No valid authToken or userData found, user set to null');
       setLoading(false);
     }
   }, []);
@@ -95,18 +91,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const setRedirectPath = (path: string) => {
-    console.log('[AuthContext] Setting redirect path:', path);
     localStorage.setItem('redirectPath', path);
   };
 
   const getRedirectPath = (): string | null => {
     const path = localStorage.getItem('redirectPath');
-    console.log('[AuthContext] Getting redirect path:', path);
     return path;
   };
 
   const clearRedirectPath = () => {
-    console.log('[AuthContext] Clearing redirect path');
     localStorage.removeItem('redirectPath');
   };
 

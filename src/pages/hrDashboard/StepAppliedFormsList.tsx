@@ -168,52 +168,45 @@ const StepAppliedFormsList: React.FC = () => {
 
   // Helper to map backend applicant details to frontend keys
   function mapApplicantDetails(raw: any) {
-    // General snake_case to camelCase
-    const camel: any = {};
-    for (const key in raw) {
-      const camelKey = key.replace(/_([a-z])/g, g => g[1].toUpperCase());
-      camel[camelKey] = raw[key];
-    }
-    // Explicit mapping for fields your UI expects
+    // The backend already returns the correct field names, so we can use them directly
     return {
-      fullName: camel.fullName,
-      dob: camel.dateOfBirth,
-      gender: camel.gender,
-      mobile: camel.mobileNumber,
-      altMobile: camel.alternateContactNumber,
-      email: camel.email,
-      currentCity: camel.currentCity,
-      homeTown: camel.homeTown,
-      willingToRelocate: camel.willingToRelocate,
-      qualification: camel.highestQualification,
-      course: camel.courseName,
-      college: camel.collegeUniversity,
-      affiliatedUniv: camel.affiliatedUniversity,
-      graduationYear: camel.yearOfPassing,
-      marks: camel.aggregateMarks,
-      allSemCleared: camel.allSemestersCleared,
-      techSkills: camel.techSkills || [],
-      otherTechSkills: camel.otherTechSkills,
-      certifications: camel.certificateName,
-      hasInternship: camel.internshipProjectExperience,
-      projectDesc: camel.projectDescription,
-      github: camel.githubLink,
-      linkedin: camel.linkedinLink,
-      preferredRole: camel.preferredRole,
-      joining: camel.immediateJoining,
-      shifts: camel.openToShifts,
-      expectedCTC: camel.expectedCtc,
-      source: camel.opportunitySource,
-      onlineTest: camel.availableForOnlineTests,
-      laptop: camel.hasLaptopInternet,
-      languages: camel.languages || [],
-      aadhar: camel.aadharNumber,
-      pan: camel.panNo,
-      passport: camel.passportAvailable,
-      resume: camel.resumePath,
-      academics: camel.academicDocsPath,
-      jobTitle: camel.jobTitle,
-      // Add any other fields as needed
+      fullName: raw.fullName,
+      dob: raw.dob,
+      gender: raw.gender,
+      mobile: raw.mobile,
+      altMobile: raw.altMobile,
+      email: raw.email,
+      currentCity: raw.currentCity,
+      homeTown: raw.homeTown,
+      willingToRelocate: raw.willingToRelocate,
+      qualification: raw.qualification,
+      course: raw.course,
+      college: raw.college,
+      affiliatedUniv: raw.affiliatedUniv,
+      graduationYear: raw.graduationYear,
+      marks: raw.marks,
+      allSemCleared: raw.allSemCleared,
+      techSkills: raw.techSkills || [],
+      otherTechSkills: raw.otherTechSkills,
+      certifications: raw.certifications,
+      hasInternship: raw.hasInternship,
+      projectDesc: raw.projectDesc,
+      github: raw.github,
+      linkedin: raw.linkedin,
+      preferredRole: raw.preferredRole,
+      joining: raw.joining,
+      shifts: raw.shifts,
+      expectedCTC: raw.expectedCTC,
+      source: raw.source,
+      onlineTest: raw.onlineTest,
+      laptop: raw.laptop,
+      languages: raw.languages || [],
+      aadhar: raw.aadhar,
+      pan: raw.pan,
+      passport: raw.passport,
+      resume: raw.resume,
+      academics: raw.academics,
+      jobTitle: raw.jobTitle,
     };
   }
 
@@ -682,20 +675,143 @@ const StepAppliedFormsList: React.FC = () => {
                   </div>
                 </section>
 
-                <section className="pb-6">
-                  <h4 className="text-lg font-semibold text-gray-800 mb-6 tracking-tight flex items-center group">
+                <section className="border-b border-gray-200/80 dark:border-gray-700/80 pb-9">
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 tracking-tight flex items-center group">
                     <span className="w-1 h-6 bg-orange-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
-                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">Resume & Documents</span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">Technical Skills & Experience</span>
                   </h4>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-1.5 group hover:bg-gray-50/50 rounded-lg px-3 transition-all duration-200">
-                      <span className="font-medium text-gray-600 group-hover:text-gray-900 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-1.5 group hover:bg-gray-50/50 dark:hover:bg-gray-700/50 rounded-lg px-3 transition-all duration-200">
+                      <span className="font-medium text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
+                        Technical Skills
+                      </span>
+                      <span className="text-gray-900 dark:text-gray-100 text-left sm:text-right break-words flex-1">
+                        {candidateDetails[String(showDetailsId)]?.techSkills && candidateDetails[String(showDetailsId)]?.techSkills.length > 0 ? (
+                          <div className="flex flex-wrap gap-2">
+                            {candidateDetails[String(showDetailsId)]?.techSkills.map((skill: string, index: number) => (
+                              <span key={index} className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium">
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          '—'
+                        )}
+                      </span>
+                    </div>
+                    <Detail label="Other Technical Skills" value={candidateDetails[String(showDetailsId)]?.otherTechSkills || '—'} />
+                    <Detail label="Certifications" value={candidateDetails[String(showDetailsId)]?.certifications || '—'} />
+                    <Detail 
+                      label="Internship Experience" 
+                      value={Number(candidateDetails[String(showDetailsId)]?.hasInternship) === 1 ? 'Yes' : 'No'} 
+                    />
+                    <div className="lg:col-span-2">
+                      <Detail label="Project Description" value={candidateDetails[String(showDetailsId)]?.projectDesc || '—'} />
+                    </div>
+                    <Detail 
+                      label="GitHub Profile" 
+                      value={candidateDetails[String(showDetailsId)]?.github ? (
+                        <a 
+                          href={candidateDetails[String(showDetailsId)]?.github}
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline break-words font-medium"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View GitHub Profile
+                        </a>
+                      ) : '—'} 
+                    />
+                    <Detail 
+                      label="LinkedIn Profile" 
+                      value={candidateDetails[String(showDetailsId)]?.linkedin ? (
+                        <a 
+                          href={candidateDetails[String(showDetailsId)]?.linkedin}
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline break-words font-medium"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View LinkedIn Profile
+                        </a>
+                      ) : '—'} 
+                    />
+                  </div>
+                </section>
+
+                <section className="border-b border-gray-200/80 dark:border-gray-700/80 pb-9">
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 tracking-tight flex items-center group">
+                    <span className="w-1 h-6 bg-indigo-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">Professional Information</span>
+                  </h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
+                    <Detail label="Preferred Role" value={candidateDetails[String(showDetailsId)]?.preferredRole || '—'} />
+                    <Detail 
+                      label="Immediate Joining" 
+                      value={Number(candidateDetails[String(showDetailsId)]?.joining) === 1 ? 'Yes' : 'No'} 
+                    />
+                    <Detail 
+                      label="Open to Shifts" 
+                      value={Number(candidateDetails[String(showDetailsId)]?.shifts) === 1 ? 'Yes' : 'No'} 
+                    />
+                    <Detail label="Expected CTC" value={candidateDetails[String(showDetailsId)]?.expectedCTC || '—'} />
+                    <Detail label="Opportunity Source" value={candidateDetails[String(showDetailsId)]?.source || '—'} />
+                    <Detail 
+                      label="Available for Online Tests" 
+                      value={Number(candidateDetails[String(showDetailsId)]?.onlineTest) === 1 ? 'Yes' : 'No'} 
+                    />
+                    <Detail 
+                      label="Has Laptop & Internet" 
+                      value={Number(candidateDetails[String(showDetailsId)]?.laptop) === 1 ? 'Yes' : 'No'} 
+                    />
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-1.5 group hover:bg-gray-50/50 dark:hover:bg-gray-700/50 rounded-lg px-3 transition-all duration-200">
+                      <span className="font-medium text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
+                        Languages Known
+                      </span>
+                      <span className="text-gray-900 dark:text-gray-100 text-left sm:text-right break-words flex-1">
+                        {candidateDetails[String(showDetailsId)]?.languages && candidateDetails[String(showDetailsId)]?.languages.length > 0 ? (
+                          <div className="flex flex-wrap gap-2">
+                            {candidateDetails[String(showDetailsId)]?.languages.map((language: string, index: number) => (
+                              <span key={index} className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium">
+                                {language}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          '—'
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="border-b border-gray-200/80 dark:border-gray-700/80 pb-9">
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 tracking-tight flex items-center group">
+                    <span className="w-1 h-6 bg-red-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">Identity Documents</span>
+                  </h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
+                    <Detail label="Aadhar Number" value={candidateDetails[String(showDetailsId)]?.aadhar || '—'} />
+                    <Detail label="PAN Number" value={candidateDetails[String(showDetailsId)]?.pan || '—'} />
+                    <Detail 
+                      label="Passport Available" 
+                      value={Number(candidateDetails[String(showDetailsId)]?.passport) === 1 ? 'Yes' : 'No'} 
+                    />
+                  </div>
+                </section>
+
+                <section className="pb-6">
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 tracking-tight flex items-center group">
+                    <span className="w-1 h-6 bg-teal-600 rounded-full mr-3 shadow-sm group-hover:h-7 transition-all duration-200"></span>
+                    <span className="bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-200 dark:to-gray-400 bg-clip-text text-transparent">Resume & Documents</span>
+                  </h4>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-5">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-1.5 group hover:bg-gray-50/50 dark:hover:bg-gray-700/50 rounded-lg px-3 transition-all duration-200">
+                      <span className="font-medium text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
                         Resume
                       </span>
-                      <span className="text-gray-900 text-left sm:text-right break-words flex-1">
+                      <span className="text-gray-900 dark:text-gray-100 text-left sm:text-right break-words flex-1">
                         <a 
                           href={getFullUrl(candidateDetails[String(showDetailsId)]?.resume)}
-                          className="text-blue-600 hover:text-blue-700 underline break-words font-medium hover:decoration-2 transition-all duration-150 inline-flex items-center gap-1 hover:gap-2"
+                          className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline break-words font-medium hover:decoration-2 transition-all duration-150 inline-flex items-center gap-1 hover:gap-2"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -706,7 +822,28 @@ const StepAppliedFormsList: React.FC = () => {
                         </a>
                       </span>
                     </div>
-                    <Detail label="Academic Documents" value={candidateDetails[String(showDetailsId)]?.academics || '—'} />
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start py-1.5 group hover:bg-gray-50/50 dark:hover:bg-gray-700/50 rounded-lg px-3 transition-all duration-200">
+                      <span className="font-medium text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors duration-150 whitespace-nowrap mr-4 mb-1 sm:mb-0 tracking-tight min-w-[180px]">
+                        Academic Documents
+                      </span>
+                      <span className="text-gray-900 dark:text-gray-100 text-left sm:text-right break-words flex-1">
+                        {candidateDetails[String(showDetailsId)]?.academics ? (
+                          <a 
+                            href={getFullUrl(candidateDetails[String(showDetailsId)]?.academics)}
+                            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline break-words font-medium hover:decoration-2 transition-all duration-150 inline-flex items-center gap-1 hover:gap-2"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            View Documents
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        ) : (
+                          '—'
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </section>
               </div>

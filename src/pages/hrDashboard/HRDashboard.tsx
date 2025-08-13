@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import {
   Users,
   Briefcase,
@@ -8,9 +9,40 @@ import {
   BookOpen,
   Settings,
 } from "lucide-react";
+import { apiService } from '../../services/api';
 
 const HRDashboard = () => {
   const location = useLocation();
+  const [departmentCounts, setDepartmentCounts] = useState<{
+    active: Record<string, number>;
+    rejected: Record<string, number>;
+    accepted: Record<string, number>;
+  }>({ active: {}, rejected: {}, accepted: {} });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDepartmentCounts = async () => {
+      try {
+        setLoading(true);
+        const response = await apiService.fetchDepartmentCounts();
+        setDepartmentCounts({
+          active: response?.active || {},
+          rejected: response?.rejected || {},
+          accepted: response?.accepted || {}
+        });
+      } catch (error) {
+        console.error('Error fetching department counts:', error);
+        setDepartmentCounts({ active: {}, rejected: {}, accepted: {} });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDepartmentCounts();
+  }, []);
+
+  // Calculate total active counts across all departments
+  const totalActiveCount = Object.values(departmentCounts.active).reduce((sum, count) => sum + count, 0);
 
   const navItems = [
     {
@@ -36,6 +68,8 @@ const HRDashboard = () => {
       path: "/hr/applied-forms",
       icon: <ClipboardList size={20} />,
       description: "See all forms submitted by candidates",
+      showNotification: true,
+      notificationCount: totalActiveCount,
     },
     {
       name: "View Applied Courses",
@@ -69,11 +103,17 @@ const HRDashboard = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40 group min-h-[200px] flex flex-col justify-between"
+                  className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 hover:bg-white/20 transition-all duration-300 border border-white/20 hover:border-white/40 group min-h-[200px] flex flex-col justify-between relative"
                 >
                   <div className="flex flex-col items-center text-center">
-                    <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-blue-500 rounded-lg mb-3 md:mb-4 mx-auto group-hover:scale-110 transition-transform">
+                    <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 bg-blue-500 rounded-lg mb-3 md:mb-4 mx-auto group-hover:scale-110 transition-transform relative">
                       {item.icon}
+                      {/* Green notification badge for active counts */}
+                      {item.showNotification && !loading && item.notificationCount > 0 && (
+                        <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg animate-pulse">
+                          {item.notificationCount}
+                        </div>
+                      )}
                     </div>
                     <h3 className="text-base md:text-lg font-semibold mb-2">{item.name}</h3>
                     <p className="text-blue-100 text-xs md:text-sm leading-relaxed">{item.description}</p>

@@ -15,20 +15,15 @@ export const apiInterceptor = {
         // Check if the response is JSON and contains session conflict or token expiry error
         if (response.ok === false) {
           const contentType = response.headers.get('content-type');
-          console.log('[APIInterceptor] Response status:', response.status);
-          console.log('[APIInterceptor] Content-Type:', contentType);
           
           if (contentType && contentType.includes('application/json')) {
             try {
               // Clone the response so it can be read multiple times
               const responseClone = response.clone();
               const data = await responseClone.json();
-              console.log('[APIInterceptor] Response data:', data);
               
               // Handle session conflict error
               if (data.error === 'SESSION_CONFLICT') {
-                console.log('[APIInterceptor] Session conflict detected');
-                
                 // Clear all authentication data
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('user');
@@ -46,8 +41,6 @@ export const apiInterceptor = {
                 
                 return response;
               } else if (data.error === 'TOKEN_EXPIRED') {
-                console.log('[APIInterceptor] Token expired detected');
-                
                 // Clear all authentication data
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('user');
