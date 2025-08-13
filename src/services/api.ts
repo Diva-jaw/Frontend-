@@ -165,6 +165,42 @@ class ApiService {
     return response.json();
   }
 
+  async fetchRoundCounts(department: string): Promise<{ 
+    active: Record<string, number>;
+    rejected: Record<string, number>;
+    accepted: Record<string, number>;
+  }> {
+    const url = `${getApplicantUrl(department)}/counts`;
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch round counts');
+    }
+    return response.json();
+  }
+
+  async fetchDepartmentCounts(): Promise<{ 
+    active: Record<string, number>;
+    rejected: Record<string, number>;
+    accepted: Record<string, number>;
+  }> {
+    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/application/api/applicants/departments/counts`;
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch department counts');
+    }
+    return response.json();
+  }
+
   async moveApplicantToRound(
     department: string,
     applicantId: number,
