@@ -168,13 +168,24 @@ const Navbar = () => {
         <div className="flex items-center h-20 w-full">
           {/* Left: Logo and Nav */}
           <div className="flex items-center flex-shrink-0">
-            <div className="h-12 w-12 rounded-full border-2 border-blue-400 dark:border-blue-500 mr-4 bg-white flex items-center justify-center overflow-hidden">
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (location.pathname !== "/") {
+                  window.location.href = "/";
+                } else {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
+              className="h-12 w-12 rounded-full border-2 border-blue-400 dark:border-blue-500 mr-4 bg-white flex items-center justify-center overflow-hidden hover:border-blue-500 dark:hover:border-blue-400 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 touch-manipulation"
+            >
               <img
                 src="/RFT logo.png"
                 alt="Logo"
                 className="h-8 w-8 object-contain"
               />
-            </div>
+            </button>
             {/* Hamburger for mobile - only show if not on HR route */}
             {!isHRRoute && (
               <button
