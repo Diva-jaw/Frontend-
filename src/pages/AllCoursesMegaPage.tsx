@@ -156,7 +156,7 @@ const AllCoursesMegaPage: React.FC = () => {
               <div className="min-w-0 flex-1 text-center">
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 lg:gap-4">
-                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight drop-shadow-lg leading-tight bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent relative">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight drop-shadow-lg leading-tight bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent relative pt-16 sm:pt-0">
                       {/* Best Seller Badge - Mobile Only */}
                       <div className="absolute top-8 -left-2 sm:hidden bg-gradient-to-r from-green-500 to-emerald-600 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg tracking-wide border-2 border-white/40 dark:border-green-900/40 flex items-center gap-1 animate-pulse-slow hover:scale-105 transition-transform duration-300">
                         <span className="inline-block w-1 h-1 bg-white rounded-full animate-pulse"></span>
@@ -225,7 +225,7 @@ const AllCoursesMegaPage: React.FC = () => {
               </div>
               
               {/* Internship Guarantee - Mobile Optimized */}
-              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 px-3 sm:px-4 lg:px-6 xl:px-8 py-2.5 sm:py-3 lg:py-4 rounded-full bg-blue-100 dark:bg-blue-200 shadow-md border border-blue-200 dark:border-blue-300 hover:scale-105 transition-transform duration-300 group mt-4 sm:mt-4 lg:mt-6 w-fit mx-auto md:mx-auto sm:ml-9">
+              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 px-3 sm:px-4 lg:px-6 xl:px-8 py-2.5 sm:py-3 lg:py-4 rounded-full bg-blue-100 dark:bg-blue-200 shadow-md border border-blue-200 dark:border-blue-300 hover:scale-105 transition-transform duration-300 group mt-4 sm:mt-4 lg:mt-6 w-fit mx-auto md:mx-auto sm:ml-9" style={{ marginTop: '10px' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-graduation-cap text-blue-600 dark:text-blue-700 group-hover:scale-110 transition-transform duration-300 sm:w-6 sm:h-6 lg:w-7 lg:h-7">
                   <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
                   <path d="M22 10v6"></path>
