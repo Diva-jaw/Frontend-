@@ -14,6 +14,7 @@ import ForgotPassword from "./components/auth/ForgotPassword";
 import EmployerForgotPassword from "./components/auth/EmployerForgotPassword";
 import JobBoard from "./pages/JobBoard";
 import EmployeeTestimonials from "./pages/EmployeeTestimonials";
+import CourseTestimonials from "./pages/CourseTestimonials";
 import LifeAtRFTSection from "./components/sections/LifeAtRFTSection";
 import MDUPage from "./pages/MDU";
 import CRDPage from "./pages/CRD";
@@ -167,6 +168,7 @@ function App() {
                   <Route path="/apply" element={<JobBoard />} />
                   <Route path="/job-board" element={<JobBoard />} />
                   <Route path="/employee-says" element={<EmployeeTestimonials />} />
+                  <Route path="/course-testimonials" element={<CourseTestimonials />} />
                   <Route path="/mdu" element={<MDUPage />} />
                   <Route path="/crd" element={<CRDPage />} />
                   <Route path="/user-profile" element={<UserProfilePopup name="Riya Singh" email="0702riya@gmail.com" />} />

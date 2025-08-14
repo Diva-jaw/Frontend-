@@ -325,8 +325,13 @@ const EnrollmentPage = () => {
           z-index: 9999 !important;
           position: relative !important;
         }
-        /* Override any parent overflow settings */
-        * {
+        /* Override overflow settings only for form-related elements */
+        .form-container *,
+        .form-fields-container *,
+        .year-select-container *,
+        select,
+        select:focus,
+        select:active {
           overflow: visible !important;
         }
         /* Specific fix for the year select */
@@ -405,7 +410,7 @@ const EnrollmentPage = () => {
         {/* Back Button */}
         <motion.button
           onClick={handleBackClick}
-          className="mb-4 sm:mb-6 mt-4 sm:mt-8 lg:mt-20 flex items-center gap-2 sm:gap-3 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-all duration-150 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 text-sm sm:text-base"
+          className="mb-4 sm:mb-6 mt-4 sm:mt-16 lg:mt-20 flex items-center gap-2 sm:gap-3 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-all duration-150 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl border border-gray-200/50 dark:border-gray-700/50 text-sm sm:text-base"
           whileHover={{ x: -5, scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
         >

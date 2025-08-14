@@ -56,7 +56,20 @@ const Header = ({ isScrolled }: HeaderProps) => {
       <div className="md:hidden fixed top-0 left-0 right-0 z-[1300] bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="flex items-center justify-between px-4 py-2">
           {/* RFT Logo - Leftmost position */}
-          <img src="/RFT logo.png" alt="Logo" className="h-8 w-8 rounded-full border-2 border-blue-400 dark:border-blue-500 object-cover" />
+          <button 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (window.location.pathname !== "/") {
+                window.location.href = "/";
+              } else {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
+            className="h-8 w-8 rounded-full border-2 border-blue-400 dark:border-blue-500 object-cover hover:border-blue-500 dark:hover:border-blue-400 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 touch-manipulation"
+          >
+            <img src="/RFT logo.png" alt="Logo" className="h-full w-full rounded-full object-cover" />
+          </button>
           
           {/* Right side buttons - Menu and Dark Mode */}
           <div className="flex items-center gap-2">
@@ -138,6 +151,7 @@ const Header = ({ isScrolled }: HeaderProps) => {
               <a href="/#about" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>About</a>
               <a href="/#what-we-do" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-between" onClick={() => setIsMenuOpen(false)}>What We Do</a>
               <a href="/courses" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Courses</a>
+              <a href="/course-testimonials" className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>Course Testimonials</a>
               {/* Learn Dropdown */}
               <div className="group">
                 <button 
