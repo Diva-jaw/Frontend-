@@ -321,6 +321,55 @@ class ApiService {
     if (!response.ok) throw new Error('Failed to fetch user course enrollments');
     return response.json();
   }
+
+  // Enrollment Counts
+  async getEnrollmentCountsByStatus(): Promise<{
+    requested: number;
+    enrolled: number;
+    contacted: number;
+    cancelled: number;
+    completed: number;
+  }> {
+    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/courses/enrollment-counts`;
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch enrollment counts');
+    }
+    const result = await response.json();
+    return result.data;
+  }
+
+  async getEnrollmentCountsByCourse(): Promise<Array<{
+    course_id: number;
+    course_name: string;
+    counts: {
+      requested: number;
+      enrolled: number;
+      contacted: number;
+      cancelled: number;
+      completed: number;
+    };
+  }>> {
+    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/courses/enrollment-counts-by-course`;
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch enrollment counts by course');
+    }
+    
+    const result = await response.json();
+    return result.data;
+  }
 }
 
 export const apiService = new ApiService(); 

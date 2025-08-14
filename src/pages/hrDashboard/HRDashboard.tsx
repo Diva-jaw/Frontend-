@@ -24,8 +24,15 @@ const HRDashboard = () => {
     const fetchDepartmentCounts = async () => {
       try {
         setLoading(true);
+        console.log('Fetching department counts...');
         const response = await apiService.fetchDepartmentCounts();
+        console.log('Department counts response:', response);
         setDepartmentCounts({
+          active: response?.active || {},
+          rejected: response?.rejected || {},
+          accepted: response?.accepted || {}
+        });
+        console.log('Set department counts:', {
           active: response?.active || {},
           rejected: response?.rejected || {},
           accepted: response?.accepted || {}
@@ -43,6 +50,7 @@ const HRDashboard = () => {
 
   // Calculate total active counts across all departments
   const totalActiveCount = Object.values(departmentCounts.active).reduce((sum, count) => sum + count, 0);
+  console.log('Total active count:', totalActiveCount, 'Department counts:', departmentCounts.active);
 
   const navItems = [
     {

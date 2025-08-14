@@ -22,6 +22,7 @@ import {
 import { useAuth } from "../../../components/AuthContext";
 import NotificationPopup from "../../../components/ui/NotificationPopup";
 import { courseService, Course } from "../../../services/courseService";
+import { apiService } from "../../../services/api";
 
 const CourseManagementDashboard = () => {
   const navigate = useNavigate();
@@ -31,6 +32,28 @@ const CourseManagementDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [coursesPerPage] = useState(8);
+  const [enrollmentCounts, setEnrollmentCounts] = useState({
+    requested: 0,
+    enrolled: 0,
+    contacted: 0,
+    cancelled: 0,
+    completed: 0
+  });
+  
+  const [courseEnrollmentCounts, setCourseEnrollmentCounts] = useState<Array<{
+    course_id: number;
+    course_name: string;
+    counts: {
+      requested: number;
+      enrolled: number;
+      contacted: number;
+      cancelled: number;
+      completed: number;
+    };
+  }>>([]);
+  
+  const [countsLoading, setCountsLoading] = useState(true);
+  const [courseCountsLoading, setCourseCountsLoading] = useState(true);
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;
     courseId: number | null;
@@ -65,6 +88,42 @@ const CourseManagementDashboard = () => {
       title,
       message,
     });
+  };
+
+  const fetchEnrollmentCounts = async () => {
+    try {
+      setCountsLoading(true);
+      const counts = await apiService.getEnrollmentCountsByStatus();
+      console.log("Overall enrollment counts:", counts);
+      setEnrollmentCounts(counts);
+    } catch (error) {
+      console.error("Error fetching enrollment counts:", error);
+      showNotification(
+        "error",
+        "Error",
+        "Failed to fetch enrollment counts"
+      );
+    } finally {
+      setCountsLoading(false);
+    }
+  };
+
+  const fetchCourseEnrollmentCounts = async () => {
+    try {
+      setCourseCountsLoading(true);
+      const courseCounts = await apiService.getEnrollmentCountsByCourse();
+      console.log("Course enrollment counts:", courseCounts);
+      setCourseEnrollmentCounts(courseCounts);
+    } catch (error) {
+      console.error("Error fetching course enrollment counts:", error);
+      showNotification(
+        "error",
+        "Error",
+        "Failed to fetch course enrollment counts"
+      );
+    } finally {
+      setCourseCountsLoading(false);
+    }
   };
 
   const fetchCourses = async () => {
@@ -108,6 +167,8 @@ const CourseManagementDashboard = () => {
 
   useEffect(() => {
     fetchCourses();
+    fetchEnrollmentCounts();
+    fetchCourseEnrollmentCounts();
   }, []);
 
   const filteredCourses = loading ? [] : (courses || []).filter(course =>
@@ -199,8 +260,10 @@ const CourseManagementDashboard = () => {
 
       if (response.ok) {
         showNotification("success", "Success", "Course deleted successfully");
-        // Refresh the courses list
+        // Refresh the courses list and enrollment counts
         fetchCourses();
+        fetchEnrollmentCounts();
+        fetchCourseEnrollmentCounts();
       } else {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.message || "Failed to delete course");
@@ -225,6 +288,20 @@ const CourseManagementDashboard = () => {
       courseName: "",
       step: 1,
     });
+  };
+
+  // Helper function to get enrollment counts for a specific course
+  const getCourseCounts = (courseId: number) => {
+    const courseCount = courseEnrollmentCounts.find(c => c.course_id === courseId);
+    const counts = courseCount ? courseCount.counts : {
+      requested: 0,
+      enrolled: 0,
+      contacted: 0,
+      cancelled: 0,
+      completed: 0
+    };
+    console.log(`Course ${courseId} counts:`, counts);
+    return counts;
   };
 
 
@@ -264,6 +341,78 @@ const CourseManagementDashboard = () => {
               Create Course
             </button>
           </div>
+          
+          {/* Enrollment Count Notifications */}
+          <div className="flex items-center space-x-4 mb-4">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-600 dark:text-gray-400">Enrollment Status:</span>
+            </div>
+            
+            {/* Requested - Green */}
+            <div className="relative">
+              <div className="flex items-center space-x-2 bg-green-100 dark:bg-green-900/30 px-3 py-1 rounded-full">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-sm font-medium text-green-700 dark:text-green-300">Requested</span>
+                {!countsLoading && (
+                  <span className="bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                    {enrollmentCounts.requested}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Enrolled - Blue */}
+            <div className="relative">
+              <div className="flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 px-3 py-1 rounded-full">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Enrolled</span>
+                {!countsLoading && (
+                  <span className="bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                    {enrollmentCounts.enrolled}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Contacted - Pink */}
+            <div className="relative">
+              <div className="flex items-center space-x-2 bg-pink-100 dark:bg-pink-900/30 px-3 py-1 rounded-full">
+                <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
+                <span className="text-sm font-medium text-pink-700 dark:text-pink-300">Contacted</span>
+                {!countsLoading && (
+                  <span className="bg-pink-500 text-white text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                    {enrollmentCounts.contacted}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Loading indicator */}
+            {countsLoading && (
+              <div className="flex items-center space-x-2">
+                <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
+                <span className="text-sm text-gray-500">Loading counts...</span>
+              </div>
+            )}
+            
+            {/* Refresh button */}
+            {!countsLoading && (
+              <button
+                onClick={() => {
+                  fetchEnrollmentCounts();
+                  fetchCourseEnrollmentCounts();
+                }}
+                className="flex items-center space-x-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                title="Refresh counts"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span className="text-xs">Refresh</span>
+              </button>
+            )}
+          </div>
+          
           <p className="text-gray-600 dark:text-gray-400">
             Manage your courses, modules, levels, topics, and subpoints from one central location.
           </p>
@@ -367,64 +516,102 @@ const CourseManagementDashboard = () => {
               )}
             </div>
           ) : (
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {currentCourses.map((course) => (
-                <div key={course.id} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center mb-2">
-                        <BookOpen className="w-5 h-5 text-blue-600 mr-2" />
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                          {course.name}
-                        </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {currentCourses.map((course) => {
+                const courseCounts = getCourseCounts(course.id);
+                return (
+                  <div key={course.id} className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer border border-green-100 dark:border-green-900/30 relative">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl relative">
+                        <BookOpen className="w-6 h-6 text-green-600 dark:text-green-400" />
+                        
+                        {/* Enrollment Count Notifications */}
+                        {!courseCountsLoading && (
+                          <>
+                            {/* Requested - Green */}
+                            {courseCounts.requested > 0 && (
+                              <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
+                                {courseCounts.requested}
+                              </div>
+                            )}
+                            
+                            {/* Contacted - Pink */}
+                            {courseCounts.contacted > 0 && (
+                              <div className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
+                                {courseCounts.contacted}
+                              </div>
+                            )}
+                            
+                            {/* Enrolled - Blue */}
+                            {courseCounts.enrolled > 0 && (
+                              <div className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-lg">
+                                {courseCounts.enrolled}
+                              </div>
+                            )}
+                          </>
+                        )}
                       </div>
-                      <p className="text-gray-600 dark:text-gray-400 mb-2">{course.description}</p>
-                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                        <span className="mr-4">Level Range: {course.level_range}</span>
-                        <span className="mr-4">Created: {new Date(course.created_at).toLocaleDateString()}</span>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          course.status === 'published' 
-                            ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200' 
-                            : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200'
-                        }`}>
-                          {course.status === 'published' ? 'Published' : 'Draft'}
-                        </span>
-                      </div>
+                      <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">{course.name}</h3>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                      {course.description}
+                    </p>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-green-600 dark:text-green-400 font-medium">View Levels</span>
+                      <ChevronRight className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    </div>
+                    
+                    {/* Course Status Badge */}
+                    <div className="absolute top-4 right-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        course.status === 'published' 
+                          ? 'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200' 
+                          : 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200'
+                      }`}>
+                        {course.status === 'published' ? 'Published' : 'Draft'}
+                      </span>
+                    </div>
+                    
+                    {/* Action Buttons */}
+                    <div className="absolute bottom-4 right-4 flex items-center space-x-2">
                       {course.status === 'draft' && (
                         <button
-                          onClick={() => handleEditCourse(course.id)}
-                          className="flex items-center px-3 py-1 text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 text-sm font-medium"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditCourse(course.id);
+                          }}
+                          className="p-1 text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300"
+                          title="Edit Course"
                         >
-                          <Edit className="w-4 h-4 mr-1" />
-                          Edit
+                          <Edit className="w-4 h-4" />
                         </button>
                       )}
                       <button
-                        onClick={() => handleViewCourse(course.id)}
-                        className="flex items-center px-3 py-1 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleViewCourse(course.id);
+                        }}
+                        className="p-1 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                        title="View Course"
                       >
-                        <Eye className="w-4 h-4 mr-1" />
-                        View
+                        <Eye className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleDeleteCourse(course.id, course.name)}
-                        className="flex items-center px-3 py-1 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteCourse(course.id, course.name);
+                        }}
+                        className="p-1 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        title="Delete Course"
                       >
-                        <Trash2 className="w-4 h-4 mr-1" />
-                        Delete
-                      </button>
-                      <button
-                        onClick={() => handleViewCourse(course.id)}
-                        className="flex items-center p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                      >
-                        <ChevronRight className="w-4 h-4" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
