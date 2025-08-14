@@ -6,9 +6,52 @@ import { useTheme } from "../ThemeContext";
 import { useAuth } from "../AuthContext";
 import UserProfilePopup from "../auth/UserProfilePopup";
 
+// Custom CSS for 1430px breakpoint
+const customStyles = `
+  @media (max-width: 1429px) {
+    .desktop-nav-1430 {
+      display: none !important;
+    }
+    .desktop-spacer-1430 {
+      display: none !important;
+    }
+    .desktop-right-1430 {
+      display: none !important;
+    }
+    .tablet-nav-1430 {
+      display: flex !important;
+    }
+  }
+  @media (min-width: 1430px) {
+    .desktop-nav-1430 {
+      display: flex !important;
+    }
+    .desktop-spacer-1430 {
+      display: block !important;
+    }
+    .desktop-right-1430 {
+      display: flex !important;
+    }
+    .tablet-nav-1430 {
+      display: none !important;
+    }
+  }
+`;
+
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  
+  // Inject custom styles for 1430px breakpoint
+  useEffect(() => {
+    const styleElement = document.createElement('style');
+    styleElement.textContent = customStyles;
+    document.head.appendChild(styleElement);
+    
+    return () => {
+      document.head.removeChild(styleElement);
+    };
+  }, []);
   const [mainDropdownOpen, setMainDropdownOpen] = useState(false);
   const [subDropdown, setSubDropdown] = useState<string | null>(null);
   const { theme, toggleTheme } = useTheme();
@@ -214,7 +257,7 @@ const Navbar = () => {
             )}
             {/* Desktop Nav - only show if not on HR route */}
             {!isHRRoute && (
-              <div className="hidden lg:flex items-center space-x-4">
+              <div className="hidden lg:flex items-center space-x-4 desktop-nav-1430">
                 <a href="/" onClick={handleHomeClick} className={linkClass}>
                   Home
                 </a>
@@ -378,7 +421,7 @@ const Navbar = () => {
           
                                            {/* Tablet Navigation - Simplified with Hamburger Menu */}
             {!isHRRoute && (
-              <div className="hidden md:flex lg:hidden items-center justify-between flex-1 px-4">
+              <div className="hidden md:flex lg:hidden items-center justify-between flex-1 px-4 tablet-nav-1430">
                 {/* Spacer to push hamburger to right */}
                 <div className="flex-1"></div>
                 
@@ -425,11 +468,11 @@ const Navbar = () => {
             )}
             
             {/* Spacer for gap - only for desktop */}
-            <div className="hidden lg:block flex-1" />
+            <div className="hidden lg:block flex-1 desktop-spacer-1430" />
                        
    
           {/* Right: Login/Register/For Employer's and Theme Toggle */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4 desktop-right-1430">
             {/* Desktop Right Side Elements */}
             {/* Show profile icon and theme toggle for HR routes */}
             {isHRRoute && isLoggedIn && user && (
