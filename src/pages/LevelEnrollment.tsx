@@ -17,6 +17,7 @@ import { courseService } from '../services/courseService';
 import SuccessPopup from '../components/ui/SuccessPopup';
 import { ModuleLevel, ModuleTopic } from '../services/courseService';
 import { useAuth } from '../components/AuthContext';
+import { API_CONFIG } from '../config/api';
 
 const LevelEnrollment = () => {
   const { courseId, moduleId, levelId } = useParams<{ courseId: string; moduleId: string; levelId: string }>();
@@ -252,163 +253,163 @@ const LevelEnrollment = () => {
                                            // PDF mapping for different routes
                       const pdfMapping: { [key: string]: { url: string; filename: string } } = {
                         '1-1-1': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Foundations%20of%20Data%20Science.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Foundations%20of%20Data%20Science.pdf`,
                           filename: 'Foundations of Data Science.pdf'
                         },
                         '1-1-2': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Foundations%20of%20Data%20Science-second%20level.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Foundations%20of%20Data%20Science-second%20level.pdf`,
                           filename: 'Foundations of Data Science-second level.pdf'
                         },
                         '1-1-3': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Foundations%20of%20Data%20Science%20level%203.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Foundations%20of%20Data%20Science%20level%203.pdf`,
                           filename: 'Foundations of Data Science level 3.pdf'
                         },
                         '1-2-4': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20%26%20MACHINE%20LEARNING%20LEVEL%201.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/AI%20%26%20MACHINE%20LEARNING%20LEVEL%201.pdf`,
                           filename: 'AI & MACHINE LEARNING LEVEL 1.pdf'
                         },
                         '1-2-5': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20%26%20MACHINE%20LEARNING%20LEVEL%202.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/AI%20%26%20MACHINE%20LEARNING%20LEVEL%202.pdf`,
                           filename: 'AI & MACHINE LEARNING LEVEL 2.pdf'
                         },
                         '1-2-6': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20%26%20MACHINE%20LEARNING%20LEVEL%203.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/AI%20%26%20MACHINE%20LEARNING%20LEVEL%203.pdf`,
                           filename: 'AI & MACHINE LEARNING LEVEL 3.pdf'
                         },
                         '3-5-13': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/DIGITAL%20MARKETING%20LEVEL%201.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/DIGITAL%20MARKETING%20LEVEL%201.pdf`,
                           filename: 'DIGITAL MARKETING LEVEL 1.pdf'
                         },
                         '3-5-14': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/DIGITAL%20MARKETING%20LEVEL%202.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/DIGITAL%20MARKETING%20LEVEL%202.pdf`,
                           filename: 'DIGITAL MARKETING LEVEL 2.pdf'
                         },
                         '3-5-15': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/DIGITAL%20MARKETING%20LEVEL%203.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/DIGITAL%20MARKETING%20LEVEL%203.pdf`,
                           filename: 'DIGITAL MARKETING LEVEL 3.pdf'
                         },
                         '3-6-16': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/SALES%20AND%20MARKETING%20LEVEL%201.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/SALES%20AND%20MARKETING%20LEVEL%201.pdf`,
                           filename: 'SALES AND MARKETING LEVEL 1.pdf'
                         },
                         '3-6-17': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/SALES%20AND%20MARKETING%20LEVEL%202.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/SALES%20AND%20MARKETING%20LEVEL%202.pdf`,
                           filename: 'SALES AND MARKETING LEVEL 2.pdf'
                         },
                         '3-6-18': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/SALES%20AND%20MARKETING%20LEVEL%203.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/SALES%20AND%20MARKETING%20LEVEL%203.pdf`,
                           filename: 'SALES AND MARKETING LEVEL 3.pdf'
                         },
                         '4-7-19': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/WEB%20%26%20UIUX%20DESIGN%20LEVEL%201.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/WEB%20%26%20UIUX%20DESIGN%20LEVEL%201.pdf`,
                           filename: 'WEB & UIUX DESIGN LEVEL 1.pdf'
                         },
                         '4-7-20': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/WEB%20%26%20UIUX%20DESIGN%20LEVEL%202.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/WEB%20%26%20UIUX%20DESIGN%20LEVEL%202.pdf`,
                           filename: 'WEB & UIUX DESIGN LEVEL 2.pdf'
                         },
                         '4-7-21': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/WEB%20%26%20UIUX%20DESIGN%20LEVEL%203.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/WEB%20%26%20UIUX%20DESIGN%20LEVEL%203.pdf`,
                           filename: 'WEB & UIUX DESIGN LEVEL 3.pdf'
                         },
                         '4-8-22': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Graphic%20and%20Video%20Content%20DesignLEVEL1.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Graphic%20and%20Video%20Content%20DesignLEVEL1.pdf`,
                           filename: 'Graphic and Video Content DesignLEVEL1.pdf'
                         },
                         '4-8-23': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Graphic%20and%20Video%20Content%20Design%20LEVEL%202.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Graphic%20and%20Video%20Content%20Design%20LEVEL%202.pdf`,
                           filename: 'Graphic and Video Content Design LEVEL 2.pdf'
                         },
                         '4-8-24': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Graphic%20and%20Video%20Content%20Design%20LEVEL%203.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Graphic%20and%20Video%20Content%20Design%20LEVEL%203.pdf`,
                           filename: 'Graphic and Video Content Design LEVEL 3.pdf'
                         },
                         '4-9-25': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20DesignLEVEL1.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Mechanical%20and%20CAD%20DesignLEVEL1.pdf`,
                           filename: 'Mechanical and CAD DesignLEVEL1.pdf'
                         },
                         '4-9-26': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20DesignLEVEL%202.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Mechanical%20and%20CAD%20DesignLEVEL%202.pdf`,
                           filename: 'Mechanical and CAD DesignLEVEL 2.pdf'
                         },
                         '4-9-27': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mechanical%20and%20CAD%20DesignLEVEL3.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Mechanical%20and%20CAD%20DesignLEVEL3.pdf`,
                           filename: 'Mechanical and CAD DesignLEVEL3.pdf'
                         },
                         '5-10-28': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level1.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Product%20Management%20Level1.pdf`,
                           filename: 'Product Management Level1.pdf'
                         },
                         '5-10-29': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level2.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Product%20Management%20Level2.pdf`,
                           filename: 'Product Management Level2.pdf'
                         },
                         '5-10-30': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Product%20Management%20Level3.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Product%20Management%20Level3.pdf`,
                           filename: 'Product Management Level3.pdf'
                         },
                         '6-11-31': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/AI%20COURSE.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/AI%20COURSE.pdf`,
                           filename: 'AI COURSE.pdf'
                         },
                         '7-12-34': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mobile%20App%20-%20react%20native.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Mobile%20App%20-%20react%20native.pdf`,
                           filename: 'Mobile App - react native.pdf'
                         },
                         '7-12-35': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Web%20Dev%20Flutter.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Web%20Dev%20Flutter.pdf`,
                           filename: 'Web Dev Flutter.pdf'
                         },
                         '7-12-36': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Ios%20App%20dev%20Swift.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Ios%20App%20dev%20Swift.pdf`,
                           filename: 'Ios App dev Swift.pdf'
                         },
                         '7-12-37': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Android%20app%20dev%20JAVA.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Android%20app%20dev%20JAVA.pdf`,
                           filename: 'Android app dev JAVA.pdf'
                         },
                         '7-13-38': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Development%20Dart%20with%20Aqueduct%20or%20Shelf.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Backend%20Development%20Dart%20with%20Aqueduct%20or%20Shelf.pdf`,
                           filename: 'Backend Development Dart with Aqueduct or Shelf.pdf'
                         },
                         '7-13-39': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Python%20Powered%20Mobile%20Backend%20Dev.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Python%20Powered%20Mobile%20Backend%20Dev.pdf`,
                           filename: 'Python Powered Mobile Backend Dev.pdf'
                         },
                         '7-13-40': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Mobile%20Backend%20Development%20with%20Java%20%26%20Kotlin.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Mobile%20Backend%20Development%20with%20Java%20%26%20Kotlin.pdf`,
                           filename: 'Mobile Backend Development with Java & Kotlin.pdf'
                         },
                         '2-3-7': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Web%20Dev%20Esss.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Web%20Dev%20Esss.pdf`,
                           filename: 'Web Dev Esss.pdf'
                         },
                         '2-3-8': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Advance%20Angular.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Advance%20Angular.pdf`,
                           filename: 'Advance Angular.pdf'
                         },
                         '2-3-9': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Java%20Development.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Java%20Development.pdf`,
                           filename: 'Java Development.pdf'
                         },
                         '2-3-32': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Advance%20React.js.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Advance%20React.js.pdf`,
                           filename: 'Advance React.js.pdf'
                         },
                         '2-4-10': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Development%20%20Node.js%20with%20Express.js.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Backend%20Development%20%20Node.js%20with%20Express.js.pdf`,
                           filename: 'Backend Development  Node.js with Express.js.pdf'
                         },
                         '2-4-11': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Development%20Java%20with%20Spring%20Boot.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Backend%20Development%20Java%20with%20Spring%20Boot.pdf`,
                           filename: 'Backend Development Java with Spring Boot.pdf'
                         },
                         '2-4-12': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Dev%20PythonDjangoFastAPI.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Backend%20Dev%20PythonDjangoFastAPI.pdf`,
                           filename: 'Backend Dev PythonDjangoFastAPI.pdf'
                         },
                         '2-4-33': {
-                          url: 'https://rftsystemsbackend-testing.up.railway.app/uploads/Backend%20Dev%20GoGinorFiber.pdf',
+                          url: `${API_CONFIG.BASE_URL}/uploads/Backend%20Dev%20GoGinorFiber.pdf`,
                           filename: 'Backend Dev GoGinorFiber.pdf'
                         }
                         // Add more mappings here as you provide them
@@ -423,7 +424,7 @@ const LevelEnrollment = () => {
                        link.download = pdfConfig.filename;
                      } else {
                        // Default fallback
-                       link.href = 'https://rftsystemsbackend-testing.up.railway.app/uploads/Foundations%20of%20Data%20Science.pdf';
+                       link.href = `${API_CONFIG.BASE_URL}/uploads/Foundations%20of%20Data%20Science.pdf`;
                        link.download = 'Foundations of Data Science.pdf';
                      }
                      
