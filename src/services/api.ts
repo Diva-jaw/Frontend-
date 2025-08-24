@@ -1,5 +1,4 @@
-import { getAuthUrl } from '../config/api';
-import { getApplicantUrl } from '../config/api';
+import { getAuthUrl, getApplicantUrl, getApiUrl } from '../config/api';
 import { isMobileDevice, logMobileNetworkError } from '../utils/errorHandler';
 
 export interface AuthResponse {
@@ -227,7 +226,7 @@ class ApiService {
     rejected: Record<string, number>;
     accepted: Record<string, number>;
   }> {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/application/api/applicants/departments/counts`;
+    const url = getApiUrl('/application/api/applicants/departments/counts');
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -263,7 +262,7 @@ class ApiService {
 
   // User Profile
   async getUserProfile() {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/user/profile`;
+    const url = getApiUrl('/api/user/profile');
     const token = localStorage.getItem('authToken');
     const response = await fetch(url, {
       method: 'GET',
@@ -277,7 +276,7 @@ class ApiService {
   }
 
   async updateUserProfile(data: { name: string; phone_no?: string; university?: string; department?: string }) {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/user/profile`;
+    const url = getApiUrl('/api/user/profile');
     const token = localStorage.getItem('authToken');
     const response = await fetch(url, {
       method: 'PUT',
@@ -293,7 +292,7 @@ class ApiService {
 
   // User Applications
   async getUserApplications() {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/application/my-applications`;
+    const url = getApiUrl('/application/my-applications');
     const token = localStorage.getItem('authToken');
     const response = await fetch(url, {
       method: 'GET',
@@ -309,7 +308,7 @@ class ApiService {
 
   // User Course Enrollments
   async getUserCourseEnrollments() {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/courses/enrollments/user`;
+    const url = getApiUrl('/api/courses/enrollments/user');
     const token = localStorage.getItem('authToken');
     const response = await fetch(url, {
       method: 'GET',
@@ -330,7 +329,7 @@ class ApiService {
     cancelled: number;
     completed: number;
   }> {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/courses/enrollment-counts`;
+    const url = getApiUrl('/api/courses/enrollment-counts');
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -355,7 +354,7 @@ class ApiService {
       completed: number;
     };
   }>> {
-    const url = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/courses/enrollment-counts-by-course`;
+    const url = getApiUrl('/api/courses/enrollment-counts-by-course');
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',

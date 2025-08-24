@@ -79,11 +79,13 @@ const defaultRejectDraft: Draft = {
   image: null,
 };
 
+import { getApiUrl } from '../../config/api';
+
 // Helper to get full URL for resume/docs
 const getFullUrl = (file: string) => {
   if (!file) return '#';
   if (file.startsWith('http')) return file;
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  const baseUrl = getApiUrl('');
   // Remove leading slash if present
   const path = file.startsWith('/') ? file : `/${file}`;
   return `${baseUrl}${path}`;
@@ -214,7 +216,7 @@ const StepAppliedFormsList: React.FC = () => {
   const fetchCandidateDetails = async (applicantId: number) => {
     try {
       setDetailsError(null);
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const baseUrl = getApiUrl('');
       const response = await fetch(`${baseUrl}/application/api/applicants/${applicantId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
@@ -310,7 +312,7 @@ const StepAppliedFormsList: React.FC = () => {
   const handleSendAll = async (draftType: 'accept' | 'reject') => {
     const list = draftType === 'accept' ? acceptedCandidates : rejectedCandidates;
     const draft = draftType === 'accept' ? acceptDraft : rejectDraft;
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    const baseUrl = getApiUrl('');
     try {
       await Promise.all(
         list.map((candidate) => {
@@ -343,7 +345,7 @@ const StepAppliedFormsList: React.FC = () => {
 
   const handleSendMail = async (candidate: Candidate, status: string, moveTo: string) => {
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const baseUrl = getApiUrl('');
       console.log('Sending mail with link:', mailLinkRef.current); // Debug log
       const movePromise = status === 'Accept'
         ? moveApplicant(candidate.id, moveTo, 'cleared')

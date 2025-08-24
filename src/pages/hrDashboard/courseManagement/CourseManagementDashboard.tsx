@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../../components/AuthContext";
 import NotificationPopup from "../../../components/ui/NotificationPopup";
+import { getCourseManagementUrl } from "../../../utils/apiHelper";
 import { courseService, Course } from "../../../services/courseService";
 import { apiService } from "../../../services/api";
 
@@ -130,7 +131,7 @@ const CourseManagementDashboard = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses`,
+        getCourseManagementUrl(`/courses`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -248,7 +249,7 @@ const CourseManagementDashboard = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${deleteConfirmation.courseId}`,
+        getCourseManagementUrl(`/courses/${deleteConfirmation.courseId}`),
         {
           method: 'DELETE',
           headers: {

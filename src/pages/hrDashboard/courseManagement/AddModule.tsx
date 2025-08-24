@@ -13,6 +13,7 @@ import {
 import { useAuth } from "../../../components/AuthContext";
 import NotificationPopup from "../../../components/ui/NotificationPopup";
 import { courseService, Course } from "../../../services/courseService";
+import { getCourseManagementUrl } from "../../../utils/apiHelper";
 
 interface AddModuleForm {
   name: string;
@@ -107,7 +108,7 @@ const AddModule = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${courseId}/modules`,
+        getCourseManagementUrl(`/courses/${courseId}/modules`),
         {
           method: "POST",
           headers: {

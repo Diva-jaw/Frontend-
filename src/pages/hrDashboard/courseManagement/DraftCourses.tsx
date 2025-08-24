@@ -16,6 +16,7 @@ import {
 import { useAuth } from '../../../components/AuthContext';
 import NotificationPopup from '../../../components/ui/NotificationPopup';
 import { Course } from '../../../services/courseService';
+import { getCourseManagementUrl } from '../../../utils/apiHelper';
 
 const DraftCourses: React.FC = () => {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ const DraftCourses: React.FC = () => {
       setLoading(true);
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses?status=draft`,
+        getCourseManagementUrl(`/courses?status=draft`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -127,7 +128,7 @@ const DraftCourses: React.FC = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${deleteConfirmation.courseId}`,
+        getCourseManagementUrl(`/courses/${deleteConfirmation.courseId}`),
         {
           method: 'DELETE',
           headers: {

@@ -16,6 +16,7 @@ import {
 import { useAuth } from "../../../components/AuthContext";
 import NotificationPopup from "../../../components/ui/NotificationPopup";
 import { courseService, Course, CourseModule, ModuleLevel, ModuleTopic } from "../../../services/courseService";
+import { getCourseManagementUrl } from "../../../utils/apiHelper";
 
 interface AddSubpointForm {
   subpoint: string;
@@ -136,7 +137,7 @@ const AddSubpoint = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}/subpoints`,
+        getCourseManagementUrl(`/topics/${topicId}/subpoints`),
         {
           method: "POST",
           headers: {

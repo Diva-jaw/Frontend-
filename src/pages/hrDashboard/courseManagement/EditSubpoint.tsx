@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../../components/AuthContext";
 import NotificationPopup from "../../../components/ui/NotificationPopup";
+import { getCourseManagementUrl } from "../../../utils/apiHelper";
 
 interface EditSubpointForm {
   subpoint: string;
@@ -73,7 +74,7 @@ const EditSubpoint = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/subpoints/${subpointId}`,
+        getCourseManagementUrl(`/subpoints/${subpointId}`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -121,7 +122,7 @@ const EditSubpoint = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/subpoints/${subpointId}`,
+        getCourseManagementUrl(`/subpoints/${subpointId}`),
         {
           method: "PUT",
           headers: {

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../../components/AuthContext";
 import NotificationPopup from "../../../components/ui/NotificationPopup";
+import { getCourseManagementUrl } from "../../../utils/apiHelper";
 
 interface EditTopicForm {
   topic_title: string;
@@ -76,7 +77,7 @@ const EditTopic = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}`,
+        getCourseManagementUrl(`/topics/${topicId}`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -125,7 +126,7 @@ const EditTopic = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}`,
+        getCourseManagementUrl(`/topics/${topicId}`),
         {
           method: "PUT",
           headers: {

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../../components/AuthContext';
 import NotificationPopup from '../../../components/ui/NotificationPopup';
+import { getCourseManagementUrl } from '../../../utils/apiHelper';
 
 interface CourseFormData {
   name: string;
@@ -100,7 +101,7 @@ const CreateCourse: React.FC = () => {
       setLoading(true);
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${id}`,
+        getCourseManagementUrl(`/courses/${id}`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -156,8 +157,8 @@ const CreateCourse: React.FC = () => {
       const token = localStorage.getItem("authToken");
       
       const url = courseId 
-        ? `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${courseId}`
-        : `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses`;
+        ? getCourseManagementUrl(`/courses/${courseId}`)
+        : getCourseManagementUrl(`/courses`);
       
       const method = courseId ? 'PUT' : 'POST';
       
@@ -212,8 +213,8 @@ const CreateCourse: React.FC = () => {
       const token = localStorage.getItem("authToken");
       
       const url = courseId 
-        ? `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${courseId}`
-        : `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses`;
+        ? getCourseManagementUrl(`/courses/${courseId}`)
+        : getCourseManagementUrl(`/courses`);
       
       const method = courseId ? 'PUT' : 'POST';
       

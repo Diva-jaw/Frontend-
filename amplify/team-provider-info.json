@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ruhilfuturetech-dev-47baf-authRole",
+      "UnauthRoleArn": "arn:aws:iam::016812367895:role/amplify-ruhilfuturetech-dev-47baf-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::016812367895:role/amplify-ruhilfuturetech-dev-47baf-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-ruhilfuturetech-dev-47baf-deployment",
+      "UnauthRoleName": "amplify-ruhilfuturetech-dev-47baf-unauthRole",
+      "StackName": "amplify-ruhilfuturetech-dev-47baf",
+      "StackId": "arn:aws:cloudformation:ap-south-1:016812367895:stack/amplify-ruhilfuturetech-dev-47baf/40ba0440-7b53-11f0-9247-0a4ab1d56909",
+      "AmplifyAppId": "d2knwwrsiqyxqg"
+    }
+  }
+}

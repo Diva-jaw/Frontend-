@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../../components/AuthContext";
 import NotificationPopup from "../../../components/ui/NotificationPopup";
+import { getCourseManagementUrl } from "../../../utils/apiHelper";
 
 interface EditLevelForm {
   level_name: string;
@@ -80,7 +81,7 @@ const EditLevel = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/levels/${levelId}`,
+        getCourseManagementUrl(`/levels/${levelId}`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -130,7 +131,7 @@ const EditLevel = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/levels/${levelId}`,
+        getCourseManagementUrl(`/levels/${levelId}`),
         {
           method: "PUT",
           headers: {

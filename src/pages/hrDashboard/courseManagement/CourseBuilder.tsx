@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { getCourseManagementUrl } from '../../../utils/apiHelper';
 import {
   BookOpen,
   Layers,
@@ -230,7 +231,7 @@ const CourseBuilder: React.FC = () => {
       setLoading(true);
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${id}`,
+        getCourseManagementUrl(`/courses/${id}`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -274,7 +275,7 @@ const CourseBuilder: React.FC = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${courseData.id}`,
+        getCourseManagementUrl(`/courses/${courseData.id}`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -300,7 +301,7 @@ const CourseBuilder: React.FC = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/modules/${moduleId}/levels`,
+        getCourseManagementUrl(`/modules/${moduleId}/levels`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -332,7 +333,7 @@ const CourseBuilder: React.FC = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/modules/${moduleId}/topics`,
+        getCourseManagementUrl(`/modules/${moduleId}/topics`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -371,7 +372,7 @@ const CourseBuilder: React.FC = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}/subpoints`,
+        getCourseManagementUrl(`/topics/${topicId}/subpoints`),
         {
           headers: {
             "Content-Type": "application/json",
@@ -408,8 +409,8 @@ const CourseBuilder: React.FC = () => {
       }
       
       const url = courseData.id 
-        ? `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${courseData.id}`
-        : `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses`;
+        ? getCourseManagementUrl(`/courses/${courseData.id}`)
+        : getCourseManagementUrl(`/courses`);
       
       const method = courseData.id ? 'PUT' : 'POST';
       
@@ -512,7 +513,7 @@ const CourseBuilder: React.FC = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/courses/${courseData.id}/modules`,
+        getCourseManagementUrl(`/courses/${courseData.id}/modules`),
         {
           method: "POST",
           headers: {
@@ -554,7 +555,7 @@ const CourseBuilder: React.FC = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/modules/${moduleId}/levels`,
+        getCourseManagementUrl(`/modules/${moduleId}/levels`),
         {
           method: "POST",
           headers: {
@@ -604,7 +605,7 @@ const CourseBuilder: React.FC = () => {
       };
       
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/modules/${moduleId}/topics`,
+        getCourseManagementUrl(`/modules/${moduleId}/topics`),
         {
           method: "POST",
           headers: {
@@ -646,7 +647,7 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}/subpoints`, {
+      const response = await fetch(getCourseManagementUrl(`/topics/${topicId}/subpoints`), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1759,7 +1760,7 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/modules/${editingModule.id}`, {
+      const response = await fetch(getCourseManagementUrl(`/modules/${editingModule.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -1789,7 +1790,7 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/levels/${editingLevel.id}`, {
+      const response = await fetch(getCourseManagementUrl(`/levels/${editingLevel.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -1819,7 +1820,7 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${editingTopic.id}`, {
+      const response = await fetch(getCourseManagementUrl(`/topics/${editingTopic.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -1849,7 +1850,7 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/subpoints/${editingSubpoint.id}`, {
+      const response = await fetch(getCourseManagementUrl(`/subpoints/${editingSubpoint.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -1890,7 +1891,7 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/modules/${moduleId}`, {
+      const response = await fetch(getCourseManagementUrl(`/modules/${moduleId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -1915,7 +1916,7 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/levels/${levelId}`, {
+      const response = await fetch(getCourseManagementUrl(`/levels/${levelId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -1940,7 +1941,7 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/topics/${topicId}`, {
+      const response = await fetch(getCourseManagementUrl(`/topics/${topicId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -1965,7 +1966,7 @@ const CourseBuilder: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/subpoints/${subpointId}`, {
+      const response = await fetch(getCourseManagementUrl(`/subpoints/${subpointId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`

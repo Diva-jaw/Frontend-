@@ -15,6 +15,7 @@ import {
 import { useAuth } from "../../../components/AuthContext";
 import NotificationPopup from "../../../components/ui/NotificationPopup";
 import { courseService, Course, CourseModule, ModuleLevel } from "../../../services/courseService";
+import { getCourseManagementUrl } from "../../../utils/apiHelper";
 
 interface AddTopicForm {
   topic_title: string;
@@ -127,7 +128,7 @@ const AddTopic = () => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/course-management/modules/${moduleId}/topics`,
+        getCourseManagementUrl(`/modules/${moduleId}/topics`),
         {
           method: "POST",
           headers: {
